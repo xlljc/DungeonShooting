@@ -82,7 +82,7 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, TileMapLaye
     public override void OnSelect()
     {
         CellNode.L_SelectTexture.Instance.Visible = true;
-        CellNode.UiPanel.EditorTileMap.SetCurrentLayer(Data);
+        CellNode.UiPanel.EditorTileMap.SetCurrLayer(Data);
     }
 
     public override void OnUnSelect()

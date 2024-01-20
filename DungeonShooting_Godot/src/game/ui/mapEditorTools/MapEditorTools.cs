@@ -31,19 +31,6 @@ public abstract partial class MapEditorTools : UiBase
     }
     private HBoxContainer _L_HBoxContainer;
 
-    /// <summary>
-    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorTools.CurrLayer
-    /// </summary>
-    public CurrLayer L_CurrLayer
-    {
-        get
-        {
-            if (_L_CurrLayer == null) _L_CurrLayer = new CurrLayer((MapEditorToolsPanel)this, GetNode<Godot.Label>("CurrLayer"));
-            return _L_CurrLayer;
-        }
-    }
-    private CurrLayer _L_CurrLayer;
-
 
     public MapEditorTools() : base(nameof(MapEditorTools))
     {
@@ -447,15 +434,6 @@ public abstract partial class MapEditorTools : UiBase
         public override HBoxContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
     }
 
-    /// <summary>
-    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorTools.CurrLayer
-    /// </summary>
-    public class CurrLayer : UiNode<MapEditorToolsPanel, Godot.Label, CurrLayer>
-    {
-        public CurrLayer(MapEditorToolsPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
-        public override CurrLayer Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
-    }
-
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="DoorHoverArea"/>, 节点路径: MapEditorTools.ToolRoot.N_HoverRoot.N_HoverArea
@@ -551,10 +529,5 @@ public abstract partial class MapEditorTools : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorTools.HBoxContainer
     /// </summary>
     public HBoxContainer S_HBoxContainer => L_HBoxContainer;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorTools.CurrLayer
-    /// </summary>
-    public CurrLayer S_CurrLayer => L_CurrLayer;
 
 }

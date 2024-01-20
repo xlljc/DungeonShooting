@@ -27,14 +27,22 @@ public partial class MapEditorPanel : MapEditor
     
     public override void OnCreateUi()
     {
-        S_TabContainer.Instance.SetTabTitle(0, "图层");
-        S_TabContainer.Instance.SetTabTitle(1, "图块");
-        S_TabContainer.Instance.SetTabTitle(2, "对象");
+        S_TabContainer.Instance.SetTabTitle(0, "图块");
+        S_TabContainer.Instance.SetTabTitle(1, "对象");
+        S_TabContainer.Instance.TabChanged += OnTabChanged;
         //S_MapLayer.Instance.Init(S_MapLayer);
         S_Left.Instance.Resized += OnMapViewResized;
         S_Back.Instance.Pressed += OnBackClick;
         S_Save.Instance.Pressed += OnSave;
         S_Play.Instance.Pressed += OnPlay;
+
+        OnTabChanged(0);
+    }
+
+    //切换页签
+    private void OnTabChanged(long tab)
+    {
+        S_LayerPanel.Instance.Visible = tab == 0;
     }
 
     public override void OnShowUi()

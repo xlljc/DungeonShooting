@@ -538,11 +538,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     /// <summary>
     /// 设置选择的layer
     /// </summary>
-    public void SetCurrentLayer(TileMapLayerData layerData)
+    public void SetCurrLayer(TileMapLayerData layerData)
     {
         CurrLayer = layerData;
         EventManager.EmitEvent(EventEnum.OnSelectTileLayer, layerData.Layer);
-        MapEditorToolsPanel.S_CurrLayer.Instance.Text = "当前图层：" + layerData.Title;
         SetLayerModulate(MapLayer.AutoFloorLayer, GetEditorLayerModulate(MapLayer.AutoFloorLayer));
         SetLayerModulate(MapLayer.AutoMiddleLayer, GetEditorLayerModulate(MapLayer.AutoMiddleLayer));
         SetLayerModulate(MapLayer.AutoTopLayer, GetEditorLayerModulate(MapLayer.AutoTopLayer));
@@ -631,7 +630,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     public void SetDesaltOtherLayer(bool flag)
     {
         _desaltOtherLayer = flag;
-        SetCurrentLayer(CurrLayer);
+        SetCurrLayer(CurrLayer);
     }
 
     /// <summary>
@@ -1829,7 +1828,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 SetLayerEnabled(MapLayer.CustomMiddleLayer1, _tempCustomMiddleLayer1);
                 SetLayerEnabled(MapLayer.CustomMiddleLayer2, _tempCustomMiddleLayer2);
                 SetLayerEnabled(MapLayer.CustomTopLayer, _tempCustomTopLayer);
-                SetCurrentLayer(CurrLayer);
+                SetCurrLayer(CurrLayer);
 
                 //保存预览图
                 var subViewport = MapEditorPanel.S_SubViewport.Instance;

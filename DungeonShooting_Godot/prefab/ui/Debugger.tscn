@@ -60,10 +60,10 @@ autowrap_mode = 3
 
 [node name="HoverButton" type="Button" parent="."]
 layout_mode = 0
-offset_left = 15.0
-offset_top = 511.0
-offset_right = 43.0
-offset_bottom = 535.0
+offset_left = 1295.0
+offset_top = 10.0
+offset_right = 1323.0
+offset_bottom = 34.0
 scale = Vector2(2, 2)
 icon = ExtResource("2_acjpv")
 flat = true

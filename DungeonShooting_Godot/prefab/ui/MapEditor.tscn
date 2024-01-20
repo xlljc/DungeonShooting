@@ -168,17 +168,39 @@ size_flags_horizontal = 0
 icon = ExtResource("5_ubl8b")
 icon_alignment = 1
 
-[node name="HSplitContainer" type="HSplitContainer" parent="Bg/VBoxContainer"]
+[node name="HSplitContainer" type="HBoxContainer" parent="Bg/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 0
 
-[node name="Left" type="Panel" parent="Bg/VBoxContainer/HSplitContainer"]
-custom_minimum_size = Vector2(600, 0)
+[node name="HSplitContainer2" type="HSplitContainer" parent="Bg/VBoxContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 7.0
 
-[node name="MarginContainer" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Left"]
+[node name="LayerPanel" type="Panel" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="MapEditorMapLayer" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer/LayerPanel" instance=ExtResource("7_ychtn")]
+layout_mode = 1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+
+[node name="Left" type="Panel" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer/Left"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -190,26 +212,26 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="MapView" type="SubViewportContainer" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer"]
+[node name="MapView" type="SubViewportContainer" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer/Left/MarginContainer"]
 layout_mode = 2
 
-[node name="SubViewport" type="SubViewport" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView"]
+[node name="SubViewport" type="SubViewport" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer/Left/MarginContainer/MapView"]
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
-size = Vector2i(1334, 1002)
+size = Vector2i(980, 1002)
 render_target_update_mode = 4
 
-[node name="TileMap" type="TileMap" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView/SubViewport" groups=["navigation"]]
+[node name="TileMap" type="TileMap" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer/Left/MarginContainer/MapView/SubViewport" groups=["navigation"]]
 position = Vector2(500, 540)
 scale = Vector2(4, 4)
 format = 2
 script = ExtResource("4_mhy1a")
 
-[node name="NavigationRegion" type="NavigationRegion2D" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView/SubViewport/TileMap"]
+[node name="NavigationRegion" type="NavigationRegion2D" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer/Left/MarginContainer/MapView/SubViewport/TileMap"]
 z_index = 10
 navigation_polygon = SubResource("NavigationPolygon_oidah")
 
-[node name="ErrorCell" type="Sprite2D" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView/SubViewport/TileMap"]
+[node name="ErrorCell" type="Sprite2D" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer/Left/MarginContainer/MapView/SubViewport/TileMap"]
 visible = false
 modulate = Color(1, 0, 0, 0)
 z_index = 10
@@ -217,30 +239,30 @@ scale = Vector2(16, 16)
 texture = ExtResource("4_465u2")
 centered = false
 
-[node name="ErrorCellAnimationPlayer" type="AnimationPlayer" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView/SubViewport/TileMap/ErrorCell"]
+[node name="ErrorCellAnimationPlayer" type="AnimationPlayer" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer/Left/MarginContainer/MapView/SubViewport/TileMap/ErrorCell"]
 libraries = {
 "": SubResource("AnimationLibrary_371oi")
 }
 
-[node name="Brush" type="Node2D" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView/SubViewport/TileMap"]
+[node name="Brush" type="Node2D" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer/Left/MarginContainer/MapView/SubViewport/TileMap"]
 z_index = 100
 
-[node name="CanvasLayer" type="CanvasLayer" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView/SubViewport"]
+[node name="CanvasLayer" type="CanvasLayer" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer/Left/MarginContainer/MapView/SubViewport"]
 layer = 2
 
-[node name="MapEditorTools" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer/MapView/SubViewport/CanvasLayer" instance=ExtResource("6_7pvgu")]
+[node name="MapEditorTools" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer/Left/MarginContainer/MapView/SubViewport/CanvasLayer" instance=ExtResource("6_7pvgu")]
 
-[node name="MapView2" type="TextureRect" parent="Bg/VBoxContainer/HSplitContainer/Left/MarginContainer"]
+[node name="MapView2" type="TextureRect" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer/Left/MarginContainer"]
 visible = false
 layout_mode = 2
 
-[node name="Right" type="Panel" parent="Bg/VBoxContainer/HSplitContainer"]
+[node name="Right" type="Panel" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2"]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
 
-[node name="MarginContainer" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right"]
+[node name="MarginContainer" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/Right"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -252,29 +274,21 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="TabContainer" type="TabContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer"]
+[node name="TabContainer" type="TabContainer" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/Right/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MapLayer" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
+[node name="MapTile" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/Right/MarginContainer/TabContainer"]
 layout_mode = 2
 theme_override_constants/margin_top = 10
 
-[node name="MapEditorMapLayer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapLayer" instance=ExtResource("7_ychtn")]
+[node name="MapEditorMapTile" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/Right/MarginContainer/TabContainer/MapTile" instance=ExtResource("10_4fu5v")]
 layout_mode = 2
 
-[node name="MapTile" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
+[node name="MapMark" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/Right/MarginContainer/TabContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/margin_top = 10
 
-[node name="MapEditorMapTile" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapTile" instance=ExtResource("10_4fu5v")]
-layout_mode = 2
-
-[node name="MapMark" type="MarginContainer" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_top = 10
-
-[node name="MapEditorMapMark" parent="Bg/VBoxContainer/HSplitContainer/Right/MarginContainer/TabContainer/MapMark" instance=ExtResource("8_8tgeu")]
+[node name="MapEditorMapMark" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/Right/MarginContainer/TabContainer/MapMark" instance=ExtResource("8_8tgeu")]
 layout_mode = 2
