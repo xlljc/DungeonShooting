@@ -36,11 +36,13 @@ public partial class MapEditorProjectPanel : MapEditorProject
         _roomGrid.SetHorizontalExpand(true);
         
         S_GroupSearchButton.Instance.Pressed += OnSearchGroupButtonClick;
+        S_GroupEditButton.Instance.Pressed += OnEditGroup;
+        S_GroupAddButton.Instance.Pressed += OnCreateGroupClick;
+        
         S_RoomSearchButton.Instance.Pressed += OnSearchRoomButtonClick;
         S_RoomAddButton.Instance.Pressed += OnCreateRoomClick;
         S_RoomEditButton.Instance.Pressed += OnEditRoom;
         S_RoomDeleteButton.Instance.Pressed += OnDeleteRoom;
-        S_GroupAddButton.Instance.Pressed += OnCreateGroupClick;
         
         _eventFactory = EventManager.CreateEventFactory();
         _eventFactory.AddEventListener(EventEnum.OnCreateGroupFinish, OnCreateGroupFinish);
@@ -69,14 +71,8 @@ public partial class MapEditorProjectPanel : MapEditorProject
     /// </summary>
     public void RefreshGroup()
     {
-        var index = _groupGrid.SelectIndex;
-        if (index == -1)
-        {
-            index = 0;
-        }
         MapProjectManager.RefreshMapGroup();
         OnSearchGroupButtonClick();
-        _groupGrid.SelectIndex = index;
     }
 
     /// <summary>
@@ -103,6 +99,10 @@ public partial class MapEditorProjectPanel : MapEditorProject
     private void OnSearchGroupButtonClick()
     {
         var select = _groupGrid.SelectIndex;
+        if (select < 0)
+        {
+            select = 0;
+        }
         //输入文本
         var text = S_GroupSearchInput.Instance.Text;
         if (!string.IsNullOrEmpty(text))
@@ -123,7 +123,7 @@ public partial class MapEditorProjectPanel : MapEditorProject
             _groupGrid.SetDataList(MapProjectManager.GroupMap.Values.ToArray());
         }
 
-        _roomGrid.SelectIndex = select;
+        _groupGrid.SelectIndex = select;
     }
 
     //搜索房间按钮点击
@@ -167,6 +167,19 @@ public partial class MapEditorProjectPanel : MapEditorProject
     private void OnCreateGroupClick()
     {
         EditorWindowManager.ShowCreateGroup(CreateGroup);
+    }
+
+    //编辑组按钮点击
+    private void OnEditGroup()
+    {
+        if (_groupGrid.SelectIndex != -1)
+        {
+            EditorWindowManager.ShowEditGroup(_groupGrid.SelectData, EditGroup);
+        }
+        else
+        {
+            EditorWindowManager.ShowTips("提示", "请选择需要编辑的组！");
+        }
     }
     
     //创建地牢房间按钮点击
@@ -225,6 +238,12 @@ public partial class MapEditorProjectPanel : MapEditorProject
     private void CreateGroup(DungeonRoomGroup group)
     {
         MapProjectManager.CreateGroup(group);
+    }
+
+    //编辑地牢组
+    private void EditGroup(DungeonRoomGroup group)
+    {
+        MapProjectManager.SaveGroupMap();
     }
     
     //创建房间

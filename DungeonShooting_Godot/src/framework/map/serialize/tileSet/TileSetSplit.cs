@@ -8,12 +8,6 @@ public class TileSetSplit : IDestroy
 {
     [JsonIgnore]
     public bool IsDestroyed { get; private set; }
-    
-    /// <summary>
-    /// 错误类型
-    /// </summary>
-    [JsonInclude]
-    public int ErrorType;
 
     /// <summary>
     /// 路径

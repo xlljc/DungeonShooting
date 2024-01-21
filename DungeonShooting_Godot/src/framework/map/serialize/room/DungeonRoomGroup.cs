@@ -14,6 +14,12 @@ public class DungeonRoomGroup : IClone<DungeonRoomGroup>
     /// </summary>
     [JsonInclude]
     public string GroupName;
+
+    /// <summary>
+    /// 图块集
+    /// </summary>
+    [JsonInclude]
+    public string TileSet;
     
     /// <summary>
     /// 普通战斗房间, 进入该房间时会关上门, 并刷出若干波敌人, 消灭所有敌人后开门
@@ -195,6 +201,7 @@ public class DungeonRoomGroup : IClone<DungeonRoomGroup>
     {
         var inst = new DungeonRoomGroup();
         inst.GroupName = GroupName;
+        inst.TileSet = TileSet;
         inst.BattleList.AddRange(BattleList);
         inst.InletList.AddRange(InletList);
         inst.OutletList.AddRange(OutletList);

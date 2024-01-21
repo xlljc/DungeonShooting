@@ -61,9 +61,22 @@ placeholder_text = "搜索"
 layout_mode = 2
 icon = ExtResource("3_f5h8c")
 
-[node name="GroupAddButton" type="Button" parent="HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
+
+[node name="GroupAddButton" type="Button" parent="HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 10
 icon = ExtResource("4_okvq0")
+
+[node name="GroupEditButton" type="Button" parent="HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+icon = ExtResource("6_qalh0")
+
+[node name="GroupDeleteButton" type="Button" parent="HBoxContainer/Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+icon = ExtResource("7_lnry3")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2

@@ -8,6 +8,7 @@ public static partial class UiManager
         public const string BottomTips = "BottomTips";
         public const string Debugger = "Debugger";
         public const string EditorColorPicker = "EditorColorPicker";
+        public const string EditorDungeonGroup = "EditorDungeonGroup";
         public const string EditorForm = "EditorForm";
         public const string EditorImportCombination = "EditorImportCombination";
         public const string EditorInfo = "EditorInfo";
@@ -183,6 +184,54 @@ public static partial class UiManager
     public static UI.EditorColorPicker.EditorColorPickerPanel[] Get_EditorColorPicker_Instance()
     {
         return GetUiInstance<UI.EditorColorPicker.EditorColorPickerPanel>(nameof(UI.EditorColorPicker.EditorColorPicker));
+    }
+
+    /// <summary>
+    /// 创建 EditorDungeonGroup, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorDungeonGroup.EditorDungeonGroupPanel Create_EditorDungeonGroup()
+    {
+        return CreateUi<UI.EditorDungeonGroup.EditorDungeonGroupPanel>(UiNames.EditorDungeonGroup);
+    }
+
+    /// <summary>
+    /// 打开 EditorDungeonGroup, 并返回UI实例
+    /// </summary>
+    public static UI.EditorDungeonGroup.EditorDungeonGroupPanel Open_EditorDungeonGroup()
+    {
+        return OpenUi<UI.EditorDungeonGroup.EditorDungeonGroupPanel>(UiNames.EditorDungeonGroup);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorDungeonGroup 的所有实例
+    /// </summary>
+    public static void Hide_EditorDungeonGroup()
+    {
+        var uiInstance = Get_EditorDungeonGroup_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorDungeonGroup 的所有实例
+    /// </summary>
+    public static void Destroy_EditorDungeonGroup()
+    {
+        var uiInstance = Get_EditorDungeonGroup_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorDungeonGroup 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorDungeonGroup.EditorDungeonGroupPanel[] Get_EditorDungeonGroup_Instance()
+    {
+        return GetUiInstance<UI.EditorDungeonGroup.EditorDungeonGroupPanel>(nameof(UI.EditorDungeonGroup.EditorDungeonGroup));
     }
 
     /// <summary>

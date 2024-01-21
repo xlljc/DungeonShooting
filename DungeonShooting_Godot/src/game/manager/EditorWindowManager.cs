@@ -6,6 +6,7 @@ using System.Linq;
 using Config;
 using Godot;
 using UI.EditorColorPicker;
+using UI.EditorDungeonGroup;
 using UI.EditorForm;
 using UI.EditorImportCombination;
 using UI.EditorInfo;
@@ -217,12 +218,12 @@ public static class EditorWindowManager
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle("创建地牢组");
         window.SetWindowSize(new Vector2I(700, 500));
-        var body = window.OpenBody<EditorInfoPanel>(UiManager.UiNames.EditorInfo);
+        var body = window.OpenBody<EditorDungeonGroupPanel>(UiManager.UiNames.EditorDungeonGroup);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {
                 //获取填写的数据, 并创建ui
-                var infoData = body.GetInfoData();
+                var infoData = body.GetData();
                 //组名
                 var groupName = infoData.Name;
         
@@ -244,9 +245,40 @@ public static class EditorWindowManager
 
                 var group = new DungeonRoomGroup();
                 group.GroupName = groupName;
+                group.TileSet = infoData.TileSet;
                 group.Remark = infoData.Remark;
                 window.CloseWindow();
                 onCreateGroup(group);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    /// <summary>
+    /// 打开创建地牢组弹窗
+    /// </summary>
+    /// <param name="group">原数据</param>
+    /// <param name="onEditGroup">提交时回调</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowEditGroup(DungeonRoomGroup group, Action<DungeonRoomGroup> onEditGroup, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle("编辑地牢组");
+        window.SetWindowSize(new Vector2I(700, 500));
+        var body = window.OpenBody<EditorDungeonGroupPanel>(UiManager.UiNames.EditorDungeonGroup);
+        body.InitData(group);
+        body.SetEditMode();
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                var infoData = body.GetData();
+                group.Remark = infoData.Remark;
+                group.TileSet = infoData.TileSet;
+                window.CloseWindow();
+                onEditGroup(group);
             }),
             new EditorWindowPanel.ButtonData("取消", () =>
             {
