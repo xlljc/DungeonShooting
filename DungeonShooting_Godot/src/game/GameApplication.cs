@@ -94,6 +94,7 @@ public partial class GameApplication : Node2D, ICoroutine
 
 		//初始化配置表
 		ExcelConfig.Init();
+		PreinstallMarkManager.Init();
 		//初始化房间配置数据
 		InitRoomConfig();
 		//初始化TileSet配置数据

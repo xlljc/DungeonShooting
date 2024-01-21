@@ -74,6 +74,9 @@ public static class ActivityId
         return "";
     }
 
+    /// <summary>
+    /// 根据 ActivityType 中的枚举类型获取类型名称的字符串
+    /// </summary>
     public static string GetTypeName(ActivityType activityType)
     {
         switch (activityType)

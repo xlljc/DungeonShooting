@@ -62,6 +62,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
 
         //S_DynamicTool.Instance.GetParent().RemoveChild(S_DynamicTool.Instance);
         S_DynamicTool.Instance.Visible = false;
+        S_AutoFillTip.Instance.Visible = false;
         
         _grid = new UiGrid<WaveItem, List<MarkInfo>>(S_WaveItem, typeof(EditorWaveCell));
         _grid.SetCellOffset(new Vector2I(0, 10));
@@ -179,6 +180,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         {
             _grid.RemoveAll();
         }
+        
+        RefreshAutoFillTip();
     }
     
     /// <summary>
@@ -291,6 +294,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             //修改下拉菜单数据
             var optionButton = S_PreinstallOption.Instance;
             optionButton.SetItemText(optionButton.Selected, $"{preinstall.Name} ({preinstall.Weight})");
+            RefreshAutoFillTip();
             //派发数据修改事件
             EventManager.EmitEvent(EventEnum.OnTileMapDirty);
         });
@@ -474,5 +478,16 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                 }
             });
         }
+    }
+
+    private void RefreshAutoFillTip()
+    {
+        var preinstall = EditorTileMapManager.SelectPreinstall;
+        if (preinstall != null)
+        {
+            S_AutoFillTip.Instance.Visible = preinstall.AutoFill;
+            return;
+        }
+        S_AutoFillTip.Instance.Visible = false;
     }
 }

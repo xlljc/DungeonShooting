@@ -197,6 +197,37 @@ public abstract partial class MapEditorMapMark : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.AutoFillTip.Label
+    /// </summary>
+    public class Label : UiNode<MapEditorMapMarkPanel, Godot.Label, Label>
+    {
+        public Label(MapEditorMapMarkPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.ColorRect"/>, 路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.AutoFillTip
+    /// </summary>
+    public class AutoFillTip : UiNode<MapEditorMapMarkPanel, Godot.ColorRect, AutoFillTip>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.Label
+        /// </summary>
+        public Label L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label(UiPanel, Instance.GetNode<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label _L_Label;
+
+        public AutoFillTip(MapEditorMapMarkPanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
+        public override AutoFillTip Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Button"/>, 路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.AddWaveButton
     /// </summary>
     public class AddWaveButton : UiNode<MapEditorMapMarkPanel, Godot.Button, AddWaveButton>
@@ -484,6 +515,19 @@ public abstract partial class MapEditorMapMark : UiBase
     public class VBoxContainer_1 : UiNode<MapEditorMapMarkPanel, Godot.VBoxContainer, VBoxContainer_1>
     {
         /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.AutoFillTip
+        /// </summary>
+        public AutoFillTip L_AutoFillTip
+        {
+            get
+            {
+                if (_L_AutoFillTip == null) _L_AutoFillTip = new AutoFillTip(UiPanel, Instance.GetNode<Godot.ColorRect>("AutoFillTip"));
+                return _L_AutoFillTip;
+            }
+        }
+        private AutoFillTip _L_AutoFillTip;
+
+        /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.AddWaveButton
         /// </summary>
         public AddWaveButton L_AddWaveButton
@@ -659,6 +703,16 @@ public abstract partial class MapEditorMapMark : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorMapMark.VBoxContainer.DynamicTool
     /// </summary>
     public DynamicTool S_DynamicTool => L_VBoxContainer.L_DynamicTool;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.AutoFillTip.Label
+    /// </summary>
+    public Label S_Label => L_VBoxContainer.L_ScrollContainer.L_VBoxContainer.L_AutoFillTip.L_Label;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.AutoFillTip
+    /// </summary>
+    public AutoFillTip S_AutoFillTip => L_VBoxContainer.L_ScrollContainer.L_VBoxContainer.L_AutoFillTip;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Button"/>, 节点路径: MapEditorMapMark.VBoxContainer.ScrollContainer.VBoxContainer.AddWaveButton

@@ -25,6 +25,7 @@ public partial class MapEditorCreatePreinstallPanel : MapEditorCreatePreinstall
         InitData(roomType);
         _roomPreinstallInfo = preinstallInfo;
         S_PreinstallNameInput.Instance.Text = preinstallInfo.Name;
+        S_AutoCheckInput.Instance.ButtonPressed = preinstallInfo.AutoFill;
         S_WeightInput.Instance.Value = preinstallInfo.Weight;
         S_RemarkInput.Instance.Text = preinstallInfo.Remark;
     }
@@ -52,6 +53,7 @@ public partial class MapEditorCreatePreinstallPanel : MapEditorCreatePreinstall
                 return null;
             }
             
+            data.AutoFill = S_AutoCheckInput.Instance.ButtonPressed;
             data.Remark = S_RemarkInput.Instance.Text;
             data.Weight = (int)S_WeightInput.Instance.Value;
         }
@@ -73,6 +75,7 @@ public partial class MapEditorCreatePreinstallPanel : MapEditorCreatePreinstall
                 return null;
             }
 
+            data.AutoFill = S_AutoCheckInput.Instance.ButtonPressed;
             data.Remark = S_RemarkInput.Instance.Text;
             data.Weight = (int)S_WeightInput.Instance.Value;
             //预加载波

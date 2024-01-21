@@ -26,6 +26,12 @@ public class RoomPreinstallInfo
     public string Remark;
 
     /// <summary>
+    /// 是否自动填充数据
+    /// </summary>
+    [JsonInclude]
+    public bool AutoFill;
+
+    /// <summary>
     /// 波数数据
     /// </summary>
     [JsonInclude]

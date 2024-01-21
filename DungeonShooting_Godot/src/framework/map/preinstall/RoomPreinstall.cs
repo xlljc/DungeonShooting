@@ -114,17 +114,40 @@ public class RoomPreinstall : IDestroy
                         var index = random.RandomWeight(tempArray);
                         markInfoItem = markInfo.MarkList[index];
                     }
-
-                    mark.Id = markInfoItem.Id;
+                    
+                    var activityBase = PreinstallMarkManager.GetMarkConfig(markInfoItem.Id);
+                    mark.ActivityType = (ActivityType)activityBase.Type;
                     mark.Attr = markInfoItem.Attr;
-                    mark.DerivedAttr = new Dictionary<string, string>();
                     mark.VerticalSpeed = markInfoItem.VerticalSpeed;
                     mark.Altitude = markInfoItem.Altitude;
-                    mark.ActivityType = (ActivityType)ExcelConfig.ActivityBase_Map[markInfoItem.Id].Type;
 
-                    if (mark.ActivityType == ActivityType.Enemy) //敌人类型
+                    
+                    
+                    if (mark.ActivityType == ActivityType.Other) //其他类型
+                    {
+                        //判断是否是随机标记
+                        if (markInfoItem.Id == PreinstallMarkManager.Weapon.Id) //随机武器
+                        {
+                            mark.Id = Utils.Random.RandomChoose(PreinstallMarkManager.GetMarkConfigsByType(ActivityType.Weapon))?.Id;
+                        }
+                        else if (markInfoItem.Id == PreinstallMarkManager.Enemy.Id) //随机敌人
+                        {
+                            mark.Id = Utils.Random.RandomChoose(PreinstallMarkManager.GetMarkConfigsByType(ActivityType.Enemy))?.Id;
+                        }
+                        else if (markInfoItem.Id == PreinstallMarkManager.Prop.Id) //随机道具
+                        {
+                            mark.Id = Utils.Random.RandomChoose(PreinstallMarkManager.GetMarkConfigsByType(ActivityType.Prop))?.Id;
+                        }
+                        else //非随机物体
+                        {
+                            mark.Id = markInfoItem.Id;
+                        }
+                    }
+                    else if (mark.ActivityType == ActivityType.Enemy) //敌人类型
                     {
                         _hsaEnemy = true;
+                        mark.Id = markInfoItem.Id;
+                        mark.DerivedAttr = new Dictionary<string, string>();
                         if (!mark.Attr.TryGetValue("Face", out var face) || face == "0") //随机方向
                         {
                             mark.DerivedAttr.Add("Face",
@@ -138,6 +161,10 @@ public class RoomPreinstall : IDestroy
                         {
                             mark.DerivedAttr.Add("Face", face);
                         }
+                    }
+                    else
+                    {
+                        mark.Id = markInfoItem.Id;
                     }
                 }
                 else if (markInfo.SpecialMarkType == SpecialMarkType.BirthPoint) //玩家出生标记
@@ -455,7 +482,7 @@ public class RoomPreinstall : IDestroy
                 }
             }
 
-            if (activityMark.DerivedAttr.TryGetValue("Face", out var face)) //脸朝向, 应该只有 -1 和 1
+            if (activityMark.DerivedAttr != null && activityMark.DerivedAttr.TryGetValue("Face", out var face)) //脸朝向, 应该只有 -1 和 1
             {
                 var faceDir = int.Parse(face);
                 role.Face = (FaceDirection)faceDir;
