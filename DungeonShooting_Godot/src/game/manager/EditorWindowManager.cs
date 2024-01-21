@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -53,7 +54,6 @@ public static class EditorWindowManager
     /// <param name="onClose">关闭回调, 回调参数为选择的文件路径, 如果选择文件, 则回调参数为null</param>
     public static void ShowOpenFileDialog(string[] filters, Action<string> onClose)
     {
-        //UiManager.Open_EditorFileDialog();
         var fileDialog = new FileDialog();
         fileDialog.UseNativeDialog = true;
         fileDialog.ModeOverridesTitle = false;
@@ -111,7 +111,7 @@ public static class EditorWindowManager
     /// <param name="message">显示内容</param>
     /// <param name="onClose">关闭时的回调, 参数如果为 true 表示点击了确定</param>
     /// <param name="parentUi">所属父级Ui</param>
-    public static void ShowConfirm(string title, string message, Action<bool> onClose, UiBase parentUi = null)
+    public static EditorWindowPanel ShowConfirm(string title, string message, Action<bool> onClose, UiBase parentUi = null)
     {
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle(title);
@@ -132,6 +132,25 @@ public static class EditorWindowManager
         );
         var body = window.OpenBody<EditorTipsPanel>(UiManager.UiNames.EditorTips);
         body.SetMessage(message);
+        return  window;
+    }
+
+    /// <summary>
+    /// 弹出延时询问窗口
+    /// </summary>
+    /// <param name="title">标题</param>
+    /// <param name="message">显示内容</param>
+    /// <param name="delayTime">延时时间</param>
+    /// <param name="onClose">关闭时的回调, 参数如果为 true 表示点击了确定</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowDelayConfirm(string title, string message, float delayTime, Action<bool> onClose, UiBase parentUi = null)
+    {
+        var window = ShowConfirm(title, message, onClose, parentUi);
+        if (delayTime > 0)
+        {
+            var uiCell = (CustomButtonCell)window.ButtonGrid.GetCell(0);
+            window.StartCoroutine(DelayTimeLabel(delayTime, uiCell.CellNode.L_Button.Instance));
+        }
     }
 
     /// <summary>
@@ -822,5 +841,19 @@ public static class EditorWindowManager
         }
 
         return UiManager.Open_EditorWindow();
+    }
+
+    private static IEnumerator DelayTimeLabel(float time, Button button)
+    {
+        var text = button.Text;
+        button.Disabled = true;
+        for (float i = time; i >= 0; i -= 1)
+        {
+            button.Text = $"{text}（{(int)i}秒）";
+            yield return new WaitForSeconds(1);
+        }
+
+        button.Text = text;
+        button.Disabled = false;
     }
 }

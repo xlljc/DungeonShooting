@@ -80,6 +80,10 @@ public enum EventEnum
     /// </summary>
     OnCreateGroupFinish,
     /// <summary>
+    /// 删除地牢组完成时调用, 参数为<see cref="DungeonRoomGroup"/>
+    /// </summary>
+    OnDeleteGroupFinish,
+    /// <summary>
     /// 创建地牢房间完成时调用, 参数为<see cref="DungeonRoomSplit"/>
     /// </summary>
     OnCreateRoomFinish,

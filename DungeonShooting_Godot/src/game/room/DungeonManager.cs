@@ -225,9 +225,10 @@ public partial class DungeonManager : Node2D
         //创建世界场景
         World = GameApplication.Instance.CreateNewWorld();
         yield return 0;
-        
+        var group = GameApplication.Instance.RoomConfig[CurrConfig.GroupName];
+        var tileSetSplit = GameApplication.Instance.TileSetConfig[group.TileSet];
+        World.TileRoot.TileSet = tileSetSplit.GetTileSet();
         //填充地牢
-        var tileSetSplit = GameApplication.Instance.TileSetConfig.First().Value;
         AutoTileConfig = new AutoTileConfig(0, tileSetSplit.TileSetInfo.Sources[0].Terrain[0]);
         _dungeonTileMap = new DungeonTileMap(World.TileRoot);
         yield return _dungeonTileMap.AutoFillRoomTile(AutoTileConfig, _dungeonGenerator.StartRoomInfo, random);

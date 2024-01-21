@@ -22,7 +22,11 @@ public partial class TileSetEditorTerrainPanel : TileSetEditorTerrain
     {
         get
         {
-            var terrain = EditorPanel.TileSetSourceInfo.Terrain;
+            var terrain = EditorPanel.TileSetSourceInfo?.Terrain;
+            if (terrain == null)
+            {
+                return null;
+            }
             if (CurrTerrainIndex < 0 || CurrTerrainIndex >= terrain.Count)
             {
                 return null;

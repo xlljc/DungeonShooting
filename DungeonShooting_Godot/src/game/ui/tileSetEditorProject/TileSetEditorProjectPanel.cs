@@ -109,10 +109,18 @@ public partial class TileSetEditorProjectPanel : TileSetEditorProject
         }
 
         var tileSetSplit = Grid.SelectData;
-        //这里要判断是否引用, 后面再做
+        //这里要判断是否引用
+        foreach (var dungeonRoomGroup in GameApplication.Instance.RoomConfig)
+        {
+            if (dungeonRoomGroup.Value.TileSet == tileSetSplit.TileSetInfo.Name)
+            {
+                EditorWindowManager.ShowTips("提示", $"该TileSet被'{dungeonRoomGroup.Key}'地牢组使用，不能删除！");
+                return;
+            }
+        }
         
         //删除数据
-        EditorWindowManager.ShowConfirm("提示", "确认删除该TileSet吗，删除后无法恢复！", (v) =>
+        EditorWindowManager.ShowDelayConfirm("提示", "确认删除该TileSet吗，删除后无法恢复！", 5, (v) =>
         {
             if (v)
             {

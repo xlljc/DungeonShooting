@@ -8,10 +8,16 @@ namespace UI.MapEditorProject;
 
 public partial class MapEditorProjectPanel : MapEditorProject
 {
-    //当前显示的组数据
-    private UiGrid<GroupButton, DungeonRoomGroup> _groupGrid;
-    //当前显示的房间数据
-    private UiGrid<RoomButton, DungeonRoomSplit> _roomGrid;
+    /// <summary>
+    /// 当前显示的组数据
+    /// </summary>
+    public UiGrid<GroupButton, DungeonRoomGroup> GroupGrid { get; private set; }
+
+    /// <summary>
+    /// 当前显示的房间数据
+    /// </summary>
+    public UiGrid<RoomButton, DungeonRoomSplit> RoomGrid { get; private set; }
+
     private EventFactory _eventFactory;
 
     public override void OnCreateUi()
@@ -23,29 +29,32 @@ public partial class MapEditorProjectPanel : MapEditorProject
         for (var i = 0; i < roomTypes.Length; i++)
         {
             var dungeonRoomType = roomTypes[i];
-            optionButton.AddItem(DungeonManager.DungeonRoomTypeToDescribeString(dungeonRoomType), (int)dungeonRoomType + 1);
+            optionButton.AddItem(DungeonManager.DungeonRoomTypeToDescribeString(dungeonRoomType),
+                (int)dungeonRoomType + 1);
         }
 
-        _groupGrid = new UiGrid<MapEditorProject.GroupButton, DungeonRoomGroup>(S_GroupButton, typeof(GroupButtonCell));
-        _groupGrid.SetCellOffset(new Vector2I(0, 2));
-        _groupGrid.SetHorizontalExpand(true);
+        GroupGrid = new UiGrid<MapEditorProject.GroupButton, DungeonRoomGroup>(S_GroupButton, typeof(GroupButtonCell));
+        GroupGrid.SetCellOffset(new Vector2I(0, 2));
+        GroupGrid.SetHorizontalExpand(true);
 
-        _roomGrid = new UiGrid<MapEditorProject.RoomButton, DungeonRoomSplit>(S_RoomButton, typeof(RoomButtonCell));
-        _roomGrid.SetAutoColumns(true);
-        _roomGrid.SetCellOffset(new Vector2I(10, 10));
-        _roomGrid.SetHorizontalExpand(true);
-        
+        RoomGrid = new UiGrid<MapEditorProject.RoomButton, DungeonRoomSplit>(S_RoomButton, typeof(RoomButtonCell));
+        RoomGrid.SetAutoColumns(true);
+        RoomGrid.SetCellOffset(new Vector2I(10, 10));
+        RoomGrid.SetHorizontalExpand(true);
+
         S_GroupSearchButton.Instance.Pressed += OnSearchGroupButtonClick;
         S_GroupEditButton.Instance.Pressed += OnEditGroup;
         S_GroupAddButton.Instance.Pressed += OnCreateGroupClick;
-        
+        S_GroupDeleteButton.Instance.Pressed += OnDeleteGroup;
+
         S_RoomSearchButton.Instance.Pressed += OnSearchRoomButtonClick;
         S_RoomAddButton.Instance.Pressed += OnCreateRoomClick;
         S_RoomEditButton.Instance.Pressed += OnEditRoom;
         S_RoomDeleteButton.Instance.Pressed += OnDeleteRoom;
-        
+
         _eventFactory = EventManager.CreateEventFactory();
         _eventFactory.AddEventListener(EventEnum.OnCreateGroupFinish, OnCreateGroupFinish);
+        _eventFactory.AddEventListener(EventEnum.OnDeleteGroupFinish, OnDeleteGroupFinish);
         _eventFactory.AddEventListener(EventEnum.OnCreateRoomFinish, OnCreateRoomFinish);
     }
 
@@ -59,11 +68,11 @@ public partial class MapEditorProjectPanel : MapEditorProject
     {
         _eventFactory.RemoveAllEventListener();
         _eventFactory = null;
-        _groupGrid.Destroy();
-        _groupGrid = null;
-        
-        _roomGrid.Destroy();
-        _roomGrid = null;
+        GroupGrid.Destroy();
+        GroupGrid = null;
+
+        RoomGrid.Destroy();
+        RoomGrid = null;
     }
 
     /// <summary>
@@ -94,15 +103,16 @@ public partial class MapEditorProjectPanel : MapEditorProject
         //加载地牢
         mapEditor.LoadMap(room, tileSetSplit);
     }
-    
+
     //搜索组按钮点击
     private void OnSearchGroupButtonClick()
     {
-        var select = _groupGrid.SelectIndex;
+        var select = GroupGrid.SelectIndex;
         if (select < 0)
         {
             select = 0;
         }
+
         //输入文本
         var text = S_GroupSearchInput.Instance.Text;
         if (!string.IsNullOrEmpty(text))
@@ -116,14 +126,15 @@ public partial class MapEditorProjectPanel : MapEditorProject
                     list.Add(valuePair.Value);
                 }
             }
-            _groupGrid.SetDataList(list.ToArray());
+
+            GroupGrid.SetDataList(list.ToArray());
         }
         else
         {
-            _groupGrid.SetDataList(MapProjectManager.GroupMap.Values.ToArray());
+            GroupGrid.SetDataList(MapProjectManager.GroupMap.Values.ToArray());
         }
 
-        _groupGrid.SelectIndex = select;
+        GroupGrid.SelectIndex = select;
     }
 
     //搜索房间按钮点击
@@ -137,7 +148,7 @@ public partial class MapEditorProjectPanel : MapEditorProject
             var roomType = S_RoomTypeButton.Instance.GetSelectedId();
 
             IEnumerable<DungeonRoomSplit> result = EditorTileMapManager.SelectDungeonGroup.GetAllRoomList();
-            
+
             //名称搜索
             if (!string.IsNullOrEmpty(text))
             {
@@ -154,12 +165,12 @@ public partial class MapEditorProjectPanel : MapEditorProject
                 var type = (DungeonRoomType)(roomType - 1);
                 result = result.Where(split => split.RoomInfo.RoomType == type);
             }
-            
-            _roomGrid.SetDataList(result.ToArray());
+
+            RoomGrid.SetDataList(result.ToArray());
         }
         else
         {
-            _roomGrid.RemoveAll();
+            RoomGrid.RemoveAll();
         }
     }
 
@@ -172,28 +183,43 @@ public partial class MapEditorProjectPanel : MapEditorProject
     //编辑组按钮点击
     private void OnEditGroup()
     {
-        if (_groupGrid.SelectIndex != -1)
+        if (GroupGrid.SelectIndex != -1)
         {
-            EditorWindowManager.ShowEditGroup(_groupGrid.SelectData, EditGroup);
+            EditorWindowManager.ShowEditGroup(GroupGrid.SelectData, EditGroup);
         }
         else
         {
             EditorWindowManager.ShowTips("提示", "请选择需要编辑的组！");
         }
     }
-    
+
+    //删除组按钮点击
+    private void OnDeleteGroup()
+    {
+        if (GroupGrid.SelectIndex != -1)
+        {
+            EditorWindowManager.ShowDelayConfirm("提示", "确定删除该组吗？\n该操作不可取消！", 5, DeleteGroup);
+        }
+        else
+        {
+            EditorWindowManager.ShowTips("提示", "请选择需要删除的组！");
+        }
+    }
+
     //创建地牢房间按钮点击
     private void OnCreateRoomClick()
     {
-        var groupName = EditorTileMapManager.SelectDungeonGroup != null ? EditorTileMapManager.SelectDungeonGroup.GroupName : null;
+        var groupName = EditorTileMapManager.SelectDungeonGroup != null
+            ? EditorTileMapManager.SelectDungeonGroup.GroupName
+            : null;
         EditorWindowManager.ShowCreateRoom(groupName, Mathf.Max(S_RoomTypeButton.Instance.Selected - 1, 0), CreateRoom);
     }
-    
-    
+
+
     //编辑房间
     private void OnEditRoom()
     {
-        var selectRoom = _roomGrid.SelectData;
+        var selectRoom = RoomGrid.SelectData;
         if (selectRoom == null)
         {
             EditorWindowManager.ShowTips("提示", "请选择需要编辑的房间！");
@@ -208,18 +234,18 @@ public partial class MapEditorProjectPanel : MapEditorProject
             });
         }
     }
-    
+
     //删除房间
     private void OnDeleteRoom()
     {
-        var selectRoom = _roomGrid.SelectData;
+        var selectRoom = RoomGrid.SelectData;
         if (selectRoom == null)
         {
             EditorWindowManager.ShowTips("提示", "请选择需要删除的房间！");
         }
         else
         {
-            EditorWindowManager.ShowConfirm("提示", $"是否删除房间: {selectRoom.RoomInfo.RoomName}, 该操作无法撤销！", result =>
+            EditorWindowManager.ShowDelayConfirm("提示", $"是否删除房间: {selectRoom.RoomInfo.RoomName}, 该操作无法撤销！", 3, result =>
             {
                 if (result)
                 {
@@ -245,7 +271,13 @@ public partial class MapEditorProjectPanel : MapEditorProject
     {
         MapProjectManager.SaveGroupMap();
     }
-    
+
+    //删除地牢组
+    private void DeleteGroup(bool v)
+    {
+        MapProjectManager.DeleteGroup(GroupGrid.SelectData.GroupName);
+    }
+
     //创建房间
     private void CreateRoom(DungeonRoomSplit roomSplit)
     {
@@ -258,7 +290,13 @@ public partial class MapEditorProjectPanel : MapEditorProject
         OnSearchGroupButtonClick();
     }
 
-    //创建地牢房间完成
+    //删除地牢组完成
+    private void OnDeleteGroupFinish(object group)
+    {
+        OnSearchGroupButtonClick();
+    }
+
+//创建地牢房间完成
     private void OnCreateRoomFinish(object roomSplit)
     {
         OnSearchRoomButtonClick();

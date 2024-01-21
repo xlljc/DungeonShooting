@@ -29,17 +29,5 @@
     "ShopList": [],
     "EventList": [],
     "Remark": ""
-  },
-  "Test2": {
-    "GroupName": "Test2",
-    "TileSet": "TileSet2",
-    "BattleList": [],
-    "InletList": [],
-    "OutletList": [],
-    "BossList": [],
-    "RewardList": [],
-    "ShopList": [],
-    "EventList": [],
-    "Remark": ""
   }
 }

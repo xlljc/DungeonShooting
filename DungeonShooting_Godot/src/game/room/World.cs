@@ -72,10 +72,6 @@ public partial class World : CanvasModulate, ICoroutine
     public override void _Ready()
     {
         Color = Colors.Black;
-        
-        //临时处理, 加载TileSet
-        var tileSet = GameApplication.Instance.TileSetConfig.First().Value.GetTileSet();
-        TileRoot.TileSet = tileSet;
         //TileRoot.YSortEnabled = false;
     }
 

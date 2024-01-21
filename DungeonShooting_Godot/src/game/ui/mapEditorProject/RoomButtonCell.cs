@@ -47,8 +47,8 @@ public class RoomButtonCell : UiCell<MapEditorProject.RoomButton, DungeonRoomSpl
 
     public override void OnDoubleClick()
     {
-        //打开房间编辑器, 临时处理加载TileSet
-        var tileSetSplit = GameApplication.Instance.TileSetConfig.First().Value;
+        //加载TileSet
+        var tileSetSplit = GameApplication.Instance.TileSetConfig[CellNode.UiPanel.GroupGrid.SelectData.TileSet];
         //判断tileSet是否可以使用
         if (string.IsNullOrEmpty(tileSetSplit.TileSetInfo.Sources[0].SourcePath))
         {
