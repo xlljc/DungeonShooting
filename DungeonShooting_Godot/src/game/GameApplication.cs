@@ -160,7 +160,7 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// <summary>
 	/// 创建新的 World 对象, 相当于清理房间
 	/// </summary>
-	public World CreateNewWorld()
+	public World CreateNewWorld(SeedRandom random)
 	{
 		if (World != null)
 		{
@@ -169,6 +169,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		}
 		World = ResourceManager.LoadAndInstantiate<World>(ResourcePath.scene_World_tscn);
 		World.InitLayer();
+		World.InitRandomPool(random);
 		SceneRoot.AddChild(World);
 		return World;
 	}

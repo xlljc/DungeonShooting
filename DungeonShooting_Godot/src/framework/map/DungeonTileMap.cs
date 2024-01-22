@@ -38,17 +38,17 @@ public class DungeonTileMap
     /// <summary>
     /// 根据 startRoom 和 config 数据自动填充 tileMap 参数中的地图数据, 该函数为协程函数
     /// </summary>
-    public IEnumerator AutoFillRoomTile(AutoTileConfig config, RoomInfo startRoomInfo, SeedRandom random)
+    public IEnumerator AutoFillRoomTile(AutoTileConfig config, RoomInfo startRoomInfo, World world)
     {
         _connectNavigationItemList.Clear();
-        yield return _AutoFillRoomTile(config, startRoomInfo, random);
+        yield return _AutoFillRoomTile(config, startRoomInfo, world);
     }
     
-    private IEnumerator _AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo, SeedRandom random)
+    private IEnumerator _AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo, World world)
     {
         foreach (var info in roomInfo.Next)
         {
-            yield return _AutoFillRoomTile(config, info, random);
+            yield return _AutoFillRoomTile(config, info, world);
         }
         
         //铺房间
@@ -155,7 +155,7 @@ public class DungeonTileMap
                 else
                 {
                     var weights = roomInfo.RoomSplit.Preinstall.Select(info => info.Weight).ToArray();
-                    var index = random.RandomWeight(weights);
+                    var index = world.Random.RandomWeight(weights);
                     preinstallInfo = roomInfo.RoomSplit.Preinstall[index];
                 }
             }
@@ -163,7 +163,7 @@ public class DungeonTileMap
             var roomPreinstall = new RoomPreinstall(roomInfo, preinstallInfo);
             roomInfo.RoomPreinstall = roomPreinstall;
             //执行预处理操作
-            roomPreinstall.Pretreatment(random);
+            roomPreinstall.Pretreatment(world);
         }
 
         // yield break;

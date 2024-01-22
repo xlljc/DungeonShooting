@@ -66,6 +66,16 @@ public partial class World : CanvasModulate, ICoroutine
     /// </summary>
     public List<Enemy> Enemy_InstanceList  { get; } = new List<Enemy>();
     
+    /// <summary>
+    /// 随机数对象
+    /// </summary>
+    public SeedRandom Random { get; private set; }
+    
+    /// <summary>
+    /// 随机对象池
+    /// </summary>
+    public RandomPool RandomPool { get; private set; }
+    
     private bool _pause = false;
     private List<CoroutineData> _coroutineList;
 
@@ -180,5 +190,14 @@ public partial class World : CanvasModulate, ICoroutine
     public void StopAllCoroutine()
     {
         ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
+    }
+
+    /// <summary>
+    /// 初始化随机池
+    /// </summary>
+    public void InitRandomPool(SeedRandom random)
+    {
+        Random = random;
+        RandomPool = new  RandomPool(this);
     }
 }

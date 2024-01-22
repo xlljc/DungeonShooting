@@ -10,7 +10,7 @@ public class ActivityMark
     public string Id { get; set; }
 
     /// <summary>
-    /// 刷新位置
+    /// 刷新位置, 单位: 像素
     /// </summary>
     public Vector2 Position { get; set; }
 
