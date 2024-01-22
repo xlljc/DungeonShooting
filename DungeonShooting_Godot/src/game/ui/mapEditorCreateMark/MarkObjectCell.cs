@@ -77,8 +77,11 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
     {
         if (_expandPanel != null)
         {
-            _attributeBases.Clear();
-            _attributeBases = null;
+            if (_attributeBases != null)
+            {
+                _attributeBases.Clear();
+                _attributeBases = null;
+            }
             _expandPanel.QueueFree();
             _expandPanel = null;
             _altitude = null;

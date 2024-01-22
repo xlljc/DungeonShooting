@@ -149,7 +149,6 @@ public class RoomPreinstall : IDestroy
                         mark.ActivityType = (ActivityType)activityBase.Type;
                         if (mark.ActivityType == ActivityType.Enemy) //敌人类型
                         {
-                            _hsaEnemy = true;
                             mark.DerivedAttr = new Dictionary<string, string>();
                             if (!mark.Attr.TryGetValue("Face", out var face) || face == "0") //随机方向
                             {
@@ -169,7 +168,7 @@ public class RoomPreinstall : IDestroy
                 }
                 else if (markInfo.SpecialMarkType == SpecialMarkType.BirthPoint) //玩家出生标记
                 {
-
+                    
                 }
                 else
                 {
@@ -186,8 +185,6 @@ public class RoomPreinstall : IDestroy
                     world.Random.RandomRangeInt((int)(pos.X - birthRect.X / 2), (int)(pos.X + birthRect.X / 2)),
                     world.Random.RandomRangeInt((int)(pos.Y - birthRect.Y / 2), (int)(pos.Y + birthRect.Y / 2))
                 );
-                //var offset = RoomInfo.RoomSplit.RoomInfo.Position.AsVector2I();
-                //mark.Position = RoomInfo.GetWorldPosition() + tempPos - offset;
                 mark.Position = RoomInfo.ToGlobalPosition(tempPos);
                 wave.Add(mark);
             }
@@ -196,23 +193,59 @@ public class RoomPreinstall : IDestroy
         //自动填充操作
         if (RoomPreinstallInfo.AutoFill)
         {
-            var tempWave = GetOrCreateWave(0);
-            var mark = new ActivityMark();
-            mark.Id = world.RandomPool.GetRandomWeapon().Id;
-            mark.MarkType = SpecialMarkType.Normal;
-            mark.ActivityType = ActivityType.Weapon;
-            mark.Attr = null;
-            mark.VerticalSpeed = 0;
-            mark.Altitude = 8;
-            mark.DelayTime = 0;
-            mark.Position = new Vector2(64, 64);
-            tempWave.Add(mark);
+            var count = world.Random.RandomRangeInt(3, 10);
+            //world.Random.GetRandomPositionInPolygon(RoomInfo.RoomSplit.TileInfo.NavigationVertices)
+            var arr = new ActivityType[] { ActivityType.Enemy, ActivityType.Weapon, ActivityType.Prop };
+            for (int i = 0; i < count; i++)
+            {
+                var tempWave = GetOrCreateWave(world.Random.RandomRangeInt(0, 2));
+                var mark = new ActivityMark();
+                var activityType = world.Random.RandomChoose(arr);
+                if (activityType == ActivityType.Enemy)
+                {
+                    mark.Id = world.RandomPool.GetRandomEnemy().Id;
+                }
+                else if (activityType == ActivityType.Weapon)
+                {
+                    mark.Id = world.RandomPool.GetRandomWeapon().Id;
+                }
+                else if (activityType == ActivityType.Prop)
+                {
+                    mark.Id = world.RandomPool.GetRandomProp().Id;
+                }
+                
+                mark.ActivityType = activityType;
+                mark.MarkType = SpecialMarkType.Normal;
+                mark.Attr = null;
+                mark.VerticalSpeed = 0;
+                mark.Altitude = 8;
+                mark.DelayTime = 0;
+                mark.Position = RoomInfo.ToGlobalPosition(Vector2.Zero);
+                tempWave.Add(mark);
+            }
         }
         
         //排序操作
         foreach (var wave in WaveList)
         {
             wave.Sort((a, b) => (int)(a.DelayTime * 1000 - b.DelayTime * 1000));
+        }
+        //判断是否有敌人
+        CheckHasEnemy();
+    }
+
+    private void CheckHasEnemy()
+    {
+        foreach (var marks in WaveList)
+        {
+            foreach (var activityMark in marks)
+            {
+                if (activityMark.ActivityType == ActivityType.Enemy)
+                {
+                    _hsaEnemy = true;
+                    return;
+                }
+            }
         }
     }
 
