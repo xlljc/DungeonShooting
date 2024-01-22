@@ -405,6 +405,7 @@ public partial class DungeonManager : Node2D
         navigationPolygon.Name = "NavigationRegion" + (GetChildCount() + 1);
         navigationPolygon.NavigationPolygon = polygonData;
         World.NavigationRoot.AddChild(navigationPolygon);
+        roomInfo.NavigationRegion = navigationPolygon;
     }
 
     //创建门

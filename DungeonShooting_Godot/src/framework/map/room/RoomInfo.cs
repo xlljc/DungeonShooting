@@ -135,6 +135,10 @@ public class RoomInfo : IDestroy
     /// </summary>
     public Vector2I Waypoints { get; set; }
 
+    /// <summary>
+    /// 导航网格对象
+    /// </summary>
+    public NavigationRegion2D NavigationRegion { get; set; }
     public bool IsDestroyed { get; private set; }
 
     private bool _openDoorFlag = true;

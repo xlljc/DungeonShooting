@@ -191,36 +191,56 @@ public class RoomPreinstall : IDestroy
         }
         
         //自动填充操作
-        if (RoomPreinstallInfo.AutoFill)
+        if (RoomPreinstallInfo.AutoFill && RoomInfo.RoomType == DungeonRoomType.Battle)
         {
             var count = world.Random.RandomRangeInt(3, 10);
-            //world.Random.GetRandomPositionInPolygon(RoomInfo.RoomSplit.TileInfo.NavigationVertices)
+            var tileInfo = RoomInfo.RoomSplit.TileInfo;
+            var serializeVector2s = tileInfo.NavigationVertices;
+            var vertices = new List<Vector2>();
+            foreach (var sv2 in serializeVector2s)
+            {
+                vertices.Add(sv2.AsVector2());
+            }
+            var positionArray = world.Random.GetRandomPositionInPolygon(vertices, tileInfo.NavigationPolygon, count);
             var arr = new ActivityType[] { ActivityType.Enemy, ActivityType.Weapon, ActivityType.Prop };
-            for (int i = 0; i < count; i++)
+            var weight = new int[] { 15, 2, 1 };
+            for (var i = 0; i < count; i++)
             {
                 var tempWave = GetOrCreateWave(world.Random.RandomRangeInt(0, 2));
                 var mark = new ActivityMark();
-                var activityType = world.Random.RandomChoose(arr);
-                if (activityType == ActivityType.Enemy)
+                mark.Attr = new Dictionary<string, string>();
+                var index = world.Random.RandomWeight(weight);
+                var activityType = arr[index];
+                if (activityType == ActivityType.Enemy) //敌人
                 {
                     mark.Id = world.RandomPool.GetRandomEnemy().Id;
+                    mark.Attr.Add("Face", "0");
+                    mark.DerivedAttr = new Dictionary<string, string>();
+                    mark.DerivedAttr.Add("Face", world.Random.RandomChoose((int)FaceDirection.Left, (int)FaceDirection.Right).ToString()); //链朝向
+                    if (world.Random.RandomBoolean(0.8f)) //手持武器
+                    {
+                        var weapon = world.RandomPool.GetRandomWeapon();
+                        var weaponAttribute = Weapon.GetWeaponAttribute(weapon.Id);
+                        mark.Attr.Add("Weapon", weapon.Id); //武器id
+                        mark.Attr.Add("CurrAmmon", weaponAttribute.AmmoCapacity.ToString()); //弹夹弹药量
+                        mark.Attr.Add("ResidueAmmo", weaponAttribute.AmmoCapacity.ToString()); //剩余弹药量
+                    }
                 }
-                else if (activityType == ActivityType.Weapon)
+                else if (activityType == ActivityType.Weapon) //武器
                 {
                     mark.Id = world.RandomPool.GetRandomWeapon().Id;
                 }
-                else if (activityType == ActivityType.Prop)
+                else if (activityType == ActivityType.Prop) //道具
                 {
                     mark.Id = world.RandomPool.GetRandomProp().Id;
                 }
                 
                 mark.ActivityType = activityType;
                 mark.MarkType = SpecialMarkType.Normal;
-                mark.Attr = null;
                 mark.VerticalSpeed = 0;
-                mark.Altitude = 8;
-                mark.DelayTime = 0;
-                mark.Position = RoomInfo.ToGlobalPosition(Vector2.Zero);
+                mark.Altitude = activityType == ActivityType.Enemy ? 0 : 8;
+                mark.DelayTime = i * 0.3f;
+                mark.Position = RoomInfo.ToGlobalPosition(positionArray[i]);
                 tempWave.Add(mark);
             }
         }
@@ -521,7 +541,7 @@ public class RoomPreinstall : IDestroy
         else if (activityMark.ActivityType == ActivityType.Enemy) //敌人类型
         {
             var role = (Role)activityObject;
-            if (role is Enemy enemy && activityMark.Attr.TryGetValue("Weapon", out var weaponId)) //使用的武器
+            if (role.WeaponPack.Capacity > 0 && role is Enemy enemy && activityMark.Attr.TryGetValue("Weapon", out var weaponId)) //使用的武器
             {
                 if (!string.IsNullOrEmpty(weaponId))
                 {
