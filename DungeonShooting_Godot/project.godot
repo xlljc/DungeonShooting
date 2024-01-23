@@ -30,10 +30,6 @@ window/vsync/vsync_mode=0
 
 project/assembly_name="DungeonShooting"
 
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/dungeonShooting_plugin/plugin.cfg")
-
 [file_customization]
 
 folder_colors={

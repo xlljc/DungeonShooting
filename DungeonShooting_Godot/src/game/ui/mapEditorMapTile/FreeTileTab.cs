@@ -6,8 +6,10 @@ namespace UI.MapEditorMapTile;
 /// <summary>
 /// 自由笔刷页签
 /// </summary>
-public partial class FreeTileTab : EditorGridBg<MapEditorMapTile.Tab1>
+public partial class FreeTileTab : EditorGridBg
 {
+    public new MapEditorMapTile.Tab1 UiNode => (MapEditorMapTile.Tab1)base.UiNode;
+
     private ImageTexture _texture;
     private Sprite2D _sprite;
     private Control _brush;

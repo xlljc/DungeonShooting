@@ -5,8 +5,10 @@ using Godot;
 
 namespace UI.TileSetEditorCombination;
 
-public partial class TileEditCombination : EditorGridBg<TileSetEditorCombination.LeftTopBg>
+public partial class TileEditCombination : EditorGridBg
 {
+    public new TileSetEditorCombination.LeftTopBg UiNode => (TileSetEditorCombination.LeftTopBg)base.UiNode;
+    
     // ------------------------------- 笔刷相关 -------------------------------
     //笔刷数据, kay: 代表原图中的坐标, 单位: 格
     private Dictionary<Vector2I, CombinationCell> _brushData = new Dictionary<Vector2I, CombinationCell>();

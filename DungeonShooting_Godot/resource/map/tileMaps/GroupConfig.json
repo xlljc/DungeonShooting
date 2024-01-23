@@ -24,7 +24,12 @@
         "Path": "resource/map/tileMaps/Test1/outlet/End1"
       }
     ],
-    "BossList": [],
+    "BossList": [
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/Test1/boss/Boss1"
+      }
+    ],
     "RewardList": [
       {
         "ErrorType": 0,

@@ -177,6 +177,7 @@ public static class MapProjectManager
             preinstallInfo.Name = "Preinstall1";
             preinstallInfo.Weight = 100;
             preinstallInfo.Remark = "";
+            preinstallInfo.AutoFill = true;
             preinstallInfo.InitWaveList();
             preinstallInfo.InitSpecialMark(roomSplit.RoomInfo.RoomType);
             roomSplit.Preinstall.Add(preinstallInfo);
