@@ -228,10 +228,10 @@ public partial class GameCamera : Camera2D
         foreach (var keyValuePair in _shakeMap)
         {
             var shakeData = keyValuePair.Value;
-            var tempLenght = shakeData.Value.LengthSquared();
-            if (tempLenght > length)
+            var tempLength = shakeData.Value.LengthSquared();
+            if (tempLength > length)
             {
-                length = tempLenght;
+                length = tempLength;
                 temp = shakeData.Value;
                 if (shakeData.Decline)
                 {
