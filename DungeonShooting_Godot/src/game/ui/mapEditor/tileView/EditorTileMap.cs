@@ -792,13 +792,13 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         
         //读取地块数据
         SetAutoLayerDataFromList(MapLayer.AutoFloorLayer, tileInfo.Floor);
-        SetAutoLayerDataFromList(MapLayer.AutoMiddleLayer, tileInfo.Middle);
-        SetAutoLayerDataFromList(MapLayer.AutoTopLayer, tileInfo.Top);
         SetCustomLayerDataFromList(MapLayer.CustomFloorLayer1, tileInfo.CustomFloor1);
         SetCustomLayerDataFromList(MapLayer.CustomFloorLayer2, tileInfo.CustomFloor2);
         SetCustomLayerDataFromList(MapLayer.CustomFloorLayer3, tileInfo.CustomFloor3);
+        SetAutoLayerDataFromList(MapLayer.AutoMiddleLayer, tileInfo.Middle);
         SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer1, tileInfo.CustomMiddle1);
         SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer2, tileInfo.CustomMiddle2);
+        SetAutoLayerDataFromList(MapLayer.AutoTopLayer, tileInfo.Top);
         SetCustomLayerDataFromList(MapLayer.CustomTopLayer, tileInfo.CustomTop);
 
         //如果有图块错误, 则找出错误的点位
@@ -862,24 +862,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
 
         _initLayer = true;
         //初始化层级数据
-        AddLayer(MapLayer.AutoFloorLayer);
-        SetLayerZIndex(MapLayer.AutoFloorLayer, MapLayer.AutoFloorLayer);
-        AddLayer(MapLayer.CustomFloorLayer1);
-        SetLayerZIndex(MapLayer.CustomFloorLayer1, MapLayer.CustomFloorLayer1);
-        AddLayer(MapLayer.CustomFloorLayer2);
-        SetLayerZIndex(MapLayer.CustomFloorLayer2, MapLayer.CustomFloorLayer2);
-        AddLayer(MapLayer.CustomFloorLayer3);
-        SetLayerZIndex(MapLayer.CustomFloorLayer3, MapLayer.CustomFloorLayer3);
-        AddLayer(MapLayer.AutoMiddleLayer);
-        SetLayerZIndex(MapLayer.AutoMiddleLayer, MapLayer.AutoMiddleLayer);
-        AddLayer(MapLayer.CustomMiddleLayer1);
-        SetLayerZIndex(MapLayer.CustomMiddleLayer1, MapLayer.CustomMiddleLayer1);
-        AddLayer(MapLayer.CustomMiddleLayer2);
-        SetLayerZIndex(MapLayer.CustomMiddleLayer2, MapLayer.CustomMiddleLayer2);
-        AddLayer(MapLayer.AutoTopLayer);
-        SetLayerZIndex(MapLayer.AutoTopLayer, MapLayer.AutoTopLayer);
-        AddLayer(MapLayer.CustomTopLayer);
-        SetLayerZIndex(MapLayer.CustomTopLayer, MapLayer.CustomTopLayer);
+        MapLayerManager.InitMapLayer(this);
     }
 
     //缩小

@@ -16,22 +16,22 @@ public partial class World : CanvasModulate, ICoroutine
     /// <summary>
     /// //对象根节点
     /// </summary>
-    [Export] public Node2D NormalLayer;
+    public Node2D NormalLayer;
     
     /// <summary>
     /// 对象根节点, 带y轴排序功能
     /// </summary>
-    [Export] public Node2D YSortLayer;
+    public Node2D YSortLayer;
     
     /// <summary>
     /// 地图根节点
     /// </summary>
-    [Export] public TileMap TileRoot;
+    public TileMap TileRoot;
 
-    [Export] public Node2D StaticSpriteRoot;
-    [Export] public Node2D AffiliationAreaRoot;
-    [Export] public Node2D FogMaskRoot;
-    [Export] public Node2D NavigationRoot;
+    public Node2D StaticSpriteRoot;
+    public Node2D AffiliationAreaRoot;
+    public Node2D FogMaskRoot;
+    public Node2D NavigationRoot;
     
     /// <summary>
     /// 是否暂停
@@ -83,6 +83,13 @@ public partial class World : CanvasModulate, ICoroutine
     {
         Color = Colors.Black;
         //TileRoot.YSortEnabled = false;
+        NormalLayer = GetNode<Node2D>("TileRoot/NormalLayer");
+        YSortLayer = GetNode<Node2D>("TileRoot/YSortLayer");
+        TileRoot = GetNode<TileMap>("TileRoot");
+        StaticSpriteRoot = GetNode<Node2D>("TileRoot/StaticSpriteRoot");
+        FogMaskRoot = GetNode<Node2D>("TileRoot/FogMaskRoot");
+        NavigationRoot = GetNode<Node2D>("TileRoot/NavigationRoot");
+        AffiliationAreaRoot = GetNode<Node2D>("TileRoot/AffiliationAreaRoot");
     }
 
     public override void _Process(double delta)
@@ -96,39 +103,7 @@ public partial class World : CanvasModulate, ICoroutine
     /// </summary>
     public void InitLayer()
     {
-        TileRoot.AddLayer(MapLayer.AutoFloorLayer);
-        TileRoot.SetLayerZIndex(MapLayer.AutoFloorLayer, -10);
-        TileRoot.SetLayerNavigationEnabled(MapLayer.AutoFloorLayer, false);
-        TileRoot.AddLayer(MapLayer.CustomFloorLayer1);
-        TileRoot.SetLayerZIndex(MapLayer.CustomFloorLayer1, -10);
-        TileRoot.SetLayerNavigationEnabled(MapLayer.CustomFloorLayer1, false);
-        TileRoot.AddLayer(MapLayer.CustomFloorLayer2);
-        TileRoot.SetLayerZIndex(MapLayer.CustomFloorLayer2, -10);
-        TileRoot.SetLayerNavigationEnabled(MapLayer.CustomFloorLayer2, false);
-        TileRoot.AddLayer(MapLayer.CustomFloorLayer3);
-        TileRoot.SetLayerZIndex(MapLayer.CustomFloorLayer3, -10);
-        TileRoot.SetLayerNavigationEnabled(MapLayer.CustomFloorLayer3, false);
-        TileRoot.AddLayer(MapLayer.AutoMiddleLayer);
-        TileRoot.SetLayerZIndex(MapLayer.AutoMiddleLayer, 0);
-        TileRoot.SetLayerNavigationEnabled(MapLayer.AutoMiddleLayer, false);
-        TileRoot.SetLayerYSortEnabled(MapLayer.AutoMiddleLayer, true);
-        TileRoot.AddLayer(MapLayer.CustomMiddleLayer1);
-        TileRoot.SetLayerZIndex(MapLayer.CustomMiddleLayer1, 0);
-        TileRoot.SetLayerNavigationEnabled(MapLayer.CustomMiddleLayer1, false);
-        TileRoot.SetLayerYSortEnabled(MapLayer.CustomMiddleLayer1, true);
-        TileRoot.AddLayer(MapLayer.CustomMiddleLayer2);
-        TileRoot.SetLayerZIndex(MapLayer.CustomMiddleLayer2, 0);
-        TileRoot.SetLayerNavigationEnabled(MapLayer.CustomMiddleLayer2, false);
-        TileRoot.SetLayerYSortEnabled(MapLayer.CustomMiddleLayer2, true);
-        TileRoot.AddLayer(MapLayer.AutoTopLayer);
-        TileRoot.SetLayerZIndex(MapLayer.AutoTopLayer, 10);
-        TileRoot.SetLayerNavigationEnabled(MapLayer.AutoTopLayer, false);
-        TileRoot.AddLayer(MapLayer.CustomTopLayer);
-        TileRoot.SetLayerZIndex(MapLayer.CustomTopLayer, 10);
-        TileRoot.SetLayerNavigationEnabled(MapLayer.CustomTopLayer, false);
-        TileRoot.AddLayer(MapLayer.AutoAisleFloorLayer);
-        TileRoot.SetLayerZIndex(MapLayer.AutoAisleFloorLayer, -10);
-        TileRoot.SetLayerNavigationEnabled(MapLayer.AutoAisleFloorLayer, false);
+        MapLayerManager.InitMapLayer(TileRoot);
     }
 
     /// <summary>

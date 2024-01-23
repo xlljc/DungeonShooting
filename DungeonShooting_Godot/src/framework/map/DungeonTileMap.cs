@@ -110,21 +110,15 @@ public class DungeonTileMap
 
             //---------------------- 填充tile操作 ----------------------
             var terrainInfo = config.TerrainInfo;
-
-            //自动地形层
-            //底层
-            SetAutoLayerDataFromList(MapLayer.AutoFloorLayer, config.SourceId, roomInfo, tileInfo.Floor, rectPos, terrainInfo);
-            //中层
-            SetAutoLayerDataFromList(MapLayer.AutoMiddleLayer, config.SourceId, roomInfo, tileInfo.Middle, rectPos, terrainInfo);
-            //顶层
-            SetAutoLayerDataFromList(MapLayer.AutoTopLayer, config.SourceId, roomInfo, tileInfo.Top, rectPos, terrainInfo);
             
-            //自定义数据层
+            SetAutoLayerDataFromList(MapLayer.AutoFloorLayer, config.SourceId, roomInfo, tileInfo.Floor, rectPos, terrainInfo);
             SetCustomLayerDataFromList(MapLayer.CustomFloorLayer1, roomInfo, tileInfo.CustomFloor1, rectPos);
             SetCustomLayerDataFromList(MapLayer.CustomFloorLayer2, roomInfo, tileInfo.CustomFloor2, rectPos);
             SetCustomLayerDataFromList(MapLayer.CustomFloorLayer3, roomInfo, tileInfo.CustomFloor3, rectPos);
+            SetAutoLayerDataFromList(MapLayer.AutoMiddleLayer, config.SourceId, roomInfo, tileInfo.Middle, rectPos, terrainInfo);
             SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer1, roomInfo, tileInfo.CustomMiddle1, rectPos);
             SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer2, roomInfo, tileInfo.CustomMiddle2, rectPos);
+            SetAutoLayerDataFromList(MapLayer.AutoTopLayer, config.SourceId, roomInfo, tileInfo.Top, rectPos, terrainInfo);
             SetCustomLayerDataFromList(MapLayer.CustomTopLayer, roomInfo, tileInfo.CustomTop, rectPos);
             
             //寻找可用传送点
