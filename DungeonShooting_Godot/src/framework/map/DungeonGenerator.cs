@@ -474,7 +474,7 @@ public class DungeonGenerator
         {
             _nextRoomType = DungeonRoomType.Inlet;
         }
-        else if (_count == 1) //奖励房间
+        else if (_count == 0) //奖励房间
         {
             _nextRoomType = DungeonRoomType.Reward;
         }
