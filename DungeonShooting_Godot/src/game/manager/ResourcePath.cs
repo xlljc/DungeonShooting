@@ -6,6 +6,9 @@ public class ResourcePath
     public const string default_bus_layout_tres = "res://default_bus_layout.tres";
     public const string default_env_tres = "res://default_env.tres";
     public const string icon_png = "res://icon.png";
+    public const string _VSCodeCounter_20240121_181451_diff_txt = "res://.VSCodeCounter/2024-01-21_18-14-51/diff.txt";
+    public const string _VSCodeCounter_20240121_181451_results_json = "res://.VSCodeCounter/2024-01-21_18-14-51/results.json";
+    public const string _VSCodeCounter_20240121_181451_results_txt = "res://.VSCodeCounter/2024-01-21_18-14-51/results.txt";
     public const string excelTool_bin_Release_net8_0_winx64_ExcelTool_deps_json = "res://excelTool/bin/Release/net8.0/win-x64/ExcelTool.deps.json";
     public const string excelTool_bin_Release_net8_0_winx64_ExcelTool_runtimeconfig_json = "res://excelTool/bin/Release/net8.0/win-x64/ExcelTool.runtimeconfig.json";
     public const string excelTool_obj_ExcelTool_csproj_nuget_dgspec_json = "res://excelTool/obj/ExcelTool.csproj.nuget.dgspec.json";
@@ -201,6 +204,7 @@ public class ResourcePath
     public const string resource_sound_sfx_shooting_Shooting0009_ogg = "res://resource/sound/sfx/shooting/Shooting0009.ogg";
     public const string resource_sound_sfx_shooting_Shooting0010_ogg = "res://resource/sound/sfx/shooting/Shooting0010.ogg";
     public const string resource_sound_sfx_shooting_Shooting0011_ogg = "res://resource/sound/sfx/shooting/Shooting0011.ogg";
+    public const string resource_sprite_1234_txt = "res://resource/sprite/1234.txt";
     public const string resource_sprite_brush_Brush1_png = "res://resource/sprite/brush/Brush1.png";
     public const string resource_sprite_brush_Brush2_png = "res://resource/sprite/brush/Brush2.png";
     public const string resource_sprite_brush_Brush3_png = "res://resource/sprite/brush/Brush3.png";
@@ -326,6 +330,7 @@ public class ResourcePath
     public const string resource_sprite_ui_commonIcon_CenterTool_png = "res://resource/sprite/ui/commonIcon/CenterTool.png";
     public const string resource_sprite_ui_commonIcon_Delete_png = "res://resource/sprite/ui/commonIcon/Delete.png";
     public const string resource_sprite_ui_commonIcon_Delete2_png = "res://resource/sprite/ui/commonIcon/Delete2.png";
+    public const string resource_sprite_ui_commonIcon_Dice_png = "res://resource/sprite/ui/commonIcon/Dice.png";
     public const string resource_sprite_ui_commonIcon_DoorTool_png = "res://resource/sprite/ui/commonIcon/DoorTool.png";
     public const string resource_sprite_ui_commonIcon_Down_png = "res://resource/sprite/ui/commonIcon/Down.png";
     public const string resource_sprite_ui_commonIcon_DragTool_png = "res://resource/sprite/ui/commonIcon/DragTool.png";
@@ -448,13 +453,6 @@ public class ResourcePath
     public const string resource_spriteFrames_weapon_Weapon0009_tres = "res://resource/spriteFrames/weapon/Weapon0009.tres";
     public const string resource_theme_mainTheme_tres = "res://resource/theme/mainTheme.tres";
     public const string resource_theme_theme1_tres = "res://resource/theme/theme1.tres";
-    public const string resource_tileSet_TileSet_old_tres = "res://resource/tileSet/TileSet_old.tres";
-    public const string resource_tileSet_map1_TileSet1_tres = "res://resource/tileSet/map1/TileSet1.tres";
-    public const string resource_tileSet_map1_website_txt = "res://resource/tileSet/map1/website.txt";
-    public const string resource_tileSet_map2_TileSet2_tres = "res://resource/tileSet/map2/TileSet2.tres";
-    public const string resource_tileSprite_map1_16x16dungeoniiwallreconfigv04spritesheet_png = "res://resource/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png";
-    public const string resource_tileSprite_map2_DungeonTilesetSpikes_png = "res://resource/tileSprite/map2/Dungeon Tileset + Spikes.png";
-    public const string resource_tileSprite_map2_DungeonTileset_png = "res://resource/tileSprite/map2/Dungeon Tileset.png";
     public const string scene_Main_tscn = "res://scene/Main.tscn";
     public const string scene_World_tscn = "res://scene/World.tscn";
     public const string scene_test_TestCreateSector_tscn = "res://scene/test/TestCreateSector.tscn";

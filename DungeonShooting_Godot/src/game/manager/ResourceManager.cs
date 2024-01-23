@@ -191,9 +191,13 @@ public static class ResourceManager
                 else if (markInfo.MarkList.Count == 1) //单个物体
                 {
                     var id = markInfo.MarkList[0].Id;
-                    if (id != null && ExcelConfig.ActivityBase_Map.TryGetValue(id, out var activityBase))
+                    if (id != null)
                     {
-                        return LoadTexture2D(activityBase.Icon);
+                        var activityBase = PreinstallMarkManager.GetMarkConfig(id);
+                        if (activityBase != null)
+                        {
+                            return LoadTexture2D(activityBase.Icon);
+                        }
                     }
                 }
             }

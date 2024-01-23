@@ -49,7 +49,7 @@ public partial class DungeonManager : Node2D
     /// 自动图块配置
     /// </summary>
     public AutoTileConfig AutoTileConfig { get; private set; }
-    
+
     private UiBase _prevUi;
     private DungeonTileMap _dungeonTileMap;
     private DungeonGenerator _dungeonGenerator;
@@ -223,7 +223,7 @@ public partial class DungeonManager : Node2D
         }
         yield return 0;
         //创建世界场景
-        World = GameApplication.Instance.CreateNewWorld();
+        World = GameApplication.Instance.CreateNewWorld(random);
         yield return 0;
         var group = GameApplication.Instance.RoomConfig[CurrConfig.GroupName];
         var tileSetSplit = GameApplication.Instance.TileSetConfig[group.TileSet];
@@ -231,7 +231,7 @@ public partial class DungeonManager : Node2D
         //填充地牢
         AutoTileConfig = new AutoTileConfig(0, tileSetSplit.TileSetInfo.Sources[0].Terrain[0]);
         _dungeonTileMap = new DungeonTileMap(World.TileRoot);
-        yield return _dungeonTileMap.AutoFillRoomTile(AutoTileConfig, _dungeonGenerator.StartRoomInfo, random);
+        yield return _dungeonTileMap.AutoFillRoomTile(AutoTileConfig, _dungeonGenerator.StartRoomInfo, World);
         //yield return _dungeonTileMap.AddOutlineTile(AutoTileConfig.WALL_BLOCK);
         
         //生成寻路网格， 这一步操作只生成过道的导航
@@ -405,6 +405,7 @@ public partial class DungeonManager : Node2D
         navigationPolygon.Name = "NavigationRegion" + (GetChildCount() + 1);
         navigationPolygon.NavigationPolygon = polygonData;
         World.NavigationRoot.AddChild(navigationPolygon);
+        roomInfo.NavigationRegion = navigationPolygon;
     }
 
     //创建门

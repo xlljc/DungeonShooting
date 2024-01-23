@@ -38,17 +38,17 @@ public class DungeonTileMap
     /// <summary>
     /// 根据 startRoom 和 config 数据自动填充 tileMap 参数中的地图数据, 该函数为协程函数
     /// </summary>
-    public IEnumerator AutoFillRoomTile(AutoTileConfig config, RoomInfo startRoomInfo, SeedRandom random)
+    public IEnumerator AutoFillRoomTile(AutoTileConfig config, RoomInfo startRoomInfo, World world)
     {
         _connectNavigationItemList.Clear();
-        yield return _AutoFillRoomTile(config, startRoomInfo, random);
+        yield return _AutoFillRoomTile(config, startRoomInfo, world);
     }
     
-    private IEnumerator _AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo, SeedRandom random)
+    private IEnumerator _AutoFillRoomTile(AutoTileConfig config, RoomInfo roomInfo, World world)
     {
         foreach (var info in roomInfo.Next)
         {
-            yield return _AutoFillRoomTile(config, info, random);
+            yield return _AutoFillRoomTile(config, info, world);
         }
         
         //铺房间
@@ -110,21 +110,15 @@ public class DungeonTileMap
 
             //---------------------- 填充tile操作 ----------------------
             var terrainInfo = config.TerrainInfo;
-
-            //自动地形层
-            //底层
-            SetAutoLayerDataFromList(MapLayer.AutoFloorLayer, config.SourceId, roomInfo, tileInfo.Floor, rectPos, terrainInfo);
-            //中层
-            SetAutoLayerDataFromList(MapLayer.AutoMiddleLayer, config.SourceId, roomInfo, tileInfo.Middle, rectPos, terrainInfo);
-            //顶层
-            SetAutoLayerDataFromList(MapLayer.AutoTopLayer, config.SourceId, roomInfo, tileInfo.Top, rectPos, terrainInfo);
             
-            //自定义数据层
+            SetAutoLayerDataFromList(MapLayer.AutoFloorLayer, config.SourceId, roomInfo, tileInfo.Floor, rectPos, terrainInfo);
             SetCustomLayerDataFromList(MapLayer.CustomFloorLayer1, roomInfo, tileInfo.CustomFloor1, rectPos);
             SetCustomLayerDataFromList(MapLayer.CustomFloorLayer2, roomInfo, tileInfo.CustomFloor2, rectPos);
             SetCustomLayerDataFromList(MapLayer.CustomFloorLayer3, roomInfo, tileInfo.CustomFloor3, rectPos);
+            SetAutoLayerDataFromList(MapLayer.AutoMiddleLayer, config.SourceId, roomInfo, tileInfo.Middle, rectPos, terrainInfo);
             SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer1, roomInfo, tileInfo.CustomMiddle1, rectPos);
             SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer2, roomInfo, tileInfo.CustomMiddle2, rectPos);
+            SetAutoLayerDataFromList(MapLayer.AutoTopLayer, config.SourceId, roomInfo, tileInfo.Top, rectPos, terrainInfo);
             SetCustomLayerDataFromList(MapLayer.CustomTopLayer, roomInfo, tileInfo.CustomTop, rectPos);
             
             //寻找可用传送点
@@ -155,7 +149,7 @@ public class DungeonTileMap
                 else
                 {
                     var weights = roomInfo.RoomSplit.Preinstall.Select(info => info.Weight).ToArray();
-                    var index = random.RandomWeight(weights);
+                    var index = world.Random.RandomWeight(weights);
                     preinstallInfo = roomInfo.RoomSplit.Preinstall[index];
                 }
             }
@@ -163,7 +157,7 @@ public class DungeonTileMap
             var roomPreinstall = new RoomPreinstall(roomInfo, preinstallInfo);
             roomInfo.RoomPreinstall = roomPreinstall;
             //执行预处理操作
-            roomPreinstall.Pretreatment(random);
+            roomPreinstall.Pretreatment(world);
         }
 
         // yield break;

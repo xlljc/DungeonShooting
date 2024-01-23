@@ -14,6 +14,7 @@ public partial class NoWeaponEnemy : Enemy
     {
         base.OnInit();
         NoWeaponAttack = true;
+        WeaponPack.SetCapacity(0);
         AnimationPlayer.AnimationFinished += OnAnimationFinished;
         
         _brushData = LiquidBrushManager.GetBrush("0002");

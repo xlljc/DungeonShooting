@@ -192,6 +192,10 @@ public class DungeonGenerator
             {
                 tempPrevRoomInfo = prevRoomInfo;
             }
+            else if (nextRoomType == DungeonRoomType.Reward)
+            {
+                tempPrevRoomInfo = prevRoomInfo;
+            }
             else if (nextRoomType == DungeonRoomType.Battle)
             {
                 if (chainTryCount < chainMaxTryCount)
@@ -460,7 +464,7 @@ public class DungeonGenerator
     //判断房间是否参与计数
     private bool IsParticipateCounting(RoomInfo roomInfo)
     {
-        return roomInfo.RoomType == DungeonRoomType.Battle || roomInfo.RoomType == DungeonRoomType.Boss;
+        return roomInfo.RoomType == DungeonRoomType.Battle || roomInfo.RoomType == DungeonRoomType.Boss || roomInfo.RoomType == DungeonRoomType.Reward;
     }
 
     //计算下一个房间类型
@@ -469,6 +473,10 @@ public class DungeonGenerator
         if (prev == null) //生成第一个房间
         {
             _nextRoomType = DungeonRoomType.Inlet;
+        }
+        else if (_count == 0) //奖励房间
+        {
+            _nextRoomType = DungeonRoomType.Reward;
         }
         else if (_count == _config.RoomCount - 1) //最后一个房间是boss房间
         {

@@ -15,22 +15,22 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// <summary>
 	/// 游戏渲染视口
 	/// </summary>
-	[Export] public SubViewport SubViewport;
+	public SubViewport SubViewport;
 
 	/// <summary>
 	/// SubViewportContainer 组件
 	/// </summary>
-	[Export] public SubViewportContainer SubViewportContainer;
+	public SubViewportContainer SubViewportContainer;
 
 	/// <summary>
 	/// 场景根节点
 	/// </summary>
-	[Export] public Node2D SceneRoot;
+	public Node2D SceneRoot;
 	
 	/// <summary>
 	/// 全局根节点
 	/// </summary>
-	[Export] public Node2D GlobalNodeRoot;
+	public Node2D GlobalNodeRoot;
 	
 	/// <summary>
 	/// 游戏目标帧率
@@ -94,6 +94,7 @@ public partial class GameApplication : Node2D, ICoroutine
 
 		//初始化配置表
 		ExcelConfig.Init();
+		PreinstallMarkManager.Init();
 		//初始化房间配置数据
 		InitRoomConfig();
 		//初始化TileSet配置数据
@@ -107,9 +108,14 @@ public partial class GameApplication : Node2D, ICoroutine
 		DungeonConfig.GroupName = "Test1";
 		DungeonConfig.RoomCount = 20;
 	}
-	
+
 	public override void _EnterTree()
 	{
+		SubViewport = GetNode<SubViewport>("ViewCanvas/SubViewportContainer/SubViewport");
+		SubViewportContainer = GetNode<SubViewportContainer>("ViewCanvas/SubViewportContainer");
+		SceneRoot = GetNode<Node2D>("ViewCanvas/SubViewportContainer/SubViewport/SceneRoot");
+		GlobalNodeRoot = GetNode<Node2D>("GlobalNodeRoot");
+		
 		//背景颜色
 		RenderingServer.SetDefaultClearColor(new Color(0, 0, 0, 1));
 		//随机化种子
@@ -159,7 +165,7 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// <summary>
 	/// 创建新的 World 对象, 相当于清理房间
 	/// </summary>
-	public World CreateNewWorld()
+	public World CreateNewWorld(SeedRandom random)
 	{
 		if (World != null)
 		{
@@ -167,8 +173,9 @@ public partial class GameApplication : Node2D, ICoroutine
 			World.QueueFree();
 		}
 		World = ResourceManager.LoadAndInstantiate<World>(ResourcePath.scene_World_tscn);
-		World.InitLayer();
 		SceneRoot.AddChild(World);
+		World.InitLayer();
+		World.InitRandomPool(random);
 		return World;
 	}
 

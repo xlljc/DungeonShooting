@@ -1,4 +1,6 @@
+
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Config;
 using Godot;
@@ -97,15 +99,39 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
         }
 
         //搜索结果
-        var arr = ExcelConfig.ActivityBase_List.Where(
-            o =>
+        var arr = new List<ExcelConfig.ActivityBase>();
+        switch (type)
+        {
+            //全部类型
+            case -1:
+                arr.Add(PreinstallMarkManager.Enemy);
+                arr.Add(PreinstallMarkManager.Prop);
+                arr.Add(PreinstallMarkManager.Weapon);
+                break;
+            //随机武器
+            case (int)ActivityType.Weapon:
+                arr.Add(PreinstallMarkManager.Weapon);
+                break;
+            //随机道具
+            case (int)ActivityType.Prop:
+                arr.Add(PreinstallMarkManager.Prop);
+                break;
+            //随机敌人
+            case (int)ActivityType.Enemy:
+                arr.Add(PreinstallMarkManager.Enemy);
+                break;
+        }
+        foreach (var o in ExcelConfig.ActivityBase_List)
+        {
+            if (o.ShowInMapEditor &&
+                (string.IsNullOrEmpty(name) || o.Name.Contains(name) || o.Id.Contains(name)) &&
+                (type < 0 ? _typeArray.Contains(o.Type) : o.Type == type))
             {
-                return o.ShowInMapEditor &&
-                       (string.IsNullOrEmpty(name) || o.Name.Contains(name) || o.Id.Contains(name)) &&
-                       (type < 0 ? _typeArray.Contains(o.Type) : o.Type == type);
+                arr.Add(o);
             }
-        ).ToArray();
-        _objectGrid.SetDataList(arr);
+        }
+        
+        _objectGrid.SetDataList(arr.ToArray());
     }
 
     /// <summary>

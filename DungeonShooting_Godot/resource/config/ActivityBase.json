@@ -283,7 +283,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/effect/enemy/Effect0001.tscn",
+    "Prefab": "res://prefab/prop/buff/BuffProp0001.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0001.png",
     "ShowInMapEditor": true
   },

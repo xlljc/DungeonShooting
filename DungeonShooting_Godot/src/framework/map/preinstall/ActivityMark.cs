@@ -10,7 +10,7 @@ public class ActivityMark
     public string Id { get; set; }
 
     /// <summary>
-    /// 刷新位置
+    /// 刷新位置, 单位: 像素
     /// </summary>
     public Vector2 Position { get; set; }
 
@@ -20,7 +20,7 @@ public class ActivityMark
     public Dictionary<string, string> Attr { get; set; }
     
     /// <summary>
-    /// 衍生属性, 可随意修改值
+    /// 衍生属性, 可随意修改值, 通常用于存储随机出来的数据
     /// </summary>
     public Dictionary<string, string> DerivedAttr { get; set; }
     

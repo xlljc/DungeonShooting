@@ -2,8 +2,8 @@
 
 [ext_resource type="Material" uid="uid://c1chld6lkpgji" path="res://resource/material/SmokeParticleMaterial.tres" id="1_dxavj"]
 [ext_resource type="Texture2D" uid="uid://bs1lan5uwxyfg" path="res://resource/curve/Curve1.tres" id="1_s60r7"]
-[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/effects/common/Smoke.png" id="2_3kyig"]
-[ext_resource type="Texture2D" uid="uid://csud4e6kc3iku" path="res://resource/sprite/effects/common/Effect1.png" id="3_1mceu"]
+[ext_resource type="Texture2D" uid="uid://h7hkgbwj1li" path="res://resource/sprite/common/Smoke.png" id="2_3kyig"]
+[ext_resource type="Texture2D" uid="uid://csud4e6kc3iku" path="res://resource/sprite/common/Effect1.png" id="3_1mceu"]
 [ext_resource type="Script" path="res://src/game/effects/AutoDestroyParticles.cs" id="3_2tlhx"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ipadv"]

@@ -192,77 +192,73 @@ public class SeedRandom
     /// <summary>
     /// 返回指定区域内的随机坐标点, 该函数比较慢, 请谨慎调用
     /// </summary>
-    /// <param name="polygonDataList">碰撞区域数据</param>
-    /// <param name="count">需要随机点的数量</param>
-    public Vector2[] GetRandomPositionInPolygon(List<NavigationPolygonData> polygonDataList, int count)
+    public Vector2[] GetRandomPositionInPolygon(List<Vector2> vertices, List<int[]> polygons, int count)
     {
+        if (vertices.Count == 0 || polygons.Count == 0)
+        {
+            return Vector2.Zero.MakeArray(count);
+        }
         var minX = int.MaxValue;
         var maxX = int.MinValue;
         var minY = int.MaxValue;
         var maxY = int.MinValue;
-        
-        var outCount = 0;
 
         // 遍历多边形的顶点，找到最小和最大的x、y坐标
-        foreach (var navigationPolygonData in polygonDataList)
+        foreach (var vertex in vertices)
         {
-            if (navigationPolygonData.Type == NavigationPolygonType.Out)
+            if (vertex.X < minX)
             {
-                outCount++;
+                minX = Mathf.CeilToInt(vertex.X);
             }
-            foreach (var vertex in navigationPolygonData.GetPoints())
+            else if (vertex.X > maxX)
             {
-                if (vertex.X < minX)
-                {
-                    minX = Mathf.CeilToInt(vertex.X);
-                }
-                else if (vertex.X > maxX)
-                {
-                    maxX = Mathf.FloorToInt(vertex.X);
-                }
-                if (vertex.Y < minY)
-                {
-                    minY = Mathf.CeilToInt(vertex.Y);
-                }
-                else if (vertex.Y > maxY)
-                {
-                    maxY = Mathf.FloorToInt(vertex.Y);
-                }
+                maxX = Mathf.FloorToInt(vertex.X);
+            }
+            if (vertex.Y < minY)
+            {
+                minY = Mathf.CeilToInt(vertex.Y);
+            }
+            else if (vertex.Y > maxY)
+            {
+                maxY = Mathf.FloorToInt(vertex.Y);
             }
         }
 
         var list = new List<Vector2>();
+        var tryCount = 0;
         while (true)
         {
-            var flag = outCount == 0;
-            var point = new Vector2(RandomRangeInt(minX, maxX), RandomRangeInt(minY, maxY));
-            
-            foreach (var navigationPolygonData in polygonDataList)
+            if (tryCount >= 2000) //尝试2000次后放弃
             {
-                if (navigationPolygonData.Type == NavigationPolygonType.Out)
+                while (list.Count < count)
                 {
-                    if (!flag && Utils.IsPointInPolygon(navigationPolygonData.GetPoints(), point))
-                    {
-                        flag = true;
-                    }
+                    list.Add(Vector2.Zero);
                 }
-                else
-                {
-                    if (flag && Utils.IsPointInPolygon(navigationPolygonData.GetPoints(), point))
-                    {
-                        flag = false;
-                    }
-                }
+                break;
             }
 
-            if (flag)
+            tryCount++;
+            var point = new Vector2(RandomRangeInt(minX, maxX), RandomRangeInt(minY, maxY));
+            foreach (var ps in polygons)
             {
-                list.Add(point);
-                if (list.Count >= count)
+                var arr = new List<Vector2>();
+                foreach (var i in ps)
                 {
-                    return list.ToArray();
+                    arr.Add(vertices[i]);
+                }
+
+                if (Utils.IsPointInPolygon(arr, point))
+                {
+                    tryCount = 0;
+                    list.Add(point);
+                    if (list.Count >= count)
+                    {
+                        return list.ToArray();
+                    }
                 }
             }
         }
+
+        return list.ToArray();
     }
 }

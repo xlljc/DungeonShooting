@@ -32,19 +32,19 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
                     str += "，";
                 }
 
-                str += ExcelConfig.ActivityBase_Map[markInfoItem.Id].Name;
+                str += PreinstallMarkManager.GetMarkConfig(markInfoItem.Id).Name;
             }
             text += str;
         }
         else
         {
-            if (data.MarkInfo.SpecialMarkType == SpecialMarkType.BirthPoint)
+            if (data.MarkInfo.SpecialMarkType != SpecialMarkType.Normal)
             {
-                text = "出生标记";
+                text = PreinstallMarkManager.GetSpecialName(data.MarkInfo.SpecialMarkType);
             }
             else
             {
-                text += "空";
+                text = "空";
             }
         }
 
