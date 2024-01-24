@@ -5,6 +5,10 @@
 public enum DungeonRoomType
 {
     /// <summary>
+    /// 无
+    /// </summary>
+    None,
+    /// <summary>
     /// 普通战斗房间, 进入该房间时会关上门, 并刷出若干波敌人, 消灭所有敌人后开门
     /// </summary>
     Battle,

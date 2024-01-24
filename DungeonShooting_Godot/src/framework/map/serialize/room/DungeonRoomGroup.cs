@@ -160,6 +160,7 @@ public class DungeonRoomGroup : IClone<DungeonRoomGroup>
         
         foreach (var roomType in Enum.GetValues<DungeonRoomType>())
         {
+            if (roomType == DungeonRoomType.None) continue;
             InitAdRewardWeight(roomType, random);
         }
     }

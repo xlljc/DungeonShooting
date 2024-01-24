@@ -139,6 +139,12 @@ public class RoomInfo : IDestroy
     /// 导航网格对象
     /// </summary>
     public NavigationRegion2D NavigationRegion { get; set; }
+
+    /// <summary>
+    /// 在 DungeonGenerator 中是否可以回滚, 如果可以回滚, 那么当前房间就只会有一个 NextRoom
+    /// </summary>
+    public bool CanRollback { get; set; } = false;
+    
     public bool IsDestroyed { get; private set; }
 
     private bool _openDoorFlag = true;

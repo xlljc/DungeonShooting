@@ -61,12 +61,12 @@ public partial class Player : Role
         ActivePropsPack.SetCapacity(1);
         
         // debug用
-        // RoleState.Acceleration = 3000;
-        // RoleState.Friction = 3000;
-        // RoleState.MoveSpeed = 500;
-        // CollisionLayer = 0;
-        // CollisionMask = 0;
-        // GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
+        RoleState.Acceleration = 3000;
+        RoleState.Friction = 3000;
+        RoleState.MoveSpeed = 500;
+        CollisionLayer = 0;
+        CollisionMask = 0;
+        GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
         //GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
         // this.CallDelay(0.5f, () =>
         // {

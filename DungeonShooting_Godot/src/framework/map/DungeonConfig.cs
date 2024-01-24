@@ -41,6 +41,11 @@ public class DungeonConfig
     /// </summary>
     public int RoomCount => BattleRoomCount + RewardRoomCount + ShopRoomCount + OutRoomCount + BossRoomCount;
     
+    /// <summary>
+    /// 房间最大层级
+    /// </summary>
+    public int MaxLayer = 5;
+    
     //----------------------- 地牢编辑使用 -------------------------
     /// <summary>
     /// 是否指定了房间
