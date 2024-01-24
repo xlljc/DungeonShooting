@@ -219,7 +219,7 @@ public partial class DungeonManager : Node2D
             {
                 UiManager.Open_Main();
             }
-            EditorWindowManager.ShowTips("错误", "生成房间尝试次数过多，生成地牢房间失败，请加大房间门连接区域！");
+            EditorWindowManager.ShowTips("错误", "生成房间尝试次数过多，生成地牢房间失败，请加大房间门连接区域，或者修改地牢生成规则！");
             yield break;
         }
         yield return 0;

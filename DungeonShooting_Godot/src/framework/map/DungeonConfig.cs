@@ -36,6 +36,11 @@ public class DungeonConfig
     /// </summary>
     public int BossRoomCount = 1;
     
+    /// <summary>
+    /// 房间数量
+    /// </summary>
+    public int RoomCount => BattleRoomCount + RewardRoomCount + ShopRoomCount + OutRoomCount + BossRoomCount;
+    
     //----------------------- 地牢编辑使用 -------------------------
     /// <summary>
     /// 是否指定了房间

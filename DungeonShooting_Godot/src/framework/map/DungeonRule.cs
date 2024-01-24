@@ -16,9 +16,14 @@ public abstract class DungeonRule
         Config = generator.Config;
         Random = generator.Random;
     }
+
+    /// <summary>
+    /// 是否可以结束生成了
+    /// </summary>
+    public abstract bool CanOverGenerator();
     
     /// <summary>
     /// 计算下一个房间类型
     /// </summary>
-    public abstract DungeonRoomType CalcNextRoomType(RoomInfo prev);
+    public abstract DungeonRoomType GetNextRoomType(RoomInfo prev);
 }
