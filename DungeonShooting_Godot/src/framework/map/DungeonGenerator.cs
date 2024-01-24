@@ -67,20 +67,7 @@ public class DungeonGenerator
     //下一个房间类型
     private DungeonRoomType _nextRoomType = DungeonRoomType.None;
     
-    //间隔
-    private int _roomMinInterval = 2;
-    private int _roomMaxInterval = 5;
-
-    //房间横轴分散程度
-    private float _roomHorizontalMinDispersion = -0.6f;
-    private float _roomHorizontalMaxDispersion = 0.6f;
-
-    //房间纵轴分散程度
-    private float _roomVerticalMinDispersion = -0.6f;
-    private float _roomVerticalMaxDispersion = 0.6f;
-    
     //区域限制
-    private bool _enableLimitRange = true;
     private int _rangeX = 120;
     private int _rangeY = 120;
     
@@ -104,6 +91,8 @@ public class DungeonGenerator
         Config = config;
         Random = seedRandom;
         RoomGroup = GameApplication.Instance.RoomConfig[config.GroupName];
+        _rangeX = config.RangeX;
+        _rangeY = config.RangeY;
 
         //验证该组是否满足生成地牢的条件
         var result = DungeonManager.CheckDungeon(config.GroupName);
@@ -254,7 +243,7 @@ public class DungeonGenerator
     }
 
     //生成房间
-    private GenerateRoomErrorCode GenerateRoom(RoomInfo prevRoomInfo, DungeonRoomType roomType, out RoomInfo resultRoomInfo)
+    private GenerateRoomErrorCode GenerateRoom(RoomInfo prevRoom, DungeonRoomType roomType, out RoomInfo resultRoomInfo)
     {
         // if (_count >= _config.RoomCount)
         // {
@@ -286,9 +275,9 @@ public class DungeonGenerator
         //房间大小
         room.Size = new Vector2I((int)roomSplit.RoomInfo.Size.X, (int)roomSplit.RoomInfo.Size.Y);
 
-        if (prevRoomInfo != null) //表示这不是第一个房间, 就得判断当前位置下的房间是否被遮挡
+        if (prevRoom != null) //表示这不是第一个房间, 就得判断当前位置下的房间是否被遮挡
         {
-            room.Layer = prevRoomInfo.Layer + 1;
+            room.Layer = prevRoom.Layer + 1;
             if (_currMaxLayer < room.Layer)
             {
                 _currMaxLayer = room.Layer;
@@ -307,50 +296,40 @@ public class DungeonGenerator
             for (; tryCount < maxTryCount; tryCount++)
             {
                 //下一个房间方向
-                var direction = Random.RandomRangeInt(0, 3);
+                var direction = _rule.GetNextRoomDoorDirection(prevRoom, roomType);
                 //房间间隔
-                var space = Random.RandomRangeInt(_roomMinInterval, _roomMaxInterval);
-                if (direction == 0 || direction == 2)
+                var space = _rule.GetNextRoomInterval(prevRoom, roomType, direction);
+                if (direction == RoomDirection.Up || direction == RoomDirection.Down)
                 {
                     space += 1;
                 }
                 //中心偏移
-                int offset;
-                if (direction == 0 || direction == 2)
-                {
-                    offset = Random.RandomRangeInt((int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
-                        (int)(prevRoomInfo.Size.X * _roomVerticalMaxDispersion));
-                }
-                else
-                {
-                    offset = Random.RandomRangeInt((int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
-                        (int)(prevRoomInfo.Size.Y * _roomHorizontalMaxDispersion));
-                }
+                var offset = _rule.GetNextRoomOffset(prevRoom, roomType, direction);
 
                 //计算房间位置
-                if (direction == 0) //上
+                if (direction == RoomDirection.Up) //上
                 {
-                    room.Position = new Vector2I(prevRoomInfo.Position.X + offset,
-                        prevRoomInfo.Position.Y - room.Size.Y - space);
+                    room.Position = new Vector2I(prevRoom.Position.X + offset,
+                        prevRoom.Position.Y - room.Size.Y - space);
                 }
-                else if (direction == 1) //右
+                else if (direction == RoomDirection.Right) //右
                 {
-                    room.Position = new Vector2I(prevRoomInfo.Position.X + prevRoomInfo.Size.Y + space,
-                        prevRoomInfo.Position.Y + offset);
+                    room.Position = new Vector2I(prevRoom.Position.X + prevRoom.Size.Y + space,
+                        prevRoom.Position.Y + offset);
                 }
-                else if (direction == 2) //下
+                else if (direction == RoomDirection.Down) //下
                 {
-                    room.Position = new Vector2I(prevRoomInfo.Position.X + offset,
-                        prevRoomInfo.Position.Y + prevRoomInfo.Size.Y + space);
+                    room.Position = new Vector2I(prevRoom.Position.X + offset,
+                        prevRoom.Position.Y + prevRoom.Size.Y + space);
                 }
-                else if (direction == 3) //左
+                else if (direction == RoomDirection.Left) //左
                 {
-                    room.Position = new Vector2I(prevRoomInfo.Position.X - room.Size.X - space,
-                        prevRoomInfo.Position.Y + offset);
+                    room.Position = new Vector2I(prevRoom.Position.X - room.Size.X - space,
+                        prevRoom.Position.Y + offset);
                 }
 
                 //是否在限制区域内
-                if (_enableLimitRange)
+                if (Config.EnableLimitRange)
                 {
                     if (room.GetHorizontalStart() < -_rangeX || room.GetHorizontalEnd() > _rangeX ||
                         room.GetVerticalStart() < -_rangeY || room.GetVerticalEnd() > _rangeY)
@@ -372,7 +351,7 @@ public class DungeonGenerator
                 _roomGrid.SetRect(room.Position, room.Size, true);
 
                 //找门, 与上一个房间是否能连通
-                if (!ConnectDoor(prevRoomInfo, room))
+                if (!ConnectDoor(prevRoom, room))
                 {
                     _roomGrid.RemoveRect(room.Position, room.Size);
                     //Debug.Log("链接通道失败");
@@ -397,10 +376,10 @@ public class DungeonGenerator
         }
         
         _id++;
-        room.Prev = prevRoomInfo;
-        if (prevRoomInfo != null)
+        room.Prev = prevRoom;
+        if (prevRoom != null)
         {
-            prevRoomInfo.Next.Add(room);
+            prevRoom.Next.Add(room);
         }
         resultRoomInfo = room;
         return GenerateRoomErrorCode.NoError;
