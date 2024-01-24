@@ -106,7 +106,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		
 		DungeonConfig = new DungeonConfig();
 		DungeonConfig.GroupName = "Test1";
-		DungeonConfig.RoomCount = 20;
+		DungeonConfig.BattleRoomCount = 20;
 	}
 
 	public override void _EnterTree()

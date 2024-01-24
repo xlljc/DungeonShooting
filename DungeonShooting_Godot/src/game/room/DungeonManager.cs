@@ -198,7 +198,8 @@ public partial class DungeonManager : Node2D
         //生成地牢房间
         var random = new SeedRandom();
         _dungeonGenerator = new DungeonGenerator(CurrConfig, random);
-        if (!_dungeonGenerator.Generate()) //生成房间失败
+        var rule = new DefaultDungeonRule(_dungeonGenerator);
+        if (!_dungeonGenerator.Generate(rule)) //生成房间失败
         {
             _dungeonGenerator.EachRoom(DisposeRoomInfo);
             _dungeonGenerator = null;
