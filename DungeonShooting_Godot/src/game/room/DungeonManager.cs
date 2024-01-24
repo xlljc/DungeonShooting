@@ -198,7 +198,8 @@ public partial class DungeonManager : Node2D
         //生成地牢房间
         var random = new SeedRandom();
         _dungeonGenerator = new DungeonGenerator(CurrConfig, random);
-        if (!_dungeonGenerator.Generate()) //生成房间失败
+        var rule = new DefaultDungeonRule(_dungeonGenerator);
+        if (!_dungeonGenerator.Generate(rule)) //生成房间失败
         {
             _dungeonGenerator.EachRoom(DisposeRoomInfo);
             _dungeonGenerator = null;
@@ -218,7 +219,7 @@ public partial class DungeonManager : Node2D
             {
                 UiManager.Open_Main();
             }
-            EditorWindowManager.ShowTips("错误", "生成房间尝试次数过多，生成地牢房间失败，请加大房间门连接区域！");
+            EditorWindowManager.ShowTips("错误", "生成房间尝试次数过多，生成地牢房间失败，请加大房间门连接区域，或者修改地牢生成规则！");
             yield break;
         }
         yield return 0;

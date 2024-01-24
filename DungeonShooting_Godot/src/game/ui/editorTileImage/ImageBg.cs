@@ -2,8 +2,10 @@ using Godot;
 
 namespace UI.EditorTileImage;
 
-public partial class ImageBg : EditorGridBg<EditorTileImage.Bg>
+public partial class ImageBg : EditorGridBg
 {
+    public new EditorTileImage.Bg UiNode => (EditorTileImage.Bg)base.UiNode;
+    
     public override void SetUiNode(IUiNode uiNode)
     {
         base.SetUiNode(uiNode);

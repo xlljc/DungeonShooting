@@ -2,20 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-<<<<<<< HEAD
-uid="uid://wew7xnxc4d50"
-=======
-uid="uid://c08d7xo84ssqp"
->>>>>>> faff39f870b1097c233b529865b4f3ee2311c8a3
-path="res://.godot/imported/Preview.png-e48e389971aff40736b911be53ae62ea.ctex"
+uid="uid://dp0vxdpgngsj8"
+path="res://.godot/imported/Preview.png-46acff5fa2872af249169769a17dd53e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/map/tileMaps/Test1/reward/Award1/Preview.png"
-dest_files=["res://.godot/imported/Preview.png-e48e389971aff40736b911be53ae62ea.ctex"]
+source_file="res://resource/map/tileMaps/Test1/boss/Boss1/Preview.png"
+dest_files=["res://.godot/imported/Preview.png-46acff5fa2872af249169769a17dd53e.ctex"]
 
 [params]
 

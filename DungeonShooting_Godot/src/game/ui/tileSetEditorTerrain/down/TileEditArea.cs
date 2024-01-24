@@ -2,8 +2,10 @@
 
 namespace UI.TileSetEditorTerrain;
 
-public partial class TileEditArea : EditorGridBg<TileSetEditorTerrain.BottomBg>
+public partial class TileEditArea : EditorGridBg
 {
+    public new TileSetEditorTerrain.BottomBg UiNode => (TileSetEditorTerrain.BottomBg)base.UiNode;
+    
     private bool _dragMoveFlag = false;
     private MaskCell _hoverCell = null;
     

@@ -3,8 +3,10 @@ using Godot;
 
 namespace UI.TileSetEditorCombination;
 
-public partial class TileEditArea : EditorGridBg<TileSetEditorCombination.LeftBottomBg>
+public partial class TileEditArea : EditorGridBg
 {
+    public new TileSetEditorCombination.LeftBottomBg UiNode => (TileSetEditorCombination.LeftBottomBg)base.UiNode;
+
     private UiGrid<TileSetEditorCombination.MaskRect, bool> _maskGrid;
     private readonly HashSet<Vector2I> _useMask = new HashSet<Vector2I>();
     

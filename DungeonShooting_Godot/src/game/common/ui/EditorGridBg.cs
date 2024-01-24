@@ -3,7 +3,7 @@
 /// <summary>
 /// 通用Ui网格背景组件, 包含可拖拽的容器根节点
 /// </summary>
-public abstract partial class EditorGridBg<T> : ColorRect, IUiNodeScript where T : IUiNode
+public abstract partial class EditorGridBg : ColorRect, IUiNodeScript
 {
     /// <summary>
     /// 可拖拽容器根节点
@@ -16,7 +16,7 @@ public abstract partial class EditorGridBg<T> : ColorRect, IUiNodeScript where T
     /// <summary>
     /// 当前对象绑定的Ui节点
     /// </summary>
-    public T UiNode { get; private set; }
+    public IUiNode UiNode { get; private set; }
     
     private ShaderMaterial _gridMaterial;
     private bool _dragMoveFlag = false;
@@ -40,7 +40,7 @@ public abstract partial class EditorGridBg<T> : ColorRect, IUiNodeScript where T
     
     public virtual void SetUiNode(IUiNode uiNode)
     {
-        UiNode = (T)uiNode;
+        UiNode = uiNode;
         this.AddDragListener(DragButtonEnum.Middle, OnDrag);
         Resized += RefreshGridTrans;
         //打开Ui时刷新网格
