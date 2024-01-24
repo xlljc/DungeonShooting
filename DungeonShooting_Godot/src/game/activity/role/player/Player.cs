@@ -61,20 +61,7 @@ public partial class Player : Role
         ActivePropsPack.SetCapacity(1);
         
         // debug用
-        RoleState.Acceleration = 3000;
-        RoleState.Friction = 3000;
-        RoleState.MoveSpeed = 500;
-        CollisionLayer = 0;
-        CollisionMask = 0;
-        GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
-        //GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
-        // this.CallDelay(0.5f, () =>
-        // {
-        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0009));
-        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0008));
-        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0007));
-        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0006));
-        // });
+        DebugSet();
         
         //注册状态机
         StateController.Register(new PlayerIdleState());
@@ -87,6 +74,37 @@ public partial class Player : Role
         
         _brushData2 = new BrushImageData(ExcelConfig.LiquidMaterial_Map["0001"]);
     }
+
+    private void DebugSet()
+    {
+        RoleState.Acceleration = 3000;
+        RoleState.Friction = 3000;
+        RoleState.MoveSpeed = 500;
+        CollisionLayer = 0;
+        CollisionMask = 0;
+        GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
+        // this.CallDelay(0.5f, () =>
+        // {
+        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0009));
+        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0008));
+        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0007));
+        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0006));
+        // });
+        World.Color = new Color(1, 1, 1, 1); //关闭迷雾
+        //显示房间小地图
+        this.CallDelay(1, () =>
+        {
+            GameApplication.Instance.DungeonManager.StartRoomInfo.EachRoom(info =>
+            {
+                info.PreviewSprite.Visible = true;
+                foreach (var roomDoorInfo in info.Doors)
+                {
+                    roomDoorInfo.AislePreviewSprite.Visible = true;
+                }
+            });
+        });
+
+}
 
     protected override RoleState OnCreateRoleState()
     {

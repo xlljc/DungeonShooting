@@ -97,6 +97,7 @@ public class DungeonGenerator
     
     //上一个房间
     private RoomInfo prevRoomInfo = null;
+    private readonly List<RoomInfo> _tempList = new List<RoomInfo>();
     
     public DungeonGenerator(DungeonConfig config, SeedRandom seedRandom)
     {
@@ -423,6 +424,14 @@ public class DungeonGenerator
             Debug.LogError("当前房间还有连接的子房间, 不能回滚!");
             return false;
         }
+
+        if (!roomInfo.CanRollback)
+        {
+            Debug.LogError("当前房间不能回滚!");
+            return false;
+        }
+        var prevRoom = roomInfo.Prev;
+        
         //退掉占用的房间区域和过道占用区域
         _roomGrid.RemoveRect(roomInfo.Position, roomInfo.Size);
         foreach (var rect2 in roomInfo.AisleArea)
@@ -431,7 +440,7 @@ public class DungeonGenerator
         }
         
         //roomInfo.Doors[0].
-        if (roomInfo.Prev != null)
+        if (prevRoom != null)
         {
             roomInfo.Prev.Next.Remove(roomInfo);
         }
@@ -471,6 +480,7 @@ public class DungeonGenerator
         roomInfo.Destroy();
         _id--;
         _nextRoomType = DungeonRoomType.None;
+        SetPrevRoom(prevRoom);
         return true;
     }
 
@@ -483,6 +493,10 @@ public class DungeonGenerator
         RoomInfo temp = null;
         foreach (var roomInfo in RoomInfos)
         {
+            if (roomInfo.CanRollback)
+            {
+                continue;
+            }
             if (temp == null || roomInfo.Layer > temp.Layer)
             {
                 if (exclude == null || !exclude.Contains(roomInfo))
@@ -498,18 +512,51 @@ public class DungeonGenerator
     /// <summary>
     /// 随机抽取层级小于 layer 的房间
     /// </summary>
-    public RoomInfo RoundRoomLessThanLayer(int layer)
+    public RoomInfo RandomRoomLessThanLayer(int layer)
     {
-        var list = new List<RoomInfo>();
+        _tempList.Clear();
         foreach (var roomInfo in RoomInfos)
         {
+            if (roomInfo.CanRollback)
+            {
+                continue;
+            }
             if (roomInfo.Layer < layer)
             {
-                list.Add(roomInfo);
+                _tempList.Add(roomInfo);
             }
         }
 
-        return Random.RandomChoose(list);
+        return Random.RandomChoose(_tempList);
+    }
+    
+    /// <summary>
+    /// 随机抽取房间
+    /// </summary>
+    public RoomInfo GetRandomRoom()
+    {
+        _tempList.Clear();
+        foreach (var roomInfo in RoomInfos)
+        {
+            if (roomInfo.CanRollback)
+            {
+                continue;
+            }
+            _tempList.Add(roomInfo);
+        }
+
+        return Random.RandomChoose(_tempList);
+    }
+
+    /// <summary>
+    /// 提交所有可以回滚的房间
+    /// </summary>
+    public void SubmitCanRollbackRoom()
+    {
+        foreach (var roomInfo in RoomInfos)
+        {
+            roomInfo.CanRollback = false;
+        }
     }
     
     /// <summary>

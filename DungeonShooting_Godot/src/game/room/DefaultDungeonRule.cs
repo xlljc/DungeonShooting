@@ -9,8 +9,13 @@ public class DefaultDungeonRule : DungeonRule
 {
     //用于排除上一级房间
     private List<RoomInfo> excludePrevRoom = new List<RoomInfo>();
-    private int chainTryCount = 0;
-    private int chainMaxTryCount = 3;
+    
+    //战斗房间尝试链接次数
+    private int battleTryCount = 0;
+    private int battleMaxTryCount = 3;
+
+    //结束房间尝试链接次数
+    private int outletTryCount = 0;
     
     public DefaultDungeonRule(DungeonGenerator generator) : base(generator)
     {
@@ -37,26 +42,18 @@ public class DefaultDungeonRule : DungeonRule
         }
         else if (nextRoomType == DungeonRoomType.Battle)
         {
-            if (chainTryCount < chainMaxTryCount)
+            if (battleTryCount < battleMaxTryCount)
             {
                 if (prevRoomInfo != null && prevRoomInfo.Layer >= Config.MaxLayer - 1) //层数太高, 下一个房间生成在低层级
                 {
-                    return Generator.RoundRoomLessThanLayer(Mathf.Max(1, Config.MaxLayer / 2));
+                    return Generator.RandomRoomLessThanLayer(Mathf.Max(1, Config.MaxLayer / 2));
                 }
-                else
-                {
-                    return prevRoomInfo;
-                }
-            }
-            else
-            {
-                return Random.RandomChoose(Generator.RoomInfos);
+
+                return prevRoomInfo;
             }
         }
-        else
-        {
-            return Random.RandomChoose(Generator.RoomInfos);
-        }
+        
+        return Generator.GetRandomRoom();
     }
 
     public override DungeonRoomType GetNextRoomType(RoomInfo prevRoomInfo)
@@ -97,8 +94,18 @@ public class DefaultDungeonRule : DungeonRule
         }
         else if (roomInfo.RoomType == DungeonRoomType.Battle)
         {
-            chainTryCount = 0;
-            chainMaxTryCount = Random.RandomRangeInt(1, 3);
+            battleTryCount = 0;
+            battleMaxTryCount = Random.RandomRangeInt(1, 3);
+        }
+        else if (roomInfo.RoomType == DungeonRoomType.Outlet)
+        {
+            outletTryCount = 0;
+            Generator.SubmitCanRollbackRoom();
+        }
+
+        if (prevRoomInfo != null && prevRoomInfo.CanRollback)
+        {
+            roomInfo.CanRollback = true;
         }
     }
 
@@ -116,17 +123,16 @@ public class DefaultDungeonRule : DungeonRule
         }
         else if (roomType == DungeonRoomType.Outlet)
         {
-            //生成结束房间失败, 那么只能回滚boss房间
-            if (prevRoomInfo != null)
+            outletTryCount++;
+            if (outletTryCount >= 3 && prevRoomInfo != null) //生成结束房间失败, 那么只能回滚boss房间
             {
-                var bossPrev = prevRoomInfo.Prev;
+                outletTryCount = 0;
                 Generator.RollbackRoom(prevRoomInfo);
-                Generator.SetPrevRoom(bossPrev);
             }
         }
         else if (roomType == DungeonRoomType.Battle)
         {
-            chainTryCount++;
+            battleTryCount++;
         }
     }
 }
