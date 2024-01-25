@@ -165,6 +165,8 @@ public partial class Enemy : Role
         var enemyBase = GetEnemyAttribute(ActivityBase.Id).Clone();
         _enemyAttribute = enemyBase;
 
+        MaxHp = enemyBase.Hp;
+        Hp = enemyBase.Hp;
         roleState.CanPickUpWeapon = enemyBase.CanPickUpWeapon;
         roleState.MoveSpeed = enemyBase.MoveSpeed;
         roleState.Acceleration = enemyBase.Acceleration;

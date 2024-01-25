@@ -8,11 +8,11 @@ public static class PreinstallMarkManager
     /// <summary>
     /// 随机武器
     /// </summary>
-    public static readonly RandomActivityBase Weapon = new RandomActivityBase()
+    public static readonly RandomActivityBase RandomWeapon = new RandomActivityBase()
     {
         Id = "$RandomGun",
         Name = "随机武器",
-        Type = (int)ActivityType.Other,
+        Type = ActivityType.Other,
         Icon = ResourcePath.resource_sprite_ui_commonIcon_Dice_png,
         ShowInMapEditor = true
     };
@@ -20,11 +20,11 @@ public static class PreinstallMarkManager
     /// <summary>
     /// 随机敌人
     /// </summary>
-    public static readonly RandomActivityBase Enemy = new RandomActivityBase()
+    public static readonly RandomActivityBase RandomEnemy = new RandomActivityBase()
     {
         Id = "$RandomEnemy",
         Name = "随机敌人",
-        Type = (int)ActivityType.Other,
+        Type = ActivityType.Other,
         Icon = ResourcePath.resource_sprite_ui_commonIcon_Dice_png,
         ShowInMapEditor = true
     };
@@ -32,17 +32,16 @@ public static class PreinstallMarkManager
     /// <summary>
     /// 随机道具
     /// </summary>
-    public static readonly RandomActivityBase Prop = new RandomActivityBase()
+    public static readonly RandomActivityBase RandomProp = new RandomActivityBase()
     {
         Id = "$RandomProp",
         Name = "随机道具",
-        Type = (int)ActivityType.Other,
+        Type = ActivityType.Other,
         Icon = ResourcePath.resource_sprite_ui_commonIcon_Dice_png,
         ShowInMapEditor = true
     };
 
-    private static Dictionary<ActivityType, List<ExcelConfig.ActivityBase>> _cache =
-        new Dictionary<ActivityType, List<ExcelConfig.ActivityBase>>();
+    private static Dictionary<ActivityType, List<ExcelConfig.ActivityBase>> _cache = new Dictionary<ActivityType, List<ExcelConfig.ActivityBase>>();
 
     private static bool _init = false;
     
@@ -67,17 +66,17 @@ public static class PreinstallMarkManager
     /// </summary>
     public static ExcelConfig.ActivityBase GetMarkConfig(string id)
     {
-        if (Weapon.Id == id)
+        if (RandomWeapon.Id == id)
         {
-            return Weapon;
+            return RandomWeapon;
         }
-        else if (Enemy.Id == id)
+        else if (RandomEnemy.Id == id)
         {
-            return Enemy;
+            return RandomEnemy;
         }
-        else if (Prop.Id == id)
+        else if (RandomProp.Id == id)
         {
-            return Prop;
+            return RandomProp;
         }
 
         ExcelConfig.ActivityBase_Map.TryGetValue(id, out var activityBase);

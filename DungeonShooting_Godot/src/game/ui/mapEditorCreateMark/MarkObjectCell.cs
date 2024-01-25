@@ -206,7 +206,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
             _vSpeed.L_NumInput.Instance.Value = markInfoItem.VerticalSpeed;
         }
         
-        if (activityObject.Type == (int)ActivityType.Weapon) //武器类型
+        if (activityObject.Type == ActivityType.Weapon) //武器类型
         {
             var numberBar = CellNode.UiPanel.CreateNumberBar("CurrAmmon", "弹夹弹药量：");
             var numberBar2 = CellNode.UiPanel.CreateNumberBar("ResidueAmmo", "剩余弹药量：");
@@ -246,7 +246,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
                 }
             }
         }
-        else if (activityObject.Type == (int)ActivityType.Enemy) //敌人
+        else if (activityObject.Type == ActivityType.Enemy) //敌人
         {
             var faceBar = CellNode.UiPanel.CreateOptionBar("Face", "脸朝向：");
             faceBar.Instance.AddItem("随机", 0);

@@ -4,9 +4,9 @@ public class NameManager
     /// <summary>
     /// 获取物体属性名称字符串
     /// </summary>
-    public static string GetActivityTypeName(int type)
+    public static string GetActivityTypeName(ActivityType type)
     {
-        switch ((ActivityType)type)
+        switch (type)
         {
             case ActivityType.None:
                 return "";

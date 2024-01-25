@@ -209,14 +209,14 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
         };
         
         //初始高度
-        if (activityObject.Type == (int)ActivityType.Weapon || activityObject.Type == (int)ActivityType.Prop)
+        if (activityObject.Type == ActivityType.Weapon || activityObject.Type == ActivityType.Prop)
         {
             markInfoItem.Altitude = 8;
         }
-        else if (activityObject.Type == (int)ActivityType.Other)
+        else if (activityObject.Type == ActivityType.Other)
         {
             //随机道具或者随机武器
-            if (activityObject.Id == PreinstallMarkManager.Weapon.Id || activityObject.Id == PreinstallMarkManager.Prop.Id)
+            if (activityObject.Id == PreinstallMarkManager.RandomWeapon.Id || activityObject.Id == PreinstallMarkManager.RandomProp.Id)
             {
                 markInfoItem.Altitude = 8;
             }

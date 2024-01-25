@@ -25,6 +25,12 @@ public static partial class ExcelConfig
         public string Remark;
 
         /// <summary>
+        /// 血量
+        /// </summary>
+        [JsonInclude]
+        public int Hp;
+
+        /// <summary>
         /// 移动速度
         /// </summary>
         [JsonInclude]
@@ -75,6 +81,7 @@ public static partial class ExcelConfig
             inst.Id = Id;
             inst.Activity = Activity;
             inst.Remark = Remark;
+            inst.Hp = Hp;
             inst.MoveSpeed = MoveSpeed;
             inst.Acceleration = Acceleration;
             inst.Friction = Friction;

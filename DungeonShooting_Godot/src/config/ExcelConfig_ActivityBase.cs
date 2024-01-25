@@ -26,13 +26,26 @@ public static partial class ExcelConfig
         /// Other(其它类型): 99
         /// </summary>
         [JsonInclude]
-        public int Type;
+        public ActivityType Type;
 
         /// <summary>
         /// 物体名称
         /// </summary>
         [JsonInclude]
         public string Name;
+
+        /// <summary>
+        /// 物体品质, 用于武器和道具 <br/>
+        /// 通用物品: 1 <br/>
+        /// 基础: 2 <br/>
+        /// 普通: 3 <br/>
+        /// 稀有: 4 <br/>
+        /// 史诗: 5 <br/>
+        /// 传说: 6 <br/>
+        /// 独一无二: 7
+        /// </summary>
+        [JsonInclude]
+        public ActivityQuality Quality;
 
         /// <summary>
         /// 物体简介 <br/>
@@ -88,6 +101,7 @@ public static partial class ExcelConfig
             inst.Id = Id;
             inst.Type = Type;
             inst.Name = Name;
+            inst.Quality = Quality;
             inst.Intro = Intro;
             inst.Details = Details;
             inst.IsStatic = IsStatic;

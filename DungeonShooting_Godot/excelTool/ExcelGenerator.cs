@@ -524,7 +524,20 @@ public static class ExcelGenerator
                                 var cellStringValue = GetCellStringValue(cell);
                                 if (cellStringValue.Length == 0)
                                 {
-                                    data.Add(field, null);
+                                    if (mappingData.TypeStr == nameof(ActivityQuality))
+                                    {
+                                        ActivityQuality v = default;
+                                        data.Add(field, v);
+                                    }
+                                    else if (mappingData.TypeStr == nameof(ActivityType))
+                                    {
+                                        ActivityType v = default;
+                                        data.Add(field, v);
+                                    }
+                                    else
+                                    {
+                                        data.Add(field, null);
+                                    }
                                 }
                                 else
                                 {
@@ -691,6 +704,8 @@ public static class ExcelGenerator
             case "vector2": return "SerializeVector2";
             case "vector3": return "SerializeVector3";
             case "color": return "SerializeColor";
+            case "activityType": return "ActivityType";
+            case "activityQuality": return "ActivityQuality";
         }
 
         return typeName;
@@ -716,6 +731,8 @@ public static class ExcelGenerator
             case "vector2": return "SerializeVector2";
             case "vector3": return "SerializeVector3";
             case "color": return "SerializeColor";
+            case "activityType": return "ActivityType";
+            case "activityQuality": return "ActivityQuality";
         }
 
         return typeName;
