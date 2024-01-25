@@ -16,6 +16,8 @@ public class DefaultDungeonRule : DungeonRule
 
     //结束房间尝试链接次数
     private int outletTryCount = 0;
+    //奖励房间绑定的上一个房间
+    private List<RoomInfo> rewardBindRoom = new List<RoomInfo>();
     
     private readonly RoomDirection[] _roomDirections = new []{ RoomDirection.Up, RoomDirection.Down, RoomDirection.Left, RoomDirection.Right };
     
@@ -36,26 +38,39 @@ public class DefaultDungeonRule : DungeonRule
         }
         else if (nextRoomType == DungeonRoomType.Boss)
         {
-            return Generator.FindMaxLayerRoom(excludePrevRoom);
+            return Generator.FindMaxLayerRoom(DungeonRoomType.Battle | DungeonRoomType.Shop, excludePrevRoom);
         }
-        else if (nextRoomType == DungeonRoomType.Outlet || nextRoomType == DungeonRoomType.Reward || nextRoomType == DungeonRoomType.Shop || nextRoomType == DungeonRoomType.Event)
+        else if (nextRoomType == DungeonRoomType.Outlet || nextRoomType == DungeonRoomType.Shop || nextRoomType == DungeonRoomType.Event)
         {
             return prevRoom;
+        }
+        else if (nextRoomType == DungeonRoomType.Reward)
+        {
+            foreach (var temp in rewardBindRoom)
+            {
+                if (!excludePrevRoom.Contains(temp))
+                {
+                    excludePrevRoom.Add(temp);
+                }
+            }
+
+            return Generator.FindMaxLayerRoom(DungeonRoomType.Battle | DungeonRoomType.Shop | DungeonRoomType.Event, excludePrevRoom);
         }
         else if (nextRoomType == DungeonRoomType.Battle)
         {
             if (battleTryCount < battleMaxTryCount)
             {
-                if (prevRoom != null && prevRoom.Layer >= Config.MaxLayer - 1) //层数太高, 下一个房间生成在低层级
+                if (prevRoom == null || prevRoom.Layer >= Config.MaxLayer - 1) //层数太高, 下一个房间生成在低层级
                 {
-                    return Generator.RandomRoomLessThanLayer(Mathf.Max(1, Config.MaxLayer / 2));
+                    return Generator.RandomRoomLessThanLayer(DungeonRoomType.Battle | DungeonRoomType.Shop | DungeonRoomType.Event | DungeonRoomType.Inlet, Mathf.Max(1, Config.MaxLayer / 2));
                 }
 
                 return prevRoom;
             }
+            return Generator.GetRandomRoom(DungeonRoomType.Battle | DungeonRoomType.Shop | DungeonRoomType.Event | DungeonRoomType.Inlet);
         }
         
-        return Generator.GetRandomRoom();
+        return Generator.GetRandomRoom(DungeonRoomType.None);
     }
 
     public override DungeonRoomType GetNextRoomType(RoomInfo prevRoom)
@@ -64,15 +79,24 @@ public class DefaultDungeonRule : DungeonRule
         {
             return DungeonRoomType.Inlet;
         }
-        // else if (Generator.BattleRoomInfos.Count == 0) //奖励房间
-        // {
-        //     return DungeonRoomType.Reward;
-        // }
-        else if (prevRoom.RoomType == DungeonRoomType.Boss) //boss房间后生成结束房间
+
+        if (prevRoom != null)
         {
-            return DungeonRoomType.Outlet;
+            if (prevRoom.RoomType == DungeonRoomType.Boss) //boss房间后生成结束房间
+            {
+                return DungeonRoomType.Outlet;
+            }
+
+            if (Generator.RewardRoomInfos.Count < Config.RewardRoomCount)
+            {
+                if (prevRoom.Id == Config.BattleRoomCount / (Config.RewardRoomCount + 1) * (Generator.RewardRoomInfos.Count + 1)) //奖励房间
+                {
+                    return DungeonRoomType.Reward;
+                }
+            }
         }
-        else if (Generator.BattleRoomInfos.Count >= Config.BattleRoomCount) //战斗房间已满
+
+        if (Generator.BattleRoomInfos.Count >= Config.BattleRoomCount) //战斗房间已满
         {
             if (Generator.BossRoomInfos.Count < Config.BossRoomCount) //最后一个房间是boss房间
             {
@@ -104,6 +128,11 @@ public class DefaultDungeonRule : DungeonRule
             outletTryCount = 0;
             Generator.SubmitCanRollbackRoom();
         }
+        else if (roomInfo.RoomType == DungeonRoomType.Reward)
+        {
+            rewardBindRoom.Add(prevRoom);
+            excludePrevRoom.Clear();
+        }
 
         if (prevRoom != null && prevRoom.CanRollback)
         {
@@ -113,9 +142,9 @@ public class DefaultDungeonRule : DungeonRule
 
     public override void GenerateRoomFail(RoomInfo prevRoom, DungeonRoomType roomType)
     {
-        if (roomType == DungeonRoomType.Boss)
+        if (roomType == DungeonRoomType.Boss || roomType == DungeonRoomType.Reward)
         {
-            //生成boss房间成功
+            //生成房间失败
             excludePrevRoom.Add(prevRoom);
             if (excludePrevRoom.Count >= Generator.RoomInfos.Count)
             {

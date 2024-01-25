@@ -205,14 +205,13 @@ public class DungeonGenerator
                 {
                     ShopRoomInfos.Add(nextRoom);
                 }
-                var prev = prevRoomInfo;
                 prevRoomInfo = nextRoom;
-                _rule.GenerateRoomSuccess(prev, nextRoom);
+                _rule.GenerateRoomSuccess(tempPrevRoomInfo, nextRoom);
                 _nextRoomType = _rule.GetNextRoomType(nextRoom);
             }
             else //生成失败
             {
-                _rule.GenerateRoomFail(prevRoomInfo, nextRoomType);
+                _rule.GenerateRoomFail(tempPrevRoomInfo, nextRoomType);
                 
                 //Debug.Log("生成第" + (_count + 1) + "个房间失败! 失败原因: " + errorCode);
                 if (errorCode == GenerateRoomErrorCode.OutArea)
@@ -238,7 +237,7 @@ public class DungeonGenerator
         
         _roomGrid.Clear();
         Debug.Log("房间总数: " + RoomInfos.Count);
-
+        Debug.Log("尝试次数: " + currTryCount);
         return true;
     }
 
@@ -466,8 +465,9 @@ public class DungeonGenerator
     /// <summary>
     /// 寻找层级最高的房间
     /// </summary>
+    /// <param name="roomType">指定房间类型, 如果传 None 则表示选择所有类型房间</param>
     /// <param name="exclude">排除的房间</param>
-    public RoomInfo FindMaxLayerRoom(List<RoomInfo> exclude = null)
+    public RoomInfo FindMaxLayerRoom(DungeonRoomType roomType, List<RoomInfo> exclude = null)
     {
         RoomInfo temp = null;
         foreach (var roomInfo in RoomInfos)
@@ -476,12 +476,9 @@ public class DungeonGenerator
             {
                 continue;
             }
-            if (temp == null || roomInfo.Layer > temp.Layer)
+            if ((temp == null || roomInfo.Layer > temp.Layer) && (roomType == DungeonRoomType.None || (roomInfo.RoomType & roomType) != DungeonRoomType.None) && (exclude == null || !exclude.Contains(roomInfo)))
             {
-                if (exclude == null || !exclude.Contains(roomInfo))
-                {
-                    temp = roomInfo;
-                }
+                temp = roomInfo;
             }
         }
 
@@ -491,7 +488,10 @@ public class DungeonGenerator
     /// <summary>
     /// 随机抽取层级小于 layer 的房间
     /// </summary>
-    public RoomInfo RandomRoomLessThanLayer(int layer)
+    /// <param name="roomType">指定房间类型, 如果传 None 则表示选择所有类型房间</param>
+    /// <param name="layer"></param>
+    /// <param name="exclude">排除的房间</param>
+    public RoomInfo RandomRoomLessThanLayer(DungeonRoomType roomType, int layer, List<RoomInfo> exclude = null)
     {
         _tempList.Clear();
         foreach (var roomInfo in RoomInfos)
@@ -500,7 +500,31 @@ public class DungeonGenerator
             {
                 continue;
             }
-            if (roomInfo.Layer < layer)
+            if (roomInfo.Layer < layer && (roomType == DungeonRoomType.None || (roomInfo.RoomType & roomType) != DungeonRoomType.None) && (exclude == null || !exclude.Contains(roomInfo)))
+            {
+                _tempList.Add(roomInfo);
+            }
+        }
+
+        return Random.RandomChoose(_tempList);
+    }
+    
+    /// <summary>
+    /// 随机抽取层级大于 layer 的房间
+    /// </summary>
+    /// <param name="roomType">指定房间类型, 如果传 None 则表示选择所有类型房间</param>
+    /// <param name="layer"></param>
+    /// <param name="exclude">排除的房间</param>
+    public RoomInfo RandomRoomGreaterThanLayer(DungeonRoomType roomType, int layer, List<RoomInfo> exclude = null)
+    {
+        _tempList.Clear();
+        foreach (var roomInfo in RoomInfos)
+        {
+            if (roomInfo.CanRollback)
+            {
+                continue;
+            }
+            if (roomInfo.Layer > layer && (roomType == DungeonRoomType.None || (roomInfo.RoomType & roomType) != DungeonRoomType.None) && (exclude == null || !exclude.Contains(roomInfo)))
             {
                 _tempList.Add(roomInfo);
             }
@@ -512,7 +536,8 @@ public class DungeonGenerator
     /// <summary>
     /// 随机抽取房间
     /// </summary>
-    public RoomInfo GetRandomRoom()
+    /// <param name="roomType">指定房间类型, 如果传 None 则表示选择所有类型房间</param>
+    public RoomInfo GetRandomRoom(DungeonRoomType roomType)
     {
         _tempList.Clear();
         foreach (var roomInfo in RoomInfos)
@@ -521,7 +546,11 @@ public class DungeonGenerator
             {
                 continue;
             }
-            _tempList.Add(roomInfo);
+
+            if (roomType == DungeonRoomType.None || (roomInfo.RoomType & roomType) != DungeonRoomType.None)
+            {
+                _tempList.Add(roomInfo);
+            }
         }
 
         return Random.RandomChoose(_tempList);
