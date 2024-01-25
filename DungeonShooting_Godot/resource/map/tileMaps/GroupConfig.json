@@ -36,7 +36,12 @@
         "Path": "resource/map/tileMaps/Test1/reward/Award1"
       }
     ],
-    "ShopList": [],
+    "ShopList": [
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/Test1/shop/Shop1"
+      }
+    ],
     "EventList": [],
     "Remark": ""
   }

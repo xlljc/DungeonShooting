@@ -89,9 +89,16 @@ public class DefaultDungeonRule : DungeonRule
 
             if (Generator.RewardRoomInfos.Count < Config.RewardRoomCount)
             {
-                if (prevRoom.Id == Config.BattleRoomCount / (Config.RewardRoomCount + 1) * (Generator.RewardRoomInfos.Count + 1)) //奖励房间
+                if (Generator.BattleRoomInfos.Count == Config.BattleRoomCount / (Config.RewardRoomCount + 1) * (Generator.RewardRoomInfos.Count + 1)) //奖励房间
                 {
                     return DungeonRoomType.Reward;
+                }
+            }
+            if (Generator.ShopRoomInfos.Count < Config.ShopRoomCount)
+            {
+                if (Generator.BattleRoomInfos.Count == Config.BattleRoomCount / (Config.ShopRoomCount + 1) * (Generator.ShopRoomInfos.Count + 1)) //商店
+                {
+                    return DungeonRoomType.Shop;
                 }
             }
         }

@@ -29,6 +29,7 @@ public partial class MapEditorProjectPanel : MapEditorProject
         for (var i = 0; i < roomTypes.Length; i++)
         {
             var dungeonRoomType = roomTypes[i];
+            if (dungeonRoomType == DungeonRoomType.None) continue;
             optionButton.AddItem(DungeonManager.DungeonRoomTypeToDescribeString(dungeonRoomType),
                 (int)dungeonRoomType + 1);
         }
