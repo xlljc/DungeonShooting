@@ -1,0 +1,166 @@
+[gd_scene load_steps=11 format=3 uid="uid://dhnrfqcojc367"]
+
+[ext_resource type="Script" path="res://src/game/activity/weapon/gun/Gun.cs" id="1_bw5v7"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_pht5a"]
+[ext_resource type="SpriteFrames" uid="uid://cd7fhaqk587o2" path="res://resource/spriteFrames/weapon/Weapon0010.tres" id="3_nj0c6"]
+[ext_resource type="Animation" uid="uid://v3dltmdstqad" path="res://resource/animation/weapon/Weapon_floodlight.res" id="4_2cd01"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cbiyh"]
+resource_local_to_scene = true
+shader = ExtResource("2_pht5a")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0oy4o"]
+resource_local_to_scene = true
+shader = ExtResource("2_pht5a")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_evjpf"]
+size = Vector2(26, 6)
+
+[sub_resource type="Animation" id="Animation_x136i"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite:material:shader_parameter/schedule")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"default"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimatedSprite:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_8xqs8"]
+resource_name = "reloading"
+length = 1.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [&"reloading_frame", &"default"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 18]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 1.1, 1.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -0.436332, -0.436332, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_trkjd"]
+_data = {
+"RESET": SubResource("Animation_x136i"),
+"floodlight": ExtResource("4_2cd01"),
+"reloading": SubResource("Animation_8xqs8")
+}
+
+[node name="Weapon0010" type="CharacterBody2D" node_paths=PackedStringArray("FirePoint", "ShellPoint", "AnimationPlayer", "ShadowSprite", "AnimatedSprite", "Collision")]
+collision_layer = 4
+script = ExtResource("1_bw5v7")
+FirePoint = NodePath("AnimatedSprite/FirePoint")
+ShellPoint = NodePath("AnimatedSprite/ShellPoint")
+AnimationPlayer = NodePath("AnimationPlayer")
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
+
+[node name="ShadowSprite" type="Sprite2D" parent="."]
+z_index = -1
+material = SubResource("ShaderMaterial_cbiyh")
+
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+modulate = Color(1.9, 1.9, 1.9, 1)
+material = SubResource("ShaderMaterial_0oy4o")
+sprite_frames = ExtResource("3_nj0c6")
+offset = Vector2(4, -2.015)
+
+[node name="ShellPoint" type="Marker2D" parent="AnimatedSprite"]
+position = Vector2(-3, -3)
+
+[node name="FirePoint" type="Marker2D" parent="AnimatedSprite"]
+position = Vector2(21, -1)
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(4, -1)
+shape = SubResource("RectangleShape2D_evjpf")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_trkjd")
+}

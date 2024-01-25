@@ -74,11 +74,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0002",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0002",
+    "Id": "0001_ai",
     "Remark": "\u6B65\u67AA",
     "__Activity": "",
     "Weight": 40,
@@ -152,11 +151,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0001"
   },
   {
-    "Id": "0003",
+    "Id": "0002",
     "Remark": "\u9730\u5F39\u67AA",
     "__Activity": "weapon0002",
     "Weight": 40,
@@ -230,11 +228,10 @@
     "__BeLoadedSound": "beLoaded0005",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0004",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0004",
+    "Id": "0002_ai",
     "Remark": "\u9730\u5F39\u67AA",
     "__Activity": "",
     "Weight": 40,
@@ -308,11 +305,10 @@
     "__BeLoadedSound": "beLoaded0005",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0002"
   },
   {
-    "Id": "0005",
+    "Id": "0003",
     "Remark": "\u624B\u67AA",
     "__Activity": "weapon0003",
     "Weight": 20,
@@ -386,11 +382,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0006",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0006",
+    "Id": "0003_ai",
     "Remark": "\u624B\u67AA",
     "__Activity": "",
     "Weight": 20,
@@ -464,11 +459,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0003"
   },
   {
-    "Id": "0007",
+    "Id": "0004",
     "Remark": "\u5200",
     "__Activity": "weapon0004",
     "Weight": 40,
@@ -541,11 +535,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0008",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0008",
+    "Id": "0004_ai",
     "Remark": "\u5200",
     "__Activity": "",
     "Weight": 40,
@@ -618,11 +611,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0004"
   },
   {
-    "Id": "0009",
+    "Id": "0005",
     "Remark": "\u72D9\u51FB\u67AA",
     "__Activity": "weapon0005",
     "Weight": 50,
@@ -696,11 +688,10 @@
     "__BeLoadedSound": "beLoaded0007",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0010",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0010",
+    "Id": "0005_ai",
     "Remark": "\u72D9\u51FB\u67AA",
     "__Activity": "",
     "Weight": 50,
@@ -774,11 +765,10 @@
     "__BeLoadedSound": "beLoaded0007",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0005"
   },
   {
-    "Id": "0011",
+    "Id": "0006",
     "Remark": "\u51B2\u950B\u67AA",
     "__Activity": "weapon0006",
     "Weight": 30,
@@ -852,11 +842,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0012",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0012",
+    "Id": "0006_ai",
     "Remark": "\u51B2\u950B\u67AA",
     "__Activity": "",
     "Weight": 30,
@@ -930,11 +919,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0004"
   },
   {
-    "Id": "0013",
+    "Id": "0007",
     "Remark": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA",
     "__Activity": "weapon0007",
     "Weight": 40,
@@ -1008,11 +996,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0014",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0014",
+    "Id": "0007_ai",
     "Remark": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA",
     "__Activity": "",
     "Weight": 40,
@@ -1086,11 +1073,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0006"
   },
   {
-    "Id": "0015",
+    "Id": "0008",
     "Remark": "\u6FC0\u5149\u624B\u67AA",
     "__Activity": "weapon0008",
     "Weight": 40,
@@ -1164,11 +1150,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0016",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0016",
+    "Id": "0008_ai",
     "Remark": "\u6FC0\u5149\u624B\u67AA",
     "__Activity": "",
     "Weight": 40,
@@ -1242,11 +1227,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0007"
   },
   {
-    "Id": "0017",
+    "Id": "0009",
     "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668",
     "__Activity": "weapon0009",
     "Weight": 40,
@@ -1320,11 +1304,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0018",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0018",
+    "Id": "0009_ai",
     "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668",
     "__Activity": "",
     "Weight": 40,
@@ -1398,7 +1381,160 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0008"
+  },
+  {
+    "Id": "0010",
+    "Remark": "weapon0010",
+    "__Activity": "weapon0010",
+    "Weight": 40,
+    "WeightType": 2,
+    "IsMelee": false,
+    "ContinuousShoot": false,
+    "AmmoCapacity": 10,
+    "MaxAmmoCapacity": 240,
+    "StandbyAmmoCapacity": 120,
+    "ReloadTime": 1.8,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0,
+    "ContinuousCountRange": [
+      1
+    ],
+    "TriggerInterval": 0,
+    "StartFiringSpeed": 300,
+    "FinalFiringSpeed": 300,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 0,
+    "FinalScatteringRange": 8,
+    "ScatteringRangeAddValue": 3,
+    "ScatteringRangeBackSpeed": 20,
+    "ScatteringRangeBackDelayTime": 0.5,
+    "CameraShake": 2,
+    "BacklashRange": [
+      2,
+      3
+    ],
+    "BacklashRegressionSpeed": 25,
+    "UpliftAngle": 13,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire2.tscn",
+    "__Bullet": "0007",
+    "__Shell": "",
+    "ReloadThrowShell": false,
+    "ThrowShellDelayTime": 0,
+    "ThrowCollisionSize": {
+      "X": 20,
+      "Y": 15
+    },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRange": [
+      100
+    ],
+    "__ShootSound": "shooting0010",
+    "__BeginReloadSound": "reloadBegin0011",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "reloadFinish0003",
+    "ReloadFinishSoundAdvanceTime": 0.8,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiAttackAttr": ""
+  },
+  {
+    "Id": "0010_ai",
+    "Remark": "weapon0010",
+    "__Activity": "",
+    "Weight": 40,
+    "WeightType": 2,
+    "IsMelee": false,
+    "ContinuousShoot": false,
+    "AmmoCapacity": 10,
+    "MaxAmmoCapacity": 240,
+    "StandbyAmmoCapacity": 120,
+    "ReloadTime": 1.8,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0,
+    "ContinuousCountRange": [
+      1
+    ],
+    "TriggerInterval": 4,
+    "StartFiringSpeed": 300,
+    "FinalFiringSpeed": 300,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 0,
+    "FinalScatteringRange": 8,
+    "ScatteringRangeAddValue": 3,
+    "ScatteringRangeBackSpeed": 20,
+    "ScatteringRangeBackDelayTime": 0.5,
+    "CameraShake": 2,
+    "BacklashRange": [
+      2,
+      3
+    ],
+    "BacklashRegressionSpeed": 25,
+    "UpliftAngle": 13,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire2.tscn",
+    "__Bullet": "0007",
+    "__Shell": "",
+    "ReloadThrowShell": false,
+    "ThrowShellDelayTime": 0,
+    "ThrowCollisionSize": {
+      "X": 20,
+      "Y": 15
+    },
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRange": [
+      100
+    ],
+    "__ShootSound": "shooting0010",
+    "__BeginReloadSound": "reloadBegin0011",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "reloadFinish0003",
+    "ReloadFinishSoundAdvanceTime": 0.8,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiAttackAttr": "0007"
   }
 ]

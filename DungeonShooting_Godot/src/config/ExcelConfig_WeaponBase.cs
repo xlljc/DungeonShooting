@@ -368,13 +368,6 @@ public static partial class ExcelConfig
         public Dictionary<string, Sound> OtherSoundMap;
 
         /// <summary>
-        /// Ai属性 <br/>
-        /// Ai 使用该武器时的武器数据, 设置该字段, 可让同一把武器在敌人和玩家手上有不同属性 <br/>
-        /// 如果不填则Ai和玩家使用同一种属性
-        /// </summary>
-        public WeaponBase AiUseAttribute;
-
-        /// <summary>
         /// Ai使用该武器开火时的一些额外配置属性 <br/>
         /// 玩家使用的武器不需要填写该字段
         /// </summary>
@@ -446,7 +439,6 @@ public static partial class ExcelConfig
             inst.BeLoadedSound = BeLoadedSound;
             inst.BeLoadedSoundDelayTime = BeLoadedSoundDelayTime;
             inst.OtherSoundMap = OtherSoundMap;
-            inst.AiUseAttribute = AiUseAttribute;
             inst.AiAttackAttr = AiAttackAttr;
             return inst;
         }
@@ -479,9 +471,6 @@ public static partial class ExcelConfig
 
         [JsonInclude]
         public Dictionary<string, string> __OtherSoundMap;
-
-        [JsonInclude]
-        public string __AiUseAttribute;
 
         [JsonInclude]
         public string __AiAttackAttr;

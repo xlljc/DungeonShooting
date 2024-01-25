@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5krnv4dpvpbb"
-path="res://.godot/imported/scar-20_reloading.png-3742dafeecbf78acc177719c43b08eb0.ctex"
+uid="uid://drhwb6yaqfocm"
+path="res://.godot/imported/Weapon0010_reloading.png-992da254579c65f8c0e81d226fb3f4c6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/weapon/weapon0010/scar-20_reloading.png"
-dest_files=["res://.godot/imported/scar-20_reloading.png-3742dafeecbf78acc177719c43b08eb0.ctex"]
+source_file="res://resource/sprite/weapon/weapon0010/Weapon0010_reloading.png"
+dest_files=["res://.godot/imported/Weapon0010_reloading.png-992da254579c65f8c0e81d226fb3f4c6.ctex"]
 
 [params]
 

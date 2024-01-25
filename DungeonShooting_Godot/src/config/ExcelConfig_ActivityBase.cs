@@ -48,6 +48,12 @@ public static partial class ExcelConfig
         public ActivityQuality Quality;
 
         /// <summary>
+        /// 商店售价
+        /// </summary>
+        [JsonInclude]
+        public uint Price;
+
+        /// <summary>
         /// 物体简介 <br/>
         /// 一句对物体简短的介绍, 比如拾起物体时弹出的描述
         /// </summary>
@@ -102,6 +108,7 @@ public static partial class ExcelConfig
             inst.Type = Type;
             inst.Name = Name;
             inst.Quality = Quality;
+            inst.Price = Price;
             inst.Intro = Intro;
             inst.Details = Details;
             inst.IsStatic = IsStatic;

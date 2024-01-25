@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cjt68qk2mm7km"]
+
+[ext_resource type="Script" path="res://src/game/activity/bullet/laser/Laser.cs" id="1_t3xbd"]
+[ext_resource type="Texture2D" uid="uid://clfpbq1c1ilp1" path="res://resource/sprite/bullet/laser/Laser0001.png" id="2_ga23q"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l4vuk"]
+resource_local_to_scene = true
+
+[node name="Laser0001" type="Area2D" node_paths=PackedStringArray("Particles2D")]
+collision_layer = 2
+monitorable = false
+script = ExtResource("1_t3xbd")
+Particles2D = []
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_l4vuk")
+
+[node name="LineSprite" type="Sprite2D" parent="."]
+modulate = Color(1.5, 1.5, 1.5, 1)
+position = Vector2(0, 1.19209e-07)
+texture = ExtResource("2_ga23q")
+centered = false
+offset = Vector2(0, -8)

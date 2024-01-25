@@ -307,12 +307,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     {
         _playerWeaponAttribute = attribute;
         SetCurrentWeaponAttribute(attribute);
-        if (attribute.AiUseAttribute != null)
+        if (ExcelConfig.WeaponBase_Map.TryGetValue(attribute.Id + "_ai", out var aiAttr))
         {
-            _aiWeaponAttribute = attribute.AiUseAttribute;
+            _aiWeaponAttribute = aiAttr;
         }
         else
         {
+            Debug.LogError("警告: 未找到 AI 武器属性: " + attribute.Id);
             _aiWeaponAttribute = attribute;
         }
 

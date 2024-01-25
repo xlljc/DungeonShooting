@@ -45,7 +45,6 @@ public partial class Laser : Area2D, IBullet
     //开启的协程
     private List<CoroutineData> _coroutineList;
     private float _pixelScale;
-    private float _speed = 2000;
     private Tween _tween;
     private bool _init = false;
 
@@ -112,7 +111,7 @@ public partial class Laser : Area2D, IBullet
         }
         
         //激光飞行时间
-        var time = distance / _speed;
+        var time = distance / data.FlySpeed;
 
         _tween = CreateTween();
         _tween.SetParallel();

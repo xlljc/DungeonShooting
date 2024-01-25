@@ -69,6 +69,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_weapon0009 = "weapon0009";
         /// <summary>
+        /// 名称: weapon0010 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_weapon0010 = "weapon0010";
+        /// <summary>
         /// 名称:  <br/>
         /// 简介: 
         /// </summary>
@@ -93,6 +98,11 @@ public partial class ActivityObject
         /// 简介: 
         /// </summary>
         public const string Id_bullet0005 = "bullet0005";
+        /// <summary>
+        /// 名称: 拖尾子弹 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_bullet0006 = "bullet0006";
         /// <summary>
         /// 名称:  <br/>
         /// 简介: 
