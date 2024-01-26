@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://brum5fmbt1br4"]
+
+[ext_resource type="Script" path="res://src/test/TestTrail.cs" id="1_mefd0"]
+[ext_resource type="PackedScene" uid="uid://ddwikcidm0gsi" path="res://prefab/effect/common/Trail0001.tscn" id="2_t308a"]
+[ext_resource type="Texture2D" uid="uid://bn8k07n2y6lmr" path="res://resource/sprite/bullet/normal/bullet0006.png" id="2_w7ffd"]
+
+[node name="TestTrail" type="Node2D"]
+script = ExtResource("1_mefd0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_w7ffd")
+
+[node name="Trail" parent="Sprite2D" instance=ExtResource("2_t308a")]
