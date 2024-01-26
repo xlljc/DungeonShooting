@@ -216,10 +216,10 @@
     "Type": 1,
     "Prefab": "bullet0006",
     "HarmRange": [
-      4
+      10
     ],
     "RepelRange": [
-      20
+      45
     ],
     "DeviationAngleRange": [
       0

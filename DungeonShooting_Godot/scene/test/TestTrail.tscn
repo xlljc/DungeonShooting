@@ -7,7 +7,7 @@
 [node name="TestTrail" type="Node2D"]
 script = ExtResource("1_mefd0")
 
+[node name="Trail" parent="." instance=ExtResource("2_t308a")]
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_w7ffd")
-
-[node name="Trail" parent="Sprite2D" instance=ExtResource("2_t308a")]

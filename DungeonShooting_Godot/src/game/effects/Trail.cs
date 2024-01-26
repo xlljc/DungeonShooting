@@ -1,30 +1,102 @@
 ﻿using Godot;
 
-public partial class Trail : Line2D
+public partial class Trail : Line2D, IPoolItem
 {
-    [Export]
-    public int length = 300;
+    public const int TrailUpdateFrame = 20;
+    
+    public int length { get; set; } = 30;
+    public Node2D Target { get; private set; }
 
-    private Node2D parent;
-    private Vector2 offset = Vector2.Zero;
+    public bool IsDestroyed { get; private set; }
+    
+    public bool IsRecycled { get; set; }
+    public string Logotype { get; set; }
 
-    public override void _Ready()
+    private double _time = 0;
+    private IPoolItem _targetPoolItem;
+
+    public void SetTarget(Node2D target)
     {
-        offset = Position;
-        parent = GetParent<Node2D>();
-        TopLevel = true;
+        Target = target;
+        if (target is IPoolItem poolItem)
+        {
+            _targetPoolItem = poolItem;
+        }
+        else
+        {
+            _targetPoolItem = null;
+        }
+
+        if (target != null)
+        {
+            ClearPoints();
+        }
+
+        _time = TrailUpdateFrame;
     }
 
     public override void _Process(double delta)
     {
-        GlobalPosition = Vector2.Zero;
-
-        var point = parent.GlobalPosition + offset;
-        AddPoint(point, 0);
-        
-        if (GetPointCount() > length)
+        if (_targetPoolItem != null && _targetPoolItem.IsRecycled) //目标物体被回收
         {
-            RemovePoint(GetPointCount() - 1);
+            SetTarget(null);
         }
+        
+        _time += delta;
+        var v = 1f / TrailUpdateFrame;
+        if (_time >= v) //执行更新点
+        {
+            _time %= v;
+
+            var pointCount = GetPointCount();
+            if (Target != null) //没有被回收
+            {
+                AddPoint(Target.GlobalPosition, 0);
+                if (pointCount > length)
+                {
+                    RemovePoint(pointCount - 1);
+                }
+            }
+            else //被回收了, 
+            {
+                if (pointCount > 0)
+                {
+                    RemovePoint(pointCount - 1);
+                }
+
+                if (pointCount <= 1) //没有点了, 执行回收
+                {
+                    ObjectPool.Reclaim(this);
+                }
+            }
+        }
+        else if (Target != null) //没有被回收, 更新第一个点
+        {
+            SetPointPosition(0, Target.GlobalPosition);
+        }
+    }
+
+    public void Destroy()
+    {
+        if (IsDestroyed)
+        {
+            return;
+        }
+
+        IsDestroyed = true;
+        QueueFree();
+    }
+    public void OnReclaim()
+    {
+        GetParent().CallDeferred(Node.MethodName.RemoveChild, this);
+        Target = null;
+        _targetPoolItem = null;
+    }
+
+    public void OnLeavePool()
+    {
+        ClearPoints();
+        _time = 0;
+        ZIndex = 0;
     }
 }

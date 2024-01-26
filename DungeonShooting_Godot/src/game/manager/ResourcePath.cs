@@ -33,6 +33,7 @@ public class ResourcePath
     public const string prefab_effect_bullet_BulletSmoke0001_tscn = "res://prefab/effect/bullet/BulletSmoke0001.tscn";
     public const string prefab_effect_bullet_BulletSmoke0002_tscn = "res://prefab/effect/bullet/BulletSmoke0002.tscn";
     public const string prefab_effect_common_Effect1_tscn = "res://prefab/effect/common/Effect1.tscn";
+    public const string prefab_effect_common_Trail0001_tscn = "res://prefab/effect/common/Trail0001.tscn";
     public const string prefab_effect_enemy_EnemyBlood0001_tscn = "res://prefab/effect/enemy/EnemyBlood0001.tscn";
     public const string prefab_effect_enemy_EnemyDead0001_tscn = "res://prefab/effect/enemy/EnemyDead0001.tscn";
     public const string prefab_effect_enemy_EnemyDead0002_tscn = "res://prefab/effect/enemy/EnemyDead0002.tscn";
@@ -483,4 +484,5 @@ public class ResourcePath
     public const string scene_test_TestRoomFog_tscn = "res://scene/test/TestRoomFog.tscn";
     public const string scene_test_TestTerrain2x2_tscn = "res://scene/test/TestTerrain2x2.tscn";
     public const string scene_test_TestTileLayer_tscn = "res://scene/test/TestTileLayer.tscn";
+    public const string scene_test_TestTrail_tscn = "res://scene/test/TestTrail.tscn";
 }
