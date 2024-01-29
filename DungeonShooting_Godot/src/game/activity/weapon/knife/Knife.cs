@@ -82,7 +82,7 @@ public partial class Knife : Weapon
         if (IsActive) //被使用
         {
             //播放挥刀特效
-            SpecialEffectManager.Play(
+            SpecialEffectManager.PlaySpriteFrames(
                 Master,
                 ResourcePath.resource_spriteFrames_weapon_Weapon0004_hit_tres, "default",
                 Master.MountPoint.Position,

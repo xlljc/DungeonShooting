@@ -1,22 +1,22 @@
 [gd_scene load_steps=8 format=3 uid="uid://drcvbo0xam6q"]
 
-[ext_resource type="Texture2D" uid="uid://cj8gb5dxnk8ov" path="res://resource/sprite/shootFire/ShotFire0002.png" id="1_ljjfn"]
-[ext_resource type="Script" path="res://src/game/effects/AutoDestroySprite.cs" id="2_4ecjw"]
+[ext_resource type="Texture2D" uid="uid://cj8gb5dxnk8ov" path="res://resource/sprite/shootFire/ShotFire0002.png" id="1_02pnb"]
+[ext_resource type="Script" path="res://src/game/effects/AutoDestroySprite.cs" id="2_uoe2l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2nk6j"]
-atlas = ExtResource("1_ljjfn")
+atlas = ExtResource("1_02pnb")
 region = Rect2(0, 0, 9, 11)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ht7ag"]
-atlas = ExtResource("1_ljjfn")
+atlas = ExtResource("1_02pnb")
 region = Rect2(9, 0, 9, 11)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jwqy0"]
-atlas = ExtResource("1_ljjfn")
+atlas = ExtResource("1_02pnb")
 region = Rect2(18, 0, 9, 11)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ud7n7"]
-atlas = ExtResource("1_ljjfn")
+atlas = ExtResource("1_02pnb")
 region = Rect2(27, 0, 9, 11)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_rry1m"]
@@ -44,8 +44,9 @@ animations = [{
 
 [node name="ShotFire2" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
 modulate = Color(1.6, 1.6, 1.6, 1)
+position = Vector2(-1, 0)
 sprite_frames = SubResource("SpriteFrames_rry1m")
 offset = Vector2(5.5, 0)
-script = ExtResource("2_4ecjw")
+script = ExtResource("2_uoe2l")
 DelayTime = 0.5
 Particles2D = []

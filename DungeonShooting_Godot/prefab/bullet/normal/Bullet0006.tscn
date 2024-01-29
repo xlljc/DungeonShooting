@@ -29,10 +29,10 @@ shader_parameter/outline_use_blend = false
 shader_parameter/grey = 0.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4mw2b"]
-radius = 4.0
+radius = 3.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vqdkp"]
-radius = 4.0
+radius = 3.0
 
 [node name="Bullet0006" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "Particles2D", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2

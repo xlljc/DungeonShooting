@@ -225,8 +225,8 @@
       0
     ],
     "SpeedRange": [
-      300,
-      320
+      350,
+      350
     ],
     "LifeTimeRange": [
       -1
@@ -239,10 +239,10 @@
       0
     ],
     "BounceCount": [
-      2
+      3
     ],
     "Penetration": [
-      0
+      1
     ]
   },
   {

@@ -1,10 +1,22 @@
 ﻿using Godot;
 
+/// <summary>
+/// 拖尾效果
+/// </summary>
 public partial class Trail : Line2D, IPoolItem
 {
+    /// <summary>
+    /// 拖尾效果固定更新帧率
+    /// </summary>
     public const int TrailUpdateFrame = 20;
     
-    public int length { get; set; } = 30;
+    /// <summary>
+    /// 拖尾最大点数
+    /// </summary>
+    public int MaxLength { get; set; } = 20;
+    /// <summary>
+    /// 拖尾绑定的物体
+    /// </summary>
     public Node2D Target { get; private set; }
 
     public bool IsDestroyed { get; private set; }
@@ -15,6 +27,9 @@ public partial class Trail : Line2D, IPoolItem
     private double _time = 0;
     private IPoolItem _targetPoolItem;
 
+    /// <summary>
+    /// 设置拖尾跟随的物体
+    /// </summary>
     public void SetTarget(Node2D target)
     {
         Target = target;
@@ -32,7 +47,14 @@ public partial class Trail : Line2D, IPoolItem
             ClearPoints();
         }
 
-        _time = TrailUpdateFrame;
+        _time = 1f / TrailUpdateFrame;
+    }
+
+    public void SetColor(Color color)
+    {
+        Gradient.SetColor(0, color);
+        color.A = 0;
+        Gradient.SetColor(1, color);
     }
 
     public override void _Process(double delta)
@@ -52,9 +74,9 @@ public partial class Trail : Line2D, IPoolItem
             if (Target != null) //没有被回收
             {
                 AddPoint(Target.GlobalPosition, 0);
-                if (pointCount > length)
+                if (pointCount > MaxLength)
                 {
-                    RemovePoint(pointCount - 1);
+                    RemovePoint(pointCount);
                 }
             }
             else //被回收了, 
@@ -70,7 +92,7 @@ public partial class Trail : Line2D, IPoolItem
                 }
             }
         }
-        else if (Target != null) //没有被回收, 更新第一个点
+        else if (Target != null && GetPointCount() >= 2) //没有被回收, 更新第一个点
         {
             SetPointPosition(0, Target.GlobalPosition);
         }

@@ -10,6 +10,18 @@
       {
         "ErrorType": 0,
         "Path": "resource/map/tileMaps/Test1/battle/Battle2"
+      },
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/Test1/battle/Battle3"
+      },
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/Test1/battle/Battle4"
+      },
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/Test1/battle/Battle5"
       }
     ],
     "InletList": [

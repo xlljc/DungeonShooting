@@ -66,6 +66,12 @@
     "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668"
   },
   {
+    "Id": "shooting0012",
+    "Path": "res://resource/sound/sfx/shooting/Shooting0012.ogg",
+    "Volume": 1,
+    "Remark": "\u6FC0\u5149\u6B66\u5668"
+  },
+  {
     "Id": "reloading0001",
     "Path": "res://resource/sound/sfx/reloading/Reloading0001.ogg",
     "Volume": 1,
@@ -138,6 +144,12 @@
     "Remark": ""
   },
   {
+    "Id": "reloadBegin0013",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_begin0013.ogg",
+    "Volume": 1.2,
+    "Remark": ""
+  },
+  {
     "Id": "reloadFinish0002",
     "Path": "res://resource/sound/sfx/reloading/Reloading_finish0002.ogg",
     "Volume": 1,
@@ -152,6 +164,12 @@
   {
     "Id": "reloadFinish0004",
     "Path": "res://resource/sound/sfx/reloading/Reloading_finish0004.ogg",
+    "Volume": 1.2,
+    "Remark": ""
+  },
+  {
+    "Id": "reloadFinish0005",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_finish0005.ogg",
     "Volume": 1.2,
     "Remark": ""
   },

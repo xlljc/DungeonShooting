@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://yg8n8xi3ucqi"]
+
+[ext_resource type="Texture2D" uid="uid://dw3amegyt2ehh" path="res://resource/sprite/shootFire/ShotFire0003.png" id="1_lxoh4"]
+[ext_resource type="Script" path="res://src/game/effects/AutoDestroySprite.cs" id="2_qlt57"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1cqk8"]
+atlas = ExtResource("1_lxoh4")
+region = Rect2(0, 0, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hfpwi"]
+atlas = ExtResource("1_lxoh4")
+region = Rect2(9, 0, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dvimy"]
+atlas = ExtResource("1_lxoh4")
+region = Rect2(18, 0, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bk1sq"]
+atlas = ExtResource("1_lxoh4")
+region = Rect2(27, 0, 9, 11)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rry1m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1cqk8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hfpwi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dvimy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bk1sq")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"default",
+"speed": 20.0
+}]
+
+[node name="ShotFire4" type="AnimatedSprite2D" node_paths=PackedStringArray("Particles2D")]
+modulate = Color(1.6, 1.6, 1.6, 1)
+position = Vector2(-1, 0)
+sprite_frames = SubResource("SpriteFrames_rry1m")
+offset = Vector2(5.5, 0)
+script = ExtResource("2_qlt57")
+DelayTime = 0.5
+Particles2D = []

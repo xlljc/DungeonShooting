@@ -259,7 +259,7 @@ public static partial class ExcelConfig
         public float UpliftAngleRestore;
 
         /// <summary>
-        /// 开火特效
+        /// 开火特效, 该特效脚本必须实现IEffect接口
         /// </summary>
         [JsonInclude]
         public string FireEffect;

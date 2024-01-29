@@ -42,7 +42,7 @@ public partial class NoWeaponEnemy : Enemy
     public virtual void OnAttack()
     {
         //攻击特效
-        var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_weapon_ShotFire3_tscn);
+        var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_weapon_ShotFire0003_tscn);
         var node = (Node2D)effect;
         node.GlobalPosition = FirePoint.GlobalPosition;
         node.Rotation = MountPoint.Rotation;

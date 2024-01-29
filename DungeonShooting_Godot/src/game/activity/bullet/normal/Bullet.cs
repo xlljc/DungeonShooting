@@ -54,11 +54,15 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public int CurrentPenetration { get; protected set; } = 0;
     
+    /// <summary>
+    /// 是否是敌人使用的子弹
+    /// </summary>
+    public bool IsEnemyBullet { get; private set; } = false;
+
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
 
     private bool _init = false;
-    private bool _isEnemyBullet = false;
 
     public override void OnInit()
     {
@@ -109,18 +113,16 @@ public partial class Bullet : ActivityObject, IBullet
         //如果子弹会对玩家造成伤害, 则显示红色描边
         if (Player.Current.CollisionWithMask(attackLayer))
         {
-            if (!_isEnemyBullet)
+            if (!IsEnemyBullet)
             {
-                _isEnemyBullet = true;
-                ShowOutline = true;
-                SetBlendSchedule(1);
+                IsEnemyBullet = true;
+                OnRefreshBulletColor(IsEnemyBullet);
             }
         }
-        else if (_isEnemyBullet)
+        else if (IsEnemyBullet)
         {
-            _isEnemyBullet = false;
-            ShowOutline = false;
-            SetBlendSchedule(0);
+            IsEnemyBullet = false;
+            OnRefreshBulletColor(IsEnemyBullet);
         }
         
         PutDown(RoomLayerEnum.YSortLayer);
@@ -144,6 +146,24 @@ public partial class Bullet : ActivityObject, IBullet
         }
     }
 
+    /// <summary>
+    /// 刷新子弹的颜色
+    /// </summary>
+    /// <param name="isEnemyBullet">是否是敌人使用的子弹</param>
+    public virtual void OnRefreshBulletColor(bool isEnemyBullet)
+    {
+        if (isEnemyBullet)
+        {
+            ShowOutline = true;
+            SetBlendSchedule(1);
+        }
+        else
+        {
+            ShowOutline = false;
+            SetBlendSchedule(0);
+        }
+    }
+    
     public override void OnMoveCollision(KinematicCollision2D collision)
     {
         CurrentBounce++;
