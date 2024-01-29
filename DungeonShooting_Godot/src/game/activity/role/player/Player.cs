@@ -104,7 +104,7 @@ public partial class Player : Role
             });
         });
 
-}
+    }
 
     protected override RoleState OnCreateRoleState()
     {

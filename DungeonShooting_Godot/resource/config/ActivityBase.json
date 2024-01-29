@@ -628,5 +628,19 @@
     "Prefab": "res://prefab/map/RoomDoor_N.tscn",
     "Icon": "",
     "ShowInMapEditor": false
+  },
+  {
+    "Id": "gold_10",
+    "Type": 99,
+    "Name": "\u91D1\u5E01",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "\u83B7\u5F9710\u8D27\u5E01",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/currency/Gold10.tscn",
+    "Icon": "res://resource/sprite/ui/commonIcon/Gold_10.png",
+    "ShowInMapEditor": true
   }
 ]

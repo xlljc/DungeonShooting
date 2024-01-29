@@ -73,6 +73,13 @@ public static partial class ExcelConfig
         public float BackViewRange;
 
         /// <summary>
+        /// 掉落金币数量区间, 如果为负数或者0则不会掉落金币 <br/>
+        /// 格式为[value]或者[min,max]
+        /// </summary>
+        [JsonInclude]
+        public int[] Gold;
+
+        /// <summary>
         /// 返回浅拷贝出的新对象
         /// </summary>
         public EnemyBase Clone()
@@ -89,6 +96,7 @@ public static partial class ExcelConfig
             inst.ViewRange = ViewRange;
             inst.TailAfterViewRange = TailAfterViewRange;
             inst.BackViewRange = BackViewRange;
+            inst.Gold = Gold;
             return inst;
         }
     }

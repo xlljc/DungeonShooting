@@ -6,9 +6,6 @@ public class ResourcePath
     public const string default_bus_layout_tres = "res://default_bus_layout.tres";
     public const string default_env_tres = "res://default_env.tres";
     public const string icon_png = "res://icon.png";
-    public const string _VSCodeCounter_20240121_181451_diff_txt = "res://.VSCodeCounter/2024-01-21_18-14-51/diff.txt";
-    public const string _VSCodeCounter_20240121_181451_results_json = "res://.VSCodeCounter/2024-01-21_18-14-51/results.json";
-    public const string _VSCodeCounter_20240121_181451_results_txt = "res://.VSCodeCounter/2024-01-21_18-14-51/results.txt";
     public const string excelTool_bin_Release_net8_0_winx64_ExcelTool_deps_json = "res://excelTool/bin/Release/net8.0/win-x64/ExcelTool.deps.json";
     public const string excelTool_bin_Release_net8_0_winx64_ExcelTool_runtimeconfig_json = "res://excelTool/bin/Release/net8.0/win-x64/ExcelTool.runtimeconfig.json";
     public const string excelTool_obj_ExcelTool_csproj_nuget_dgspec_json = "res://excelTool/obj/ExcelTool.csproj.nuget.dgspec.json";
@@ -27,6 +24,8 @@ public class ResourcePath
     public const string prefab_bullet_normal_Bullet0004_tscn = "res://prefab/bullet/normal/Bullet0004.tscn";
     public const string prefab_bullet_normal_Bullet0005_tscn = "res://prefab/bullet/normal/Bullet0005.tscn";
     public const string prefab_bullet_normal_Bullet0006_tscn = "res://prefab/bullet/normal/Bullet0006.tscn";
+    public const string prefab_currency_Gold10_tscn = "res://prefab/currency/Gold10.tscn";
+    public const string prefab_currency_GoldTemplate_tscn = "res://prefab/currency/GoldTemplate.tscn";
     public const string prefab_effect_Blood_tscn = "res://prefab/effect/Blood.tscn";
     public const string prefab_effect_bullet_BulletDisappear0001_tscn = "res://prefab/effect/bullet/BulletDisappear0001.tscn";
     public const string prefab_effect_bullet_BulletDisappear0002_tscn = "res://prefab/effect/bullet/BulletDisappear0002.tscn";
@@ -134,15 +133,6 @@ public class ResourcePath
     public const string resource_font_DinkieBitmap9pxItalicDemo_ttf = "res://resource/font/DinkieBitmap-9pxItalicDemo.ttf";
     public const string resource_font_VonwaonBitmap12px_ttf = "res://resource/font/VonwaonBitmap-12px.ttf";
     public const string resource_font_VonwaonBitmap16px_ttf = "res://resource/font/VonwaonBitmap-16px.ttf";
-    public const string resource_map_tileSet_TileSetConfig_json = "res://resource/map/tileSet/TileSetConfig.json";
-    public const string resource_map_tileSet_TileSet1_Main_png = "res://resource/map/tileSet/TileSet1/Main.png";
-    public const string resource_map_tileSet_TileSet1_Test1_png = "res://resource/map/tileSet/TileSet1/Test1.png";
-    public const string resource_map_tileSet_TileSet1_Test2_png = "res://resource/map/tileSet/TileSet1/Test2.png";
-    public const string resource_map_tileSet_TileSet1_Test3_png = "res://resource/map/tileSet/TileSet1/Test3.png";
-    public const string resource_map_tileSet_TileSet1_TileSet_json = "res://resource/map/tileSet/TileSet1/TileSet.json";
-    public const string resource_map_tileSet_TileSet2_Main_png = "res://resource/map/tileSet/TileSet2/Main.png";
-    public const string resource_map_tileSet_TileSet2_Test2_png = "res://resource/map/tileSet/TileSet2/Test2.png";
-    public const string resource_map_tileSet_TileSet2_TileSet_json = "res://resource/map/tileSet/TileSet2/TileSet.json";
     public const string resource_material_Blend_gdshader = "res://resource/material/Blend.gdshader";
     public const string resource_material_Blend_tres = "res://resource/material/Blend.tres";
     public const string resource_material_GodRays_gdshader = "res://resource/material/GodRays.gdshader";
@@ -194,10 +184,12 @@ public class ResourcePath
     public const string resource_sound_sfx_reloading_Reloading_begin0010_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0010.ogg";
     public const string resource_sound_sfx_reloading_Reloading_begin0011_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0011.ogg";
     public const string resource_sound_sfx_reloading_Reloading_begin0012_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0012.ogg";
+    public const string resource_sound_sfx_reloading_Reloading_begin0013_ogg = "res://resource/sound/sfx/reloading/Reloading_begin0013.ogg";
     public const string resource_sound_sfx_reloading_Reloading_finish0001_ogg = "res://resource/sound/sfx/reloading/Reloading_finish0001.ogg";
     public const string resource_sound_sfx_reloading_Reloading_finish0002_ogg = "res://resource/sound/sfx/reloading/Reloading_finish0002.ogg";
     public const string resource_sound_sfx_reloading_Reloading_finish0003_ogg = "res://resource/sound/sfx/reloading/Reloading_finish0003.ogg";
     public const string resource_sound_sfx_reloading_Reloading_finish0004_ogg = "res://resource/sound/sfx/reloading/Reloading_finish0004.ogg";
+    public const string resource_sound_sfx_reloading_Reloading_finish0005_ogg = "res://resource/sound/sfx/reloading/Reloading_finish0005.ogg";
     public const string resource_sound_sfx_shooting_Shooting0001_ogg = "res://resource/sound/sfx/shooting/Shooting0001.ogg";
     public const string resource_sound_sfx_shooting_Shooting0002_ogg = "res://resource/sound/sfx/shooting/Shooting0002.ogg";
     public const string resource_sound_sfx_shooting_Shooting0003_ogg = "res://resource/sound/sfx/shooting/Shooting0003.ogg";
@@ -235,6 +227,9 @@ public class ResourcePath
     public const string resource_sprite_common_Smoke2_png = "res://resource/sprite/common/Smoke2.png";
     public const string resource_sprite_common_Smoke3_png = "res://resource/sprite/common/Smoke3.png";
     public const string resource_sprite_common_Smoke4_png = "res://resource/sprite/common/Smoke4.png";
+    public const string resource_sprite_currency_Gold_1_png = "res://resource/sprite/currency/Gold_1.png";
+    public const string resource_sprite_currency_Gold_10_png = "res://resource/sprite/currency/Gold_10.png";
+    public const string resource_sprite_currency_Gold_5_png = "res://resource/sprite/currency/Gold_5.png";
     public const string resource_sprite_explode_Explode_circle0001_png = "res://resource/sprite/explode/Explode_circle0001.png";
     public const string resource_sprite_explode_Explode_circle0002_png = "res://resource/sprite/explode/Explode_circle0002.png";
     public const string resource_sprite_explode_Explode_circle0003_png = "res://resource/sprite/explode/Explode_circle0003.png";
@@ -345,6 +340,7 @@ public class ResourcePath
     public const string resource_sprite_ui_commonIcon_DragTool_png = "res://resource/sprite/ui/commonIcon/DragTool.png";
     public const string resource_sprite_ui_commonIcon_Edit_png = "res://resource/sprite/ui/commonIcon/Edit.png";
     public const string resource_sprite_ui_commonIcon_Error_mini_png = "res://resource/sprite/ui/commonIcon/Error_mini.png";
+    public const string resource_sprite_ui_commonIcon_Gold_10_png = "res://resource/sprite/ui/commonIcon/Gold_10.png";
     public const string resource_sprite_ui_commonIcon_Hide_png = "res://resource/sprite/ui/commonIcon/Hide.png";
     public const string resource_sprite_ui_commonIcon_Import_png = "res://resource/sprite/ui/commonIcon/Import.png";
     public const string resource_sprite_ui_commonIcon_Lock_png = "res://resource/sprite/ui/commonIcon/Lock.png";

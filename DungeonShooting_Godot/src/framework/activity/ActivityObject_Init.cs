@@ -233,5 +233,10 @@ public partial class ActivityObject
         /// 简介: 地牢房间的门(北侧)
         /// </summary>
         public const string Id_other_door_n = "other_door_n";
+        /// <summary>
+        /// 名称: 金币 <br/>
+        /// 简介: 获得10货币
+        /// </summary>
+        public const string Id_gold_10 = "gold_10";
     }
 }

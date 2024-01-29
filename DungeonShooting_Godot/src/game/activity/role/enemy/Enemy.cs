@@ -212,6 +212,20 @@ public partial class Enemy : Role
             debris.MoveController.AddForce(Velocity + realVelocity);
         }
         
+        //创建金币
+        var goldCount = Utils.Random.RandomRangeInt(1, 5);
+        for (int i = 0; i < goldCount; i++)
+        {
+            var o = Create(Ids.Id_gold_10);
+            o.GlobalPosition = GlobalPosition;
+            o.Throw(0,
+                Utils.Random.RandomRangeInt(50, 90),
+                new Vector2(Utils.Random.RandomRangeInt(-10, 10), Utils.Random.RandomRangeInt(-10, 10)),
+                0
+            );
+        }
+
+
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
         Destroy();

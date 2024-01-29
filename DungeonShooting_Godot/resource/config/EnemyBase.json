@@ -10,7 +10,11 @@
     "CanPickUpWeapon": true,
     "ViewRange": 250,
     "TailAfterViewRange": 400,
-    "BackViewRange": 50
+    "BackViewRange": 50,
+    "Gold": [
+      1,
+      5
+    ]
   },
   {
     "Id": "0002",
@@ -23,6 +27,10 @@
     "CanPickUpWeapon": false,
     "ViewRange": 250,
     "TailAfterViewRange": 400,
-    "BackViewRange": 50
+    "BackViewRange": 50,
+    "Gold": [
+      1,
+      3
+    ]
   }
 ]
