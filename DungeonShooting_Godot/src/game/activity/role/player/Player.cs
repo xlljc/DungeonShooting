@@ -73,8 +73,6 @@ public partial class Player : Role
         //InitSubLine();
         
         _brushData2 = new BrushImageData(ExcelConfig.LiquidMaterial_Map["0001"]);
-
-        MaxHp = 100;
     }
 
     private void DebugSet()
