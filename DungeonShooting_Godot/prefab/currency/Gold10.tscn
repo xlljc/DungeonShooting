@@ -151,6 +151,7 @@ animations = [{
 }]
 
 [node name="Gold10" instance=ExtResource("1_q6rqs")]
+GoldCount = 10
 
 [node name="AnimatedSprite" parent="." index="1"]
 material = SubResource("ShaderMaterial_2tpx1")

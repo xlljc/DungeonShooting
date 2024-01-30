@@ -70,6 +70,9 @@ public partial class NoWeaponEnemy : Enemy
         debris.SetForwardDirection(Face);
         debris.BrushPrevPosition =  BrushPrevPosition;
         
+        //创建金币
+        CreateGold();
+        
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
         Destroy();

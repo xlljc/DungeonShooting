@@ -236,34 +236,122 @@ public abstract partial class RoomUI : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.LifeBar.Life
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.LifeBar.Life.LifeIcon
     /// </summary>
-    public class Life : UiNode<RoomUIPanel, Godot.TextureRect, Life>
+    public class LifeIcon : UiNode<RoomUIPanel, Godot.TextureRect, LifeIcon>
     {
-        public Life(RoomUIPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
-        public override Life Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+        public LifeIcon(RoomUIPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override LifeIcon Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.Control.LifeBar
+    /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.Control.LifeBar.Life
     /// </summary>
-    public class LifeBar : UiNode<RoomUIPanel, Godot.Control, LifeBar>
+    public class Life : UiNode<RoomUIPanel, Godot.Control, Life>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.Life
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.LifeBar.LifeIcon
+        /// </summary>
+        public LifeIcon L_LifeIcon
+        {
+            get
+            {
+                if (_L_LifeIcon == null) _L_LifeIcon = new LifeIcon(UiPanel, Instance.GetNode<Godot.TextureRect>("LifeIcon"));
+                return _L_LifeIcon;
+            }
+        }
+        private LifeIcon _L_LifeIcon;
+
+        public Life(RoomUIPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override Life Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: RoomUI.Control.LifeBar.Gold.GoldIcon
+    /// </summary>
+    public class GoldIcon : UiNode<RoomUIPanel, Godot.TextureRect, GoldIcon>
+    {
+        public GoldIcon(RoomUIPanel uiPanel, Godot.TextureRect node) : base(uiPanel, node) {  }
+        public override GoldIcon Clone() => new (UiPanel, (Godot.TextureRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: RoomUI.Control.LifeBar.Gold.GoldText
+    /// </summary>
+    public class GoldText : UiNode<RoomUIPanel, Godot.Label, GoldText>
+    {
+        public GoldText(RoomUIPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override GoldText Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Control"/>, 路径: RoomUI.Control.LifeBar.Gold
+    /// </summary>
+    public class Gold : UiNode<RoomUIPanel, Godot.Control, Gold>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.LifeBar.GoldIcon
+        /// </summary>
+        public GoldIcon L_GoldIcon
+        {
+            get
+            {
+                if (_L_GoldIcon == null) _L_GoldIcon = new GoldIcon(UiPanel, Instance.GetNode<Godot.TextureRect>("GoldIcon"));
+                return _L_GoldIcon;
+            }
+        }
+        private GoldIcon _L_GoldIcon;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: RoomUI.Control.LifeBar.GoldText
+        /// </summary>
+        public GoldText L_GoldText
+        {
+            get
+            {
+                if (_L_GoldText == null) _L_GoldText = new GoldText(UiPanel, Instance.GetNode<Godot.Label>("GoldText"));
+                return _L_GoldText;
+            }
+        }
+        private GoldText _L_GoldText;
+
+        public Gold(RoomUIPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override Gold Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: RoomUI.Control.LifeBar
+    /// </summary>
+    public class LifeBar : UiNode<RoomUIPanel, Godot.VBoxContainer, LifeBar>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.Control.Life
         /// </summary>
         public Life L_Life
         {
             get
             {
-                if (_L_Life == null) _L_Life = new Life(UiPanel, Instance.GetNode<Godot.TextureRect>("Life"));
+                if (_L_Life == null) _L_Life = new Life(UiPanel, Instance.GetNode<Godot.Control>("Life"));
                 return _L_Life;
             }
         }
         private Life _L_Life;
 
-        public LifeBar(RoomUIPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
-        public override LifeBar Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.Control.Gold
+        /// </summary>
+        public Gold L_Gold
+        {
+            get
+            {
+                if (_L_Gold == null) _L_Gold = new Gold(UiPanel, Instance.GetNode<Godot.Control>("Gold"));
+                return _L_Gold;
+            }
+        }
+        private Gold _L_Gold;
+
+        public LifeBar(RoomUIPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
+        public override LifeBar Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -510,13 +598,13 @@ public abstract partial class RoomUI : UiBase
     public class Control : UiNode<RoomUIPanel, Godot.Control, Control>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.LifeBar
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: RoomUI.LifeBar
         /// </summary>
         public LifeBar L_LifeBar
         {
             get
             {
-                if (_L_LifeBar == null) _L_LifeBar = new LifeBar(UiPanel, Instance.GetNode<Godot.Control>("LifeBar"));
+                if (_L_LifeBar == null) _L_LifeBar = new LifeBar(UiPanel, Instance.GetNode<Godot.VBoxContainer>("LifeBar"));
                 return _L_LifeBar;
             }
         }
@@ -619,12 +707,32 @@ public abstract partial class RoomUI : UiBase
     public ReloadBar S_ReloadBar => L_ReloadBar;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.LifeBar.Life
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.LifeBar.Life.LifeIcon
+    /// </summary>
+    public LifeIcon S_LifeIcon => L_Control.L_LifeBar.L_Life.L_LifeIcon;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.Control.LifeBar.Life
     /// </summary>
     public Life S_Life => L_Control.L_LifeBar.L_Life;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.Control.LifeBar
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: RoomUI.Control.LifeBar.Gold.GoldIcon
+    /// </summary>
+    public GoldIcon S_GoldIcon => L_Control.L_LifeBar.L_Gold.L_GoldIcon;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: RoomUI.Control.LifeBar.Gold.GoldText
+    /// </summary>
+    public GoldText S_GoldText => L_Control.L_LifeBar.L_Gold.L_GoldText;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.Control.LifeBar.Gold
+    /// </summary>
+    public Gold S_Gold => L_Control.L_LifeBar.L_Gold;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: RoomUI.Control.LifeBar
     /// </summary>
     public LifeBar S_LifeBar => L_Control.L_LifeBar;
 

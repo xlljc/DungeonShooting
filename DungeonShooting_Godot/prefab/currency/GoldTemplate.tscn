@@ -23,6 +23,7 @@ size = Vector2(6, 4)
 collision_layer = 4
 collision_mask = 0
 script = ExtResource("1_p60kl")
+GoldCount = 0
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")

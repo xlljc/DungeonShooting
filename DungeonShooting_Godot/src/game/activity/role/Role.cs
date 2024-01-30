@@ -1236,6 +1236,14 @@ public abstract partial class Role : ActivityObject
             });
         }
     }
+    
+    /// <summary>
+    /// 添加金币
+    /// </summary>
+    public virtual void AddGold(int goldCount)
+    {
+        RoleState.Gold += goldCount;
+    }
 
     /// <summary>
     /// 切换当前使用的武器的回调

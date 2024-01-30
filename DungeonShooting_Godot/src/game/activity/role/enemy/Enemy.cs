@@ -174,6 +174,8 @@ public partial class Enemy : Role
         roleState.ViewRange = enemyBase.ViewRange;
         roleState.TailAfterViewRange = enemyBase.TailAfterViewRange;
         roleState.BackViewRange = enemyBase.BackViewRange;
+        
+        roleState.Gold = Mathf.Max(0, Utils.Random.RandomConfigRange(enemyBase.Gold));
         return roleState;
     }
 
@@ -213,19 +215,8 @@ public partial class Enemy : Role
         }
         
         //创建金币
-        var goldCount = Utils.Random.RandomRangeInt(1, 5);
-        for (int i = 0; i < goldCount; i++)
-        {
-            var o = Create(Ids.Id_gold_10);
-            o.GlobalPosition = GlobalPosition;
-            o.Throw(0,
-                Utils.Random.RandomRangeInt(50, 90),
-                new Vector2(Utils.Random.RandomRangeInt(-10, 10), Utils.Random.RandomRangeInt(-10, 10)),
-                0
-            );
-        }
-
-
+        CreateGold();
+        
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
         Destroy();
@@ -262,6 +253,24 @@ public partial class Enemy : Role
         {
             //拾起武器操作
             EnemyPickUpWeapon();
+        }
+    }
+
+    /// <summary>
+    /// 创建散落的金币
+    /// </summary>
+    protected void CreateGold()
+    {
+        var goldList = Utils.GetGoldList(RoleState.Gold);
+        foreach (var id in goldList)
+        {
+            var o = ObjectManager.GetActivityObject<Gold>(id);
+            o.Position = Position;
+            o.Throw(0,
+                Utils.Random.RandomRangeInt(50, 110),
+                new Vector2(Utils.Random.RandomRangeInt(-20, 20), Utils.Random.RandomRangeInt(-20, 20)),
+                0
+            );
         }
     }
 

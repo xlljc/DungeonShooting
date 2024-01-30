@@ -51,6 +51,18 @@ public static class ObjectManager
         return item;
     }
 
+    public static T GetActivityObject<T>(string id) where T : ActivityObject, IPoolItem
+    {
+        var item = ObjectPool.GetItem<T>(id);
+        if (item == null)
+        {
+            item = ActivityObject.Create<T>(id);
+            item.Logotype = id;
+        }
+
+        return item;
+    }
+    
     public static Bullet GetBullet(string id)
     {
         var bullet = ObjectPool.GetItem<Bullet>(id);

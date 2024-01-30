@@ -171,7 +171,7 @@
     "Id": "weapon0010",
     "Type": 5,
     "Name": "weapon0010",
-    "Quality": 4,
+    "Quality": 5,
     "Price": 0,
     "Intro": "",
     "Details": "",
@@ -179,6 +179,20 @@
     "__Material": "",
     "Prefab": "res://prefab/weapon/Weapon0010.tscn",
     "Icon": "res://resource/sprite/weapon/weapon0010/Weapon0010.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "weapon0013",
+    "Type": 5,
+    "Name": "P90",
+    "Quality": 4,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/weapon/Weapon0013.tscn",
+    "Icon": "res://resource/sprite/weapon/weapon0013/Weapon0013.png",
     "ShowInMapEditor": true
   },
   {
@@ -635,12 +649,40 @@
     "Name": "\u91D1\u5E01",
     "Quality": 0,
     "Price": 0,
-    "Intro": "\u83B7\u5F9710\u8D27\u5E01",
+    "Intro": "\u83B7\u5F9710\u91D1\u5E01",
     "Details": "",
     "IsStatic": false,
     "__Material": "",
     "Prefab": "res://prefab/currency/Gold10.tscn",
     "Icon": "res://resource/sprite/ui/commonIcon/Gold_10.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "gold_5",
+    "Type": 99,
+    "Name": "\u94F6\u5E01",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "\u83B7\u5F975\u91D1\u5E01",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/currency/Gold5.tscn",
+    "Icon": "res://resource/sprite/ui/commonIcon/Gold_5.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "gold_1",
+    "Type": 99,
+    "Name": "\u94DC\u5E01",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "\u83B7\u5F971\u91D1\u5E01",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/currency/Gold1.tscn",
+    "Icon": "res://resource/sprite/ui/commonIcon/Gold_1.png",
     "ShowInMapEditor": true
   }
 ]

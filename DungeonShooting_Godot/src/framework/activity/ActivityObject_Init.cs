@@ -74,6 +74,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_weapon0010 = "weapon0010";
         /// <summary>
+        /// 名称: P90 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_weapon0013 = "weapon0013";
+        /// <summary>
         /// 名称:  <br/>
         /// 简介: 
         /// </summary>
@@ -235,8 +240,18 @@ public partial class ActivityObject
         public const string Id_other_door_n = "other_door_n";
         /// <summary>
         /// 名称: 金币 <br/>
-        /// 简介: 获得10货币
+        /// 简介: 获得10金币
         /// </summary>
         public const string Id_gold_10 = "gold_10";
+        /// <summary>
+        /// 名称: 银币 <br/>
+        /// 简介: 获得5金币
+        /// </summary>
+        public const string Id_gold_5 = "gold_5";
+        /// <summary>
+        /// 名称: 铜币 <br/>
+        /// 简介: 获得1金币
+        /// </summary>
+        public const string Id_gold_1 = "gold_1";
     }
 }

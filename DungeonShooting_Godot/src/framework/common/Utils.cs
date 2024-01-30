@@ -530,4 +530,31 @@ public static class Utils
         }
         return arr;
     }
+
+    /// <summary>
+    /// 根据金币数量获取金币对象id数组
+    /// </summary>
+    public static string[] GetGoldList(int gold)
+    {
+        var list = new List<string>();
+        while (gold > 0)
+        {
+            if (gold >= 10)
+            {
+                list.Add(ActivityObject.Ids.Id_gold_10);
+                gold -= 10;
+            }
+            else if (gold >= 5)
+            {
+                list.Add(ActivityObject.Ids.Id_gold_5);
+                gold -= 5;
+            }
+            else
+            {
+                list.Add(ActivityObject.Ids.Id_gold_1);
+                gold -= 1;
+            }
+        }
+        return list.ToArray();
+    }
 }

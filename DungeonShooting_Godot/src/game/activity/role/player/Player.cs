@@ -73,6 +73,8 @@ public partial class Player : Role
         //InitSubLine();
         
         _brushData2 = new BrushImageData(ExcelConfig.LiquidMaterial_Map["0001"]);
+
+        MaxHp = 100;
     }
 
     private void DebugSet()
@@ -404,4 +406,10 @@ public partial class Player : Role
     //     base.DebugDraw();
     //     DrawArc(GetLocalMousePosition(), 25, 0, Mathf.Pi * 2f, 20, Colors.Red, 1);
     // }
+
+    public override void AddGold(int goldCount)
+    {
+        base.AddGold(goldCount);
+        EventManager.EmitEvent(EventEnum.OnPlayerGoldChange, RoleState.Gold);
+    }
 }
