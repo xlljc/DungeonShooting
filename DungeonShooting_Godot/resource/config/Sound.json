@@ -72,6 +72,12 @@
     "Remark": "\u6FC0\u5149\u6B66\u5668"
   },
   {
+    "Id": "shooting0013",
+    "Path": "res://resource/sound/sfx/shooting/Shooting0013.ogg",
+    "Volume": 0.6,
+    "Remark": "P90"
+  },
+  {
     "Id": "reloading0001",
     "Path": "res://resource/sound/sfx/reloading/Reloading0001.ogg",
     "Volume": 1,
@@ -117,7 +123,13 @@
     "Id": "reloadBegin0006",
     "Path": "res://resource/sound/sfx/reloading/Reloading_begin0006.ogg",
     "Volume": 1,
-    "Remark": ""
+    "Remark": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA"
+  },
+  {
+    "Id": "reloadBegin0007",
+    "Path": "res://resource/sound/sfx/reloading/Reloading_begin0007.ogg",
+    "Volume": 1,
+    "Remark": "P90"
   },
   {
     "Id": "reloadBegin0009",
@@ -230,8 +242,8 @@
   {
     "Id": "beLoaded0010",
     "Path": "res://resource/sound/sfx/beLoaded/BeLoaded0010.ogg",
-    "Volume": 1,
-    "Remark": "\u6B65\u67AA"
+    "Volume": 0.7,
+    "Remark": "P90"
   },
   {
     "Id": "beLoaded0011",
@@ -298,5 +310,11 @@
     "Path": "res://resource/sound/sfx/collision/Collision0001.ogg",
     "Volume": 0.7,
     "Remark": "\u78B0\u649E"
+  },
+  {
+    "Id": "gold",
+    "Path": "res://resource/sound/sfx/common/gold.ogg",
+    "Volume": 1.5,
+    "Remark": "\u91D1\u5E01"
   }
 ]

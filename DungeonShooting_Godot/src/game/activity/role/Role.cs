@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Collections.Generic;
+using Config;
 using Godot;
 
 /// <summary>
@@ -1243,6 +1244,8 @@ public abstract partial class Role : ActivityObject
     public virtual void AddGold(int goldCount)
     {
         RoleState.Gold += goldCount;
+        //播放音效
+        SoundManager.PlaySoundByConfig(ExcelConfig.Sound_Map["gold"], Position, this);
     }
 
     /// <summary>
