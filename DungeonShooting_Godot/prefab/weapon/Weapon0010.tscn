@@ -148,7 +148,7 @@ material = SubResource("ShaderMaterial_cbiyh")
 modulate = Color(1.9, 1.9, 1.9, 1)
 material = SubResource("ShaderMaterial_0oy4o")
 sprite_frames = ExtResource("3_nj0c6")
-offset = Vector2(4, -2.015)
+offset = Vector2(4, -2)
 
 [node name="ShellPoint" type="Marker2D" parent="AnimatedSprite"]
 position = Vector2(-3, -3)
@@ -157,7 +157,7 @@ position = Vector2(-3, -3)
 position = Vector2(21, -1)
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2(4, -1)
+position = Vector2(5, -1)
 shape = SubResource("RectangleShape2D_evjpf")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

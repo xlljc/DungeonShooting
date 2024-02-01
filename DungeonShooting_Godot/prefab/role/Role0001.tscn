@@ -55,8 +55,8 @@ position = Vector2(0, 0)
 [node name="HurtCollision" parent="HurtArea" index="0"]
 shape = SubResource("RectangleShape2D_ve262")
 
-[node name="InteractiveArea" parent="." index="5"]
-visible = true
+[node name="InteractiveCollision" parent="InteractiveArea" index="0"]
+position = Vector2(0, 0)
 
 [node name="AnimationPlayer" parent="." index="8"]
 libraries = {

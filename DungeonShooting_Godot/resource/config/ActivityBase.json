@@ -684,5 +684,19 @@
     "Prefab": "res://prefab/currency/Gold1.tscn",
     "Icon": "res://resource/sprite/ui/commonIcon/Gold_1.png",
     "ShowInMapEditor": true
+  },
+  {
+    "Id": "treasure_box0001",
+    "Type": 99,
+    "Name": "\u6728\u8D28\u5B9D\u7BB1",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "\u6728\u8D28\u5B9D\u7BB1",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/box/TreasureBox0001.tscn",
+    "Icon": "res://resource/sprite/box/TreasureBox0001.png",
+    "ShowInMapEditor": true
   }
 ]

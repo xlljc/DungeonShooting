@@ -287,12 +287,6 @@ public static partial class ExcelConfig
         public float ThrowShellDelayTime;
 
         /// <summary>
-        /// 投抛状态下物体碰撞器大小
-        /// </summary>
-        [JsonInclude]
-        public SerializeVector2 ThrowCollisionSize;
-
-        /// <summary>
         /// 是否可以触发近战攻击
         /// </summary>
         [JsonInclude]
@@ -425,7 +419,6 @@ public static partial class ExcelConfig
             inst.Shell = Shell;
             inst.ReloadThrowShell = ReloadThrowShell;
             inst.ThrowShellDelayTime = ThrowShellDelayTime;
-            inst.ThrowCollisionSize = ThrowCollisionSize;
             inst.CanMeleeAttack = CanMeleeAttack;
             inst.MeleeAttackHarmRange = MeleeAttackHarmRange;
             inst.MeleeAttackRepelRange = MeleeAttackRepelRange;

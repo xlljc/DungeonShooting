@@ -134,7 +134,7 @@ public partial class Enemy : Role
         
         StateController = AddComponent<StateController<Enemy, AIStateEnum>>();
 
-        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Player;
+        AttackLayer = PhysicsLayer.Obstacle | PhysicsLayer.Player;
         EnemyLayer = PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 

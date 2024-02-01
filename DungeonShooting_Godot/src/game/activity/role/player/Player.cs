@@ -48,7 +48,7 @@ public partial class Player : Role
 
         IsAi = false;
         StateController = AddComponent<StateController<Player, PlayerStateEnum>>();
-        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Enemy;
+        AttackLayer = PhysicsLayer.Obstacle | PhysicsLayer.Enemy;
         EnemyLayer = EnemyLayer = PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
 
@@ -62,6 +62,12 @@ public partial class Player : Role
         
         // debug用
         // DebugSet();
+        this.CallDelay(2.5f, () =>
+        {
+            var o = Create(Ids.Id_treasure_box0001);
+            o.Position = Position;
+            o.PutDown(RoomLayerEnum.YSortLayer);
+        });
         
         //注册状态机
         StateController.Register(new PlayerIdleState());
@@ -80,8 +86,8 @@ public partial class Player : Role
         RoleState.Acceleration = 3000;
         RoleState.Friction = 3000;
         RoleState.MoveSpeed = 500;
-        CollisionLayer = 0;
-        CollisionMask = 0;
+        CollisionLayer = PhysicsLayer.None;
+        CollisionMask = PhysicsLayer.None;
         GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
         // this.CallDelay(0.5f, () =>
         // {
@@ -220,14 +226,14 @@ public partial class Player : Role
         {
             //Hurt(1000, 0);
             Hp = 0;
-            Hurt(this, 1000, 0);
+            HurtHandler(this, 1000, 0);
         }
         else if (Input.IsKeyPressed(Key.O)) //测试用, 消灭房间内所有敌人
         {
             var enemyList = AffiliationArea.FindIncludeItems(o => o.CollisionWithMask(PhysicsLayer.Enemy));
             foreach (var enemy in enemyList)
             {
-                ((Enemy)enemy).Hurt(this, 1000, 0);
+                ((Enemy)enemy).HurtArea.Hurt(this, 1000, 0);
             }
         }
         // //测试用

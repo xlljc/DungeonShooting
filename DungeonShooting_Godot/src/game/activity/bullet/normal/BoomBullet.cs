@@ -19,7 +19,7 @@ public partial class BoomBullet : Bullet
         DoReclaim();
     }
 
-    public override void OnCollisionTarget(ActivityObject o)
+    public override void OnCollisionTarget(IHurt o)
     {
         PlayBoom();
         DoReclaim();

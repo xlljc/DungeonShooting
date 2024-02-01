@@ -53,10 +53,6 @@
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -130,10 +126,6 @@
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -207,10 +199,6 @@
     "__Shell": "shell0002",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0.2,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -284,10 +272,6 @@
     "__Shell": "shell0002",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0.2,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -361,10 +345,6 @@
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -438,10 +418,6 @@
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -514,10 +490,6 @@
     "__Shell": "",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -590,10 +562,6 @@
     "__Shell": "",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -667,10 +635,6 @@
     "__Shell": "shell0003",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0.2,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -744,10 +708,6 @@
     "__Shell": "shell0003",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0.2,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -821,10 +781,6 @@
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -898,10 +854,6 @@
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -975,10 +927,6 @@
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1052,10 +1000,6 @@
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1129,10 +1073,6 @@
     "__Shell": "",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1206,10 +1146,6 @@
     "__Shell": "",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1283,10 +1219,6 @@
     "__Shell": "shell0004",
     "ReloadThrowShell": true,
     "ThrowShellDelayTime": 0.46,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1360,10 +1292,6 @@
     "__Shell": "shell0004",
     "ReloadThrowShell": true,
     "ThrowShellDelayTime": 0.46,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1437,10 +1365,6 @@
     "__Shell": "",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1514,10 +1438,6 @@
     "__Shell": "",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1591,10 +1511,6 @@
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1668,10 +1584,6 @@
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10

@@ -64,6 +64,7 @@ public partial class Laser : Area2D, IBullet
             _pixelScale = 1f / LineSprite.Texture.GetHeight();
 
             AreaEntered += OnArea2dEntered;
+            BodyEntered += OnBodyEntered;
             
             _init = true;
         }
@@ -77,7 +78,7 @@ public partial class Laser : Area2D, IBullet
 
         //计算射线最大距离, 也就是撞到墙壁的距离
         var targetPosition = data.Position + Vector2.FromAngle(data.Rotation) * data.MaxDistance;
-        var parameters = PhysicsRayQueryParameters2D.Create(data.Position + new Vector2(0, data.Altitude), targetPosition + new Vector2(0, data.Altitude), PhysicsLayer.Wall);
+        var parameters = PhysicsRayQueryParameters2D.Create(data.Position + new Vector2(0, data.Altitude), targetPosition + new Vector2(0, data.Altitude), PhysicsLayer.Wall | PhysicsLayer.Obstacle);
         var result = GetWorld2D().DirectSpaceState.IntersectRay(parameters);
         float distance;
         var doRebound = false; //是否需要执行反弹
@@ -192,20 +193,37 @@ public partial class Laser : Area2D, IBullet
             }
         }
     }
+
+    private void OnBodyEntered(Node2D body)
+    {
+        if (body is IHurt hurt)
+        {
+            HandlerCollision(hurt);
+        }
+    }
     
     private void OnArea2dEntered(Area2D other)
     {
-        var role = other.AsActivityObject<Role>();
-        if (role != null)
+        if (other is IHurt hurt)
         {
-            //击退
-            if (BulletData.Repel != 0)
-            {
-                role.AddRepelForce(Vector2.FromAngle(Rotation) * BulletData.Repel);
-            }
-            //造成伤害
-            role.CallDeferred(nameof(Role.Hurt), BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
+            HandlerCollision(hurt);
         }
+    }
+
+    private void HandlerCollision(IHurt hurt)
+    {
+        if (hurt is HurtArea hurtArea)
+        {
+            var o = hurtArea.ActivityObject;
+            //击退
+            if (o is not Player && BulletData.Repel != 0)
+            {
+                o.AddRepelForce(Vector2.FromAngle(Rotation) * BulletData.Repel);
+            }
+        }
+
+        //造成伤害
+        hurt.Hurt(BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
     }
 
     public long StartCoroutine(IEnumerator able)

@@ -253,5 +253,10 @@ public partial class ActivityObject
         /// 简介: 获得1金币
         /// </summary>
         public const string Id_gold_1 = "gold_1";
+        /// <summary>
+        /// 名称: 木质宝箱 <br/>
+        /// 简介: 木质宝箱
+        /// </summary>
+        public const string Id_treasure_box0001 = "treasure_box0001";
     }
 }

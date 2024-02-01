@@ -76,6 +76,7 @@ public partial class Bullet : ActivityObject, IBullet
         if (!_init)
         {
             CollisionArea.AreaEntered += OnArea2dEntered;
+            CollisionArea.BodyEntered += OnBodyEntered;
             _init = true;
         }
         
@@ -115,14 +116,12 @@ public partial class Bullet : ActivityObject, IBullet
         {
             if (!IsEnemyBullet)
             {
-                IsEnemyBullet = true;
-                OnRefreshBulletColor(IsEnemyBullet);
+                RefreshBulletColor(true);
             }
         }
         else if (IsEnemyBullet)
         {
-            IsEnemyBullet = false;
-            OnRefreshBulletColor(IsEnemyBullet);
+            RefreshBulletColor(false);
         }
         
         PutDown(RoomLayerEnum.YSortLayer);
@@ -150,8 +149,9 @@ public partial class Bullet : ActivityObject, IBullet
     /// 刷新子弹的颜色
     /// </summary>
     /// <param name="isEnemyBullet">是否是敌人使用的子弹</param>
-    public virtual void OnRefreshBulletColor(bool isEnemyBullet)
+    public virtual void RefreshBulletColor(bool isEnemyBullet)
     {
+        IsEnemyBullet = isEnemyBullet;
         if (isEnemyBullet)
         {
             ShowOutline = true;
@@ -178,30 +178,31 @@ public partial class Bullet : ActivityObject, IBullet
     /// <summary>
     /// 碰到目标
     /// </summary>
-    public virtual void OnCollisionTarget(ActivityObject o)
+    public virtual void OnCollisionTarget(IHurt hurt)
     {
-        if (o is Role role)
-        {
-            OnPlayDisappearEffect();
+        OnPlayDisappearEffect();
 
+        if (hurt is HurtArea hurtArea)
+        {
+            var o = hurtArea.ActivityObject;
             //击退
-            if (role is not Player) //目标不是玩家才会触发击退
+            if (o is not Player) //目标不是玩家才会触发击退
             {
                 if (BulletData.Repel != 0)
                 {
-                    role.AddRepelForce(Velocity.Normalized() * BulletData.Repel);
+                    o.AddRepelForce(Velocity.Normalized() * BulletData.Repel);
                 }
             }
-            
-            //造成伤害
-            role.CallDeferred(nameof(Role.Hurt), BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
+        }
+        
+        //造成伤害
+        hurt.Hurt(BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
 
-            //穿透次数
-            CurrentPenetration++;
-            if (CurrentPenetration > BulletData.Penetration)
-            {
-                DoReclaim();
-            }
+        //穿透次数
+        CurrentPenetration++;
+        if (CurrentPenetration > BulletData.Penetration)
+        {
+            DoReclaim();
         }
     }
 
@@ -306,17 +307,37 @@ public partial class Bullet : ActivityObject, IBullet
             OnMaxDistance();
         }
     }
-    
+
+    private void OnBodyEntered(Node2D body)
+    {
+        if (IsDestroyed)
+        {
+            return;
+        }
+
+        if (body is IHurt hurt)
+        {
+            OnCollisionTarget(hurt);
+        }
+    }
+
     private void OnArea2dEntered(Area2D other)
     {
         if (IsDestroyed)
         {
             return;
         }
-        var activityObject = other.AsActivityObject();
-        OnCollisionTarget(activityObject);
+        
+        if (other is HurtArea hurtArea)
+        {
+            OnCollisionTarget(hurtArea);
+        }
+        else if (other is IHurt hurt)
+        {
+            hurt.Hurt(BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
+        }
     }
-    
+
     public virtual void DoReclaim()
     {
         ObjectPool.Reclaim(this);

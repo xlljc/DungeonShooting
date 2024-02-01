@@ -257,7 +257,12 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <summary>
     /// 默认所在层级
     /// </summary>
-    public RoomLayerEnum DefaultLayer { get; protected set; }
+    public RoomLayerEnum DefaultLayer { get; set; }
+
+    /// <summary>
+    /// 投抛状态下的碰撞器层级
+    /// </summary>
+    public uint ThrowCollisionMask { get; set; } = PhysicsLayer.Wall;
     
     // --------------------------------------------------------------------------------
 
@@ -1492,7 +1497,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
             Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
-            CollisionMask = 1;
+            CollisionMask = ThrowCollisionMask;
             CollisionLayer = _fallData.OriginCollisionLayer | PhysicsLayer.Throwing;
             _fallData.UseOrigin = false;
         }

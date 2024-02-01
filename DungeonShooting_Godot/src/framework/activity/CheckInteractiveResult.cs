@@ -20,6 +20,14 @@ public class CheckInteractiveResult
         /// 替换
         /// </summary>
         Replace,
+        /// <summary>
+        /// 打开宝箱
+        /// </summary>
+        OpenTreasureBox,
+        /// <summary>
+        /// 其他互动类型
+        /// </summary>
+        Other,
     }
     
     /// <summary>
