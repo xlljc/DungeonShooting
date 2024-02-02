@@ -158,7 +158,7 @@ public partial class Explode : Area2D, IPoolItem
 
     private void HandlerCollision(IHurt hurt)
     {
-        var temp = ((Node2D)hurt).GlobalPosition - Position;
+        var temp = hurt.GetPosition() - Position;
         var len = temp.Length();
         var angle = temp.Angle();
 
@@ -166,11 +166,15 @@ public partial class Explode : Area2D, IPoolItem
         {
             hurt.Hurt(BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, _harm, angle);
         }
-            
-        if (len <= _repelledRadius && hurt is HurtArea hurtArea) //击退半径内
+        
+        if (len <= _repelledRadius) //击退半径内
         {
-            var repelled = (_repelledRadius - len) / _repelledRadius * _maxRepelled;
-            hurtArea.ActivityObject.AddRepelForce(Vector2.FromAngle(angle) * repelled);
+            var o = hurt.GetActivityObject();
+            if (o != null)
+            {
+                var repelled = (_repelledRadius - len) / _repelledRadius * _maxRepelled;
+                o.AddRepelForce(Vector2.FromAngle(angle) * repelled);
+            }
         }
     }
 }

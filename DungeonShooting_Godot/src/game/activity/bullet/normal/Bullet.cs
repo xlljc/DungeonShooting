@@ -181,20 +181,15 @@ public partial class Bullet : ActivityObject, IBullet
     public virtual void OnCollisionTarget(IHurt hurt)
     {
         OnPlayDisappearEffect();
-
-        if (hurt is HurtArea hurtArea)
+        if (BulletData.Repel != 0)
         {
-            var o = hurtArea.ActivityObject;
-            //击退
-            if (o is not Player) //目标不是玩家才会触发击退
+            var o = hurt.GetActivityObject();
+            if (o != null && o is not Player) //目标不是玩家才会触发击退
             {
-                if (BulletData.Repel != 0)
-                {
-                    o.AddRepelForce(Velocity.Normalized() * BulletData.Repel);
-                }
+                o.AddRepelForce(Velocity.Normalized() * BulletData.Repel);
             }
         }
-        
+
         //造成伤害
         hurt.Hurt(BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
 
@@ -328,13 +323,9 @@ public partial class Bullet : ActivityObject, IBullet
             return;
         }
         
-        if (other is HurtArea hurtArea)
+        if (other is IHurt hurt)
         {
-            OnCollisionTarget(hurtArea);
-        }
-        else if (other is IHurt hurt)
-        {
-            hurt.Hurt(BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
+            OnCollisionTarget(hurt);
         }
     }
 

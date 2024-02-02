@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="DungeonShooting"
+config/name="枪火地牢"
 run/main_scene="res://scene/Main.tscn"
 config/features=PackedStringArray("4.2", "C#")
 config/icon="res://icon.png"

@@ -69,7 +69,7 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_weapon0009 = "weapon0009";
         /// <summary>
-        /// 名称: weapon0010 <br/>
+        /// 名称: M1型热能狙击枪 <br/>
         /// 简介: 
         /// </summary>
         public const string Id_weapon0010 = "weapon0010";
@@ -219,6 +219,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_prop5001 = "prop5001";
         /// <summary>
+        /// 名称: 木质宝箱 <br/>
+        /// 简介: 木质宝箱
+        /// </summary>
+        public const string Id_treasure_box0001 = "treasure_box0001";
+        /// <summary>
         /// 名称:  <br/>
         /// 简介: 地牢房间的门(东侧)
         /// </summary>
@@ -253,10 +258,5 @@ public partial class ActivityObject
         /// 简介: 获得1金币
         /// </summary>
         public const string Id_gold_1 = "gold_1";
-        /// <summary>
-        /// 名称: 木质宝箱 <br/>
-        /// 简介: 木质宝箱
-        /// </summary>
-        public const string Id_treasure_box0001 = "treasure_box0001";
     }
 }

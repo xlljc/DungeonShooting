@@ -167,32 +167,28 @@ public partial class Knife : Weapon
         {
             repel = TriggerRole.RoleState.CalcBulletRepel(repel);
         }
-
-        if (hurt is HurtArea hurtArea)
+        
+        var globalPosition = GlobalPosition;
+        if (repel != 0)
         {
-            var globalPosition = GlobalPosition;
-            if (repel != 0 && hurtArea.ActivityObject is not Player) //不是玩家才能被击退
+            var o = hurt.GetActivityObject();
+            if (o != null && o is not Player) //不是玩家才能被击退
             {
                 Vector2 position;
                 if (TriggerRole != null)
                 {
-                    position = hurtArea.ActivityObject.GlobalPosition - TriggerRole.MountPoint.GlobalPosition;
+                    position = o.GlobalPosition - TriggerRole.MountPoint.GlobalPosition;
                 }
                 else
                 {
-                    position = hurtArea.ActivityObject.GlobalPosition - globalPosition;
+                    position = o.GlobalPosition - globalPosition;
                 }
                 var v2 = position.Normalized() * repel;
-                hurtArea.ActivityObject.AddRepelForce(v2);
+                o.AddRepelForce(v2);
             }
-            
-            //造成伤害
-            hurt.Hurt(TriggerRole, damage, (hurtArea.ActivityObject.GetCenterPosition() - globalPosition).Angle());
         }
-        else if (hurt is Node2D node2D)
-        {
-            //造成伤害
-            hurt.Hurt(TriggerRole, damage, (node2D.GlobalPosition - GlobalPosition).Angle());
-        }
+        
+        //造成伤害
+        hurt.Hurt(TriggerRole, damage, (hurt.GetPosition() - globalPosition).Angle());
     }
 }

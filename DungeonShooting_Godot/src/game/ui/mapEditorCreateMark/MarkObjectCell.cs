@@ -50,7 +50,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
             //物体名称
             CellNode.L_VBoxContainer.L_HBoxContainer.L_NameLabel.Instance.Text = _activityObject.Name;
             //物体类型
-            CellNode.L_VBoxContainer.L_HBoxContainer.L_TypeLabel.Instance.Text = NameManager.GetActivityTypeName(_activityObject.Type);
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_TypeLabel.Instance.Text = ActivityId.GetTypeName(_activityObject.Type);
             
             //图标
             if (string.IsNullOrEmpty(_activityObject.Icon))

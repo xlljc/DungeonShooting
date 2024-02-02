@@ -23,6 +23,7 @@ public static partial class ExcelConfig
         /// Shell(弹壳): 7 <br/>
         /// Effect(特效): 8 <br/>
         /// Prop(道具): 9 <br/>
+        /// Treasure(宝箱): 10 <br/>
         /// Other(其它类型): 99
         /// </summary>
         [JsonInclude]

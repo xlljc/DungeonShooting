@@ -170,7 +170,7 @@
   {
     "Id": "weapon0010",
     "Type": 5,
-    "Name": "weapon0010",
+    "Name": "M1\u578B\u70ED\u80FD\u72D9\u51FB\u67AA",
     "Quality": 5,
     "Price": 0,
     "Intro": "",
@@ -588,6 +588,20 @@
     "ShowInMapEditor": true
   },
   {
+    "Id": "treasure_box0001",
+    "Type": 10,
+    "Name": "\u6728\u8D28\u5B9D\u7BB1",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "\u6728\u8D28\u5B9D\u7BB1",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/box/TreasureBox0001.tscn",
+    "Icon": "res://resource/sprite/box/TreasureBox0001.png",
+    "ShowInMapEditor": true
+  },
+  {
     "Id": "other_door_e",
     "Type": 99,
     "Name": "",
@@ -683,20 +697,6 @@
     "__Material": "",
     "Prefab": "res://prefab/currency/Gold1.tscn",
     "Icon": "res://resource/sprite/ui/commonIcon/Gold_1.png",
-    "ShowInMapEditor": true
-  },
-  {
-    "Id": "treasure_box0001",
-    "Type": 99,
-    "Name": "\u6728\u8D28\u5B9D\u7BB1",
-    "Quality": 0,
-    "Price": 0,
-    "Intro": "\u6728\u8D28\u5B9D\u7BB1",
-    "Details": "",
-    "IsStatic": false,
-    "__Material": "",
-    "Prefab": "res://prefab/box/TreasureBox0001.tscn",
-    "Icon": "res://resource/sprite/box/TreasureBox0001.png",
     "ShowInMapEditor": true
   }
 ]

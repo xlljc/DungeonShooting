@@ -62,12 +62,6 @@ public partial class Player : Role
         
         // debug用
         // DebugSet();
-        this.CallDelay(2.5f, () =>
-        {
-            var o = Create(Ids.Id_treasure_box0001);
-            o.Position = Position;
-            o.PutDown(RoomLayerEnum.YSortLayer);
-        });
         
         //注册状态机
         StateController.Register(new PlayerIdleState());

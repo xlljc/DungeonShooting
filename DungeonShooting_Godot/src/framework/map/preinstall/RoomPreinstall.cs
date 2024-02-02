@@ -422,7 +422,7 @@ public class RoomPreinstall : IDestroy
     //获取物体默认所在层级
     private RoomLayerEnum GetDefaultLayer(ActivityMark activityMark)
     {
-        if (activityMark.ActivityType == ActivityType.Player || activityMark.ActivityType == ActivityType.Enemy)
+        if (activityMark.ActivityType == ActivityType.Player || activityMark.ActivityType == ActivityType.Enemy || activityMark.ActivityType == ActivityType.Treasure)
         {
             return RoomLayerEnum.YSortLayer;
         }

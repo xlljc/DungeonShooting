@@ -45,6 +45,10 @@ public enum ActivityType
     /// </summary>
     Prop,
     /// <summary>
+    /// 宝箱
+    /// </summary>
+    Treasure,
+    /// <summary>
     /// 其它类型
     /// </summary>
     Other = 99,

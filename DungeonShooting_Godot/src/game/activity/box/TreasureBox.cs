@@ -32,12 +32,11 @@ public partial class TreasureBox : ActivityObject, IHurt
     private void OnAnimationFinished()
     {
         var weapon = Create(World.RandomPool.GetRandomProp());
-        weapon.Throw(Position, 2, 90, new Vector2(0, 13), 0);
+        weapon.Throw(Position, 2, 95, new Vector2(0, 11), 0);
     }
 
     public void Hurt(ActivityObject target, int damage, float angle)
     {
         PlayHitAnimation();
-        Debug.Log("111");
     }
 }

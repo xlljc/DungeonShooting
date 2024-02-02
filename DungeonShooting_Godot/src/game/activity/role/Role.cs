@@ -1317,26 +1317,19 @@ public abstract partial class Role : ActivityObject
     {
         var damage = Utils.Random.RandomConfigRange(activeWeapon.Attribute.MeleeAttackHarmRange);
         damage = RoleState.CalcDamage(damage);
+
+        var o = hurt.GetActivityObject();
+        var pos = hurt.GetPosition();
+        if (o != null && o is not Player) //不是玩家才能被击退
+        {
+            var attr = IsAi ? activeWeapon.AiUseAttribute : activeWeapon.PlayerUseAttribute;
+            var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRange);
+            var position = pos - MountPoint.GlobalPosition;
+            var v2 = position.Normalized() * repel;
+            o.AddRepelForce(v2);
+        }
         
-        if (hurt is HurtArea hurtArea)
-        {
-            //击退
-            if (hurtArea.ActivityObject is not Player) //目标不是玩家才会触发击退
-            {
-                var attr = IsAi ? activeWeapon.AiUseAttribute : activeWeapon.PlayerUseAttribute;
-                var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRange);
-                var position = hurtArea.ActivityObject.GlobalPosition - MountPoint.GlobalPosition;
-                var v2 = position.Normalized() * repel;
-                hurtArea.ActivityObject.AddRepelForce(v2);
-            }
-            
-            hurt.Hurt(this, damage, (hurtArea.ActivityObject.GetCenterPosition() - GlobalPosition).Angle());
-        }
-        else if (hurt is Node2D node2D)
-        {
-            //造成伤害
-            hurt.Hurt(this, damage, (node2D.GlobalPosition - GlobalPosition).Angle());
-        }
+        hurt.Hurt(this, damage, (pos - GlobalPosition).Angle());
     }
 
     protected override void OnDestroy()

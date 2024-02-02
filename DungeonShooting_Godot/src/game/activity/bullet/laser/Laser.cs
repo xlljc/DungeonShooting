@@ -78,7 +78,7 @@ public partial class Laser : Area2D, IBullet
 
         //计算射线最大距离, 也就是撞到墙壁的距离
         var targetPosition = data.Position + Vector2.FromAngle(data.Rotation) * data.MaxDistance;
-        var parameters = PhysicsRayQueryParameters2D.Create(data.Position + new Vector2(0, data.Altitude), targetPosition + new Vector2(0, data.Altitude), PhysicsLayer.Wall | PhysicsLayer.Obstacle);
+        var parameters = PhysicsRayQueryParameters2D.Create(data.Position + new Vector2(0, data.Altitude), targetPosition + new Vector2(0, data.Altitude), PhysicsLayer.Wall);
         var result = GetWorld2D().DirectSpaceState.IntersectRay(parameters);
         float distance;
         var doRebound = false; //是否需要执行反弹
@@ -212,11 +212,10 @@ public partial class Laser : Area2D, IBullet
 
     private void HandlerCollision(IHurt hurt)
     {
-        if (hurt is HurtArea hurtArea)
+        if (BulletData.Repel != 0)
         {
-            var o = hurtArea.ActivityObject;
-            //击退
-            if (o is not Player && BulletData.Repel != 0)
+            var o = hurt.GetActivityObject();
+            if (o != null && o is not Player) //目标不是玩家才会触发击退
             {
                 o.AddRepelForce(Vector2.FromAngle(Rotation) * BulletData.Repel);
             }

@@ -1313,7 +1313,7 @@
   },
   {
     "Id": "0010",
-    "Remark": "weapon0010",
+    "Remark": "M1\u578B\u70ED\u80FD\u72D9\u51FB\u67AA",
     "__Activity": "weapon0010",
     "Weight": 40,
     "WeightType": 2,
@@ -1386,7 +1386,7 @@
   },
   {
     "Id": "0010_ai",
-    "Remark": "weapon0010",
+    "Remark": "M1\u578B\u70ED\u80FD\u72D9\u51FB\u67AA",
     "__Activity": "",
     "Weight": 40,
     "WeightType": 2,
