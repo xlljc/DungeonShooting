@@ -196,6 +196,20 @@
     "ShowInMapEditor": true
   },
   {
+    "Id": "weapon0014",
+    "Type": 5,
+    "Name": "\u5DE6\u8F6E",
+    "Quality": 4,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/weapon/Weapon0014.tscn",
+    "Icon": "res://resource/sprite/weapon/weapon0014/Weapon0014.png",
+    "ShowInMapEditor": true
+  },
+  {
     "Id": "bullet0001",
     "Type": 6,
     "Name": "",
@@ -276,6 +290,20 @@
     "IsStatic": false,
     "__Material": "0003",
     "Prefab": "res://prefab/bullet/normal/Bullet0006.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
+    "Id": "bullet0007",
+    "Type": 6,
+    "Name": "",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "0003",
+    "Prefab": "res://prefab/bullet/normal/Bullet0007.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },

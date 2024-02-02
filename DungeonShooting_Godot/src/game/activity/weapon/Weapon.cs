@@ -1510,23 +1510,30 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     //抛弹逻辑
     private void ThrowShellHandler(float speedScale)
     {
-        if (Attribute.Shell == null)
+        var attribute = Attribute;
+        if (attribute.Shell == null)
         {
             return;
         }
         //创建一个弹壳
-        if (Attribute.ThrowShellDelayTime > 0)
+        if (attribute.ThrowShellDelayTime > 0)
         {
-            this.CallDelay(Attribute.ThrowShellDelayTime, () =>
+            this.CallDelay(attribute.ThrowShellDelayTime, () =>
             {
                 _reloadShellFlag = true;
-                FireManager.ThrowShell(this, Attribute.Shell, speedScale);
+                for (var i = 0; i < attribute.ThrowShellCount; i++)
+                {
+                    FireManager.ThrowShell(this, attribute.Shell, speedScale);
+                }
             });
         }
-        else if (Attribute.ThrowShellDelayTime == 0)
+        else if (attribute.ThrowShellDelayTime == 0)
         {
             _reloadShellFlag = true;
-            FireManager.ThrowShell(this, Attribute.Shell, speedScale);
+            for (var i = 0; i < attribute.ThrowShellCount; i++)
+            {
+                FireManager.ThrowShell(this, attribute.Shell, speedScale);
+            }
         }
     }
 

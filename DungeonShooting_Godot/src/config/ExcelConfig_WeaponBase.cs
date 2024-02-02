@@ -281,6 +281,12 @@ public static partial class ExcelConfig
         public bool ReloadThrowShell;
 
         /// <summary>
+        /// 抛壳数量
+        /// </summary>
+        [JsonInclude]
+        public int ThrowShellCount;
+
+        /// <summary>
         /// 投抛弹壳的延时时间
         /// </summary>
         [JsonInclude]
@@ -418,6 +424,7 @@ public static partial class ExcelConfig
             inst.Bullet = Bullet;
             inst.Shell = Shell;
             inst.ReloadThrowShell = ReloadThrowShell;
+            inst.ThrowShellCount = ThrowShellCount;
             inst.ThrowShellDelayTime = ThrowShellDelayTime;
             inst.CanMeleeAttack = CanMeleeAttack;
             inst.MeleeAttackHarmRange = MeleeAttackHarmRange;

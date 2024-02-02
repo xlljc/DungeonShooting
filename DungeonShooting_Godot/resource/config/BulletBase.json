@@ -246,6 +246,41 @@
     ]
   },
   {
+    "Id": "0008",
+    "Name": "\u5B50\u5F394",
+    "Type": 1,
+    "Prefab": "bullet0007",
+    "HarmRange": [
+      4
+    ],
+    "RepelRange": [
+      15
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      350,
+      380
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      400,
+      450
+    ],
+    "VerticalSpeed": [
+      0
+    ],
+    "BounceCount": [
+      0
+    ],
+    "Penetration": [
+      0
+    ]
+  },
+  {
     "Id": "1001",
     "Name": "\u6FC0\u51491",
     "Type": 2,

@@ -77,6 +77,7 @@ public class ResourcePath
     public const string prefab_bullet_normal_Bullet0004_tscn = "res://prefab/bullet/normal/Bullet0004.tscn";
     public const string prefab_bullet_normal_Bullet0005_tscn = "res://prefab/bullet/normal/Bullet0005.tscn";
     public const string prefab_bullet_normal_Bullet0006_tscn = "res://prefab/bullet/normal/Bullet0006.tscn";
+    public const string prefab_bullet_normal_Bullet0007_tscn = "res://prefab/bullet/normal/Bullet0007.tscn";
     public const string prefab_currency_Gold1_tscn = "res://prefab/currency/Gold1.tscn";
     public const string prefab_currency_Gold10_tscn = "res://prefab/currency/Gold10.tscn";
     public const string prefab_currency_Gold5_tscn = "res://prefab/currency/Gold5.tscn";
@@ -174,6 +175,7 @@ public class ResourcePath
     public const string prefab_weapon_Weapon0009_tscn = "res://prefab/weapon/Weapon0009.tscn";
     public const string prefab_weapon_Weapon0010_tscn = "res://prefab/weapon/Weapon0010.tscn";
     public const string prefab_weapon_Weapon0013_tscn = "res://prefab/weapon/Weapon0013.tscn";
+    public const string prefab_weapon_Weapon0014_tscn = "res://prefab/weapon/Weapon0014.tscn";
     public const string prefab_weapon_WeaponTemplate_tscn = "res://prefab/weapon/WeaponTemplate.tscn";
     public const string resource_config_ActivityBase_json = "res://resource/config/ActivityBase.json";
     public const string resource_config_ActivityMaterial_json = "res://resource/config/ActivityMaterial.json";
@@ -277,6 +279,7 @@ public class ResourcePath
     public const string resource_sprite_bullet_normal_bullet0004_png = "res://resource/sprite/bullet/normal/bullet0004.png";
     public const string resource_sprite_bullet_normal_bullet0005_png = "res://resource/sprite/bullet/normal/bullet0005.png";
     public const string resource_sprite_bullet_normal_bullet0006_png = "res://resource/sprite/bullet/normal/bullet0006.png";
+    public const string resource_sprite_bullet_normal_bullet0007_png = "res://resource/sprite/bullet/normal/bullet0007.png";
     public const string resource_sprite_bullet_normal_bullet2_png = "res://resource/sprite/bullet/normal/bullet2.png";
     public const string resource_sprite_common_Circle_png = "res://resource/sprite/common/Circle.png";
     public const string resource_sprite_common_Circle2_png = "res://resource/sprite/common/Circle2.png";
@@ -468,6 +471,7 @@ public class ResourcePath
     public const string resource_sprite_weapon_weapon0013_weapon0013_png = "res://resource/sprite/weapon/weapon0013/weapon0013.png";
     public const string resource_sprite_weapon_weapon0013_weapon0014export_png = "res://resource/sprite/weapon/weapon0013/weapon0014-export.png";
     public const string resource_sprite_weapon_weapon0013_weapon0014_png = "res://resource/sprite/weapon/weapon0013/weapon0014.png";
+    public const string resource_sprite_weapon_weapon0014_Weapon0014_png = "res://resource/sprite/weapon/weapon0014/Weapon0014.png";
     public const string resource_sprite_weapon_weapon0015_gun3_png = "res://resource/sprite/weapon/weapon0015/gun3.png";
     public const string resource_sprite_weapon_weapon0016_gun4_png = "res://resource/sprite/weapon/weapon0016/gun4.png";
     public const string resource_sprite_weapon_weapon0017_gun5_png = "res://resource/sprite/weapon/weapon0017/gun5.png";
@@ -480,6 +484,7 @@ public class ResourcePath
     public const string resource_spriteFrames_bullet_Bullet0004_tres = "res://resource/spriteFrames/bullet/Bullet0004.tres";
     public const string resource_spriteFrames_bullet_Bullet0005_tres = "res://resource/spriteFrames/bullet/Bullet0005.tres";
     public const string resource_spriteFrames_bullet_Bullet0006_tres = "res://resource/spriteFrames/bullet/Bullet0006.tres";
+    public const string resource_spriteFrames_bullet_Bullet0007_tres = "res://resource/spriteFrames/bullet/Bullet0007.tres";
     public const string resource_spriteFrames_bullet_Collision0001_tres = "res://resource/spriteFrames/bullet/Collision0001.tres";
     public const string resource_spriteFrames_bullet_Collision0002_tres = "res://resource/spriteFrames/bullet/Collision0002.tres";
     public const string resource_spriteFrames_other_RoomDoor_E_Down_tres = "res://resource/spriteFrames/other/RoomDoor_E_Down.tres";
@@ -524,6 +529,7 @@ public class ResourcePath
     public const string resource_spriteFrames_weapon_Weapon0009_tres = "res://resource/spriteFrames/weapon/Weapon0009.tres";
     public const string resource_spriteFrames_weapon_Weapon0010_tres = "res://resource/spriteFrames/weapon/Weapon0010.tres";
     public const string resource_spriteFrames_weapon_Weapon0013_tres = "res://resource/spriteFrames/weapon/Weapon0013.tres";
+    public const string resource_spriteFrames_weapon_Weapon0014_tres = "res://resource/spriteFrames/weapon/Weapon0014.tres";
     public const string resource_theme_mainTheme_tres = "res://resource/theme/mainTheme.tres";
     public const string resource_theme_theme1_tres = "res://resource/theme/theme1.tres";
     public const string scene_Main_tscn = "res://scene/Main.tscn";
