@@ -1,12 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://cybey66bhe4ro"]
+[gd_scene load_steps=8 format=3 uid="uid://d3dcmte122p6t"]
 
-[ext_resource type="Script" path="res://src/game/activity/bullet/normal/Bullet.cs" id="1_h4tn7"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_fgeyt"]
-[ext_resource type="SpriteFrames" uid="uid://bkwoy70bnm74k" path="res://resource/spriteFrames/bullet/Bullet0007.tres" id="3_c1ec6"]
+[ext_resource type="Script" path="res://src/game/activity/bullet/normal/ColorBullet.cs" id="1_qqm5l"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_t3qw6"]
+[ext_resource type="SpriteFrames" uid="uid://ubdvau75andr" path="res://resource/spriteFrames/bullet/Bullet0008.tres" id="3_aoni0"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v77gw"]
 resource_local_to_scene = true
-shader = ExtResource("2_fgeyt")
+shader = ExtResource("2_t3qw6")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
 shader_parameter/modulate = Color(1, 1, 1, 1)
@@ -16,9 +16,9 @@ shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
 shader_parameter/grey = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_r6pkp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jypdq"]
 resource_local_to_scene = true
-shader = ExtResource("2_fgeyt")
+shader = ExtResource("2_t3qw6")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
 shader_parameter/modulate = Color(1, 1, 1, 1)
@@ -28,16 +28,16 @@ shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = false
 shader_parameter/grey = 0.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_0vxfv"]
-radius = 2.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5x14b"]
+size = Vector2(22, 3)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_e2yn3"]
-radius = 2.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_72d75"]
+size = Vector2(22, 3)
 
-[node name="Bullet0007" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "Particles2D", "ShadowSprite", "AnimatedSprite", "Collision")]
+[node name="Bullet0008" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "Particles2D", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2
 collision_mask = 0
-script = ExtResource("1_h4tn7")
+script = ExtResource("1_qqm5l")
 CollisionArea = NodePath("AnimatedSprite/CollisionArea")
 CollisionShape2D = NodePath("AnimatedSprite/CollisionArea/CollisionShape2D")
 Particles2D = []
@@ -50,9 +50,9 @@ z_index = -1
 material = SubResource("ShaderMaterial_v77gw")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
-modulate = Color(2, 2, 2, 1)
-material = SubResource("ShaderMaterial_r6pkp")
-sprite_frames = ExtResource("3_c1ec6")
+modulate = Color(1.6, 1.6, 1.6, 1)
+material = SubResource("ShaderMaterial_jypdq")
+sprite_frames = ExtResource("3_aoni0")
 
 [node name="CollisionArea" type="Area2D" parent="AnimatedSprite"]
 collision_layer = 0
@@ -60,8 +60,7 @@ collision_mask = 0
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite/CollisionArea"]
-position = Vector2(-2.38419e-07, 0)
-shape = SubResource("CircleShape2D_0vxfv")
+shape = SubResource("RectangleShape2D_5x14b")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_e2yn3")
+shape = SubResource("RectangleShape2D_72d75")

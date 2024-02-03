@@ -20,7 +20,7 @@
     "Id": "0002",
     "__Activity": "enemy0002",
     "Remark": "\u654C\u4EBA2",
-    "Hp": 20,
+    "Hp": 25,
     "MoveSpeed": 120,
     "Acceleration": 1500,
     "Friction": 900,

@@ -52,7 +52,7 @@
     "__Bullet": "0001",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -126,7 +126,7 @@
     "__Bullet": "0001",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -200,7 +200,7 @@
     "__Bullet": "0002",
     "__Shell": "shell0002",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0.2,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -274,7 +274,7 @@
     "__Bullet": "0002",
     "__Shell": "shell0002",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0.2,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -348,7 +348,7 @@
     "__Bullet": "0001",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -422,7 +422,7 @@
     "__Bullet": "0001",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -642,7 +642,7 @@
     "__Bullet": "0004",
     "__Shell": "shell0003",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0.2,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -716,7 +716,7 @@
     "__Bullet": "0004",
     "__Shell": "shell0003",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0.2,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -790,7 +790,7 @@
     "__Bullet": "0002",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -864,7 +864,7 @@
     "__Bullet": "0002",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -938,7 +938,7 @@
     "__Bullet": "0003",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -1012,7 +1012,7 @@
     "__Bullet": "0003",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -1086,7 +1086,7 @@
     "__Bullet": "1001",
     "__Shell": "",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -1160,7 +1160,7 @@
     "__Bullet": "1001",
     "__Shell": "",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -1234,7 +1234,7 @@
     "__Bullet": "0005",
     "__Shell": "shell0004",
     "ReloadThrowShell": true,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0.46,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -1308,7 +1308,7 @@
     "__Bullet": "0005",
     "__Shell": "shell0004",
     "ReloadThrowShell": true,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0.46,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -1382,7 +1382,7 @@
     "__Bullet": "0007",
     "__Shell": "",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -1456,7 +1456,7 @@
     "__Bullet": "0007",
     "__Shell": "",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -1476,6 +1476,154 @@
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
     "__AiAttackAttr": "0009"
+  },
+  {
+    "Id": "0011",
+    "Remark": "weapon0011",
+    "__Activity": "weapon0011",
+    "Weight": 30,
+    "WeightType": 2,
+    "IsMelee": false,
+    "ContinuousShoot": true,
+    "AmmoCapacity": 20,
+    "MaxAmmoCapacity": 600,
+    "StandbyAmmoCapacity": 580,
+    "ReloadTime": 1.8,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0,
+    "ContinuousCountRange": [
+      1
+    ],
+    "TriggerInterval": 0,
+    "StartFiringSpeed": 700,
+    "FinalFiringSpeed": 700,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 3,
+    "FinalScatteringRange": 30,
+    "ScatteringRangeAddValue": 2,
+    "ScatteringRangeBackSpeed": 40,
+    "ScatteringRangeBackDelayTime": 0.3,
+    "CameraShake": 2,
+    "BacklashRange": [
+      1,
+      2
+    ],
+    "BacklashRegressionSpeed": 35,
+    "UpliftAngle": 5,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
+    "__Bullet": "0009",
+    "__Shell": "",
+    "ReloadThrowShell": false,
+    "ThrowShellCount": 0,
+    "ThrowShellDelayTime": 0,
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRange": [
+      100
+    ],
+    "__ShootSound": "shooting0002",
+    "__BeginReloadSound": "reloadBegin0005",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "beLoaded0016",
+    "ReloadFinishSoundAdvanceTime": 0.6,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiAttackAttr": ""
+  },
+  {
+    "Id": "0011_ai",
+    "Remark": "weapon0011",
+    "__Activity": "",
+    "Weight": 30,
+    "WeightType": 2,
+    "IsMelee": false,
+    "ContinuousShoot": false,
+    "AmmoCapacity": 20,
+    "MaxAmmoCapacity": 600,
+    "StandbyAmmoCapacity": 580,
+    "ReloadTime": 1.8,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0,
+    "ContinuousCountRange": [
+      5
+    ],
+    "TriggerInterval": 3,
+    "StartFiringSpeed": 700,
+    "FinalFiringSpeed": 700,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 3,
+    "FinalScatteringRange": 30,
+    "ScatteringRangeAddValue": 2,
+    "ScatteringRangeBackSpeed": 30,
+    "ScatteringRangeBackDelayTime": 0.3,
+    "CameraShake": 2,
+    "BacklashRange": [
+      1,
+      2
+    ],
+    "BacklashRegressionSpeed": 35,
+    "UpliftAngle": 5,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
+    "__Bullet": "0009",
+    "__Shell": "",
+    "ReloadThrowShell": false,
+    "ThrowShellCount": 0,
+    "ThrowShellDelayTime": 0,
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRange": [
+      100
+    ],
+    "__ShootSound": "shooting0002",
+    "__BeginReloadSound": "reloadBegin0005",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "beLoaded0016",
+    "ReloadFinishSoundAdvanceTime": 0.6,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiAttackAttr": "0004"
   },
   {
     "Id": "0013",
@@ -1530,7 +1678,7 @@
     "__Bullet": "0003",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
@@ -1604,7 +1752,7 @@
     "__Bullet": "0003",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
-    "ThrowShellCount": 0,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [

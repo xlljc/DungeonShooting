@@ -174,6 +174,7 @@ public class ResourcePath
     public const string prefab_weapon_Weapon0008_tscn = "res://prefab/weapon/Weapon0008.tscn";
     public const string prefab_weapon_Weapon0009_tscn = "res://prefab/weapon/Weapon0009.tscn";
     public const string prefab_weapon_Weapon0010_tscn = "res://prefab/weapon/Weapon0010.tscn";
+    public const string prefab_weapon_Weapon0011_tscn = "res://prefab/weapon/Weapon0011.tscn";
     public const string prefab_weapon_Weapon0013_tscn = "res://prefab/weapon/Weapon0013.tscn";
     public const string prefab_weapon_Weapon0014_tscn = "res://prefab/weapon/Weapon0014.tscn";
     public const string prefab_weapon_WeaponTemplate_tscn = "res://prefab/weapon/WeaponTemplate.tscn";
@@ -466,7 +467,7 @@ public class ResourcePath
     public const string resource_sprite_weapon_weapon0009_Weapon0009_reload_png = "res://resource/sprite/weapon/weapon0009/Weapon0009_reload.png";
     public const string resource_sprite_weapon_weapon0010_Weapon0010_png = "res://resource/sprite/weapon/weapon0010/Weapon0010.png";
     public const string resource_sprite_weapon_weapon0010_Weapon0010_reloading_png = "res://resource/sprite/weapon/weapon0010/Weapon0010_reloading.png";
-    public const string resource_sprite_weapon_weapon0011_gun10_png = "res://resource/sprite/weapon/weapon0011/gun10.png";
+    public const string resource_sprite_weapon_weapon0011_Weapon0011_png = "res://resource/sprite/weapon/weapon0011/Weapon0011.png";
     public const string resource_sprite_weapon_weapon0012_bow_png = "res://resource/sprite/weapon/weapon0012/bow.png";
     public const string resource_sprite_weapon_weapon0013_weapon0013_png = "res://resource/sprite/weapon/weapon0013/weapon0013.png";
     public const string resource_sprite_weapon_weapon0013_weapon0014export_png = "res://resource/sprite/weapon/weapon0013/weapon0014-export.png";
@@ -528,6 +529,7 @@ public class ResourcePath
     public const string resource_spriteFrames_weapon_Weapon0008_tres = "res://resource/spriteFrames/weapon/Weapon0008.tres";
     public const string resource_spriteFrames_weapon_Weapon0009_tres = "res://resource/spriteFrames/weapon/Weapon0009.tres";
     public const string resource_spriteFrames_weapon_Weapon0010_tres = "res://resource/spriteFrames/weapon/Weapon0010.tres";
+    public const string resource_spriteFrames_weapon_Weapon0011_tres = "res://resource/spriteFrames/weapon/Weapon0011.tres";
     public const string resource_spriteFrames_weapon_Weapon0013_tres = "res://resource/spriteFrames/weapon/Weapon0013.tres";
     public const string resource_spriteFrames_weapon_Weapon0014_tres = "res://resource/spriteFrames/weapon/Weapon0014.tres";
     public const string resource_theme_mainTheme_tres = "res://resource/theme/mainTheme.tres";

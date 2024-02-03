@@ -182,6 +182,20 @@
     "ShowInMapEditor": true
   },
   {
+    "Id": "weapon0011",
+    "Type": 5,
+    "Name": "weapon0011",
+    "Quality": 5,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/weapon/Weapon0011.tscn",
+    "Icon": "res://resource/sprite/weapon/weapon0011/Weapon0011.png",
+    "ShowInMapEditor": true
+  },
+  {
     "Id": "weapon0013",
     "Type": 5,
     "Name": "P90",
@@ -304,6 +318,20 @@
     "IsStatic": false,
     "__Material": "0003",
     "Prefab": "res://prefab/bullet/normal/Bullet0007.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
+    "Id": "bullet0008",
+    "Type": 6,
+    "Name": "",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "0003",
+    "Prefab": "res://prefab/bullet/normal/Bullet0008.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },
