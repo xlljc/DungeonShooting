@@ -1,0 +1,160 @@
+[gd_scene load_steps=24 format=3 uid="uid://cpfeog5xk7frv"]
+
+[ext_resource type="PackedScene" uid="uid://c7i2q4mx5qp2h" path="res://prefab/currency/GoldTemplate.tscn" id="1_q6rqs"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_fwuy2"]
+[ext_resource type="Texture2D" uid="uid://7dy6itvggpwy" path="res://resource/sprite/currency/Gold_10.png" id="3_x42g4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2tpx1"]
+resource_local_to_scene = true
+shader = ExtResource("2_fwuy2")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x41wb"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_03ih4"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qdoke"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3wdhp"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(24, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vgpiy"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(32, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jfxvm"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(40, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hqk1i"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(48, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j4okn"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(56, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nohmj"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(64, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_blcne"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(72, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_018qf"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(80, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kb863"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(88, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nrald"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(96, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4rlwh"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(104, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7qdiq"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(112, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l7tjk"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(120, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_thd0w"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(128, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_js8fg"]
+atlas = ExtResource("3_x42g4")
+region = Rect2(136, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3te8s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x41wb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_03ih4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qdoke")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3wdhp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vgpiy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jfxvm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hqk1i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j4okn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nohmj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_blcne")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_018qf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kb863")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nrald")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4rlwh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7qdiq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l7tjk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_thd0w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_js8fg")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="Gold10" instance=ExtResource("1_q6rqs")]
+GoldCount = 10
+
+[node name="AnimatedSprite" parent="." index="1"]
+material = SubResource("ShaderMaterial_2tpx1")
+sprite_frames = SubResource("SpriteFrames_3te8s")
+autoplay = "default"
+frame_progress = 0.578976

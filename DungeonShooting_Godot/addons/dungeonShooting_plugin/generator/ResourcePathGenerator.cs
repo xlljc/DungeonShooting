@@ -40,12 +40,12 @@ public static class ResourcePathGenerator
         ".git",
         ".import",
         ".mono",
+        ".VSCodeCounter",
         "android",
         "addons",
         ".godot",
         ".vs",
-        "resource/map/tiledata",
-        "resource/map/tileMaps"
+        "resource/map"
     };
 
     private static string resultStr = "";

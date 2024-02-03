@@ -340,11 +340,6 @@ public static partial class ExcelConfig
                     }
                 }
 
-                if (!string.IsNullOrEmpty(item.__AiUseAttribute))
-                {
-                    item.AiUseAttribute = WeaponBase_Map[item.__AiUseAttribute];
-                }
-
                 if (!string.IsNullOrEmpty(item.__AiAttackAttr))
                 {
                     item.AiAttackAttr = AiAttackAttr_Map[item.__AiAttackAttr];

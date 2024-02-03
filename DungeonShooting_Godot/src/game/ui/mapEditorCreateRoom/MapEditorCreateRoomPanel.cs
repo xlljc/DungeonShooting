@@ -31,6 +31,7 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
         for (var i = 0; i < roomTypes.Length; i++)
         {
             var item = roomTypes[i];
+            if (item == DungeonRoomType.None) continue;
             var text = DungeonManager.DungeonRoomTypeToDescribeString(item);
             selectButton.AddItem(text, (int)item);
         }

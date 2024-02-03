@@ -25,6 +25,12 @@ public static partial class ExcelConfig
         public string Remark;
 
         /// <summary>
+        /// 血量
+        /// </summary>
+        [JsonInclude]
+        public int Hp;
+
+        /// <summary>
         /// 移动速度
         /// </summary>
         [JsonInclude]
@@ -67,6 +73,13 @@ public static partial class ExcelConfig
         public float BackViewRange;
 
         /// <summary>
+        /// 掉落金币数量区间, 如果为负数或者0则不会掉落金币 <br/>
+        /// 格式为[value]或者[min,max]
+        /// </summary>
+        [JsonInclude]
+        public int[] Gold;
+
+        /// <summary>
         /// 返回浅拷贝出的新对象
         /// </summary>
         public EnemyBase Clone()
@@ -75,6 +88,7 @@ public static partial class ExcelConfig
             inst.Id = Id;
             inst.Activity = Activity;
             inst.Remark = Remark;
+            inst.Hp = Hp;
             inst.MoveSpeed = MoveSpeed;
             inst.Acceleration = Acceleration;
             inst.Friction = Friction;
@@ -82,6 +96,7 @@ public static partial class ExcelConfig
             inst.ViewRange = ViewRange;
             inst.TailAfterViewRange = TailAfterViewRange;
             inst.BackViewRange = BackViewRange;
+            inst.Gold = Gold;
             return inst;
         }
     }

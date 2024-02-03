@@ -62,6 +62,8 @@ anim_offset_max = 1.0
 
 [node name="Bullet0005" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "Particles2D", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2
+collision_mask = 0
+platform_wall_layers = 512
 script = ExtResource("1_13wdl")
 BrushId = "0004"
 EffectiveAltitude = 1.0

@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://brum5fmbt1br4"]
+
+[ext_resource type="Script" path="res://src/test/TestTrail.cs" id="1_mefd0"]
+[ext_resource type="PackedScene" uid="uid://ddwikcidm0gsi" path="res://prefab/effect/common/Trail0001.tscn" id="2_t308a"]
+[ext_resource type="Texture2D" uid="uid://bn8k07n2y6lmr" path="res://resource/sprite/bullet/normal/bullet0006.png" id="2_w7ffd"]
+
+[sub_resource type="Gradient" id="Gradient_gds2p"]
+resource_local_to_scene = true
+offsets = PackedFloat32Array(0.825949, 1)
+colors = PackedColorArray(1, 1, 1, 0.705882, 1, 1, 1, 0)
+
+[node name="TestTrail" type="Node2D"]
+script = ExtResource("1_mefd0")
+
+[node name="Trail" parent="." instance=ExtResource("2_t308a")]
+gradient = SubResource("Gradient_gds2p")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_w7ffd")

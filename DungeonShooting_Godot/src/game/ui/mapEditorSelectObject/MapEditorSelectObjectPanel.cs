@@ -23,9 +23,9 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
         /// <summary>
         /// 类型值
         /// </summary>
-        public int Type;
+        public ActivityType Type;
 
-        public TypeButtonData(string name, int type)
+        public TypeButtonData(string name, ActivityType type)
         {
             Name = name;
             Type = type;
@@ -36,7 +36,7 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
     //物体网格组件
     private UiGrid<ObjectButton, ExcelConfig.ActivityBase> _objectGrid;
     //允许出现在该面板中的物体类型
-    private int[] _typeArray = new[] { 4, 5, 9 };
+    private ActivityType[] _typeArray = new[] { ActivityType.Enemy, ActivityType.Weapon, ActivityType.Prop };
     
     public override void OnCreateUi()
     {
@@ -67,14 +67,14 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
         _typeGrid.RemoveAll();
         if (activityType == ActivityType.None)
         {
-            _typeGrid.Add(new TypeButtonData("所有", -1));
-            _typeGrid.Add(new TypeButtonData(ActivityId.GetTypeName(ActivityType.Weapon), (int)ActivityType.Weapon));
-            _typeGrid.Add(new TypeButtonData(ActivityId.GetTypeName(ActivityType.Prop), (int)ActivityType.Prop));
-            _typeGrid.Add(new TypeButtonData(ActivityId.GetTypeName(ActivityType.Enemy), (int)ActivityType.Enemy));
+            _typeGrid.Add(new TypeButtonData("所有", ActivityType.None));
+            _typeGrid.Add(new TypeButtonData(ActivityId.GetTypeName(ActivityType.Weapon), ActivityType.Weapon));
+            _typeGrid.Add(new TypeButtonData(ActivityId.GetTypeName(ActivityType.Prop), ActivityType.Prop));
+            _typeGrid.Add(new TypeButtonData(ActivityId.GetTypeName(ActivityType.Enemy), ActivityType.Enemy));
         }
         else
         {
-            _typeGrid.Add(new TypeButtonData(ActivityId.GetTypeName(activityType), (int)activityType));
+            _typeGrid.Add(new TypeButtonData(ActivityId.GetTypeName(activityType), activityType));
         }
         _typeGrid.SelectIndex = 0;
     }
@@ -85,7 +85,7 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
     public void OnSearch()
     {
         //类型
-        int type;
+        ActivityType type;
         //名称
         var name = S_LineEdit.Instance.Text;
         var buttonData = _typeGrid.GetData(_typeGrid.SelectIndex);
@@ -95,7 +95,7 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
         }
         else
         {
-            type = -1;
+            type = ActivityType.None;
         }
 
         //搜索结果
@@ -103,29 +103,29 @@ public partial class MapEditorSelectObjectPanel : MapEditorSelectObject
         switch (type)
         {
             //全部类型
-            case -1:
-                arr.Add(PreinstallMarkManager.Enemy);
-                arr.Add(PreinstallMarkManager.Prop);
-                arr.Add(PreinstallMarkManager.Weapon);
+            case ActivityType.None:
+                arr.Add(PreinstallMarkManager.RandomEnemy);
+                arr.Add(PreinstallMarkManager.RandomProp);
+                arr.Add(PreinstallMarkManager.RandomWeapon);
                 break;
             //随机武器
-            case (int)ActivityType.Weapon:
-                arr.Add(PreinstallMarkManager.Weapon);
+            case ActivityType.Weapon:
+                arr.Add(PreinstallMarkManager.RandomWeapon);
                 break;
             //随机道具
-            case (int)ActivityType.Prop:
-                arr.Add(PreinstallMarkManager.Prop);
+            case ActivityType.Prop:
+                arr.Add(PreinstallMarkManager.RandomProp);
                 break;
             //随机敌人
-            case (int)ActivityType.Enemy:
-                arr.Add(PreinstallMarkManager.Enemy);
+            case ActivityType.Enemy:
+                arr.Add(PreinstallMarkManager.RandomEnemy);
                 break;
         }
         foreach (var o in ExcelConfig.ActivityBase_List)
         {
             if (o.ShowInMapEditor &&
                 (string.IsNullOrEmpty(name) || o.Name.Contains(name) || o.Id.Contains(name)) &&
-                (type < 0 ? _typeArray.Contains(o.Type) : o.Type == type))
+                (type == ActivityType.None ? _typeArray.Contains(o.Type) : o.Type == type))
             {
                 arr.Add(o);
             }

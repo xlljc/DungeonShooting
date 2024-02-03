@@ -43,4 +43,8 @@ public class PhysicsLayer
     /// 投抛中
     /// </summary>
     public const uint Throwing = 0b100000000;
+    /// <summary>
+    /// 障碍物
+    /// </summary>
+    public const uint Obstacle = 0b1000000000;
 }

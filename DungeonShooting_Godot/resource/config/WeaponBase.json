@@ -10,7 +10,7 @@
     "AmmoCapacity": 30,
     "MaxAmmoCapacity": 420,
     "StandbyAmmoCapacity": 390,
-    "ReloadTime": 2.2,
+    "ReloadTime": 2,
     "AloneReload": false,
     "AloneReloadCount": 1,
     "AloneReloadBeginIntervalTime": 0,
@@ -48,15 +48,12 @@
     "UpliftAngle": 10,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0001",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -74,11 +71,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0002",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0002",
+    "Id": "0001_ai",
     "Remark": "\u6B65\u67AA",
     "__Activity": "",
     "Weight": 40,
@@ -88,7 +84,7 @@
     "AmmoCapacity": 30,
     "MaxAmmoCapacity": 420,
     "StandbyAmmoCapacity": 390,
-    "ReloadTime": 2.2,
+    "ReloadTime": 2,
     "AloneReload": false,
     "AloneReloadCount": 1,
     "AloneReloadBeginIntervalTime": 0,
@@ -102,7 +98,7 @@
     "ContinuousCountRange": [
       3
     ],
-    "TriggerInterval": 3,
+    "TriggerInterval": 2.5,
     "StartFiringSpeed": 480,
     "FinalFiringSpeed": 480,
     "FiringSpeedAddSpeed": 0,
@@ -126,15 +122,12 @@
     "UpliftAngle": 10,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0001",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -152,11 +145,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0001"
   },
   {
-    "Id": "0003",
+    "Id": "0002",
     "Remark": "\u9730\u5F39\u67AA",
     "__Activity": "weapon0002",
     "Weight": 40,
@@ -166,11 +158,11 @@
     "AmmoCapacity": 7,
     "MaxAmmoCapacity": 140,
     "StandbyAmmoCapacity": 133,
-    "ReloadTime": 0.4,
+    "ReloadTime": 0.26,
     "AloneReload": true,
     "AloneReloadCount": 1,
-    "AloneReloadBeginIntervalTime": 0.6,
-    "AloneReloadFinishIntervalTime": 0.6,
+    "AloneReloadBeginIntervalTime": 0.5,
+    "AloneReloadFinishIntervalTime": 0.45,
     "AloneReloadCanShoot": true,
     "LooseShoot": false,
     "MinChargeTime": 0,
@@ -204,15 +196,12 @@
     "UpliftAngle": 15,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0002",
     "__Shell": "shell0002",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0.2,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -230,11 +219,10 @@
     "__BeLoadedSound": "beLoaded0005",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0004",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0004",
+    "Id": "0002_ai",
     "Remark": "\u9730\u5F39\u67AA",
     "__Activity": "",
     "Weight": 40,
@@ -244,11 +232,11 @@
     "AmmoCapacity": 7,
     "MaxAmmoCapacity": 140,
     "StandbyAmmoCapacity": 133,
-    "ReloadTime": 0.4,
+    "ReloadTime": 0.26,
     "AloneReload": true,
     "AloneReloadCount": 1,
-    "AloneReloadBeginIntervalTime": 0.6,
-    "AloneReloadFinishIntervalTime": 0.6,
+    "AloneReloadBeginIntervalTime": 0.5,
+    "AloneReloadFinishIntervalTime": 0.45,
     "AloneReloadCanShoot": true,
     "LooseShoot": false,
     "MinChargeTime": 0,
@@ -258,7 +246,7 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 3.5,
+    "TriggerInterval": 3,
     "StartFiringSpeed": 120,
     "FinalFiringSpeed": 120,
     "FiringSpeedAddSpeed": 0,
@@ -282,15 +270,12 @@
     "UpliftAngle": 15,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0002",
     "__Shell": "shell0002",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0.2,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -308,11 +293,10 @@
     "__BeLoadedSound": "beLoaded0005",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0002"
   },
   {
-    "Id": "0005",
+    "Id": "0003",
     "Remark": "\u624B\u67AA",
     "__Activity": "weapon0003",
     "Weight": 20,
@@ -322,7 +306,7 @@
     "AmmoCapacity": 12,
     "MaxAmmoCapacity": 180,
     "StandbyAmmoCapacity": 168,
-    "ReloadTime": 1.5,
+    "ReloadTime": 1.4,
     "AloneReload": false,
     "AloneReloadCount": 1,
     "AloneReloadBeginIntervalTime": 0,
@@ -360,15 +344,12 @@
     "UpliftAngle": 20,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0001",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -386,11 +367,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0006",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0006",
+    "Id": "0003_ai",
     "Remark": "\u624B\u67AA",
     "__Activity": "",
     "Weight": 20,
@@ -400,7 +380,7 @@
     "AmmoCapacity": 12,
     "MaxAmmoCapacity": 180,
     "StandbyAmmoCapacity": 168,
-    "ReloadTime": 1.5,
+    "ReloadTime": 1.4,
     "AloneReload": false,
     "AloneReloadCount": 1,
     "AloneReloadBeginIntervalTime": 0,
@@ -414,7 +394,7 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 1.3,
+    "TriggerInterval": 1,
     "StartFiringSpeed": 300,
     "FinalFiringSpeed": 300,
     "FiringSpeedAddSpeed": 0,
@@ -438,15 +418,12 @@
     "UpliftAngle": 20,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0001",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -464,11 +441,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0003"
   },
   {
-    "Id": "0007",
+    "Id": "0004",
     "Remark": "\u5200",
     "__Activity": "weapon0004",
     "Weight": 40,
@@ -519,11 +495,8 @@
     "__Bullet": "2001",
     "__Shell": "",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 0,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -541,11 +514,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0008",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0008",
+    "Id": "0004_ai",
     "Remark": "\u5200",
     "__Activity": "",
     "Weight": 40,
@@ -596,11 +568,8 @@
     "__Bullet": "2001",
     "__Shell": "",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 0,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -618,11 +587,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0004"
   },
   {
-    "Id": "0009",
+    "Id": "0005",
     "Remark": "\u72D9\u51FB\u67AA",
     "__Activity": "weapon0005",
     "Weight": 50,
@@ -632,7 +600,7 @@
     "AmmoCapacity": 10,
     "MaxAmmoCapacity": 80,
     "StandbyAmmoCapacity": 70,
-    "ReloadTime": 3,
+    "ReloadTime": 2.8,
     "AloneReload": false,
     "AloneReloadCount": 1,
     "AloneReloadBeginIntervalTime": 0,
@@ -670,15 +638,12 @@
     "UpliftAngle": 15,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0004",
     "__Shell": "shell0003",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0.2,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -696,11 +661,10 @@
     "__BeLoadedSound": "beLoaded0007",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0010",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0010",
+    "Id": "0005_ai",
     "Remark": "\u72D9\u51FB\u67AA",
     "__Activity": "",
     "Weight": 50,
@@ -710,7 +674,7 @@
     "AmmoCapacity": 10,
     "MaxAmmoCapacity": 80,
     "StandbyAmmoCapacity": 70,
-    "ReloadTime": 3,
+    "ReloadTime": 2.8,
     "AloneReload": false,
     "AloneReloadCount": 1,
     "AloneReloadBeginIntervalTime": 0,
@@ -724,7 +688,7 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 5,
+    "TriggerInterval": 4,
     "StartFiringSpeed": 150,
     "FinalFiringSpeed": 150,
     "FiringSpeedAddSpeed": 0,
@@ -748,15 +712,12 @@
     "UpliftAngle": 15,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0004",
     "__Shell": "shell0003",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0.2,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -774,11 +735,10 @@
     "__BeLoadedSound": "beLoaded0007",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0005"
   },
   {
-    "Id": "0011",
+    "Id": "0006",
     "Remark": "\u51B2\u950B\u67AA",
     "__Activity": "weapon0006",
     "Weight": 30,
@@ -788,7 +748,7 @@
     "AmmoCapacity": 20,
     "MaxAmmoCapacity": 600,
     "StandbyAmmoCapacity": 580,
-    "ReloadTime": 2.2,
+    "ReloadTime": 1.8,
     "AloneReload": false,
     "AloneReloadCount": 1,
     "AloneReloadBeginIntervalTime": 0,
@@ -826,15 +786,12 @@
     "UpliftAngle": 5,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0002",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -844,19 +801,18 @@
     ],
     "__ShootSound": "shooting0002",
     "__BeginReloadSound": "reloadBegin0005",
-    "BeginReloadSoundDelayTime": 0.2,
+    "BeginReloadSoundDelayTime": 0,
     "__ReloadSound": "",
     "ReloadSoundDelayTime": 0,
     "__ReloadFinishSound": "beLoaded0016",
-    "ReloadFinishSoundAdvanceTime": 0.5,
+    "ReloadFinishSoundAdvanceTime": 0.6,
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0012",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0012",
+    "Id": "0006_ai",
     "Remark": "\u51B2\u950B\u67AA",
     "__Activity": "",
     "Weight": 30,
@@ -866,7 +822,7 @@
     "AmmoCapacity": 20,
     "MaxAmmoCapacity": 600,
     "StandbyAmmoCapacity": 580,
-    "ReloadTime": 2.2,
+    "ReloadTime": 1.8,
     "AloneReload": false,
     "AloneReloadCount": 1,
     "AloneReloadBeginIntervalTime": 0,
@@ -880,7 +836,7 @@
     "ContinuousCountRange": [
       5
     ],
-    "TriggerInterval": 3.5,
+    "TriggerInterval": 3,
     "StartFiringSpeed": 700,
     "FinalFiringSpeed": 700,
     "FiringSpeedAddSpeed": 0,
@@ -904,15 +860,12 @@
     "UpliftAngle": 5,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0002",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -922,19 +875,18 @@
     ],
     "__ShootSound": "shooting0002",
     "__BeginReloadSound": "reloadBegin0005",
-    "BeginReloadSoundDelayTime": 0.2,
+    "BeginReloadSoundDelayTime": 0,
     "__ReloadSound": "",
     "ReloadSoundDelayTime": 0,
     "__ReloadFinishSound": "beLoaded0016",
-    "ReloadFinishSoundAdvanceTime": 0.5,
+    "ReloadFinishSoundAdvanceTime": 0.6,
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0004"
   },
   {
-    "Id": "0013",
+    "Id": "0007",
     "Remark": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA",
     "__Activity": "weapon0007",
     "Weight": 40,
@@ -982,15 +934,12 @@
     "UpliftAngle": 5,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0003",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1008,11 +957,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0014",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0014",
+    "Id": "0007_ai",
     "Remark": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA",
     "__Activity": "",
     "Weight": 40,
@@ -1036,7 +984,7 @@
     "ContinuousCountRange": [
       10
     ],
-    "TriggerInterval": 4.5,
+    "TriggerInterval": 4,
     "StartFiringSpeed": 200,
     "FinalFiringSpeed": 200,
     "FiringSpeedAddSpeed": 0,
@@ -1060,15 +1008,12 @@
     "UpliftAngle": 5,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0003",
     "__Shell": "shell0001",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1086,11 +1031,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0006"
   },
   {
-    "Id": "0015",
+    "Id": "0008",
     "Remark": "\u6FC0\u5149\u624B\u67AA",
     "__Activity": "weapon0008",
     "Weight": 40,
@@ -1138,15 +1082,12 @@
     "UpliftAngle": 13,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire2.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0002.tscn",
     "__Bullet": "1001",
     "__Shell": "",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1164,11 +1105,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0016",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0016",
+    "Id": "0008_ai",
     "Remark": "\u6FC0\u5149\u624B\u67AA",
     "__Activity": "",
     "Weight": 40,
@@ -1192,7 +1132,7 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 4,
+    "TriggerInterval": 3,
     "StartFiringSpeed": 300,
     "FinalFiringSpeed": 300,
     "FiringSpeedAddSpeed": 0,
@@ -1216,15 +1156,12 @@
     "UpliftAngle": 13,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 1,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire2.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0002.tscn",
     "__Bullet": "1001",
     "__Shell": "",
     "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1242,11 +1179,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0007"
   },
   {
-    "Id": "0017",
+    "Id": "0009",
     "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668",
     "__Activity": "weapon0009",
     "Weight": 40,
@@ -1294,15 +1230,12 @@
     "UpliftAngle": 16,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 3,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0005",
     "__Shell": "shell0004",
     "ReloadThrowShell": true,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0.46,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1320,11 +1253,10 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "0018",
     "__AiAttackAttr": ""
   },
   {
-    "Id": "0018",
+    "Id": "0009_ai",
     "Remark": "\u69B4\u5F39\u53D1\u5C04\u5668",
     "__Activity": "",
     "Weight": 40,
@@ -1348,7 +1280,7 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 5,
+    "TriggerInterval": 4,
     "StartFiringSpeed": 60,
     "FinalFiringSpeed": 60,
     "FiringSpeedAddSpeed": 0,
@@ -1372,15 +1304,12 @@
     "UpliftAngle": 16,
     "DefaultAngle": 0,
     "UpliftAngleRestore": 3,
-    "FireEffect": "res://prefab/effect/weapon/ShotFire.tscn",
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
     "__Bullet": "0005",
     "__Shell": "shell0004",
     "ReloadThrowShell": true,
+    "ThrowShellCount": 1,
     "ThrowShellDelayTime": 0.46,
-    "ThrowCollisionSize": {
-      "X": 20,
-      "Y": 15
-    },
     "CanMeleeAttack": true,
     "MeleeAttackHarmRange": [
       10
@@ -1398,7 +1327,598 @@
     "__BeLoadedSound": "",
     "BeLoadedSoundDelayTime": 0,
     "__OtherSoundMap": null,
-    "__AiUseAttribute": "",
     "__AiAttackAttr": "0008"
+  },
+  {
+    "Id": "0010",
+    "Remark": "M1\u578B\u70ED\u80FD\u72D9\u51FB\u67AA",
+    "__Activity": "weapon0010",
+    "Weight": 40,
+    "WeightType": 2,
+    "IsMelee": false,
+    "ContinuousShoot": false,
+    "AmmoCapacity": 5,
+    "MaxAmmoCapacity": 150,
+    "StandbyAmmoCapacity": 80,
+    "ReloadTime": 2,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0,
+    "ContinuousCountRange": [
+      1
+    ],
+    "TriggerInterval": 0,
+    "StartFiringSpeed": 210,
+    "FinalFiringSpeed": 210,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 0,
+    "FinalScatteringRange": 20,
+    "ScatteringRangeAddValue": 7,
+    "ScatteringRangeBackSpeed": 20,
+    "ScatteringRangeBackDelayTime": 0.5,
+    "CameraShake": 2,
+    "BacklashRange": [
+      2,
+      3
+    ],
+    "BacklashRegressionSpeed": 25,
+    "UpliftAngle": 16,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0004.tscn",
+    "__Bullet": "0007",
+    "__Shell": "",
+    "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
+    "ThrowShellDelayTime": 0,
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRange": [
+      100
+    ],
+    "__ShootSound": "shooting0012",
+    "__BeginReloadSound": "reloadBegin0013",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "reloadFinish0005",
+    "ReloadFinishSoundAdvanceTime": 0.6,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiAttackAttr": ""
+  },
+  {
+    "Id": "0010_ai",
+    "Remark": "M1\u578B\u70ED\u80FD\u72D9\u51FB\u67AA",
+    "__Activity": "",
+    "Weight": 40,
+    "WeightType": 2,
+    "IsMelee": false,
+    "ContinuousShoot": false,
+    "AmmoCapacity": 5,
+    "MaxAmmoCapacity": 150,
+    "StandbyAmmoCapacity": 80,
+    "ReloadTime": 2,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0,
+    "ContinuousCountRange": [
+      1
+    ],
+    "TriggerInterval": 4,
+    "StartFiringSpeed": 210,
+    "FinalFiringSpeed": 210,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 0,
+    "FinalScatteringRange": 20,
+    "ScatteringRangeAddValue": 7,
+    "ScatteringRangeBackSpeed": 20,
+    "ScatteringRangeBackDelayTime": 0.5,
+    "CameraShake": 2,
+    "BacklashRange": [
+      2,
+      3
+    ],
+    "BacklashRegressionSpeed": 25,
+    "UpliftAngle": 16,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0004.tscn",
+    "__Bullet": "0007",
+    "__Shell": "",
+    "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
+    "ThrowShellDelayTime": 0,
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRange": [
+      100
+    ],
+    "__ShootSound": "shooting0012",
+    "__BeginReloadSound": "reloadBegin0013",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "reloadFinish0005",
+    "ReloadFinishSoundAdvanceTime": 0.6,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiAttackAttr": "0009"
+  },
+  {
+    "Id": "0011",
+    "Remark": "weapon0011",
+    "__Activity": "weapon0011",
+    "Weight": 30,
+    "WeightType": 2,
+    "IsMelee": false,
+    "ContinuousShoot": true,
+    "AmmoCapacity": 20,
+    "MaxAmmoCapacity": 600,
+    "StandbyAmmoCapacity": 580,
+    "ReloadTime": 1.8,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0,
+    "ContinuousCountRange": [
+      1
+    ],
+    "TriggerInterval": 0,
+    "StartFiringSpeed": 700,
+    "FinalFiringSpeed": 700,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 3,
+    "FinalScatteringRange": 30,
+    "ScatteringRangeAddValue": 2,
+    "ScatteringRangeBackSpeed": 40,
+    "ScatteringRangeBackDelayTime": 0.3,
+    "CameraShake": 2,
+    "BacklashRange": [
+      1,
+      2
+    ],
+    "BacklashRegressionSpeed": 35,
+    "UpliftAngle": 5,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
+    "__Bullet": "0009",
+    "__Shell": "",
+    "ReloadThrowShell": false,
+    "ThrowShellCount": 0,
+    "ThrowShellDelayTime": 0,
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRange": [
+      100
+    ],
+    "__ShootSound": "shooting0002",
+    "__BeginReloadSound": "reloadBegin0005",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "beLoaded0016",
+    "ReloadFinishSoundAdvanceTime": 0.6,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiAttackAttr": ""
+  },
+  {
+    "Id": "0011_ai",
+    "Remark": "weapon0011",
+    "__Activity": "",
+    "Weight": 30,
+    "WeightType": 2,
+    "IsMelee": false,
+    "ContinuousShoot": false,
+    "AmmoCapacity": 20,
+    "MaxAmmoCapacity": 600,
+    "StandbyAmmoCapacity": 580,
+    "ReloadTime": 1.8,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0,
+    "ContinuousCountRange": [
+      5
+    ],
+    "TriggerInterval": 3,
+    "StartFiringSpeed": 700,
+    "FinalFiringSpeed": 700,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 3,
+    "FinalScatteringRange": 30,
+    "ScatteringRangeAddValue": 2,
+    "ScatteringRangeBackSpeed": 30,
+    "ScatteringRangeBackDelayTime": 0.3,
+    "CameraShake": 2,
+    "BacklashRange": [
+      1,
+      2
+    ],
+    "BacklashRegressionSpeed": 35,
+    "UpliftAngle": 5,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
+    "__Bullet": "0009",
+    "__Shell": "",
+    "ReloadThrowShell": false,
+    "ThrowShellCount": 0,
+    "ThrowShellDelayTime": 0,
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRange": [
+      100
+    ],
+    "__ShootSound": "shooting0002",
+    "__BeginReloadSound": "reloadBegin0005",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "beLoaded0016",
+    "ReloadFinishSoundAdvanceTime": 0.6,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiAttackAttr": "0004"
+  },
+  {
+    "Id": "0013",
+    "Remark": "P90",
+    "__Activity": "weapon0013",
+    "Weight": 40,
+    "WeightType": 2,
+    "IsMelee": false,
+    "ContinuousShoot": true,
+    "AmmoCapacity": 50,
+    "MaxAmmoCapacity": 500,
+    "StandbyAmmoCapacity": 350,
+    "ReloadTime": 2,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0,
+    "ContinuousCountRange": [
+      1
+    ],
+    "TriggerInterval": 0,
+    "StartFiringSpeed": 900,
+    "FinalFiringSpeed": 900,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0.5,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 5,
+    "FinalScatteringRange": 35,
+    "ScatteringRangeAddValue": 2,
+    "ScatteringRangeBackSpeed": 50,
+    "ScatteringRangeBackDelayTime": 0.3,
+    "CameraShake": 2,
+    "BacklashRange": [
+      1,
+      1
+    ],
+    "BacklashRegressionSpeed": 35,
+    "UpliftAngle": 3,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
+    "__Bullet": "0003",
+    "__Shell": "shell0001",
+    "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
+    "ThrowShellDelayTime": 0,
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRange": [
+      100
+    ],
+    "__ShootSound": "shooting0013",
+    "__BeginReloadSound": "reloadBegin0007",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "beLoaded0010",
+    "ReloadFinishSoundAdvanceTime": 0.35,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiAttackAttr": ""
+  },
+  {
+    "Id": "0013_ai",
+    "Remark": "P90",
+    "__Activity": "",
+    "Weight": 40,
+    "WeightType": 2,
+    "IsMelee": false,
+    "ContinuousShoot": false,
+    "AmmoCapacity": 50,
+    "MaxAmmoCapacity": 500,
+    "StandbyAmmoCapacity": 350,
+    "ReloadTime": 2,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0,
+    "ContinuousCountRange": [
+      25
+    ],
+    "TriggerInterval": 4,
+    "StartFiringSpeed": 500,
+    "FinalFiringSpeed": 500,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 10,
+    "FinalScatteringRange": 30,
+    "ScatteringRangeAddValue": 3,
+    "ScatteringRangeBackSpeed": 50,
+    "ScatteringRangeBackDelayTime": 0.3,
+    "CameraShake": 2,
+    "BacklashRange": [
+      1,
+      1
+    ],
+    "BacklashRegressionSpeed": 35,
+    "UpliftAngle": 3,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
+    "__Bullet": "0003",
+    "__Shell": "shell0001",
+    "ReloadThrowShell": false,
+    "ThrowShellCount": 1,
+    "ThrowShellDelayTime": 0,
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRange": [
+      100
+    ],
+    "__ShootSound": "shooting0013",
+    "__BeginReloadSound": "reloadBegin0007",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "beLoaded0010",
+    "ReloadFinishSoundAdvanceTime": 0.35,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiAttackAttr": "0006"
+  },
+  {
+    "Id": "0014",
+    "Remark": "\u5DE6\u8F6E",
+    "__Activity": "weapon0014",
+    "Weight": 20,
+    "WeightType": 1,
+    "IsMelee": false,
+    "ContinuousShoot": false,
+    "AmmoCapacity": 5,
+    "MaxAmmoCapacity": 120,
+    "StandbyAmmoCapacity": 80,
+    "ReloadTime": 1,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0.05,
+    "ContinuousCountRange": [
+      1
+    ],
+    "TriggerInterval": 0,
+    "StartFiringSpeed": 600,
+    "FinalFiringSpeed": 600,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 2,
+    "FinalScatteringRange": 25,
+    "ScatteringRangeAddValue": 5,
+    "ScatteringRangeBackSpeed": 25,
+    "ScatteringRangeBackDelayTime": 0.5,
+    "CameraShake": 4,
+    "BacklashRange": [
+      3,
+      5
+    ],
+    "BacklashRegressionSpeed": 35,
+    "UpliftAngle": 20,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
+    "__Bullet": "0008",
+    "__Shell": "shell0001",
+    "ReloadThrowShell": true,
+    "ThrowShellCount": 5,
+    "ThrowShellDelayTime": 0,
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRange": [
+      100
+    ],
+    "__ShootSound": "shooting0004",
+    "__BeginReloadSound": "reloading0001",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "beLoaded0015",
+    "ReloadFinishSoundAdvanceTime": 0.43,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiAttackAttr": ""
+  },
+  {
+    "Id": "0014_ai",
+    "Remark": "\u5DE6\u8F6E",
+    "__Activity": "",
+    "Weight": 20,
+    "WeightType": 1,
+    "IsMelee": false,
+    "ContinuousShoot": false,
+    "AmmoCapacity": 5,
+    "MaxAmmoCapacity": 120,
+    "StandbyAmmoCapacity": 80,
+    "ReloadTime": 1,
+    "AloneReload": false,
+    "AloneReloadCount": 1,
+    "AloneReloadBeginIntervalTime": 0,
+    "AloneReloadFinishIntervalTime": 0,
+    "AloneReloadCanShoot": false,
+    "LooseShoot": false,
+    "MinChargeTime": 0,
+    "ManualBeLoaded": false,
+    "AutoManualBeLoaded": false,
+    "BeLoadedTime": 0.05,
+    "ContinuousCountRange": [
+      1
+    ],
+    "TriggerInterval": 0.8,
+    "StartFiringSpeed": 300,
+    "FinalFiringSpeed": 300,
+    "FiringSpeedAddSpeed": 0,
+    "FiringSpeedBackSpeed": 0,
+    "FiringSpeedBackTime": 0,
+    "FireBulletCountRange": [
+      1
+    ],
+    "DelayedTime": 0,
+    "StartScatteringRange": 2,
+    "FinalScatteringRange": 25,
+    "ScatteringRangeAddValue": 5,
+    "ScatteringRangeBackSpeed": 25,
+    "ScatteringRangeBackDelayTime": 0.5,
+    "CameraShake": 4,
+    "BacklashRange": [
+      3,
+      5
+    ],
+    "BacklashRegressionSpeed": 35,
+    "UpliftAngle": 20,
+    "DefaultAngle": 0,
+    "UpliftAngleRestore": 1,
+    "FireEffect": "res://prefab/effect/weapon/ShotFire0001.tscn",
+    "__Bullet": "0008",
+    "__Shell": "shell0001",
+    "ReloadThrowShell": true,
+    "ThrowShellCount": 5,
+    "ThrowShellDelayTime": 0,
+    "CanMeleeAttack": true,
+    "MeleeAttackHarmRange": [
+      10
+    ],
+    "MeleeAttackRepelRange": [
+      100
+    ],
+    "__ShootSound": "shooting0004",
+    "__BeginReloadSound": "reloading0001",
+    "BeginReloadSoundDelayTime": 0,
+    "__ReloadSound": "",
+    "ReloadSoundDelayTime": 0,
+    "__ReloadFinishSound": "beLoaded0015",
+    "ReloadFinishSoundAdvanceTime": 0.43,
+    "__BeLoadedSound": "",
+    "BeLoadedSoundDelayTime": 0,
+    "__OtherSoundMap": null,
+    "__AiAttackAttr": "0003"
   }
 ]

@@ -45,7 +45,6 @@ public partial class Laser : Area2D, IBullet
     //开启的协程
     private List<CoroutineData> _coroutineList;
     private float _pixelScale;
-    private float _speed = 2000;
     private Tween _tween;
     private bool _init = false;
 
@@ -65,6 +64,7 @@ public partial class Laser : Area2D, IBullet
             _pixelScale = 1f / LineSprite.Texture.GetHeight();
 
             AreaEntered += OnArea2dEntered;
+            BodyEntered += OnBodyEntered;
             
             _init = true;
         }
@@ -112,7 +112,7 @@ public partial class Laser : Area2D, IBullet
         }
         
         //激光飞行时间
-        var time = distance / _speed;
+        var time = distance / data.FlySpeed;
 
         _tween = CreateTween();
         _tween.SetParallel();
@@ -193,20 +193,36 @@ public partial class Laser : Area2D, IBullet
             }
         }
     }
+
+    private void OnBodyEntered(Node2D body)
+    {
+        if (body is IHurt hurt)
+        {
+            HandlerCollision(hurt);
+        }
+    }
     
     private void OnArea2dEntered(Area2D other)
     {
-        var role = other.AsActivityObject<Role>();
-        if (role != null)
+        if (other is IHurt hurt)
         {
-            //击退
-            if (BulletData.Repel != 0)
-            {
-                role.AddRepelForce(Vector2.FromAngle(Rotation) * BulletData.Repel);
-            }
-            //造成伤害
-            role.CallDeferred(nameof(Role.Hurt), BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
+            HandlerCollision(hurt);
         }
+    }
+
+    private void HandlerCollision(IHurt hurt)
+    {
+        if (BulletData.Repel != 0)
+        {
+            var o = hurt.GetActivityObject();
+            if (o != null && o is not Player) //目标不是玩家才会触发击退
+            {
+                o.AddRepelForce(Vector2.FromAngle(Rotation) * BulletData.Repel);
+            }
+        }
+
+        //造成伤害
+        hurt.Hurt(BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
     }
 
     public long StartCoroutine(IEnumerator able)

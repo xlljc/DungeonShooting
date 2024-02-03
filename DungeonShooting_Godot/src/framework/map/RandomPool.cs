@@ -114,8 +114,8 @@ public class RandomPool
     private void FillRewardRoom(RoomPreinstall preinstall)
     {
         var wave = GetOrCreateWave(preinstall, 0);
-        var mark = CreateMark(ActivityType.Prop, 0, (preinstall.RoomInfo.Waypoints + new Vector2(0.5f, 0.5f)) * GameConfig.TileCellSize);
-        mark.Id = GetRandomProp().Id;
+        var mark = CreateMark(ActivityType.Treasure, 0, (preinstall.RoomInfo.Waypoints + new Vector2(0.5f, 0.5f)) * GameConfig.TileCellSize);
+        mark.Id = "treasure_box0001";
         wave.Add(mark);
     }
     

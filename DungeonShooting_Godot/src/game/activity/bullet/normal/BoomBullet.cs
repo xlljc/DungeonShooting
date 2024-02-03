@@ -19,7 +19,7 @@ public partial class BoomBullet : Bullet
         DoReclaim();
     }
 
-    public override void OnCollisionTarget(ActivityObject o)
+    public override void OnCollisionTarget(IHurt o)
     {
         PlayBoom();
         DoReclaim();
@@ -53,7 +53,7 @@ public partial class BoomBullet : Bullet
     public void PlayBoom()
     {
         var explode = ObjectManager.GetPoolItem<Explode>(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
-        var pos = Position;
+        var pos = CollisionArea.GlobalPosition;
         explode.Position = pos;
         explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
         explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);

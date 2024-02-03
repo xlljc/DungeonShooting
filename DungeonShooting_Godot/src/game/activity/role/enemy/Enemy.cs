@@ -134,7 +134,7 @@ public partial class Enemy : Role
         
         StateController = AddComponent<StateController<Enemy, AIStateEnum>>();
 
-        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Player;
+        AttackLayer = PhysicsLayer.Obstacle | PhysicsLayer.Player;
         EnemyLayer = PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
@@ -165,6 +165,8 @@ public partial class Enemy : Role
         var enemyBase = GetEnemyAttribute(ActivityBase.Id).Clone();
         _enemyAttribute = enemyBase;
 
+        MaxHp = enemyBase.Hp;
+        Hp = enemyBase.Hp;
         roleState.CanPickUpWeapon = enemyBase.CanPickUpWeapon;
         roleState.MoveSpeed = enemyBase.MoveSpeed;
         roleState.Acceleration = enemyBase.Acceleration;
@@ -172,6 +174,8 @@ public partial class Enemy : Role
         roleState.ViewRange = enemyBase.ViewRange;
         roleState.TailAfterViewRange = enemyBase.TailAfterViewRange;
         roleState.BackViewRange = enemyBase.BackViewRange;
+        
+        roleState.Gold = Mathf.Max(0, Utils.Random.RandomConfigRange(enemyBase.Gold));
         return roleState;
     }
 
@@ -210,6 +214,9 @@ public partial class Enemy : Role
             debris.MoveController.AddForce(Velocity + realVelocity);
         }
         
+        //创建金币
+        CreateGold();
+        
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
         Destroy();
@@ -246,6 +253,24 @@ public partial class Enemy : Role
         {
             //拾起武器操作
             EnemyPickUpWeapon();
+        }
+    }
+
+    /// <summary>
+    /// 创建散落的金币
+    /// </summary>
+    protected void CreateGold()
+    {
+        var goldList = Utils.GetGoldList(RoleState.Gold);
+        foreach (var id in goldList)
+        {
+            var o = ObjectManager.GetActivityObject<Gold>(id);
+            o.Position = Position;
+            o.Throw(0,
+                Utils.Random.RandomRangeInt(50, 110),
+                new Vector2(Utils.Random.RandomRangeInt(-20, 20), Utils.Random.RandomRangeInt(-20, 20)),
+                0
+            );
         }
     }
 

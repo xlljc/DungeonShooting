@@ -47,6 +47,10 @@ public enum EventEnum
     /// </summary>
     OnPlayerMaxShieldChange,
     /// <summary>
+    /// 玩家金币发生改变, 参数为玩家金币值
+    /// </summary>
+    OnPlayerGoldChange,
+    /// <summary>
     /// 玩家拾起武器, 参数为<see cref="Weapon"/>
     /// </summary>
     OnPlayerPickUpWeapon,

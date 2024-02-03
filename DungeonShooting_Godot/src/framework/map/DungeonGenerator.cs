@@ -65,25 +65,9 @@ public class DungeonGenerator
     private int _id;
     
     //下一个房间类型
-    private DungeonRoomType _nextRoomType = DungeonRoomType.Battle;
-    
-    //间隔
-    private int _roomMinInterval = 2;
-    private int _roomMaxInterval = 5;
-
-    //房间横轴分散程度
-    private float _roomHorizontalMinDispersion = -0.6f;
-    private float _roomHorizontalMaxDispersion = 0.6f;
-
-    //房间纵轴分散程度
-    private float _roomVerticalMinDispersion = -0.6f;
-    private float _roomVerticalMaxDispersion = 0.6f;
-
-    //房间最大层级
-    private int _maxLayer = 5;
+    private DungeonRoomType _nextRoomType = DungeonRoomType.None;
     
     //区域限制
-    private bool _enableLimitRange = true;
     private int _rangeX = 120;
     private int _rangeY = 120;
     
@@ -97,25 +81,18 @@ public class DungeonGenerator
 
     //地牢房间规则处理类
     private DungeonRule _rule;
-
-    private enum GenerateRoomErrorCode
-    {
-        NoError,
-        //超出区域
-        OutArea,
-        //没有合适的位置
-        NoSuitableLocation
-        // //碰到其他房间或过道
-        // HasCollision,
-        // //没有合适的门
-        // NoProperDoor,
-    }
+    
+    //上一个房间
+    private RoomInfo prevRoomInfo = null;
+    private readonly List<RoomInfo> _tempList = new List<RoomInfo>();
     
     public DungeonGenerator(DungeonConfig config, SeedRandom seedRandom)
     {
         Config = config;
         Random = seedRandom;
         RoomGroup = GameApplication.Instance.RoomConfig[config.GroupName];
+        _rangeX = config.RangeX;
+        _rangeY = config.RangeY;
 
         //验证该组是否满足生成地牢的条件
         var result = DungeonManager.CheckDungeon(config.GroupName);
@@ -180,62 +157,23 @@ public class DungeonGenerator
         if (StartRoomInfo != null) return false;
         _rule = rule;
         
-        _nextRoomType = _rule.GetNextRoomType(null);
-        //用于排除上一级房间
-        var excludePrevRoom = new List<RoomInfo>();
-        //上一个房间
-        RoomInfo prevRoomInfo = null;
-        
-        var chainTryCount = 0;
-        var chainMaxTryCount = 3;
-        
         //最大尝试次数
-        var maxTryCount = 1000;
+        var maxTryCount = 2000;
 
         //当前尝试次数
         var currTryCount = 0;
 
         //如果房间数量不够, 就一直生成
-        while (!_rule.CanOverGenerator() || EndRoomInfos.Count == 0)
+        while (!_rule.CanOverGenerator())
         {
+            if (_nextRoomType == DungeonRoomType.None)
+            {
+                _nextRoomType = _rule.GetNextRoomType(prevRoomInfo);
+            }
             var nextRoomType = _nextRoomType;
             
             //上一个房间
-            RoomInfo tempPrevRoomInfo;
-            if (nextRoomType == DungeonRoomType.Inlet)
-            {
-                tempPrevRoomInfo = null;
-            }
-            else if (nextRoomType == DungeonRoomType.Boss)
-            {
-                tempPrevRoomInfo = FindMaxLayerRoom(excludePrevRoom);
-            }
-            else if (nextRoomType == DungeonRoomType.Outlet || nextRoomType == DungeonRoomType.Reward || nextRoomType == DungeonRoomType.Shop || nextRoomType == DungeonRoomType.Event)
-            {
-                tempPrevRoomInfo = prevRoomInfo;
-            }
-            else if (nextRoomType == DungeonRoomType.Battle)
-            {
-                if (chainTryCount < chainMaxTryCount)
-                {
-                    if (prevRoomInfo != null && prevRoomInfo.Layer >= _maxLayer - 1) //层数太高, 下一个房间生成在低层级
-                    {
-                        tempPrevRoomInfo = RoundRoomLessThanLayer(Mathf.Max(1, _maxLayer / 2));
-                    }
-                    else
-                    {
-                        tempPrevRoomInfo = prevRoomInfo;
-                    }
-                }
-                else
-                {
-                    tempPrevRoomInfo = Random.RandomChoose(RoomInfos);
-                }
-            }
-            else
-            {
-                tempPrevRoomInfo = Random.RandomChoose(RoomInfos);
-            }
+            var tempPrevRoomInfo = _rule.GetConnectPrevRoom(prevRoomInfo, nextRoomType);
             
             //生成下一个房间
             var errorCode = GenerateRoom(tempPrevRoomInfo, nextRoomType, out var nextRoom);
@@ -250,7 +188,6 @@ public class DungeonGenerator
                 else if (nextRoomType == DungeonRoomType.Boss) //boss房间
                 {
                     BossRoomInfos.Add(nextRoom);
-                    excludePrevRoom.Clear();
                 }
                 else if (nextRoomType == DungeonRoomType.Outlet)
                 {
@@ -259,8 +196,6 @@ public class DungeonGenerator
                 else if (nextRoomType == DungeonRoomType.Battle)
                 {
                     BattleRoomInfos.Add(nextRoom);
-                    chainTryCount = 0;
-                    chainMaxTryCount = Random.RandomRangeInt(1, 3);
                 }
                 else if (nextRoomType == DungeonRoomType.Reward)
                 {
@@ -271,36 +206,12 @@ public class DungeonGenerator
                     ShopRoomInfos.Add(nextRoom);
                 }
                 prevRoomInfo = nextRoom;
-                _nextRoomType = _rule.GetNextRoomType(prevRoomInfo);
+                _rule.GenerateRoomSuccess(tempPrevRoomInfo, nextRoom);
+                _nextRoomType = _rule.GetNextRoomType(nextRoom);
             }
             else //生成失败
             {
-                if (nextRoomType == DungeonRoomType.Boss)
-                {
-                    //生成boss房间成功
-                    excludePrevRoom.Add(tempPrevRoomInfo);
-                    if (excludePrevRoom.Count >= RoomInfos.Count)
-                    {
-                        //全都没找到合适的, 那就再来一遍
-                        excludePrevRoom.Clear();
-                    }
-                }
-                else if (nextRoomType == DungeonRoomType.Outlet)
-                {
-                    //生成结束房间失败, 那么只能回滚boss房间
-                    if (prevRoomInfo != null)
-                    {
-                        var bossPrev = prevRoomInfo.Prev;
-                        BossRoomInfos.Remove(prevRoomInfo);
-                        RollbackRoom(prevRoomInfo);
-                        _nextRoomType = _rule.GetNextRoomType(bossPrev);
-                        prevRoomInfo = null;
-                    }
-                }
-                else if (nextRoomType == DungeonRoomType.Battle)
-                {
-                    chainTryCount++;
-                }
+                _rule.GenerateRoomFail(tempPrevRoomInfo, nextRoomType);
                 
                 //Debug.Log("生成第" + (_count + 1) + "个房间失败! 失败原因: " + errorCode);
                 if (errorCode == GenerateRoomErrorCode.OutArea)
@@ -326,12 +237,12 @@ public class DungeonGenerator
         
         _roomGrid.Clear();
         Debug.Log("房间总数: " + RoomInfos.Count);
-
+        Debug.Log("尝试次数: " + currTryCount);
         return true;
     }
 
     //生成房间
-    private GenerateRoomErrorCode GenerateRoom(RoomInfo prevRoomInfo, DungeonRoomType roomType, out RoomInfo resultRoomInfo)
+    private GenerateRoomErrorCode GenerateRoom(RoomInfo prevRoom, DungeonRoomType roomType, out RoomInfo resultRoomInfo)
     {
         // if (_count >= _config.RoomCount)
         // {
@@ -348,7 +259,7 @@ public class DungeonGenerator
         {
             //随机选择一个房间
             var list = RoomGroup.GetRoomList(roomType);
-            if (list.Count == 0) //如果没有指定类型的房间, 就生成战斗房间
+            if (list.Count == 0) //如果没有指定类型的房间, 或者房间数量不够, 就生成战斗房间
             {
                 roomSplit = RoomGroup.GetRandomRoom(DungeonRoomType.Battle);
             }
@@ -363,9 +274,9 @@ public class DungeonGenerator
         //房间大小
         room.Size = new Vector2I((int)roomSplit.RoomInfo.Size.X, (int)roomSplit.RoomInfo.Size.Y);
 
-        if (prevRoomInfo != null) //表示这不是第一个房间, 就得判断当前位置下的房间是否被遮挡
+        if (prevRoom != null) //表示这不是第一个房间, 就得判断当前位置下的房间是否被遮挡
         {
-            room.Layer = prevRoomInfo.Layer + 1;
+            room.Layer = prevRoom.Layer + 1;
             if (_currMaxLayer < room.Layer)
             {
                 _currMaxLayer = room.Layer;
@@ -384,50 +295,40 @@ public class DungeonGenerator
             for (; tryCount < maxTryCount; tryCount++)
             {
                 //下一个房间方向
-                var direction = Random.RandomRangeInt(0, 3);
+                var direction = _rule.GetNextRoomDoorDirection(prevRoom, roomType);
                 //房间间隔
-                var space = Random.RandomRangeInt(_roomMinInterval, _roomMaxInterval);
-                if (direction == 0 || direction == 2)
+                var space = _rule.GetNextRoomInterval(prevRoom, roomType, direction);
+                if (direction == RoomDirection.Up || direction == RoomDirection.Down)
                 {
                     space += 1;
                 }
                 //中心偏移
-                int offset;
-                if (direction == 0 || direction == 2)
-                {
-                    offset = Random.RandomRangeInt((int)(prevRoomInfo.Size.X * _roomVerticalMinDispersion),
-                        (int)(prevRoomInfo.Size.X * _roomVerticalMaxDispersion));
-                }
-                else
-                {
-                    offset = Random.RandomRangeInt((int)(prevRoomInfo.Size.Y * _roomHorizontalMinDispersion),
-                        (int)(prevRoomInfo.Size.Y * _roomHorizontalMaxDispersion));
-                }
+                var offset = _rule.GetNextRoomOffset(prevRoom, roomType, direction);
 
                 //计算房间位置
-                if (direction == 0) //上
+                if (direction == RoomDirection.Up) //上
                 {
-                    room.Position = new Vector2I(prevRoomInfo.Position.X + offset,
-                        prevRoomInfo.Position.Y - room.Size.Y - space);
+                    room.Position = new Vector2I(prevRoom.Position.X + offset,
+                        prevRoom.Position.Y - room.Size.Y - space);
                 }
-                else if (direction == 1) //右
+                else if (direction == RoomDirection.Right) //右
                 {
-                    room.Position = new Vector2I(prevRoomInfo.Position.X + prevRoomInfo.Size.Y + space,
-                        prevRoomInfo.Position.Y + offset);
+                    room.Position = new Vector2I(prevRoom.Position.X + prevRoom.Size.Y + space,
+                        prevRoom.Position.Y + offset);
                 }
-                else if (direction == 2) //下
+                else if (direction == RoomDirection.Down) //下
                 {
-                    room.Position = new Vector2I(prevRoomInfo.Position.X + offset,
-                        prevRoomInfo.Position.Y + prevRoomInfo.Size.Y + space);
+                    room.Position = new Vector2I(prevRoom.Position.X + offset,
+                        prevRoom.Position.Y + prevRoom.Size.Y + space);
                 }
-                else if (direction == 3) //左
+                else if (direction == RoomDirection.Left) //左
                 {
-                    room.Position = new Vector2I(prevRoomInfo.Position.X - room.Size.X - space,
-                        prevRoomInfo.Position.Y + offset);
+                    room.Position = new Vector2I(prevRoom.Position.X - room.Size.X - space,
+                        prevRoom.Position.Y + offset);
                 }
 
                 //是否在限制区域内
-                if (_enableLimitRange)
+                if (Config.EnableLimitRange)
                 {
                     if (room.GetHorizontalStart() < -_rangeX || room.GetHorizontalEnd() > _rangeX ||
                         room.GetVerticalStart() < -_rangeY || room.GetVerticalEnd() > _rangeY)
@@ -449,7 +350,7 @@ public class DungeonGenerator
                 _roomGrid.SetRect(room.Position, room.Size, true);
 
                 //找门, 与上一个房间是否能连通
-                if (!ConnectDoor(prevRoomInfo, room))
+                if (!ConnectDoor(prevRoom, room))
                 {
                     _roomGrid.RemoveRect(room.Position, room.Size);
                     //Debug.Log("链接通道失败");
@@ -474,23 +375,41 @@ public class DungeonGenerator
         }
         
         _id++;
-        room.Prev = prevRoomInfo;
-        if (prevRoomInfo != null)
+        room.Prev = prevRoom;
+        if (prevRoom != null)
         {
-            prevRoomInfo.Next.Add(room);
+            prevRoom.Next.Add(room);
         }
         resultRoomInfo = room;
         return GenerateRoomErrorCode.NoError;
     }
 
-    //回滚一个房间
-    private bool RollbackRoom(RoomInfo roomInfo)
+    /// <summary>
+    /// 设置上一个房间
+    /// </summary>
+    public void SetPrevRoom(RoomInfo roomInfo)
+    {
+        prevRoomInfo = roomInfo;
+    }
+
+    /// <summary>
+    /// 回滚一个房间
+    /// </summary>
+    public bool RollbackRoom(RoomInfo roomInfo)
     {
         if (roomInfo.Next.Count > 0)
         {
             Debug.LogError("当前房间还有连接的子房间, 不能回滚!");
             return false;
         }
+
+        if (!roomInfo.CanRollback)
+        {
+            Debug.LogError("当前房间不能回滚!");
+            return false;
+        }
+        var prevRoom = roomInfo.Prev;
+        
         //退掉占用的房间区域和过道占用区域
         _roomGrid.RemoveRect(roomInfo.Position, roomInfo.Size);
         foreach (var rect2 in roomInfo.AisleArea)
@@ -499,7 +418,7 @@ public class DungeonGenerator
         }
         
         //roomInfo.Doors[0].
-        if (roomInfo.Prev != null)
+        if (prevRoom != null)
         {
             roomInfo.Prev.Next.Remove(roomInfo);
         }
@@ -512,26 +431,54 @@ public class DungeonGenerator
         }
 
         RoomInfos.Remove(roomInfo);
+        switch (roomInfo.RoomType)
+        {
+            case DungeonRoomType.Battle:
+                BattleRoomInfos.Remove(roomInfo);
+                break;
+            case DungeonRoomType.Inlet:
+                StartRoomInfo = null;
+                break;
+            case DungeonRoomType.Outlet:
+                EndRoomInfos.Remove(roomInfo);
+                break;
+            case DungeonRoomType.Boss:
+                BossRoomInfos.Remove(roomInfo);
+                break;
+            case DungeonRoomType.Reward:
+                RewardRoomInfos.Remove(roomInfo);
+                break;
+            case DungeonRoomType.Shop:
+                ShopRoomInfos.Remove(roomInfo);
+                break;
+            case DungeonRoomType.Event:
+                break;
+        }
+        
         roomInfo.Destroy();
         _id--;
+        _nextRoomType = DungeonRoomType.None;
+        SetPrevRoom(prevRoom);
         return true;
     }
 
     /// <summary>
     /// 寻找层级最高的房间
     /// </summary>
+    /// <param name="roomType">指定房间类型, 如果传 None 则表示选择所有类型房间</param>
     /// <param name="exclude">排除的房间</param>
-    private RoomInfo FindMaxLayerRoom(List<RoomInfo> exclude)
+    public RoomInfo FindMaxLayerRoom(DungeonRoomType roomType, List<RoomInfo> exclude = null)
     {
         RoomInfo temp = null;
         foreach (var roomInfo in RoomInfos)
         {
-            if (temp == null || roomInfo.Layer > temp.Layer)
+            if (roomInfo.CanRollback)
             {
-                if (exclude == null || !exclude.Contains(roomInfo))
-                {
-                    temp = roomInfo;
-                }
+                continue;
+            }
+            if ((temp == null || roomInfo.Layer > temp.Layer) && (roomType == DungeonRoomType.None || (roomInfo.RoomType & roomType) != DungeonRoomType.None) && (exclude == null || !exclude.Contains(roomInfo)))
+            {
+                temp = roomInfo;
             }
         }
 
@@ -541,18 +488,83 @@ public class DungeonGenerator
     /// <summary>
     /// 随机抽取层级小于 layer 的房间
     /// </summary>
-    private RoomInfo RoundRoomLessThanLayer(int layer)
+    /// <param name="roomType">指定房间类型, 如果传 None 则表示选择所有类型房间</param>
+    /// <param name="layer"></param>
+    /// <param name="exclude">排除的房间</param>
+    public RoomInfo RandomRoomLessThanLayer(DungeonRoomType roomType, int layer, List<RoomInfo> exclude = null)
     {
-        var list = new List<RoomInfo>();
+        _tempList.Clear();
         foreach (var roomInfo in RoomInfos)
         {
-            if (roomInfo.Layer < layer)
+            if (roomInfo.CanRollback)
             {
-                list.Add(roomInfo);
+                continue;
+            }
+            if (roomInfo.Layer < layer && (roomType == DungeonRoomType.None || (roomInfo.RoomType & roomType) != DungeonRoomType.None) && (exclude == null || !exclude.Contains(roomInfo)))
+            {
+                _tempList.Add(roomInfo);
             }
         }
 
-        return Random.RandomChoose(list);
+        return Random.RandomChoose(_tempList);
+    }
+    
+    /// <summary>
+    /// 随机抽取层级大于 layer 的房间
+    /// </summary>
+    /// <param name="roomType">指定房间类型, 如果传 None 则表示选择所有类型房间</param>
+    /// <param name="layer"></param>
+    /// <param name="exclude">排除的房间</param>
+    public RoomInfo RandomRoomGreaterThanLayer(DungeonRoomType roomType, int layer, List<RoomInfo> exclude = null)
+    {
+        _tempList.Clear();
+        foreach (var roomInfo in RoomInfos)
+        {
+            if (roomInfo.CanRollback)
+            {
+                continue;
+            }
+            if (roomInfo.Layer > layer && (roomType == DungeonRoomType.None || (roomInfo.RoomType & roomType) != DungeonRoomType.None) && (exclude == null || !exclude.Contains(roomInfo)))
+            {
+                _tempList.Add(roomInfo);
+            }
+        }
+
+        return Random.RandomChoose(_tempList);
+    }
+    
+    /// <summary>
+    /// 随机抽取房间
+    /// </summary>
+    /// <param name="roomType">指定房间类型, 如果传 None 则表示选择所有类型房间</param>
+    public RoomInfo GetRandomRoom(DungeonRoomType roomType)
+    {
+        _tempList.Clear();
+        foreach (var roomInfo in RoomInfos)
+        {
+            if (roomInfo.CanRollback)
+            {
+                continue;
+            }
+
+            if (roomType == DungeonRoomType.None || (roomInfo.RoomType & roomType) != DungeonRoomType.None)
+            {
+                _tempList.Add(roomInfo);
+            }
+        }
+
+        return Random.RandomChoose(_tempList);
+    }
+
+    /// <summary>
+    /// 提交所有可以回滚的房间
+    /// </summary>
+    public void SubmitCanRollbackRoom()
+    {
+        foreach (var roomInfo in RoomInfos)
+        {
+            roomInfo.CanRollback = false;
+        }
     }
     
     /// <summary>

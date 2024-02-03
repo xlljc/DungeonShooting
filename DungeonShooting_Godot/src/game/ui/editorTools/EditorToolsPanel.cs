@@ -353,5 +353,11 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
     public override void OnHideUi()
     {
     }
+    public void OnBeforeSerialize()
+    {
+    }
+    public void OnAfterDeserialize()
+    {
+    }
 #endif
 }

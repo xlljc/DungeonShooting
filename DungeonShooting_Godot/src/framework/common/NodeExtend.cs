@@ -8,39 +8,43 @@ using Godot;
 public static class NodeExtend
 {
     /// <summary>
-    /// 尝试将一个 Node2d 节点转换成一个 ActivityObject 对象, 如果转换失败, 则返回 null
+    /// 获取 IHurt 绑定的 ActivityObject, 没有则返回 null
     /// </summary>
-    public static ActivityObject AsActivityObject(this Node2D node2d)
+    /// <param name="hurt"></param>
+    /// <returns></returns>
+    public static ActivityObject GetActivityObject(this IHurt hurt)
     {
-        if (node2d is ActivityObject p)
+        if (hurt is ActivityObject activityObject)
         {
-            return p;
+            return activityObject;
         }
-        var parent = node2d.GetParent();
-        if (parent != null && parent is ActivityObject p2)
+
+        if (hurt is HurtArea hurtArea)
         {
-            return p2;
+            return hurtArea.ActivityObject;
         }
-        return null;
-    }
-    
-    /// <summary>
-    /// 尝试将一个 Node2d 节点转换成一个 ActivityObject 对象, 如果转换失败, 则返回 null
-    /// </summary>
-    public static T AsActivityObject<T>(this Node2D node2d) where T : ActivityObject
-    {
-        if (node2d is T p)
-        {
-            return p;
-        }
-        var parent = node2d.GetParent();
-        if (parent != null && parent is T p2)
-        {
-            return p2;
-        }
+
         return null;
     }
 
+    /// <summary>
+    /// 获取 IHurt 节点的坐标
+    /// </summary>
+    public static Vector2 GetPosition(this IHurt hurt)
+    {
+        if (hurt is ActivityObject role)
+        {
+            return role.GetCenterPosition();
+        }
+
+        if (hurt is Node2D node2D)
+        {
+            return node2D.GlobalPosition;
+        }
+        
+        return Vector2.Zero;
+    }
+    
     /// <summary>
     /// 将节点插入的房间物体根节点
     /// </summary>

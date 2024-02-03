@@ -254,6 +254,16 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public Vector2I? BrushPrevPosition { get; set; }
     
+    /// <summary>
+    /// 默认所在层级
+    /// </summary>
+    public RoomLayerEnum DefaultLayer { get; set; }
+
+    /// <summary>
+    /// 投抛状态下的碰撞器层级
+    /// </summary>
+    public uint ThrowCollisionMask { get; set; } = PhysicsLayer.Wall;
+    
     // --------------------------------------------------------------------------------
 
     //是否正在调用组件 Update 函数
@@ -277,9 +287,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     
     //存储投抛该物体时所产生的数据
     private readonly ActivityFallData _fallData = new ActivityFallData();
-    
-    //所在层级
-    private RoomLayerEnum _currLayer;
     
     //标记字典
     private Dictionary<string, object> _signMap;
@@ -650,7 +657,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public virtual void PutDown(RoomLayerEnum layer, bool showShadow = true)
     {
-        _currLayer = layer;
+        DefaultLayer = layer;
         var parent = GetParent();
         var root = GameApplication.Instance.World.GetRoomLayer(layer);
         if (parent != root)
@@ -1490,7 +1497,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
             Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
-            CollisionMask = 1;
+            CollisionMask = ThrowCollisionMask;
             CollisionLayer = _fallData.OriginCollisionLayer | PhysicsLayer.Throwing;
             _fallData.UseOrigin = false;
         }
@@ -1526,7 +1533,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     private void ThrowOver()
     {
         var parent = GetParent();
-        var roomLayer = GameApplication.Instance.World.GetRoomLayer(_currLayer);
+        var roomLayer = GameApplication.Instance.World.GetRoomLayer(DefaultLayer);
         if (parent != roomLayer)
         {
             parent.RemoveChild(this);

@@ -214,7 +214,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     private Vector2 _gripOffset;
 
     //碰撞器位置
-    private Vector2 _collPoint;
+    private Vector2 _collPoint1;
+    private Vector2 _collPoint2;
 
     //换弹计时器
     private float _reloadTimer = 0;
@@ -294,10 +295,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         AnimationPlayer.AnimationFinished += OnAnimationPlayerFinished;
         _gripPoint = AnimatedSprite.Position;
         _gripOffset = AnimatedSprite.Offset;
-        _collPoint = Collision.Position;
+        _collPoint1 = Collision.Position;
+        _collPoint2 = _collPoint1 - AnimatedSprite.Offset - AnimatedSprite.Position;
         AnimatedSprite.Position = Vector2.Zero;
         AnimatedSprite.Offset = Vector2.Zero;
-        Collision.Position = Vector2.Zero;
+        Collision.Position = _collPoint2;
     }
 
     /// <summary>
@@ -307,12 +309,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     {
         _playerWeaponAttribute = attribute;
         SetCurrentWeaponAttribute(attribute);
-        if (attribute.AiUseAttribute != null)
+        if (ExcelConfig.WeaponBase_Map.TryGetValue(attribute.Id + "_ai", out var aiAttr))
         {
-            _aiWeaponAttribute = attribute.AiUseAttribute;
+            _aiWeaponAttribute = aiAttr;
         }
         else
         {
+            Debug.LogError("警告: 未找到 AI 武器属性: " + attribute.Id);
             _aiWeaponAttribute = attribute;
         }
 
@@ -325,8 +328,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         CurrAmmo = Attribute.AmmoCapacity;
         //剩余弹药量
         ResidueAmmo = Mathf.Min(Attribute.StandbyAmmoCapacity + CurrAmmo, Attribute.MaxAmmoCapacity) - CurrAmmo;
-        
-        ThrowCollisionSize = attribute.ThrowCollisionSize.AsVector2();
+
+        if (Collision.Shape is RectangleShape2D rectangleShape)
+        {
+            ThrowCollisionSize = rectangleShape.Size;
+        }
+        else
+        {
+            ThrowCollisionSize = new Vector2(-1, -1);
+        }
     }
 
     /// <summary>
@@ -1500,23 +1510,30 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     //抛弹逻辑
     private void ThrowShellHandler(float speedScale)
     {
-        if (Attribute.Shell == null)
+        var attribute = Attribute;
+        if (attribute.Shell == null)
         {
             return;
         }
         //创建一个弹壳
-        if (Attribute.ThrowShellDelayTime > 0)
+        if (attribute.ThrowShellDelayTime > 0)
         {
-            this.CallDelay(Attribute.ThrowShellDelayTime, () =>
+            this.CallDelay(attribute.ThrowShellDelayTime, () =>
             {
                 _reloadShellFlag = true;
-                FireManager.ThrowShell(this, Attribute.Shell, speedScale);
+                for (var i = 0; i < attribute.ThrowShellCount; i++)
+                {
+                    FireManager.ThrowShell(this, attribute.Shell, speedScale);
+                }
             });
         }
-        else if (Attribute.ThrowShellDelayTime == 0)
+        else if (attribute.ThrowShellDelayTime == 0)
         {
             _reloadShellFlag = true;
-            FireManager.ThrowShell(this, Attribute.Shell, speedScale);
+            for (var i = 0; i < attribute.ThrowShellCount; i++)
+            {
+                FireManager.ThrowShell(this, attribute.Shell, speedScale);
+            }
         }
     }
 
@@ -1915,7 +1932,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         //精灵位置, 旋转中心点
         AnimatedSprite.Position = Vector2.Zero;
         AnimatedSprite.Offset = Vector2.Zero;
-        Collision.Position = Vector2.Zero;
+        Collision.Position = _collPoint2;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
         //停止换弹
@@ -1945,7 +1962,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         //Collision.Disabled = true;
         AnimatedSprite.Position = _gripPoint;
         AnimatedSprite.Offset = _gripOffset;
-        Collision.Position = _collPoint;
+        Collision.Position = _collPoint1;
         //修改层级
         _tempLayer = CollisionLayer;
         CollisionLayer = PhysicsLayer.OnHand;

@@ -10,6 +10,18 @@
       {
         "ErrorType": 0,
         "Path": "resource/map/tileMaps/Test1/battle/Battle2"
+      },
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/Test1/battle/Battle3"
+      },
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/Test1/battle/Battle4"
+      },
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/Test1/battle/Battle5"
       }
     ],
     "InletList": [
@@ -36,7 +48,12 @@
         "Path": "resource/map/tileMaps/Test1/reward/Award1"
       }
     ],
-    "ShopList": [],
+    "ShopList": [
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/Test1/shop/Shop1"
+      }
+    ],
     "EventList": [],
     "Remark": ""
   }

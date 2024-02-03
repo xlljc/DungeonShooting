@@ -51,7 +51,7 @@ public static partial class SpecialEffectManager
     /// <param name="zIndex">层级</param>
     /// <param name="speed">播放速度</param>
     /// <param name="loopCount">循环次数, 到达该次数特效停止播放</param>
-    public static void Play(Node root, string path, string animName, Vector2 pos, float rotation, Vector2 scale, Vector2 offset, int zIndex = 0, float speed = 1, int loopCount = 1)
+    public static void PlaySpriteFrames(Node root, string path, string animName, Vector2 pos, float rotation, Vector2 scale, Vector2 offset, int zIndex = 0, float speed = 1, int loopCount = 1)
     {
         var spriteFrames = ResourceManager.Load<SpriteFrames>(path);
         var specialEffect = new SpecialEffect();

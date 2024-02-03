@@ -122,17 +122,17 @@ public class RoomPreinstall : IDestroy
                     
                     if (activityBase is RandomActivityBase) //随机物体
                     {
-                        if (markInfoItem.Id == PreinstallMarkManager.Weapon.Id) //随机武器
+                        if (markInfoItem.Id == PreinstallMarkManager.RandomWeapon.Id) //随机武器
                         {
                             mark.Id = world.RandomPool.GetRandomWeapon()?.Id;
                             mark.ActivityType = ActivityType.Weapon;
                         }
-                        else if (markInfoItem.Id == PreinstallMarkManager.Enemy.Id) //随机敌人
+                        else if (markInfoItem.Id == PreinstallMarkManager.RandomEnemy.Id) //随机敌人
                         {
                             mark.Id = world.RandomPool.GetRandomEnemy()?.Id;
                             mark.ActivityType = ActivityType.Enemy;
                         }
-                        else if (markInfoItem.Id == PreinstallMarkManager.Prop.Id) //随机道具
+                        else if (markInfoItem.Id == PreinstallMarkManager.RandomProp.Id) //随机道具
                         {
                             mark.Id = world.RandomPool.GetRandomProp()?.Id;
                             mark.ActivityType = ActivityType.Prop;
@@ -422,7 +422,7 @@ public class RoomPreinstall : IDestroy
     //获取物体默认所在层级
     private RoomLayerEnum GetDefaultLayer(ActivityMark activityMark)
     {
-        if (activityMark.ActivityType == ActivityType.Player || activityMark.ActivityType == ActivityType.Enemy)
+        if (activityMark.ActivityType == ActivityType.Player || activityMark.ActivityType == ActivityType.Enemy || activityMark.ActivityType == ActivityType.Treasure)
         {
             return RoomLayerEnum.YSortLayer;
         }

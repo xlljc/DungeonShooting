@@ -41,6 +41,56 @@ public class DungeonConfig
     /// </summary>
     public int RoomCount => BattleRoomCount + RewardRoomCount + ShopRoomCount + OutRoomCount + BossRoomCount;
     
+    /// <summary>
+    /// 房间最大层级
+    /// </summary>
+    public int MaxLayer = 5;
+    
+    /// <summary>
+    /// 房间最小间隔
+    /// </summary>
+    public int RoomMinInterval = 2;
+    
+    /// <summary>
+    /// 房间最大间隔
+    /// </summary>
+    public int RoomMaxInterval = 5;
+    
+    /// <summary>
+    /// 房间横轴最小分散程度
+    /// </summary>
+    public float RoomHorizontalMinDispersion = -0.6f;
+    
+    /// <summary>
+    /// 房间横轴最大分散程度
+    /// </summary>
+    public float RoomHorizontalMaxDispersion = 0.6f;
+
+    /// <summary>
+    /// 房间纵轴最小分散程度
+    /// </summary>
+    public float RoomVerticalMinDispersion = -0.6f;
+    
+    /// <summary>
+    /// 房间纵轴最大分散程度
+    /// </summary>
+    public float RoomVerticalMaxDispersion = 0.6f;
+    
+    /// <summary>
+    /// 是否启用区域限制
+    /// </summary>
+    public bool EnableLimitRange = true;
+    
+    /// <summary>
+    /// 横轴范围
+    /// </summary>
+    public int RangeX = 120;
+    
+    /// <summary>
+    /// 纵轴范围
+    /// </summary>
+    public int RangeY = 120;
+    
     //----------------------- 地牢编辑使用 -------------------------
     /// <summary>
     /// 是否指定了房间

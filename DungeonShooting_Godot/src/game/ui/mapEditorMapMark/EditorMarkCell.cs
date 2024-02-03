@@ -109,7 +109,7 @@ public class EditorMarkCell : UiCell<MapEditorMapMark.MarkItem, MapEditorMapMark
 
     public override int OnSort(UiCell<MapEditorMapMark.MarkItem, MapEditorMapMarkPanel.MarkCellData> other)
     {
-        if (!Data.Preloading && other.Data.Preloading)
+        if (Data.Preloading && other.Data.Preloading)
         {
             return 0;
         }

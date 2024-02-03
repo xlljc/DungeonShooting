@@ -1,7 +1,7 @@
 [
   {
     "Id": "0001",
-    "Remark": "",
+    "Remark": "\u6B65\u67AA",
     "LockingStand": true,
     "FiringStand": true,
     "ShowSubline": false,
@@ -13,7 +13,7 @@
   },
   {
     "Id": "0002",
-    "Remark": "",
+    "Remark": "\u9730\u5F39\u67AA",
     "LockingStand": true,
     "FiringStand": true,
     "ShowSubline": false,
@@ -25,7 +25,7 @@
   },
   {
     "Id": "0003",
-    "Remark": "",
+    "Remark": "\u624B\u67AA",
     "LockingStand": true,
     "FiringStand": true,
     "ShowSubline": false,
@@ -93,6 +93,18 @@
     "LockAngleTime": 0.5,
     "AttackLockAngle": true,
     "BulletSpeedScale": 0.8,
+    "AmmoConsumptionProbability": 0
+  },
+  {
+    "Id": "0009",
+    "Remark": "Weapon0010",
+    "LockingStand": true,
+    "FiringStand": true,
+    "ShowSubline": false,
+    "LockingTime": 1.5,
+    "LockAngleTime": 0.5,
+    "AttackLockAngle": true,
+    "BulletSpeedScale": 0.4,
     "AmmoConsumptionProbability": 0
   }
 ]

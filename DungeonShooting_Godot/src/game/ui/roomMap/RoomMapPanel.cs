@@ -159,9 +159,10 @@ public partial class RoomMapPanel : RoomMap
             S_Mark.Instance.Position = S_DrawContainer.Instance.Size / 2 + _mapOffset;
         }
 
+        var area = Player.Current.AffiliationArea;
         //传送
         if (_pressMapFlag && _mouseHoverRoom != null &&
-            !Player.Current.AffiliationArea.RoomInfo.IsSeclusion &&
+            area != null && !area.RoomInfo.IsSeclusion &&
             Input.IsMouseButtonPressed(MouseButton.Right))
         {
             //执行传送操作
@@ -245,14 +246,18 @@ public partial class RoomMapPanel : RoomMap
                 var shaderMaterial = (ShaderMaterial)roomInfo.PreviewSprite.Material;
                 _originOutlineColor = shaderMaterial.GetShaderParameter("outline_color").AsColor();
                 //玩家所在的房间门是否打开
-                var isOpen = !Player.Current.AffiliationArea.RoomInfo.IsSeclusion;
-                if (isOpen)
+                var area = Player.Current.AffiliationArea;
+                if (area != null)
                 {
-                    shaderMaterial.SetShaderParameter("outline_color", new Color(0, 1, 0, 0.9f));
-                }
-                else
-                {
-                    shaderMaterial.SetShaderParameter("outline_color", new Color(1, 0, 0, 0.9f));
+                    var isOpen = !area.RoomInfo.IsSeclusion;
+                    if (isOpen)
+                    {
+                        shaderMaterial.SetShaderParameter("outline_color", new Color(0, 1, 0, 0.9f));
+                    }
+                    else
+                    {
+                        shaderMaterial.SetShaderParameter("outline_color", new Color(1, 0, 0, 0.9f));
+                    }
                 }
             };
             roomInfo.PreviewSprite.MouseExited += () =>

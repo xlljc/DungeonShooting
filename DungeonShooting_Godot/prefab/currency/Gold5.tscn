@@ -1,0 +1,160 @@
+[gd_scene load_steps=24 format=3 uid="uid://dqeph6v1y3ycm"]
+
+[ext_resource type="PackedScene" uid="uid://c7i2q4mx5qp2h" path="res://prefab/currency/GoldTemplate.tscn" id="1_t3bsk"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_r5r64"]
+[ext_resource type="Texture2D" uid="uid://bfpcqj2x8t2os" path="res://resource/sprite/currency/Gold_5.png" id="3_rf7nc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2tpx1"]
+resource_local_to_scene = true
+shader = ExtResource("2_r5r64")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kpbsl"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tpaps"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gfmw0"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kh76b"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(24, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h71d5"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(32, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_irvf2"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(40, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6upf3"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(48, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_th3rv"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(56, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2nwhu"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(64, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3f1xk"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(72, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4edoa"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(80, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t7eeg"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(88, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x22g0"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(96, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_14m0u"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(104, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4s0em"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(112, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ncscs"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(120, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gwnv8"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(128, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aw75c"]
+atlas = ExtResource("3_rf7nc")
+region = Rect2(136, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3te8s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kpbsl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tpaps")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gfmw0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kh76b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h71d5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_irvf2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6upf3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_th3rv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2nwhu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3f1xk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4edoa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t7eeg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x22g0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_14m0u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4s0em")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ncscs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gwnv8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aw75c")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="Gold5" instance=ExtResource("1_t3bsk")]
+GoldCount = 5
+
+[node name="AnimatedSprite" parent="." index="1"]
+material = SubResource("ShaderMaterial_2tpx1")
+sprite_frames = SubResource("SpriteFrames_3te8s")
+autoplay = "default"
+frame_progress = 0.578976

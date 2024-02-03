@@ -88,7 +88,8 @@ public partial class GameApplication : Node2D, ICoroutine
 	public GameApplication()
 	{
 		Instance = this;
-		TargetFps = (int)DisplayServer.ScreenGetRefreshRate();
+		//TargetFps = 20;
+		TargetFps = Mathf.RoundToInt(DisplayServer.ScreenGetRefreshRate());
 		
 		Utils.InitRandom();
 

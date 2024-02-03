@@ -90,4 +90,9 @@ public static class AnimatorNames
     /// 重置动画
     /// </summary>
     public static readonly StringName Reset = "RESET";
+
+    /// <summary>
+    /// 打开宝箱
+    /// </summary>
+    public static readonly StringName Open = "open";
 }
