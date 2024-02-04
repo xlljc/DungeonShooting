@@ -274,13 +274,20 @@ public abstract partial class Role : ActivityObject
             {
                 if (value) //无敌状态
                 {
-                    HurtArea.CollisionLayer = _currentLayer;
+                    if (HurtArea != null)
+                    {
+                        HurtArea.CollisionLayer = _currentLayer;
+                    }
+
                     _flashingInvincibleTimer = -1;
                     _flashingInvincibleFlag = false;
                 }
                 else //正常状态
                 {
-                    HurtArea.CollisionLayer = _currentLayer;
+                    if (HurtArea != null)
+                    {
+                        HurtArea.CollisionLayer = _currentLayer;
+                    }
                     SetBlendModulate(new Color(1, 1, 1, 1));
                 }
             }

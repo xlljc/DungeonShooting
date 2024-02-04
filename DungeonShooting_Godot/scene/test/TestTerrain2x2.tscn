@@ -1,9 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bwxo7kc5ybrou"]
 
-[ext_resource type="Texture2D" uid="uid://bcoae24vin57c" path="res://resource/tileSprite/map2/Dungeon Tileset.png" id="1_ivn6d"]
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_23gwl"]
-texture = ExtResource("1_ivn6d")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0

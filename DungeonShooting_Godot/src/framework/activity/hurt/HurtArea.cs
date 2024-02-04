@@ -1,5 +1,6 @@
 ﻿using Godot;
 
+[Tool]
 public partial class HurtArea : Area2D, IHurt
 {
     public delegate void HurtDelegate(ActivityObject target, int damage, float angle);
