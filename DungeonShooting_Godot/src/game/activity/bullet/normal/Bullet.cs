@@ -42,6 +42,9 @@ public partial class Bullet : ActivityObject, IBullet
         set => CollisionArea.CollisionMask = value;
     }
 
+    /// <summary>
+    /// 子弹使用的数据
+    /// </summary>
     public BulletData BulletData { get; private set; }
     
     /// <summary>
@@ -112,7 +115,7 @@ public partial class Bullet : ActivityObject, IBullet
         MoveController.AddForce(new Vector2(data.FlySpeed, 0).Rotated(Rotation));
         
         //如果子弹会对玩家造成伤害, 则显示红色描边
-        if (Player.Current.CollisionWithMask(attackLayer))
+        if (Player.Current != null && Player.Current.CollisionWithMask(attackLayer))
         {
             if (!IsEnemyBullet)
             {
@@ -296,10 +299,13 @@ public partial class Bullet : ActivityObject, IBullet
             CollisionShape2D.Disabled = Altitude >= 16;
         }
         //距离太大, 自动销毁
-        CurrFlyDistance += BulletData.FlySpeed * delta;
-        if (CurrFlyDistance >= BulletData.MaxDistance)
+        if (MoveController.Enable)
         {
-            OnMaxDistance();
+            CurrFlyDistance += BulletData.FlySpeed * delta;
+            if (CurrFlyDistance >= BulletData.MaxDistance)
+            {
+                OnMaxDistance();
+            }
         }
     }
 

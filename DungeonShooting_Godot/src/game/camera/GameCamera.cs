@@ -202,7 +202,7 @@ public partial class GameCamera : Camera2D
             }
             else
             {
-                distance = new Vector2(Mathf.Sqrt(distance.X), Mathf.Sqrt(distance.Y));
+                distance = new Vector2(Mathf.Sqrt(Mathf.Abs(distance.X)), Mathf.Sqrt(Mathf.Abs(distance.Y)));
                 var offset = Offset;
                 _shakeOffset += _processDirection + new Vector2(
                     (float)GD.RandRange(-distance.X, distance.X) - offset.X,

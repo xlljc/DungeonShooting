@@ -241,6 +241,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     //换弹投抛弹壳记录
     private bool _reloadShellFlag = false;
 
+    //抖动强度
+    private float _shakeStrength = 0;
+    
+    //抖动间隔
+    private float _shakeInterval = 1 / 60f;
+    
+    //抖动计时器
+    private float _shakeTimer = 0;
+    
     // ----------------------------------------------
     private uint _tempLayer;
 
@@ -388,6 +397,31 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     }
 
     /// <summary>
+    /// 结束蓄力时调用
+    /// 注意, 该函数仅在 Attribute.LooseShoot == false 时才能被调用
+    /// </summary>
+    protected virtual void OnEndCharge()
+    {
+    }
+    
+    /// <summary>
+    /// 蓄力完成时调用
+    /// </summary>
+    protected virtual void OnChargeFinish()
+    {
+    }
+    
+    /// <summary>
+    /// 蓄力时每帧调用
+    /// 注意, 该函数仅在 Attribute.LooseShoot == false 时才能被调用
+    /// </summary>
+    /// <param name="delta"></param>
+    /// <param name="charge">蓄力时长</param>
+    protected virtual void OnChargeProcess(float delta, float charge)
+    {
+    }
+
+    /// <summary>
     /// 当换弹时调用, 如果设置单独装弹, 则每装一次弹调用一次该函数
     /// </summary>
     protected virtual void OnReload()
@@ -469,6 +503,24 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
 
     protected override void Process(float delta)
     {
+        //抖动 AnimatedSprite
+        if (_shakeStrength != 0)
+        {
+            _shakeTimer += delta;
+            if (_shakeTimer >= _shakeInterval)
+            {
+                _shakeTimer = 0;
+                AnimatedSprite.Offset = new Vector2(
+                    Utils.Random.RandomRangeFloat(-_shakeStrength, _shakeStrength),
+                    Utils.Random.RandomRangeFloat(-_shakeStrength, _shakeStrength)
+                );
+            }
+        }
+        else
+        {
+            _shakeTimer = 0;
+        }
+        
         //未开火时间
         _noAttackTime += delta;
         
@@ -630,6 +682,12 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                     {
                         BeLoaded();
                     }
+                    
+                    //子弹换弹
+                    if (CurrAmmo <= 0 && Attribute.AutoReload)
+                    {
+                        Reload();
+                    }
                 }
             }
             else if (_delayedTime > 0) //攻击延时
@@ -646,7 +704,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
             {
                 if (_looseShootFlag) //蓄力时长
                 {
+                    var pv = _chargeTime;
                     _chargeTime += delta;
+                    OnChargeProcess(delta, _chargeTime);
+                    //蓄力完成
+                    if (pv < Attribute.MinChargeTime && _chargeTime >= Attribute.MinChargeTime)
+                    {
+                        OnChargeFinish();
+                    }
                 }
 
                 _downTimer += delta;
@@ -713,6 +778,22 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// 设置抖动强度
+    /// </summary>
+    public void SetShake(float strength)
+    {
+        _shakeStrength = strength;
+    }
+    
+    /// <summary>
+    /// 设置抖动间隔
+    /// </summary>
+    public void SetShakeInterval(float interval)
+    {
+        _shakeInterval = interval;
     }
 
     /// <summary>
@@ -911,6 +992,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     }
     
     /// <summary>
+    /// 获取蓄力是否结束
+    /// 注意, 该函数仅在 Attribute.LooseShoot == false 时有正确的返回值, 否则返回 false
+    /// </summary>
+    public bool IsChargeFinish()
+    {
+        return _chargeTime >= Attribute.MinChargeTime;
+    }
+    
+    /// <summary>
     /// 获取延时射击倒计时, 单位: 秒
     /// </summary>
     public float GetDelayedAttackTime()
@@ -996,6 +1086,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                 _continuousCount = 0;
             }
             _chargeTime = 0;
+            OnEndCharge();
         }
 
         OnUpTrigger();

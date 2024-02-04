@@ -70,6 +70,18 @@ public static partial class ExcelConfig
         public int StandbyAmmoCapacity;
 
         /// <summary>
+        /// 换弹是否显示换弹进度
+        /// </summary>
+        [JsonInclude]
+        public bool ShowReloadBar;
+
+        /// <summary>
+        /// 弹夹打空是否自动换弹
+        /// </summary>
+        [JsonInclude]
+        public bool AutoReload;
+
+        /// <summary>
         /// 装弹时间 (单位: 秒)
         /// </summary>
         [JsonInclude]
@@ -389,6 +401,8 @@ public static partial class ExcelConfig
             inst.AmmoCapacity = AmmoCapacity;
             inst.MaxAmmoCapacity = MaxAmmoCapacity;
             inst.StandbyAmmoCapacity = StandbyAmmoCapacity;
+            inst.ShowReloadBar = ShowReloadBar;
+            inst.AutoReload = AutoReload;
             inst.ReloadTime = ReloadTime;
             inst.AloneReload = AloneReload;
             inst.AloneReloadCount = AloneReloadCount;

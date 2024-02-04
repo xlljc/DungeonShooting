@@ -95,4 +95,9 @@ public static class AnimatorNames
     /// 打开宝箱
     /// </summary>
     public static readonly StringName Open = "open";
+
+    /// <summary>
+    /// 拉弓
+    /// </summary>
+    public static readonly StringName Pull = "pull";
 }
