@@ -30,6 +30,7 @@ z_index = -2
 z_index = -1
 
 [node name="YSortLayer" type="Node2D" parent="TileRoot"]
+z_index = 2
 y_sort_enabled = true
 
 [node name="AffiliationAreaRoot" type="Node2D" parent="TileRoot"]

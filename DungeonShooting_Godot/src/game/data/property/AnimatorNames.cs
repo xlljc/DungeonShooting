@@ -100,4 +100,8 @@ public static class AnimatorNames
     /// 拉弓
     /// </summary>
     public static readonly StringName Pull = "pull";
+
+    
+    public static readonly StringName HalfStart = "half_start";
+    public static readonly StringName HalfEnd = "half_end";
 }

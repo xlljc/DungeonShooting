@@ -32,19 +32,19 @@ public static class MapLayerManager
         tileMap.SetLayerName(MapLayer.CustomFloorLayer3, nameof(MapLayer.CustomFloorLayer3));
         
         tileMap.AddLayer(MapLayer.AutoMiddleLayer);
-        tileMap.SetLayerZIndex(MapLayer.AutoMiddleLayer, 0);
+        tileMap.SetLayerZIndex(MapLayer.AutoMiddleLayer, 2);
         tileMap.SetLayerNavigationEnabled(MapLayer.AutoMiddleLayer, false);
         tileMap.SetLayerYSortEnabled(MapLayer.AutoMiddleLayer, true);
         tileMap.SetLayerName(MapLayer.AutoMiddleLayer, nameof(MapLayer.AutoMiddleLayer));
         
         tileMap.AddLayer(MapLayer.CustomMiddleLayer1);
-        tileMap.SetLayerZIndex(MapLayer.CustomMiddleLayer1, 0);
+        tileMap.SetLayerZIndex(MapLayer.CustomMiddleLayer1, 2);
         tileMap.SetLayerNavigationEnabled(MapLayer.CustomMiddleLayer1, false);
         tileMap.SetLayerYSortEnabled(MapLayer.CustomMiddleLayer1, true);
         tileMap.SetLayerName(MapLayer.CustomMiddleLayer1, nameof(MapLayer.CustomMiddleLayer1));
         
         tileMap.AddLayer(MapLayer.CustomMiddleLayer2);
-        tileMap.SetLayerZIndex(MapLayer.CustomMiddleLayer2, 0);
+        tileMap.SetLayerZIndex(MapLayer.CustomMiddleLayer2, 2);
         tileMap.SetLayerNavigationEnabled(MapLayer.CustomMiddleLayer2, false);
         tileMap.SetLayerYSortEnabled(MapLayer.CustomMiddleLayer2, true);
         tileMap.SetLayerName(MapLayer.CustomMiddleLayer2, nameof(MapLayer.CustomMiddleLayer2));

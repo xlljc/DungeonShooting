@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://c4puxmnan51ds"]
 
-[ext_resource type="Script" path="res://src/game/activity/bullet/normal/Bullet.cs" id="1_dmdyg"]
+[ext_resource type="Script" path="res://src/game/activity/bullet/normal/Arrow.cs" id="1_eots7"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_tscmb"]
 [ext_resource type="SpriteFrames" uid="uid://cyg3uvbakan08" path="res://resource/spriteFrames/bullet/Bullet0009.tres" id="3_l58ff"]
 
@@ -29,15 +29,16 @@ shader_parameter/outline_use_blend = false
 shader_parameter/grey = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5x14b"]
-size = Vector2(26, 3)
+size = Vector2(21, 3)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_72d75"]
-size = Vector2(26, 3)
+size = Vector2(21, 3)
 
-[node name="Bullet0009" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "Particles2D", "ShadowSprite", "AnimatedSprite", "Collision")]
+[node name="Bullet0009" type="CharacterBody2D" node_paths=PackedStringArray("HalfSprite", "CollisionArea", "CollisionShape2D", "Particles2D", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2
 collision_mask = 0
-script = ExtResource("1_dmdyg")
+script = ExtResource("1_eots7")
+HalfSprite = NodePath("AnimatedSprite/HalfSprite")
 CollisionArea = NodePath("AnimatedSprite/CollisionArea")
 CollisionShape2D = NodePath("AnimatedSprite/CollisionArea/CollisionShape2D")
 Particles2D = []
@@ -59,7 +60,15 @@ collision_mask = 0
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite/CollisionArea"]
+position = Vector2(-2.5, 0)
 shape = SubResource("RectangleShape2D_5x14b")
 
+[node name="HalfSprite" type="AnimatedSprite2D" parent="AnimatedSprite"]
+visible = false
+z_index = -1
+sprite_frames = ExtResource("3_l58ff")
+animation = &"half_start"
+
 [node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(-2.5, 0)
 shape = SubResource("RectangleShape2D_72d75")

@@ -75,7 +75,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// 阴影偏移
     /// </summary>
     [Export]
-    public Vector2 ShadowOffset { get; protected set; } = new Vector2(0, 2);
+    public Vector2 ShadowOffset { get; set; } = new Vector2(0, 2);
     
     /// <summary>
     /// 移动控制器
@@ -321,6 +321,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
 
     //击退外力
     private ExternalForce _repelForce;
+
+    private HashSet<IDestroy> _destroySet;
 
     // --------------------------------------------------------------------------------
     
@@ -1416,6 +1418,16 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
 
         _components.Clear();
+
+        if (_destroySet != null)
+        {
+            foreach (var destroy in _destroySet)
+            {
+                destroy.Destroy();
+            }
+
+            _destroySet = null;
+        }
     }
 
     /// <summary>
@@ -1854,5 +1866,31 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
             AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(brush, BrushPrevPosition, pos, 0);
             BrushPrevPosition = pos;
         }
+    }
+
+    /// <summary>
+    /// 绑定可销毁对象, 绑定的物体会在当前物体销毁时触发销毁
+    /// </summary>
+    public void BindDestroyObject(IDestroy destroy)
+    {
+        if (_destroySet == null)
+        {
+            _destroySet = new HashSet<IDestroy>();
+        }
+
+        _destroySet.Add(destroy);
+    }
+
+    /// <summary>
+    /// 移除绑定可销毁对象
+    /// </summary>
+    public void RemoveDestroyObject(IDestroy destroy)
+    {
+        if (_destroySet == null)
+        {
+            return;
+        }
+        
+        _destroySet.Remove(destroy);
     }
 }

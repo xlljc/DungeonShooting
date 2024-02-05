@@ -26,7 +26,7 @@ public interface IBullet : ICoroutine, IPoolItem
     /// </summary>
     void InitData(BulletData data, uint attackLayer);
     /// <summary>
-    /// 执行子弹回收操作
+    /// 子弹运行逻辑执行完成
     /// </summary>
-    void DoReclaim();
+    void LogicalFinish();
 }

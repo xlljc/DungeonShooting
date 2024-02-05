@@ -1,14 +1,42 @@
-[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://cyg3uvbakan08"]
+[gd_resource type="SpriteFrames" load_steps=5 format=3 uid="uid://cyg3uvbakan08"]
 
 [ext_resource type="Texture2D" uid="uid://c5b2dmsxgv1p8" path="res://resource/sprite/bullet/normal/bullet0009.png" id="1_v33wk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n6dlo"]
+atlas = ExtResource("1_v33wk")
+region = Rect2(0, 0, 28, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b3wh3"]
+atlas = ExtResource("1_v33wk")
+region = Rect2(28, 0, 28, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bdaam"]
+atlas = ExtResource("1_v33wk")
+region = Rect2(56, 0, 28, 7)
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_v33wk")
+"texture": SubResource("AtlasTexture_n6dlo")
 }],
 "loop": true,
 "name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b3wh3")
+}],
+"loop": false,
+"name": &"half_end",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bdaam")
+}],
+"loop": false,
+"name": &"half_start",
 "speed": 5.0
 }]

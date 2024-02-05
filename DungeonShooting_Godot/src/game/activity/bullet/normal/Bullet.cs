@@ -174,7 +174,7 @@ public partial class Bullet : ActivityObject, IBullet
         {
             //创建粒子特效
             OnPlayCollisionEffect(collision);
-            DoReclaim();
+            LogicalFinish();
         }
     }
 
@@ -200,7 +200,7 @@ public partial class Bullet : ActivityObject, IBullet
         CurrentPenetration++;
         if (CurrentPenetration > BulletData.Penetration)
         {
-            DoReclaim();
+            CallDeferred(nameof(LogicalFinish));
         }
     }
 
@@ -210,7 +210,7 @@ public partial class Bullet : ActivityObject, IBullet
     public virtual void OnMaxDistance()
     {
         OnPlayDisappearEffect();
-        DoReclaim();
+        LogicalFinish();
     }
     
     /// <summary>
@@ -219,14 +219,14 @@ public partial class Bullet : ActivityObject, IBullet
     public virtual void OnLimeOver()
     {
         OnPlayDisappearEffect();
-        DoReclaim();
+        LogicalFinish();
     }
     
     protected override void OnFallToGround()
     {
         //落地销毁
         OnPlayDisappearEffect();
-        DoReclaim();
+        LogicalFinish();
     }
     
     /// <summary>
@@ -335,7 +335,7 @@ public partial class Bullet : ActivityObject, IBullet
         }
     }
 
-    public virtual void DoReclaim()
+    public virtual void LogicalFinish()
     {
         ObjectPool.Reclaim(this);
     }

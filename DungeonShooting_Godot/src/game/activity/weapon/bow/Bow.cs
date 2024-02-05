@@ -13,20 +13,24 @@ public partial class Bow : Weapon
     public Marker2D ArrowPoint { get; set; }
 
     //正在使用的弓箭
-    private Bullet _activeArrow;
+    private Arrow _activeArrow;
 
-    private void InitActiveArrow()
+    public override void OnInit()
     {
-        if (_activeArrow == null)
-        {
-            _activeArrow = (Bullet)FireManager.ShootBullet(this, 0, Attribute.Bullet);
-            _activeArrow.Pickup();
-            _activeArrow.MoveController.Enable = false;
-            _activeArrow.CollisionArea.Monitoring = false;
-            _activeArrow.Collision.Disabled = true;
-            _activeArrow.Position = Vector2.Zero;
-            ArrowPoint.AddChild(_activeArrow);
-        }
+        base.OnInit();
+        _activeArrow = (Arrow)FireManager.ShootBullet(this, 0, Attribute.Bullet);
+        _activeArrow.Pickup();
+        _activeArrow.MoveController.Enable = false;
+        _activeArrow.CollisionArea.Monitoring = false;
+        _activeArrow.Collision.Disabled = true;
+        _activeArrow.Position = Vector2.Zero;
+        ArrowPoint.AddChild(_activeArrow);
+    }
+
+    protected override void Process(float delta)
+    {
+        base.Process(delta);
+        _activeArrow.ShadowOffset = ShadowOffset + new Vector2(0, Altitude);
     }
 
     protected override void OnBeginCharge()
@@ -35,18 +39,16 @@ public partial class Bow : Weapon
         AnimationPlayer.Play(AnimatorNames.Pull);
     }
 
-    protected override void OnChargeProcess(float delta, float charge)
+    protected override void OnChargeFinish()
     {
-        if (Master.IsPlayer() && IsChargeFinish())
-        {
-            //蓄力完成抖动屏幕
-            GameCamera.Main.Shake(new Vector2(Utils.Random.RandomRangeFloat(-1, 1), Utils.Random.RandomRangeFloat(-1, 1)));
-        }
+        //蓄力完成
+        SetShake(0.7f);
     }
 
     protected override void OnEndCharge()
     {
         //结束蓄力
+        SetShake(0);
         AnimationPlayer.Play(AnimatorNames.Reset);
     }
 
@@ -62,22 +64,6 @@ public partial class Bow : Weapon
     protected override void OnShoot(float fireRotation)
     {
         FireManager.ShootBullet(this, fireRotation, Attribute.Bullet);
-    }
-
-    protected override void OnPickUp(Role master)
-    {
-        base.OnPickUp(master);
-        InitActiveArrow();
-    }
-
-    protected override void OnRemove(Role master)
-    {
-        base.OnRemove(master);
-        if (_activeArrow != null)
-        {
-            _activeArrow.DoReclaim();
-            _activeArrow = null;
-        }
     }
 
     protected override void OnDestroy()

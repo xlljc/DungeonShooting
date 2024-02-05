@@ -138,7 +138,7 @@ public partial class Laser : Area2D, IBullet
         _tween.TweenCallback(Callable.From(() =>
         {
             _tween = null;
-            DoReclaim();
+            LogicalFinish();
         }));
         _tween.Play();
         
@@ -245,7 +245,7 @@ public partial class Laser : Area2D, IBullet
         ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
     }
     
-    public void DoReclaim()
+    public void LogicalFinish()
     {
         ObjectPool.Reclaim(this);
     }

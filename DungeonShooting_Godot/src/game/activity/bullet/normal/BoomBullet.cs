@@ -10,19 +10,19 @@ public partial class BoomBullet : Bullet
     public override void OnLimeOver()
     {
         PlayBoom();
-        DoReclaim();
+        LogicalFinish();
     }
 
     public override void OnMaxDistance()
     {
         PlayBoom();
-        DoReclaim();
+        LogicalFinish();
     }
 
     public override void OnCollisionTarget(IHurt o)
     {
         PlayBoom();
-        DoReclaim();
+        LogicalFinish();
     }
 
     public override void OnMoveCollision(KinematicCollision2D lastSlideCollision)
@@ -31,7 +31,7 @@ public partial class BoomBullet : Bullet
         if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
         {
             PlayBoom();
-            DoReclaim();
+            LogicalFinish();
         }
         else
         {
