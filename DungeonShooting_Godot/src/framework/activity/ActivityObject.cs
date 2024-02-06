@@ -161,12 +161,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     private float _verticalSpeed;
 
     /// <summary>
-    /// 投抛状态下物体碰撞器大小, 如果 (x, y) 都小于 0, 则默认使用 AnimatedSprite 的默认动画第一帧的大小
-    /// </summary>
-    [Export]
-    public Vector2 ThrowCollisionSize { get; set; } = new Vector2(-1, -1);
-
-    /// <summary>
     /// 是否启用垂直方向上的运动模拟, 默认开启, 如果禁用, 那么下落和投抛效果, 同样 Throw() 函数也将失效
     /// </summary>
     public bool EnableVerticalMotion { get; set; } = true;
@@ -303,9 +297,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     //下坠是否已经结束
     private bool _isFallOver = true;
 
-    //下坠状态碰撞器形状
-    private RectangleShape2D _throwRectangleShape;
-
     //投抛移动速率
     private ExternalForce _throwForce;
     
@@ -322,7 +313,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     //击退外力
     private ExternalForce _repelForce;
 
+    //绑定销毁物体集合
     private HashSet<IDestroy> _destroySet;
+
+    //挂载的物体集合
+    private HashSet<IMountItem> _mountObjects;
 
     // --------------------------------------------------------------------------------
     
@@ -714,17 +709,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <param name="rotateSpeed">旋转速度</param>
     public void Throw(float altitude, float verticalSpeed, Vector2 velocity, float rotateSpeed)
     {
-        var parent = GetParent();
-        if (parent == null)
-        {
-            GameApplication.Instance.World.YSortLayer.AddChild(this);
-        }
-        else if (parent != GameApplication.Instance.World.YSortLayer)
-        {
-            parent.RemoveChild(this);
-            GameApplication.Instance.World.YSortLayer.AddChild(this);
-        }
-        
         Altitude = altitude;
         //Position = Position + new Vector2(0, altitude);
         VerticalSpeed = verticalSpeed;
@@ -1396,6 +1380,16 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         {
             return;
         }
+        
+        if (_mountObjects != null)
+        {
+            foreach (var item in _mountObjects)
+            {
+                item.OnUnmount(this);
+            }
+
+            _mountObjects = null;
+        }
 
         IsDestroyed = true;
         if (AffiliationArea != null)
@@ -1418,7 +1412,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
 
         _components.Clear();
-
+        
         if (_destroySet != null)
         {
             foreach (var destroy in _destroySet)
@@ -1459,10 +1453,9 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         {
             this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         }
-        else if (parent == GameApplication.Instance.World.NormalLayer)
+        else if (parent != GameApplication.Instance.World.YSortLayer)
         {
-            parent.RemoveChild(this);
-            this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+            Reparent(GameApplication.Instance.World.YSortLayer);
         }
 
         CalcThrowAnimatedPosition();
@@ -1495,12 +1488,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
             _fallData.OriginCollisionMask = CollisionMask;
             _fallData.OriginCollisionLayer = CollisionLayer;
 
-            if (_throwRectangleShape == null)
-            {
-                _throwRectangleShape = new RectangleShape2D();
-            }
-            
-            Collision.Shape = _throwRectangleShape;
             Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
@@ -1565,15 +1552,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         _firstFall = true;
         _hasResilienceVerticalSpeed = false;
         _resilienceVerticalSpeed = 0;
-                
-        if (ThrowCollisionSize.X < 0 && ThrowCollisionSize.Y < 0)
-        {
-            _throwRectangleShape.Size = GetDefaultTexture().GetSize();
-        }
-        else
-        {
-            _throwRectangleShape.Size = ThrowCollisionSize;
-        }
 
         Throw();
     }
@@ -1892,5 +1870,37 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
         
         _destroySet.Remove(destroy);
+    }
+
+    /// <summary>
+    /// 绑定挂载对象, 绑定的物体会在当前物体销毁时触发扔出
+    /// </summary>
+    public void BindMountObject(IMountItem target)
+    {
+        if (_mountObjects == null)
+        {
+            _mountObjects = new HashSet<IMountItem>();
+        }
+
+        if (_mountObjects.Add(target))
+        {
+            target.OnMount(this);
+        }
+    }
+    
+    /// <summary>
+    /// 移除绑定挂载对象
+    /// </summary>
+    public void RemoveMountObject(IMountItem target)
+    {
+        if (_mountObjects == null)
+        {
+            return;
+        }
+
+        if (_mountObjects.Remove(target))
+        {
+            target.OnUnmount(this);
+        }
     }
 }

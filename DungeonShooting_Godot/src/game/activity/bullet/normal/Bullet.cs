@@ -371,4 +371,15 @@ public partial class Bullet : ActivityObject, IBullet
             OnLeavePoolEvent();
         }
     }
+
+    /// <summary>
+    /// 设置是否启用移动逻辑
+    /// </summary>
+    public void SetEnableMovement(bool v)
+    {
+        MoveController.Enable = v;
+        CollisionArea.Monitoring = v;
+        CollisionArea.Monitorable = v;
+        Collision.Disabled = !v;
+    }
 }

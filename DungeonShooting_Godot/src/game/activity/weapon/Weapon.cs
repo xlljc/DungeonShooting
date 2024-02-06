@@ -337,15 +337,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         CurrAmmo = Attribute.AmmoCapacity;
         //剩余弹药量
         ResidueAmmo = Mathf.Min(Attribute.StandbyAmmoCapacity + CurrAmmo, Attribute.MaxAmmoCapacity) - CurrAmmo;
-
-        if (Collision.Shape is RectangleShape2D rectangleShape)
-        {
-            ThrowCollisionSize = rectangleShape.Size;
-        }
-        else
-        {
-            ThrowCollisionSize = new Vector2(-1, -1);
-        }
     }
 
     /// <summary>

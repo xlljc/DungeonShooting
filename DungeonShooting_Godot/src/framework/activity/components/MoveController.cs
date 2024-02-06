@@ -386,7 +386,7 @@ public class MoveController : Component
                 //调用反弹函数
                 Master.OnBounce(rotation);
 
-                if (Enable)
+                if (Enable && !Master.IsDestroyed)
                 {
                     if (Master.ActivityMaterial.RotationType == 1) //跟着反弹角度
                     {

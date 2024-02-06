@@ -2,7 +2,7 @@
 using Godot;
 
 [Tool]
-public partial class Arrow : Bullet
+public partial class Arrow : Bullet, IMountItem
 {
     [Export, ExportFillNode]
     public AnimatedSprite2D HalfSprite { get; set; }
@@ -27,18 +27,27 @@ public partial class Arrow : Bullet
 
     public override void LogicalFinish()
     {
-        MoveController.Enable = false;
-        CollisionArea.Monitoring = false;
-        CollisionArea.Monitorable = false;
-        Collision.Disabled = true;
+        SetEnableMovement(false);
     }
 
     private void OnBindTarget(ActivityObject activityObject)
     {
         Altitude = -activityObject.ToLocal(GlobalPosition).Y;
-        Reparent(activityObject);
-        activityObject.BindDestroyObject(this);
+        activityObject.BindMountObject(this);
         AnimatedSprite.Play(AnimatorNames.HalfEnd);
         HalfSprite.Visible = true;
+    }
+
+    public void OnMount(ActivityObject target)
+    {
+        Reparent(target);
+    }
+
+    public void OnUnmount(ActivityObject target)
+    {
+        SetEnableMovement(true);
+        MoveController.ClearForce();
+        MoveController.BasisVelocity = Vector2.Zero;
+        Throw(10, 60, new Vector2(20, 0), 0);
     }
 }
