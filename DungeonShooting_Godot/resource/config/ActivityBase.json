@@ -358,7 +358,7 @@
     "Intro": "",
     "Details": "",
     "IsStatic": false,
-    "__Material": "0003",
+    "__Material": "",
     "Prefab": "res://prefab/bullet/normal/Bullet0009.tscn",
     "Icon": "",
     "ShowInMapEditor": false

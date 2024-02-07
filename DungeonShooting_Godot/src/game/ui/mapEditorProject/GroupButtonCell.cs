@@ -12,7 +12,7 @@ public class GroupButtonCell : UiCell<MapEditorProject.GroupButton, DungeonRoomG
     public override void OnSetData(DungeonRoomGroup info)
     {
         CellNode.Instance.Text = info.GroupName;
-        CellNode.Instance.TooltipText = "路径: " + MapProjectManager.CustomMapPath + "/" + info.GroupName;
+        CellNode.Instance.TooltipText = "路径: " + MapProjectManager.CustomMapPath + info.GroupName;
     }
 
     public override void OnRefreshIndex()

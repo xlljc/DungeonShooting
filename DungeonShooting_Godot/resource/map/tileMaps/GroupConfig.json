@@ -28,10 +28,6 @@
       {
         "ErrorType": 0,
         "Path": "resource/map/tileMaps/Test1/inlet/Start"
-      },
-      {
-        "ErrorType": 1,
-        "Path": "resource/map/tileMaps/Test1/inlet/\u5927\u5385"
       }
     ],
     "OutletList": [
@@ -58,18 +54,6 @@
         "Path": "resource/map/tileMaps/Test1/shop/Shop1"
       }
     ],
-    "EventList": [],
-    "Remark": ""
-  },
-  "\u521D\u59CB\u623F\u95F4": {
-    "GroupName": "\u521D\u59CB\u623F\u95F4",
-    "TileSet": "TileSet1",
-    "BattleList": [],
-    "InletList": [],
-    "OutletList": [],
-    "BossList": [],
-    "RewardList": [],
-    "ShopList": [],
     "EventList": [],
     "Remark": ""
   }

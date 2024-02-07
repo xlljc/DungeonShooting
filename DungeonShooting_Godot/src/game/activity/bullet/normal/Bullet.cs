@@ -309,7 +309,7 @@ public partial class Bullet : ActivityObject, IBullet
         }
     }
 
-    private void OnBodyEntered(Node2D body)
+    protected virtual void OnBodyEntered(Node2D body)
     {
         if (IsDestroyed)
         {
@@ -321,8 +321,8 @@ public partial class Bullet : ActivityObject, IBullet
             OnCollisionTarget(hurt);
         }
     }
-
-    private void OnArea2dEntered(Area2D other)
+    
+    protected virtual void OnArea2dEntered(Area2D other)
     {
         if (IsDestroyed)
         {
