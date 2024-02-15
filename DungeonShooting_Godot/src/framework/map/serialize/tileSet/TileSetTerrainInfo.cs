@@ -26,7 +26,7 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
     [JsonInclude] public Dictionary<uint, int[]> F;
 
     /// <summary>
-    /// 侧方墙壁 (4块) type = 2
+    /// 侧方墙壁 (8块) type = 2
     /// </summary>
     [JsonInclude] public Dictionary<uint, int[]> M;
     
@@ -86,7 +86,7 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
         {
             if (sourceIndex == 0 && terrainIndex == 0)
             {
-                Ready = T != null && T.Count == 47 && M != null && M.Count == 4 && F != null && F.Count == 1;
+                Ready = T != null && T.Count == 47 && M != null && M.Count == 8 && F != null && F.Count == 1;
             }
             else
             {
@@ -350,6 +350,11 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
                 case 1: M[1] = cellData; break;
                 case 2: M[2] = cellData; break;
                 case 3: M[3] = cellData; break;
+                
+                case 4: M[4] = cellData; break;
+                case 5: M[5] = cellData; break;
+                case 6: M[6] = cellData; break;
+                case 7: M[7] = cellData; break;
             }
         }
         else if (type == FloorLayerType) //地板
@@ -379,6 +384,11 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
                 case 1: M.Remove(1); break;
                 case 2: M.Remove(2); break;
                 case 3: M.Remove(3); break;
+                
+                case 4: M.Remove(4); break;
+                case 5: M.Remove(5); break;
+                case 6: M.Remove(6); break;
+                case 7: M.Remove(7); break;
             }
         }
         else if (type == FloorLayerType) //地板
@@ -425,6 +435,27 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
                 case 3:
                 {
                     if (M.TryGetValue(3, out var cellData)) return cellData;
+                }
+
+                    break;
+                case 4:
+                {
+                    if (M.TryGetValue(4, out var cellData)) return cellData;
+                }
+                    break;
+                case 5:
+                {
+                    if (M.TryGetValue(5, out var cellData)) return cellData;
+                }
+                    break;
+                case 6:
+                {
+                    if (M.TryGetValue(6, out var cellData)) return cellData;
+                }
+                    break;
+                case 7:
+                {
+                    if (M.TryGetValue(7, out var cellData)) return cellData;
                 }
                     break;
             }

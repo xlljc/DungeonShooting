@@ -248,7 +248,7 @@ public class DungeonTileMap
                     FillRect(MapLayer.AutoTopLayer, config.Wall_Out_RT, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1), Vector2.One);
                     FillRect(MapLayer.AutoTopLayer, config.Wall_In_RT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, -1), Vector2.One);
                     FillRect(MapLayer.AutoMiddleLayer, config.Wall_Top, doorInfo.Cross + new Vector2I(0, -1), new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Center, doorInfo.Cross, new Vector2(GameConfig.CorridorWidth - 1, 1));
+                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_CenterTop, doorInfo.Cross, new Vector2(GameConfig.CorridorWidth - 1, 1));
                     FillRect(MapLayer.AutoTopLayer, config.Wall_Right, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0), new Vector2(1, GameConfig.CorridorWidth));
                     
                     FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross - new Vector2I(0, 2), new Vector2(GameConfig.CorridorWidth + 1, 1));
@@ -258,7 +258,7 @@ public class DungeonTileMap
                          (doorDir2 == DoorDirection.E && doorDir1 == DoorDirection.S))
                 {
                     FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_RB, doorInfo.Cross + new Vector2I(0, -1), Vector2.One);
-                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Right, doorInfo.Cross, Vector2.One);
+                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_RightTop, doorInfo.Cross, Vector2.One);
                     FillRect(MapLayer.AutoTopLayer, config.Wall_In_RB, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, GameConfig.CorridorWidth - 1), Vector2.One);
                     FillRect(MapLayer.AutoTopLayer, config.Wall_Right, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, -1), new Vector2(1, GameConfig.CorridorWidth));
                     FillRect(MapLayer.AutoTopLayer, config.Wall_Bottom, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1), new Vector2(GameConfig.CorridorWidth - 1, 1));
@@ -270,7 +270,7 @@ public class DungeonTileMap
                          (doorDir2 == DoorDirection.S && doorDir1 == DoorDirection.W))
                 {
                     FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_LB, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, -1), Vector2.One);
-                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Left, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0), Vector2.One);
+                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_LeftTop, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0), Vector2.One);
                     FillRect(MapLayer.AutoTopLayer, config.Wall_In_LB, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1), Vector2.One);
                     FillRect(MapLayer.AutoTopLayer, config.Wall_Left, doorInfo.Cross + new Vector2I(0, -1), new Vector2(1, GameConfig.CorridorWidth));
                     FillRect(MapLayer.AutoTopLayer, config.Wall_Bottom, doorInfo.Cross + new Vector2(1, GameConfig.CorridorWidth - 1), new Vector2(GameConfig.CorridorWidth - 1, 1));
@@ -284,7 +284,7 @@ public class DungeonTileMap
                     FillRect(MapLayer.AutoTopLayer, config.Wall_Out_LT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, GameConfig.CorridorWidth - 1), Vector2.One);
                     FillRect(MapLayer.AutoTopLayer, config.Wall_In_LT, doorInfo.Cross + new Vector2I(0, -1), Vector2.One);
                     FillRect(MapLayer.AutoMiddleLayer, config.Wall_Top, doorInfo.Cross + new Vector2(1, -1), new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Center, doorInfo.Cross + new Vector2(1, 0), new Vector2(GameConfig.CorridorWidth - 1, 1));
+                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_CenterTop, doorInfo.Cross + new Vector2(1, 0), new Vector2(GameConfig.CorridorWidth - 1, 1));
                     FillRect(MapLayer.AutoTopLayer, config.Wall_Left, doorInfo.Cross + new Vector2(0, 0), new Vector2(1, GameConfig.CorridorWidth));
                     
                     FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross - new Vector2I(1, 2), new Vector2(GameConfig.CorridorWidth + 1, 1));
@@ -476,7 +476,7 @@ public class DungeonTileMap
         FillRect(MapLayer.AutoTopLayer, config.TopMask, rect.Position - new Vector2(0, 2), new Vector2(rect.Size.X, 1));
         FillRect(MapLayer.AutoTopLayer, config.TopMask, rect.Position + new Vector2(0, rect.Size.Y), new Vector2(rect.Size.X, 1));
         FillRect(MapLayer.AutoMiddleLayer, config.Wall_Top, rect.Position - new Vector2(0, 1), new Vector2(rect.Size.X, 1));
-        FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Center, rect.Position, new Vector2(rect.Size.X, 1));
+        FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_CenterTop, rect.Position, new Vector2(rect.Size.X, 1));
         FillRect(MapLayer.AutoTopLayer, config.Wall_Bottom, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(rect.Size.X, 1));
     }
 
@@ -503,7 +503,7 @@ public class DungeonTileMap
         else
         {
             ClearRect(MapLayer.AutoTopLayer, rect.Position - new Vector2(1, 1), new Vector2(2, 4));
-            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Left, rect.Position - new Vector2(1, 0), Vector2.One);
+            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_LeftTop, rect.Position - new Vector2(1, 0), Vector2.One);
             FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_LB, rect.Position - new Vector2(1, 1), Vector2.One);
             FillRect(MapLayer.AutoTopLayer, config.Wall_Out_LT, rect.Position + new Vector2(-1, 3), Vector2.One);
             
@@ -538,7 +538,7 @@ public class DungeonTileMap
         else
         {
             ClearRect(MapLayer.AutoTopLayer, rect.Position + new Vector2(rect.Size.X - 1,  -1), new Vector2(2, 4));
-            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Right, rect.Position + new Vector2(rect.Size.X, 0), Vector2.One);
+            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_RightTop, rect.Position + new Vector2(rect.Size.X, 0), Vector2.One);
             FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_RB, rect.Position + new Vector2(rect.Size.X, -1), Vector2.One);
             FillRect(MapLayer.AutoTopLayer, config.Wall_Out_RT, rect.Position + new Vector2(rect.Size.X, 3), Vector2.One);
             
@@ -611,9 +611,9 @@ public class DungeonTileMap
             ClearRect(MapLayer.AutoMiddleLayer, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(4, 2));
 
             FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_RB, rect.Position + new Vector2(0, rect.Size.Y - 1), Vector2.One);
-            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Right, rect.Position + new Vector2(0, rect.Size.Y), Vector2.One);
+            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_RightTop, rect.Position + new Vector2(0, rect.Size.Y), Vector2.One);
             FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_LB, rect.Position + new Vector2(rect.Size.X - 1, rect.Size.Y - 1), Vector2.One);
-            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_Left, rect.Position + new Vector2(rect.Size.X - 1, rect.Size.Y), Vector2.One);
+            FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_LeftTop, rect.Position + new Vector2(rect.Size.X - 1, rect.Size.Y), Vector2.One);
             
             FillRect(MapLayer.AutoFloorLayer, config.Floor, rect.Position + new Vector2(1, rect.Size.Y), new Vector2(rect.Size.X - 2, 1));
             //生成门的导航区域

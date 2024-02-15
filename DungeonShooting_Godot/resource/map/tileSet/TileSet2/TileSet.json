@@ -222,7 +222,7 @@
             ]
           },
           "TerrainType": 0,
-          "Ready": true
+          "Ready": false
         },
         {
           "Name": "Test2",

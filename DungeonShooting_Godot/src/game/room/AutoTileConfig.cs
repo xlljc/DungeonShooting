@@ -23,10 +23,15 @@ public class AutoTileConfig
     public TileCellData Wall_In_RT;
     public TileCellData Wall_In_RB;
     
-    public TileCellData Wall_Vertical_Left;
-    public TileCellData Wall_Vertical_Center;
-    public TileCellData Wall_Vertical_Right;
-    public TileCellData Wall_Vertical_Single;
+    public TileCellData Wall_Vertical_LeftTop;
+    public TileCellData Wall_Vertical_CenterTop;
+    public TileCellData Wall_Vertical_RightTop;
+    public TileCellData Wall_Vertical_SingleTop;
+    
+    public TileCellData Wall_Vertical_LeftBottom;
+    public TileCellData Wall_Vertical_CenterBottom;
+    public TileCellData Wall_Vertical_RightBottom;
+    public TileCellData Wall_Vertical_SingleBottom;
     
     //----------------------------- 所有自动图块数据 -----------------------------
     //----------------------------- 命名规则: Auto_ + LT + T + RT + _ + L + C + R + _ + LB + B + RB
@@ -121,19 +126,36 @@ public class AutoTileConfig
             int[] data;
             if (terrainInfo.M.TryGetValue(0, out data))
             {
-                Wall_Vertical_Single = new TileCellData(sourceId, terrainInfo.GetPosition(data), 0, TileSetTerrainInfo.MiddleLayerType, MapLayer.AutoMiddleLayer);
+                Wall_Vertical_SingleTop = new TileCellData(sourceId, terrainInfo.GetPosition(data), 0, TileSetTerrainInfo.MiddleLayerType, MapLayer.AutoMiddleLayer);
             }
             if (terrainInfo.M.TryGetValue(1, out data))
             {
-                Wall_Vertical_Left= new TileCellData(sourceId, terrainInfo.GetPosition(data), 1, TileSetTerrainInfo.MiddleLayerType, MapLayer.AutoMiddleLayer);
+                Wall_Vertical_LeftTop = new TileCellData(sourceId, terrainInfo.GetPosition(data), 1, TileSetTerrainInfo.MiddleLayerType, MapLayer.AutoMiddleLayer);
             }
             if (terrainInfo.M.TryGetValue(2, out data))
             {
-                Wall_Vertical_Center= new TileCellData(sourceId, terrainInfo.GetPosition(data), 2, TileSetTerrainInfo.MiddleLayerType, MapLayer.AutoMiddleLayer);
+                Wall_Vertical_CenterTop = new TileCellData(sourceId, terrainInfo.GetPosition(data), 2, TileSetTerrainInfo.MiddleLayerType, MapLayer.AutoMiddleLayer);
             }
             if (terrainInfo.M.TryGetValue(3, out data))
             {
-                Wall_Vertical_Right= new TileCellData(sourceId, terrainInfo.GetPosition(data), 3, TileSetTerrainInfo.MiddleLayerType, MapLayer.AutoMiddleLayer);
+                Wall_Vertical_RightTop = new TileCellData(sourceId, terrainInfo.GetPosition(data), 3, TileSetTerrainInfo.MiddleLayerType, MapLayer.AutoMiddleLayer);
+            }
+            
+            if (terrainInfo.M.TryGetValue(4, out data))
+            {
+                Wall_Vertical_SingleBottom= new TileCellData(sourceId, terrainInfo.GetPosition(data), 4, TileSetTerrainInfo.MiddleLayerType, MapLayer.AutoMiddleLayer);
+            }
+            if (terrainInfo.M.TryGetValue(5, out data))
+            {
+                Wall_Vertical_LeftBottom = new TileCellData(sourceId, terrainInfo.GetPosition(data), 5, TileSetTerrainInfo.MiddleLayerType, MapLayer.AutoMiddleLayer);
+            }
+            if (terrainInfo.M.TryGetValue(6, out data))
+            {
+                Wall_Vertical_CenterBottom = new TileCellData(sourceId, terrainInfo.GetPosition(data), 6, TileSetTerrainInfo.MiddleLayerType, MapLayer.AutoMiddleLayer);
+            }
+            if (terrainInfo.M.TryGetValue(7, out data))
+            {
+                Wall_Vertical_RightBottom = new TileCellData(sourceId, terrainInfo.GetPosition(data), 7, TileSetTerrainInfo.MiddleLayerType, MapLayer.AutoMiddleLayer);
             }
         }
         
@@ -441,9 +463,13 @@ public class AutoTileConfig
     private void HandlerOtherCellMapping()
     {
         _mapping.Add(Floor.AutoTileCoords, Floor);
-        _mapping.Add(Wall_Vertical_Left.AutoTileCoords, Wall_Vertical_Left);
-        _mapping.Add(Wall_Vertical_Right.AutoTileCoords, Wall_Vertical_Right);
-        _mapping.Add(Wall_Vertical_Center.AutoTileCoords, Wall_Vertical_Center);
-        _mapping.Add(Wall_Vertical_Single.AutoTileCoords, Wall_Vertical_Single);
+        _mapping.Add(Wall_Vertical_LeftTop.AutoTileCoords, Wall_Vertical_LeftTop);
+        _mapping.Add(Wall_Vertical_RightTop.AutoTileCoords, Wall_Vertical_RightTop);
+        _mapping.Add(Wall_Vertical_CenterTop.AutoTileCoords, Wall_Vertical_CenterTop);
+        _mapping.Add(Wall_Vertical_SingleTop.AutoTileCoords, Wall_Vertical_SingleTop);
+        _mapping.Add(Wall_Vertical_LeftBottom.AutoTileCoords, Wall_Vertical_LeftBottom);
+        _mapping.Add(Wall_Vertical_CenterBottom.AutoTileCoords, Wall_Vertical_CenterBottom);
+        _mapping.Add(Wall_Vertical_RightBottom.AutoTileCoords, Wall_Vertical_RightBottom);
+        _mapping.Add(Wall_Vertical_SingleBottom.AutoTileCoords, Wall_Vertical_SingleBottom);
     }
 }

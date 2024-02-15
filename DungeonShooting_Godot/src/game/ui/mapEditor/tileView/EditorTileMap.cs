@@ -1267,19 +1267,19 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                     TileCellData tileCellData;
                     if (left && right)
                     {
-                        tileCellData = _autoTileConfig.Wall_Vertical_Single;
+                        tileCellData = _autoTileConfig.Wall_Vertical_SingleTop;
                     }
                     else if (left)
                     {
-                        tileCellData = _autoTileConfig.Wall_Vertical_Left;
+                        tileCellData = _autoTileConfig.Wall_Vertical_LeftTop;
                     }
                     else if (right)
                     {
-                        tileCellData = _autoTileConfig.Wall_Vertical_Right;
+                        tileCellData = _autoTileConfig.Wall_Vertical_RightTop;
                     }
                     else
                     {
-                        tileCellData = _autoTileConfig.Wall_Vertical_Center;
+                        tileCellData = _autoTileConfig.Wall_Vertical_CenterTop;
                     }
                     SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 1), tileCellData.SourceId, tileCellData.AutoTileCoords);
                 }
