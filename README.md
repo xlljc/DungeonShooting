@@ -8,7 +8,7 @@
 ### 游戏定义
 
 **游戏名称:**《枪火地牢》  
-**英文名称:**《Gunfire Dungeon》
+**英文名称:**《Gunfire Dungeon》  
 **美术风格:** 2D像素(完美像素)  
 **游戏标签:** Roguelite, 俯视角, 地牢探索, 双摇杆射击  
 **参考游戏:** 《挺进地牢》, 《元气骑士》, 《废土之王》  
@@ -17,7 +17,22 @@
 但本作与市面上常规地牢射击游戏不同的是, 玩家与敌人共用武器资源, 玩家击败敌人便可拾起敌人的武器, 并且更加注重环境互动要素  
 **游戏背景:** 构思中
 
-![gif](DungeonShooting_Document/文档资源/preview_gif.gif)
+**游戏内置了一个功能强大的地图编辑器, 方便玩家自己制作地图和分享地图**
+
+---
+### 预览图
+##### 游戏中  
+![gif](DungeonShooting_Document/文档资源/preview_gif.gif)  
+![png](DungeonShooting_Document/文档资源/preview1.png)  
+##### 地图编辑器  
+房间管理器  
+![png](DungeonShooting_Document/文档资源/preview2.png)  
+房间地形编辑  
+![png](DungeonShooting_Document/文档资源/preview3_gif.gif)  
+房间装饰编辑  
+![png](DungeonShooting_Document/文档资源/preview2_gif.gif)  
+房间预设编辑
+![png](DungeonShooting_Document/文档资源/preview3.png)
 
 ---
 ### 启动项目
