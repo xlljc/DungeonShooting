@@ -1211,6 +1211,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         var rect = _autoCellLayerGrid.GetRect();
         CurrRoomPosition = rect.Position - new Vector2I(2, 3);
         SetMapSize(rect.Size + new Vector2I(4, 5), refreshDoorTrans);
+        // CurrRoomPosition = rect.Position - new Vector2I(2, 4);
+        // SetMapSize(rect.Size + new Vector2I(4, 6), refreshDoorTrans);
     }
     
     //检测是否有不合规的图块, 返回true表示图块正常
@@ -1498,8 +1500,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
         else //聚焦地图中心点
         {
-            var roomPos = new Vector2(CurrRoomPosition.X, CurrRoomPosition.Y);
-            var roomSize = new Vector2(CurrRoomSize.X, CurrRoomSize.Y);
+            var roomPos = new Vector2(CurrRoomPosition.X, CurrRoomPosition.Y - 1);
+            var roomSize = new Vector2(CurrRoomSize.X, CurrRoomSize.Y + 1);
             SetMapPosition(pos - (roomPos + roomSize / 2) * TileSet.TileSize * Scale);
         }
     }
@@ -1754,13 +1756,14 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         }
         else //聚焦地图中心点
         {
-            var tempPos = new Vector2(CurrRoomSize.X, CurrRoomSize.Y);
+            var tempPos = new Vector2(CurrRoomPosition.X, CurrRoomPosition.Y - 1);
+            var tempSize = new Vector2(CurrRoomSize.X, CurrRoomSize.Y + 1);
             //var tempPos = new Vector2(CurrRoomSize.X + 2, CurrRoomSize.Y + 2);
-            var mapSize = tempPos * TileSet.TileSize;
+            var mapSize = tempSize * TileSet.TileSize;
             var axis = Mathf.Max(mapSize.X, mapSize.Y);
             var targetScale = GameConfig.PreviewImageSize / axis;
             Scale = new Vector2(targetScale, targetScale);
-            Position = pos - (CurrRoomPosition + tempPos / 2f) * TileSet.TileSize * targetScale;
+            Position = pos - (tempPos + tempSize / 2f) * TileSet.TileSize * targetScale;
         }
         
         //隐藏工具栏
