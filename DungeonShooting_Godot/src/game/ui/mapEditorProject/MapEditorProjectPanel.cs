@@ -276,7 +276,10 @@ public partial class MapEditorProjectPanel : MapEditorProject
     //删除地牢组
     private void DeleteGroup(bool v)
     {
-        MapProjectManager.DeleteGroup(GroupGrid.SelectData.GroupName);
+        if (v)
+        {
+            MapProjectManager.DeleteGroup(GroupGrid.SelectData.GroupName);
+        }
     }
 
     //创建房间
