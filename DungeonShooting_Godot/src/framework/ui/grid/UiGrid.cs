@@ -75,6 +75,9 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
 
     public int Count => _cellList.Count;
 
+    /// <summary>
+    /// Godot 原生网格容器
+    /// </summary>
     public GridContainer GridContainer { get; private set; }
 
     //模板对象
