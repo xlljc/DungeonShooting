@@ -259,6 +259,11 @@ public class TileSetSplit : IDestroy
         SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(1, 0), false);
         SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(2, 0), false);
         SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(3, 0), false);
+
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(0, 1), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(1, 1), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(2, 1), false);
+        SetAtlasSourceCollision(terrainInfo, tileSetAtlasSource, 2, new Vector2I(3, 1), false);
     }
 
     /// <summary>

@@ -1221,7 +1221,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         {
             if (flag)
             {
-                if (!_autoCellLayerGrid.Contains(x, y + 1) && _autoCellLayerGrid.Contains(x, y + 2))
+                if (!_autoCellLayerGrid.Contains(x, y + 1) &&
+                    (_autoCellLayerGrid.Contains(x, y + 2) || _autoCellLayerGrid.Contains(x, y + 3)))
                 {
                     _checkTerrainFlag = false;
                     _checkTerrainErrorPosition = new Vector2I(x, y + 1);
