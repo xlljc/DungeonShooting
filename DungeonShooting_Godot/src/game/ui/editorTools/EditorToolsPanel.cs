@@ -210,7 +210,7 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
     {
         if (Plugin.Plugin.Instance != null)
         {
-            var root = Plugin.Plugin.Instance.GetEditorInterface().GetEditedSceneRoot();
+            var root = EditorInterface.Singleton.GetEditedSceneRoot();
             if (root != null && Plugin.Plugin.Instance.CheckIsUi(root))
             {
                 if (UiGenerator.GenerateUiCodeFromEditor(root))

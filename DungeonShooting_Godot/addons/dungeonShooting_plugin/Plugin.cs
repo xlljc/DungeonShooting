@@ -60,7 +60,7 @@ namespace Plugin
         {
             Instance = this;
             
-            if (_uiMonitor != null && Instance == this)
+            if (_uiMonitor != null)
             {
                 _uiMonitor.Process((float) delta);
             }
@@ -68,7 +68,7 @@ namespace Plugin
             {
                 _uiMonitor = new NodeMonitor();
                 _uiMonitor.SceneNodeChangeEvent += GenerateUiCode;
-                OnSceneChanged(GetEditorInterface().GetEditedSceneRoot());
+                OnSceneChanged(EditorInterface.Singleton.GetEditedSceneRoot());
             }
         }
 
@@ -97,7 +97,7 @@ namespace Plugin
             }
 
             _editorTools = GD.Load<PackedScene>(ResourcePath.prefab_ui_EditorTools_tscn).Instantiate<EditorToolsPanel>();
-            var editorMainScreen = GetEditorInterface().GetEditorMainScreen();
+            var editorMainScreen = EditorInterface.Singleton.GetEditorMainScreen();
             editorMainScreen.AddChild(_editorTools);
 
             try
@@ -128,7 +128,7 @@ namespace Plugin
             _uiMonitor = new NodeMonitor();
             _uiMonitor.SceneNodeChangeEvent += GenerateUiCode;
 
-            OnSceneChanged(GetEditorInterface().GetEditedSceneRoot());
+            OnSceneChanged(EditorInterface.Singleton.GetEditedSceneRoot());
         }
         
         public void OnBeforeSerialize()

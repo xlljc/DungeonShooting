@@ -71,7 +71,6 @@ public class DungeonRoomGroup : IClone<DungeonRoomGroup>
     
     private bool _init = false;
     private Dictionary<DungeonRoomType, WeightRandom> _weightRandomMap;
-    private List<DungeonRoomSplit> _readyBattleList;
     
     /// <summary>
     /// 获取所有房间数据

@@ -80,7 +80,7 @@ public static class UiGenerator
             //打开ui
             if (open)
             {
-                Plugin.Plugin.Instance.GetEditorInterface().OpenSceneFromPath(prefabResPath);
+                EditorInterface.Singleton.OpenSceneFromPath(prefabResPath);
             }
 
         }
