@@ -1849,7 +1849,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <summary>
     /// 绑定可销毁对象, 绑定的物体会在当前物体销毁时触发销毁
     /// </summary>
-    public void BindDestroyObject(IDestroy destroy)
+    public void AddDestroyObject(IDestroy destroy)
     {
         if (_destroySet == null)
         {
@@ -1875,7 +1875,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <summary>
     /// 绑定挂载对象, 绑定的物体会在当前物体销毁时触发扔出
     /// </summary>
-    public void BindMountObject(IMountItem target)
+    public void AddMountObject(IMountItem target)
     {
         if (_mountObjects == null)
         {

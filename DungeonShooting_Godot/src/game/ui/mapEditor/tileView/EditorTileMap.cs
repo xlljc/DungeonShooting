@@ -1265,24 +1265,34 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
                 {
                     var left = _autoCellLayerGrid.Contains(x - 1, y - 1);
                     var right = _autoCellLayerGrid.Contains(x + 1, y - 1);
-                    TileCellData tileCellData;
                     if (left && right)
                     {
-                        tileCellData = _autoTileConfig.Wall_Vertical_SingleTop;
+                        var tileCellData1 = _autoTileConfig.Wall_Vertical_SingleTop;
+                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 2), tileCellData1.SourceId, tileCellData1.AutoTileCoords);
+                        var tileCellData2 = _autoTileConfig.Wall_Vertical_SingleBottom;
+                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 1), tileCellData2.SourceId, tileCellData2.AutoTileCoords);
                     }
                     else if (left)
                     {
-                        tileCellData = _autoTileConfig.Wall_Vertical_LeftTop;
+                        var tileCellData1 = _autoTileConfig.Wall_Vertical_LeftTop;
+                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 2), tileCellData1.SourceId, tileCellData1.AutoTileCoords);
+                        var tileCellData2 = _autoTileConfig.Wall_Vertical_LeftBottom;
+                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 1), tileCellData2.SourceId, tileCellData2.AutoTileCoords);
                     }
                     else if (right)
                     {
-                        tileCellData = _autoTileConfig.Wall_Vertical_RightTop;
+                        var tileCellData1 = _autoTileConfig.Wall_Vertical_RightTop;
+                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 2), tileCellData1.SourceId, tileCellData1.AutoTileCoords);
+                        var tileCellData2 = _autoTileConfig.Wall_Vertical_RightBottom;
+                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 1), tileCellData2.SourceId, tileCellData2.AutoTileCoords);
                     }
                     else
                     {
-                        tileCellData = _autoTileConfig.Wall_Vertical_CenterTop;
+                        var tileCellData1 = _autoTileConfig.Wall_Vertical_CenterTop;
+                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 2), tileCellData1.SourceId, tileCellData1.AutoTileCoords);
+                        var tileCellData2 = _autoTileConfig.Wall_Vertical_CenterBottom;
+                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 1), tileCellData2.SourceId, tileCellData2.AutoTileCoords);
                     }
-                    SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 1), tileCellData.SourceId, tileCellData.AutoTileCoords);
                 }
             }
 
@@ -1293,7 +1303,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         var temp1 = new List<Vector2I>();
         for (var x = xStart - 3; x <= xEnd + 3; x++)
         {
-            var p1 = new Vector2I(x, yStart - 4);
+            var p1 = new Vector2I(x, yStart - 5);
             var p2 = new Vector2I(x, yEnd + 3);
             temp1.Add(p1);
             temp1.Add(p2);
@@ -1302,7 +1312,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
             //下横
             SetCell(MapLayer.AutoFloorLayer, p2, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
         }
-        for (var y = yStart - 4; y <= yEnd + 3; y++)
+        for (var y = yStart - 5; y <= yEnd + 3; y++)
         {
             var p1 = new Vector2I(xStart - 3, y);
             var p2 = new Vector2I(xEnd + 3, y);
@@ -1318,9 +1328,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         var temp2 = new List<Vector2I>();
         for (var x = xStart - 2; x <= xEnd + 2; x++)
         {
-            for (var y = yStart - 3; y <= yEnd + 2; y++)
+            for (var y = yStart - 4; y <= yEnd + 2; y++)
             {
-                if (!_autoCellLayerGrid.Contains(x, y) && !_autoCellLayerGrid.Contains(x, y + 1))
+                if (!_autoCellLayerGrid.Contains(x, y) && !_autoCellLayerGrid.Contains(x, y + 1) && !_autoCellLayerGrid.Contains(x, y + 2))
                 {
                     list.Add(new Vector2I(x, y));
                     if (!IsMaskCollisionGround(_autoCellLayerGrid, x, y))
@@ -1360,7 +1370,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
     {
         for (var i = -2; i <= 2; i++)
         {
-            for (var j = -2; j <= 3; j++)
+            for (var j = -2; j <= 4; j++)
             {
                 if (autoCellLayerGrid.Contains(x + i, y + j))
                 {
@@ -1379,9 +1389,9 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         ClearLayer(MapLayer.AutoMiddleLayer);
         
         var x = CurrRoomPosition.X;
-        var y = CurrRoomPosition.Y;
+        var y = CurrRoomPosition.Y - 1;
         var w = CurrRoomSize.X;
-        var h = CurrRoomSize.Y;
+        var h = CurrRoomSize.Y + 1;
 
         for (var i = 0; i < w; i++)
         {

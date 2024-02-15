@@ -45,7 +45,7 @@ public partial class Arrow : Bullet, IMountItem
     private void OnBindTarget(ActivityObject activityObject)
     {
         Altitude = -activityObject.ToLocal(GlobalPosition).Y;
-        activityObject.BindMountObject(this);
+        activityObject.AddMountObject(this);
     }
 
     public void OnMount(ActivityObject target)

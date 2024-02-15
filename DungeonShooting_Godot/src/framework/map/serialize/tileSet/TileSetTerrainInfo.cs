@@ -216,7 +216,7 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
         }
         else if (type == MiddleLayerType)
         {
-            if (bit < 4)
+            if (bit < 8)
             {
                 return (int)bit;
             }
@@ -320,7 +320,7 @@ public class TileSetTerrainInfo : IClone<TileSetTerrainInfo>
         }
         else if (type == MiddleLayerType)
         {
-            if (index >= 0 && index < 4)
+            if (index >= 0 && index < 8)
             {
                 return (uint)index;
             }
