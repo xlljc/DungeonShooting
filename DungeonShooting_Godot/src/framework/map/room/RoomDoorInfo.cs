@@ -55,11 +55,6 @@ public class RoomDoorInfo : IDestroy
     public DoorNavigationInfo Navigation;
 
     /// <summary>
-    /// 连接过道使用的导航网格 (暂未用到)
-    /// </summary>
-    public NavigationPolygonData AisleNavigation;
-
-    /// <summary>
     /// 连接过道使用预览纹理, 用于小地图
     /// </summary>
     public ImageTexture AislePreviewTexture;

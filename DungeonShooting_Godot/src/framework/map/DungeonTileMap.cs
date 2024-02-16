@@ -472,11 +472,13 @@ public class DungeonTileMap
     //横向过道
     private void FullHorizontalAisle(AutoTileConfig config, Rect2 rect)
     {
-        FillRect(MapLayer.AutoAisleFloorLayer, config.Floor, rect.Position + new Vector2(0, 1), rect.Size - new Vector2(0, 2));
-        FillRect(MapLayer.AutoTopLayer, config.TopMask, rect.Position - new Vector2(0, 2), new Vector2(rect.Size.X, 1));
+        FillRect(MapLayer.AutoAisleFloorLayer, config.Floor, rect.Position + new Vector2(0, 2), rect.Size - new Vector2(0, 3));
+
+        FillRect(MapLayer.AutoTopLayer, config.TopMask, rect.Position + new Vector2(0, -2), new Vector2(rect.Size.X, 1));
         FillRect(MapLayer.AutoTopLayer, config.TopMask, rect.Position + new Vector2(0, rect.Size.Y), new Vector2(rect.Size.X, 1));
-        FillRect(MapLayer.AutoMiddleLayer, config.Wall_Top, rect.Position - new Vector2(0, 1), new Vector2(rect.Size.X, 1));
+        FillRect(MapLayer.AutoMiddleLayer, config.Wall_Top, rect.Position + new Vector2(0, -1), new Vector2(rect.Size.X, 1));
         FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_CenterTop, rect.Position, new Vector2(rect.Size.X, 1));
+        FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_CenterBottom, rect.Position + new Vector2(0, 1), new Vector2(rect.Size.X, 1));
         FillRect(MapLayer.AutoTopLayer, config.Wall_Bottom, rect.Position + new Vector2(0, rect.Size.Y - 1), new Vector2(rect.Size.X, 1));
     }
 

@@ -196,7 +196,7 @@ public partial class DungeonManager : Node2D
         UiManager.Open_Loading();
         yield return 0;
         //生成地牢房间
-        var random = new SeedRandom();
+        var random = new SeedRandom(1);
         _dungeonGenerator = new DungeonGenerator(CurrConfig, random);
         var rule = new DefaultDungeonRule(_dungeonGenerator);
         if (!_dungeonGenerator.Generate(rule)) //生成房间失败
@@ -236,13 +236,10 @@ public partial class DungeonManager : Node2D
         //yield return _dungeonTileMap.AddOutlineTile(AutoTileConfig.WALL_BLOCK);
         
         //生成寻路网格， 这一步操作只生成过道的导航
-        _dungeonTileMap.GenerateNavigationPolygon(MapLayer.AutoAisleFloorLayer);
-        yield return 0;
-        //将导航网格绑定到 DoorInfo 上
-        BindAisleNavigation(StartRoomInfo, _dungeonTileMap.GetPolygonData());
+        //_dungeonTileMap.GenerateNavigationPolygon(MapLayer.AutoAisleFloorLayer);
         yield return 0;
         //挂载过道导航区域
-        _dungeonTileMap.MountNavigationPolygon(World.NavigationRoot);
+        //_dungeonTileMap.MountNavigationPolygon(World.NavigationRoot);
         yield return 0;
         //初始化所有房间
         yield return _dungeonGenerator.EachRoomCoroutine(InitRoom);
@@ -317,52 +314,6 @@ public partial class DungeonManager : Node2D
         {
             finish();
         }
-    }
-
-    //将导航网格绑定到 DoorInfo 上
-    private void BindAisleNavigation(RoomInfo startRoom, NavigationPolygonData[] polygonDatas)
-    {
-        var list = polygonDatas.ToList();
-        startRoom.EachRoom(roomInfo =>
-        {
-            if (roomInfo.Doors != null)
-            {
-                foreach (var roomInfoDoor in roomInfo.Doors)
-                {
-                    if (roomInfoDoor.IsForward)
-                    {
-                        var doorPosition = roomInfoDoor.GetWorldOriginPosition();
-                        for (var i = 0; i < list.Count; i++)
-                        {
-                            var data = list[i];
-                            var points = data.GetPoints();
-                            if (InLength(points, doorPosition, 32) && InLength(points, roomInfoDoor.GetWorldEndPosition(), 32))
-                            {
-                                roomInfoDoor.AisleNavigation = data;
-                                roomInfoDoor.ConnectDoor.AisleNavigation = data;
-
-                                list.RemoveAt(i);
-                            }
-                        }
-
-                        //Debug.Log(roomInfo.Id + ", 是否找到连接过道: " + flag);
-                    }
-                }
-            }
-        });
-    }
-
-    private bool InLength(Vector2[] points, Vector2 targetPoint, float len)
-    {
-        foreach (var point in points)
-        {
-            if (point.DistanceSquaredTo(targetPoint) <= len * len)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     // 初始化房间
