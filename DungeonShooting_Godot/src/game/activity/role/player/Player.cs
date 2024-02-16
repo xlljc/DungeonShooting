@@ -61,7 +61,7 @@ public partial class Player : Role
         ActivePropsPack.SetCapacity(1);
         
         // debug用
-        // DebugSet();
+        DebugSet();
         
         //注册状态机
         StateController.Register(new PlayerIdleState());
@@ -82,7 +82,7 @@ public partial class Player : Role
         RoleState.MoveSpeed = 500;
         CollisionLayer = PhysicsLayer.None;
         CollisionMask = PhysicsLayer.None;
-        GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
+        //GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
         // this.CallDelay(0.5f, () =>
         // {
         //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0009));

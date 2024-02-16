@@ -169,126 +169,14 @@ public class DungeonTileMap
             {
                 continue;
             }
-            
-            //普通的直线连接
-            var doorDir1 = doorInfo.Direction;
-            var doorDir2 = doorInfo.ConnectDoor.Direction;
-            if (!doorInfo.HasCross)
-            {
-                var rect = doorInfo.GetAisleRect();
-                switch (doorDir1)
-                {
-                    case DoorDirection.E:
-                        FullHorizontalAisle(config, rect);
-                        FullHorizontalAisleLeft(config, rect, doorInfo);
-                        FullHorizontalAisleRight(config, rect, doorInfo.ConnectDoor);
-                        break;
-                    case DoorDirection.W:
-                        FullHorizontalAisle(config, rect);
-                        FullHorizontalAisleLeft(config, rect, doorInfo.ConnectDoor);
-                        FullHorizontalAisleRight(config, rect, doorInfo);
-                        break;
-                    
-                    case DoorDirection.S:
-                        FullVerticalAisle(config, rect);
-                        FullVerticalAisleUp(config, rect, doorInfo);
-                        FullVerticalAisleDown(config, rect, doorInfo.ConnectDoor);
-                        break;
-                    case DoorDirection.N:
-                        FullVerticalAisle(config, rect);
-                        FullVerticalAisleUp(config, rect, doorInfo.ConnectDoor);
-                        FullVerticalAisleDown(config, rect, doorInfo);
-                        break;
-                }
-            }
-            else //带交叉点
-            {
-                //方向, 0横向, 1纵向
-                var dir1 = (doorDir1 == DoorDirection.S || doorDir1 == DoorDirection.N) ? 1 : 0;
-                var dir2 = (doorDir2 == DoorDirection.S || doorDir2 == DoorDirection.N) ? 1 : 0;
 
-                var aisleRect = doorInfo.GetCrossAisleRect();
-                var rect = aisleRect.Rect1;
-                var rect2 = aisleRect.Rect2;
-    
-                //填充交叉点
-                FillRect(MapLayer.AutoAisleFloorLayer, config.Floor, aisleRect.Cross.Position, aisleRect.Cross.Size);
-
-                //墙壁, 0横向, 1纵向
-                if (dir1 == 0)
+            //铺过道
+            if (doorInfo.FloorCell != null)
+            {
+                yield return 0;
+                foreach (var p in doorInfo.FloorCell)
                 {
-                    FullHorizontalAisle(config, rect);
-                    FullHorizontalAisleLeft(config, rect, doorDir1 == DoorDirection.E ? doorInfo : null);
-                    FullHorizontalAisleRight(config, rect, doorDir1 == DoorDirection.W ? doorInfo : null);
-                }
-                else
-                {
-                    FullVerticalAisle(config, rect);
-                    FullVerticalAisleUp(config, rect, doorDir1 == DoorDirection.S ? doorInfo : null);
-                    FullVerticalAisleDown(config, rect, doorDir1 == DoorDirection.N ? doorInfo : null);
-                }
-    
-                //墙壁, 0横向, 1纵向
-                if (dir2 == 0)
-                {
-                    FullHorizontalAisle(config, rect2);
-                    FullHorizontalAisleLeft(config, rect2, doorDir2 == DoorDirection.E ? doorInfo.ConnectDoor : null);
-                    FullHorizontalAisleRight(config, rect2, doorDir2 == DoorDirection.W ? doorInfo.ConnectDoor : null);
-                }
-                else
-                {
-                    FullVerticalAisle(config, rect2);
-                    FullVerticalAisleUp(config, rect2, doorDir2 == DoorDirection.S ? doorInfo.ConnectDoor : null);
-                    FullVerticalAisleDown(config, rect2, doorDir2 == DoorDirection.N ? doorInfo.ConnectDoor : null);
-                }
-    
-                if ((doorDir1 == DoorDirection.N && doorDir2 == DoorDirection.E) || //↑→
-                    (doorDir2 == DoorDirection.N && doorDir1 == DoorDirection.E))
-                {
-                    FillRect(MapLayer.AutoTopLayer, config.Wall_Out_RT, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1), Vector2.One);
-                    FillRect(MapLayer.AutoTopLayer, config.Wall_In_RT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, -1), Vector2.One);
-                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Top, doorInfo.Cross + new Vector2I(0, -1), new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_CenterTop, doorInfo.Cross, new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    FillRect(MapLayer.AutoTopLayer, config.Wall_Right, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0), new Vector2(1, GameConfig.CorridorWidth));
-                    
-                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross - new Vector2I(0, 2), new Vector2(GameConfig.CorridorWidth + 1, 1));
-                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross + new Vector2I(GameConfig.CorridorWidth, -1), new Vector2(1, GameConfig.CorridorWidth + 1));
-                }
-                else if ((doorDir1 == DoorDirection.E && doorDir2 == DoorDirection.S) || //→↓
-                         (doorDir2 == DoorDirection.E && doorDir1 == DoorDirection.S))
-                {
-                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_RB, doorInfo.Cross + new Vector2I(0, -1), Vector2.One);
-                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_RightTop, doorInfo.Cross, Vector2.One);
-                    FillRect(MapLayer.AutoTopLayer, config.Wall_In_RB, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, GameConfig.CorridorWidth - 1), Vector2.One);
-                    FillRect(MapLayer.AutoTopLayer, config.Wall_Right, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, -1), new Vector2(1, GameConfig.CorridorWidth));
-                    FillRect(MapLayer.AutoTopLayer, config.Wall_Bottom, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1), new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    
-                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross + new Vector2I(GameConfig.CorridorWidth, -1), new Vector2(1, GameConfig.CorridorWidth + 1));
-                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross + new Vector2I(0, GameConfig.CorridorWidth), new Vector2(GameConfig.CorridorWidth + 1, 1));
-                }
-                else if ((doorDir1 == DoorDirection.S && doorDir2 == DoorDirection.W) || //↓←
-                         (doorDir2 == DoorDirection.S && doorDir1 == DoorDirection.W))
-                {
-                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Out_LB, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, -1), Vector2.One);
-                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_LeftTop, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, 0), Vector2.One);
-                    FillRect(MapLayer.AutoTopLayer, config.Wall_In_LB, doorInfo.Cross + new Vector2(0, GameConfig.CorridorWidth - 1), Vector2.One);
-                    FillRect(MapLayer.AutoTopLayer, config.Wall_Left, doorInfo.Cross + new Vector2I(0, -1), new Vector2(1, GameConfig.CorridorWidth));
-                    FillRect(MapLayer.AutoTopLayer, config.Wall_Bottom, doorInfo.Cross + new Vector2(1, GameConfig.CorridorWidth - 1), new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    
-                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross + new Vector2I(-1, -1), new Vector2(1, GameConfig.CorridorWidth + 1));
-                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross + new Vector2I(-1, GameConfig.CorridorWidth), new Vector2(GameConfig.CorridorWidth + 1, 1));
-                }
-                else if ((doorDir1 == DoorDirection.W && doorDir2 == DoorDirection.N) || //←↑
-                         (doorDir2 == DoorDirection.W && doorDir1 == DoorDirection.N))
-                {
-                    FillRect(MapLayer.AutoTopLayer, config.Wall_Out_LT, doorInfo.Cross + new Vector2(GameConfig.CorridorWidth - 1, GameConfig.CorridorWidth - 1), Vector2.One);
-                    FillRect(MapLayer.AutoTopLayer, config.Wall_In_LT, doorInfo.Cross + new Vector2I(0, -1), Vector2.One);
-                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Top, doorInfo.Cross + new Vector2(1, -1), new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    FillRect(MapLayer.AutoMiddleLayer, config.Wall_Vertical_CenterTop, doorInfo.Cross + new Vector2(1, 0), new Vector2(GameConfig.CorridorWidth - 1, 1));
-                    FillRect(MapLayer.AutoTopLayer, config.Wall_Left, doorInfo.Cross + new Vector2(0, 0), new Vector2(1, GameConfig.CorridorWidth));
-                    
-                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross - new Vector2I(1, 2), new Vector2(GameConfig.CorridorWidth + 1, 1));
-                    FillRect(MapLayer.AutoTopLayer, config.TopMask, doorInfo.Cross - new Vector2I(1, 1), new Vector2(1, GameConfig.CorridorWidth + 1));
+                    _tileRoot.SetCell(MapLayer.AutoAisleFloorLayer, p, config.Floor.SourceId, config.Floor.AutoTileCoords);
                 }
             }
             

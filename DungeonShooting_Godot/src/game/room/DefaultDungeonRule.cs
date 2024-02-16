@@ -27,7 +27,7 @@ public class DefaultDungeonRule : DungeonRule
 
     public override bool CanOverGenerator()
     {
-        return Generator.BattleRoomInfos.Count >= Config.BattleRoomCount && Generator.EndRoomInfos.Count > 0;
+        return Generator.BattleRoomInfos.Count >= Config.BattleRoomCount && Generator.EndRoomInfos.Count >= Config.OutRoomCount;
     }
 
     public override RoomInfo GetConnectPrevRoom(RoomInfo prevRoom, DungeonRoomType nextRoomType)

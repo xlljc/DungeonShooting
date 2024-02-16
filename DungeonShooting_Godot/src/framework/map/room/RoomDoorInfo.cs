@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -40,12 +41,22 @@ public class RoomDoorInfo : IDestroy
     public Vector2I OriginPosition;
 
     /// <summary>
-    /// 与下一道门是否有交叉点
+    /// 地板所占的地板格子, 单位: 格, 使用时不需要加上 OriginPosition
+    /// </summary>
+    public HashSet<Vector2I> FloorCell;
+    
+    /// <summary>
+    /// 地板所占的矩形, 单位: 格
+    /// </summary>
+    public Rect2I FloorRect;
+
+    /// <summary>
+    /// 与下一道门是否有交叉点 (弃用)
     /// </summary>
     public bool HasCross;
 
     /// <summary>
-    /// 与下一道门的交叉点, 单位: 格
+    /// 与下一道门的交叉点, 单位: 格 (弃用)
     /// </summary>
     public Vector2I Cross;
 

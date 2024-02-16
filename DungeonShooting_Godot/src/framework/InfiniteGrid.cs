@@ -94,8 +94,11 @@ public class InfiniteGrid<T>
     {
         if (_map.TryGetValue(x, out var value))
         {
-            _isDirty = true;
-            return value.Remove(y);
+            if (value.Remove(y))
+            {
+                _isDirty = true;
+                return true;
+            }
         }
 
         return false;
@@ -145,11 +148,14 @@ public class InfiniteGrid<T>
             {
                 if (_map.TryGetValue(x + i, out var value))
                 {
-                    value.Remove(y + j);
+                    if (value.Remove(y + j))
+                    {
+                        _isDirty = true;
+                    }
+
                     if (value.Count == 0)
                     {
                         _map.Remove(x + i);
-                        _isDirty = true;
                     }
                 }
             }
