@@ -174,43 +174,24 @@ public class DungeonTileMap
             if (doorInfo.FloorCell != null)
             {
                 yield return 0;
+
+                //创建image, 这里留两个像素宽高用于描边
+                var image = Image.Create(doorInfo.FloorRect.Size.X, doorInfo.FloorRect.Size.Y, false, Image.Format.Rgba8);
+                //image.Fill(new Color(0, 1, 0, 0.2f));
+                //填充像素点
                 foreach (var p in doorInfo.FloorCell)
                 {
-                    _tileRoot.SetCell(MapLayer.AutoAisleFloorLayer, p, config.Floor.SourceId, config.Floor.AutoTileCoords);
+                    //_tileRoot.SetCell(MapLayer.AutoAisleFloorLayer, p, config.Floor.SourceId, config.Floor.AutoTileCoords);
+                    _tileRoot.SetCell(MapLayer.CustomTopLayer, p, config.Auto_000_010_000.SourceId, config.Auto_000_010_000.AutoTileCoords);
+                    image.SetPixel(p.X - doorInfo.FloorRect.Position.X, p.Y - doorInfo.FloorRect.Position.Y, new Color(1, 1, 1, 0.5882353F));
                 }
+                //创建texture
+                var imageTexture = ImageTexture.CreateFromImage(image);
+                doorInfo.AislePreviewTexture = imageTexture;
+                doorInfo.ConnectDoor.AislePreviewTexture = imageTexture;
+            
+                _tempAisleFloorGrid.Clear();
             }
-            
-            //先计算范围
-            var x = int.MaxValue;
-            var y = int.MaxValue;
-            var x2 = int.MinValue;
-            var y2 = int.MinValue;
-            _tempAisleFloorGrid.ForEach((gx, gy, data) =>
-            {
-                x = Mathf.Min(x, gx);
-                x2 = Mathf.Max(x2, gx);
-                y = Mathf.Min(y, gy);
-                y2 = Mathf.Max(y2, gy);
-                return true;
-            });
-            //创建image, 这里留两个像素宽高用于描边
-            var image = Image.Create(x2 - x + 3, y2 - y + 3, false, Image.Format.Rgba8);
-            //image.Fill(new Color(0, 1, 0, 0.2f));
-            //填充像素点
-            _tempAisleFloorGrid.ForEach((gx, gy, data) =>
-            {
-                var posX = gx - x + 1;
-                var posY = gy - y + 1;
-                //image.SetPixel(posX, posY, new Color(1, 0, 0, 0.5882353F));
-                image.SetPixel(posX, posY, new Color(0, 0, 0, 0.5882353F));
-                return true;
-            });
-            //创建texture
-            var imageTexture = ImageTexture.CreateFromImage(image);
-            doorInfo.AislePreviewTexture = imageTexture;
-            doorInfo.ConnectDoor.AislePreviewTexture = imageTexture;
-            
-            _tempAisleFloorGrid.Clear();
         }
     }
 

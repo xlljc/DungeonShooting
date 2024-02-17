@@ -46,7 +46,7 @@ public class RoomDoorInfo : IDestroy
     public HashSet<Vector2I> FloorCell;
     
     /// <summary>
-    /// 地板所占的矩形, 单位: 格
+    /// 地板所占的矩形, 单位: 格, 使用时不需要加上 OriginPosition
     /// </summary>
     public Rect2I FloorRect;
 

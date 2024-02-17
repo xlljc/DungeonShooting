@@ -369,6 +369,33 @@ public static class Utils
     }
 
     /// <summary>
+    /// 计算Vector2点所占用的区域
+    /// </summary>
+    public static Rect2I CalcRect(IEnumerable<Vector2I> cells)
+    {
+        //单位: 像素
+        var canvasXStart = int.MaxValue;
+        var canvasYStart = int.MaxValue;
+        var canvasXEnd = int.MinValue;
+        var canvasYEnd = int.MinValue;
+
+        foreach (var pos in cells)
+        {
+            canvasXStart = Mathf.Min(pos.X, canvasXStart);
+            canvasYStart = Mathf.Min(pos.Y, canvasYStart);
+            canvasXEnd = Mathf.Max(pos.X + 1, canvasXEnd);
+            canvasYEnd = Mathf.Max(pos.Y + 1, canvasYEnd);
+        }
+
+        return new Rect2I(
+            canvasXStart,
+            canvasYStart,
+            canvasXEnd - canvasXStart,
+            canvasYEnd - canvasYStart
+        );
+    }
+    
+    /// <summary>
     /// 计算TileSet Cell所占用的区域
     /// </summary>
     public static Rect2I CalcTileRect(IEnumerable<Vector2I> cells)

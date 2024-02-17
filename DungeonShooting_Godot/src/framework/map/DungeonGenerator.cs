@@ -583,26 +583,26 @@ public class DungeonGenerator
         nextRoomDoor.ConnectRoom = roomInfo;
         nextRoomDoor.ConnectDoor = roomDoor;
 
-        // //先寻找直通门
-        // if (Random.RandomBoolean())
-        // {s
-        //     //直行通道, 优先纵轴
-        //     if (TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
-        //         || TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
-        //     {
-        //         return true;
-        //     }
-        // }
-        // else
-        // {
-        //     //直行通道, 优先横轴
-        //     if (TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
-        //         || TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
-        //     {
-        //         return true;
-        //     }
-        // }
-        
+        //先寻找直通门
+        if (Random.RandomBoolean())
+        {
+            //直行通道, 优先纵轴
+            if (TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
+                || TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            //直行通道, 优先横轴
+            if (TryConnectHorizontalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor)
+                || TryConnectVerticalDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor))
+            {
+                return true;
+            }
+        }
+
         //包含1个拐角的通道
         return TryConnectCrossDoor(roomInfo, roomDoor, nextRoomInfo, nextRoomDoor);
         //包含2个拐角的通道 (后面再开发)
@@ -638,7 +638,9 @@ public class DungeonGenerator
                     roomDoor.OriginPosition = new Vector2I(x, roomInfo.GetVerticalDoorEnd());
                     nextRoomDoor.OriginPosition = new Vector2I(x, nextRoomInfo.GetVerticalDoorStart());
 
-                    for (var i = roomInfo.GetVerticalDoorEnd() - 1; i < nextRoomInfo.GetVerticalDoorStart() + 1; i++)
+                    var sv = roomInfo.GetVerticalDoorEnd() - 1;
+                    var ev = nextRoomInfo.GetVerticalDoorStart() + 1;
+                    for (var i = sv; i < ev; i++)
                     {
                         floorCell.Add(new Vector2I(x + 1, i));
                         floorCell.Add(new Vector2I(x + 2, i));
@@ -650,8 +652,10 @@ public class DungeonGenerator
                     nextRoomDoor.Direction = DoorDirection.S;
                     roomDoor.OriginPosition = new Vector2I(x, roomInfo.GetVerticalDoorStart());
                     nextRoomDoor.OriginPosition = new Vector2I(x, nextRoomInfo.GetVerticalDoorEnd());
-                    
-                    for (var i = nextRoomInfo.GetVerticalDoorEnd() - 1; i < roomInfo.GetVerticalDoorStart() + 1; i++)
+
+                    var sv = nextRoomInfo.GetVerticalDoorEnd() - 1;
+                    var ev = roomInfo.GetVerticalDoorStart() + 1;
+                    for (var i = sv; i < ev; i++)
                     {
                         floorCell.Add(new Vector2I(x + 1, i));
                         floorCell.Add(new Vector2I(x + 2, i));
@@ -672,6 +676,8 @@ public class DungeonGenerator
 
                 roomDoor.FloorCell = floorCell;
                 nextRoomDoor.FloorCell = floorCell;
+                roomDoor.FloorRect = Utils.CalcRect(floorCell);;
+                nextRoomDoor.FloorRect = roomDoor.FloorRect;
                 return true;
             }
         }
@@ -708,8 +714,10 @@ public class DungeonGenerator
                     nextRoomDoor.Direction = DoorDirection.W;
                     roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalDoorEnd(), y);
                     nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalDoorStart(), y);
-                    
-                    for (var i = roomInfo.GetHorizontalDoorEnd() - 1; i < nextRoomInfo.GetHorizontalDoorStart() + 1; i++)
+
+                    var sv = roomInfo.GetHorizontalDoorEnd() - 1;
+                    var ev = nextRoomInfo.GetHorizontalDoorStart() + 1;
+                    for (var i = sv; i < ev; i++)
                     {
                         floorCell.Add(new Vector2I(i, y + 2));
                     }
@@ -720,8 +728,10 @@ public class DungeonGenerator
                     nextRoomDoor.Direction = DoorDirection.E;
                     roomDoor.OriginPosition = new Vector2I(roomInfo.GetHorizontalDoorStart(), y);
                     nextRoomDoor.OriginPosition = new Vector2I(nextRoomInfo.GetHorizontalDoorEnd(), y);
-                    
-                    for (var i = nextRoomInfo.GetHorizontalDoorEnd() - 1; i < roomInfo.GetHorizontalDoorStart() + 1; i++)
+
+                    var sv = nextRoomInfo.GetHorizontalDoorEnd() - 1;
+                    var ev = roomInfo.GetHorizontalDoorStart() + 1;
+                    for (var i = sv; i < ev; i++)
                     {
                         floorCell.Add(new Vector2I(i, y + 2));
                     }
@@ -741,6 +751,8 @@ public class DungeonGenerator
                 
                 roomDoor.FloorCell = floorCell;
                 nextRoomDoor.FloorCell = floorCell;
+                roomDoor.FloorRect = Utils.CalcRect(floorCell);;
+                nextRoomDoor.FloorRect = roomDoor.FloorRect;
                 return true;
             }
         }
@@ -1022,6 +1034,8 @@ public class DungeonGenerator
         
         roomDoor.FloorCell = floorCell;
         nextRoomDoor.FloorCell = floorCell;
+        roomDoor.FloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.FloorRect = roomDoor.FloorRect;
         return true;
     }
 
@@ -1063,6 +1077,8 @@ public class DungeonGenerator
         
         roomDoor.FloorCell = floorCell;
         nextRoomDoor.FloorCell = floorCell;
+        roomDoor.FloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.FloorRect = roomDoor.FloorRect;
         return true;
     }
 
@@ -1105,6 +1121,8 @@ public class DungeonGenerator
         
         roomDoor.FloorCell = floorCell;
         nextRoomDoor.FloorCell = floorCell;
+        roomDoor.FloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.FloorRect = roomDoor.FloorRect;
         return true;
     }
 
@@ -1147,6 +1165,8 @@ public class DungeonGenerator
         
         roomDoor.FloorCell = floorCell;
         nextRoomDoor.FloorCell = floorCell;
+        roomDoor.FloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.FloorRect = roomDoor.FloorRect;
         return true;
     }
     
@@ -1189,6 +1209,8 @@ public class DungeonGenerator
         
         roomDoor.FloorCell = floorCell;
         nextRoomDoor.FloorCell = floorCell;
+        roomDoor.FloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.FloorRect = roomDoor.FloorRect;
         return true;
     }
     
@@ -1231,6 +1253,8 @@ public class DungeonGenerator
         
         roomDoor.FloorCell = floorCell;
         nextRoomDoor.FloorCell = floorCell;
+        roomDoor.FloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.FloorRect = roomDoor.FloorRect;
         return true;
     }
     
@@ -1273,6 +1297,8 @@ public class DungeonGenerator
         
         roomDoor.FloorCell = floorCell;
         nextRoomDoor.FloorCell = floorCell;
+        roomDoor.FloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.FloorRect = roomDoor.FloorRect;
         return true;
     }
 
@@ -1315,6 +1341,8 @@ public class DungeonGenerator
         
         roomDoor.FloorCell = floorCell;
         nextRoomDoor.FloorCell = floorCell;
+        roomDoor.FloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.FloorRect = roomDoor.FloorRect;
         return true;
     }
 
