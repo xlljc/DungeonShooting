@@ -421,7 +421,8 @@ public partial class DungeonManager : Node2D
     {
         var roomFog = new FogMask();
         roomFog.Name = "FogMask" + roomFog.IsDestroyed;
-        roomFog.InitFog(roomInfo.Position + new Vector2I(1, 1), roomInfo.Size - new Vector2I(2, 2));
+        roomFog.InitFog(roomInfo.Position + new Vector2I(1, 0), roomInfo.Size - new Vector2I(2, 1));
+        //roomFog.InitFog(roomInfo.Position + new Vector2I(1, 1), roomInfo.Size - new Vector2I(2, 2));
 
         World.FogMaskRoot.AddChild(roomFog);
         roomInfo.RoomFogMask = roomFog;
@@ -446,7 +447,7 @@ public partial class DungeonManager : Node2D
                     else
                     {
                         calcRect.Position += new Vector2I(0, 2);
-                        calcRect.Size -= new Vector2I(0, 4);
+                        calcRect.Size -= new Vector2I(0, 5);
                     }
                 }
                 else
@@ -460,7 +461,7 @@ public partial class DungeonManager : Node2D
                         if (roomDoorInfo.ConnectDoor.Direction == DoorDirection.N) //→↑
                         {
                             calcRect.Position += new Vector2I(2, 0);
-                            calcRect.Size -= new Vector2I(2, 3);
+                            calcRect.Size -= new Vector2I(2, 4);
                         }
                         else //→↓
                         {
@@ -472,7 +473,7 @@ public partial class DungeonManager : Node2D
                     {
                         if (roomDoorInfo.ConnectDoor.Direction == DoorDirection.N) //←↑
                         {
-                            calcRect.Size -= new Vector2I(2, 3);
+                            calcRect.Size -= new Vector2I(2, 4);
                         }
                         else //←↓
                         {
@@ -485,12 +486,12 @@ public partial class DungeonManager : Node2D
                         if (roomDoorInfo.ConnectDoor.Direction == DoorDirection.E) //↑→
                         {
                             calcRect.Position += new Vector2I(2, -1);
-                            calcRect.Size -= new Vector2I(2, 1);
+                            calcRect.Size -= new Vector2I(2, 2);
                         }
                         else //↑←
                         {
                             calcRect.Position += new Vector2I(0, -1);
-                            calcRect.Size -= new Vector2I(2, 1);
+                            calcRect.Size -= new Vector2I(2, 2);
                         }
                     }
                     else if (roomDoorInfo.Direction == DoorDirection.S)

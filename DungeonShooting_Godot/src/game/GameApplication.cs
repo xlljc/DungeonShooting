@@ -108,15 +108,15 @@ public partial class GameApplication : Node2D, ICoroutine
 		DungeonConfig = new DungeonConfig();
 		DungeonConfig.GroupName = "Test1";
 		DungeonConfig.BattleRoomCount = 15;
-		DungeonConfig.BossRoomCount = 0;
-		DungeonConfig.RewardRoomCount = 0;
-		DungeonConfig.ShopRoomCount = 0;
-		DungeonConfig.OutRoomCount = 0;
-		DungeonConfig.RoomHorizontalMinDispersion = -1;
-		DungeonConfig.RoomHorizontalMaxDispersion = 1;
-		DungeonConfig.RoomVerticalMinDispersion = -1;
-		DungeonConfig.RoomVerticalMaxDispersion = 1;
-		DungeonConfig.EnableLimitRange = false;
+		// DungeonConfig.BossRoomCount = 0;
+		// DungeonConfig.RewardRoomCount = 0;
+		// DungeonConfig.ShopRoomCount = 0;
+		// DungeonConfig.OutRoomCount = 0;
+		// DungeonConfig.RoomHorizontalMinDispersion = -1;
+		// DungeonConfig.RoomHorizontalMaxDispersion = 1;
+		// DungeonConfig.RoomVerticalMinDispersion = -1;
+		// DungeonConfig.RoomVerticalMaxDispersion = 1;
+		// DungeonConfig.EnableLimitRange = false;
 	}
 
 	public override void _EnterTree()

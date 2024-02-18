@@ -97,13 +97,13 @@ public partial class PreviewFogMask : FogMaskBase
             if (fogType == PreviewFogType.Aisle)
             {
                 Texture = _previewAisle;
-                Position = globalPosition + new Vector2(0, -GameConfig.TileCellSize * 2);
+                Position = globalPosition + new Vector2(0, -GameConfig.TileCellSize * 3);
                 RotationDegrees = 0;
             }
             else
             {
                 Texture = _previewRoom_n;
-                Position = globalPosition + new Vector2(0, GameConfig.TileCellSize * 0.5f);
+                Position = globalPosition;
                 RotationDegrees = 180;
             }
         }

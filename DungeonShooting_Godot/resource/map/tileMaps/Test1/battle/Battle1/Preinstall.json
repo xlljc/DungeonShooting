@@ -1,1 +1,1 @@
-[{"Name":"Preinstall1","Weight":100,"Remark":"","AutoFill":true,"WaveList":[[{"Position":{"X":31,"Y":-17},"Size":{"X":16,"Y":16},"SpecialMarkType":0,"DelayTime":0,"MarkList":[{"Id":"enemy0001","Weight":100,"Attr":{"Face":"0","Weapon":"weapon0013","CurrAmmon":"50","ResidueAmmo":"50"},"Altitude":0,"VerticalSpeed":0}]}]]}]
+[{"Name":"Preinstall1","Weight":100,"Remark":"","AutoFill":false,"WaveList":[[]]}]
