@@ -82,10 +82,8 @@ public class DungeonTileMap
         SetCustomLayerDataFromList(MapLayer.CustomFloorLayer1, roomInfo, tileInfo.CustomFloor1, rectPos);
         SetCustomLayerDataFromList(MapLayer.CustomFloorLayer2, roomInfo, tileInfo.CustomFloor2, rectPos);
         SetCustomLayerDataFromList(MapLayer.CustomFloorLayer3, roomInfo, tileInfo.CustomFloor3, rectPos);
-        //SetAutoLayerDataFromList(MapLayer.AutoMiddleLayer, config.SourceId, roomInfo, tileInfo.Middle, rectPos, terrainInfo);
         SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer1, roomInfo, tileInfo.CustomMiddle1, rectPos);
         SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer2, roomInfo, tileInfo.CustomMiddle2, rectPos);
-        //SetAutoLayerDataFromList(MapLayer.AutoTopLayer, config.SourceId, roomInfo, tileInfo.Top, rectPos, terrainInfo);
         SetCustomLayerDataFromList(MapLayer.CustomTopLayer, roomInfo, tileInfo.CustomTop, rectPos);
         
         //寻找可用传送点
@@ -146,19 +144,19 @@ public class DungeonTileMap
             }
 
             //铺过道
-            if (doorInfo.FloorCell != null)
+            if (doorInfo.AisleFloorCell != null)
             {
                 yield return 0;
 
                 //创建image, 这里留两个像素宽高用于描边
-                var aisleImage = Image.Create(doorInfo.FloorRect.Size.X, doorInfo.FloorRect.Size.Y, false, Image.Format.Rgba8);
+                var aisleImage = Image.Create(doorInfo.AisleFloorRect.Size.X, doorInfo.AisleFloorRect.Size.Y, false, Image.Format.Rgba8);
                 //image.Fill(new Color(0, 1, 0, 0.2f));
                 //填充像素点
-                foreach (var p in doorInfo.FloorCell)
+                foreach (var p in doorInfo.AisleFloorCell)
                 {
                     _tileRoot.SetCell(MapLayer.AutoFloorLayer, p, config.Floor.SourceId, config.Floor.AutoTileCoords);
                     //_tileRoot.SetCell(MapLayer.CustomTopLayer, p, config.Auto_000_010_000.SourceId, config.Auto_000_010_000.AutoTileCoords);
-                    aisleImage.SetPixel(p.X - doorInfo.FloorRect.Position.X, p.Y - doorInfo.FloorRect.Position.Y, new Color(1, 1, 1, 0.5882353F));
+                    aisleImage.SetPixel(p.X - doorInfo.AisleFloorRect.Position.X, p.Y - doorInfo.AisleFloorRect.Position.Y, new Color(1, 1, 1, 0.5882353F));
                 }
                 //创建texture
                 var aisleImageTexture = ImageTexture.CreateFromImage(aisleImage);

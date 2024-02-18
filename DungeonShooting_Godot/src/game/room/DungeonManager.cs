@@ -582,11 +582,11 @@ public partial class DungeonManager : Node2D
                     if (doorInfo.Direction == DoorDirection.N || doorInfo.Direction == DoorDirection.S ||
                         doorInfo.ConnectDoor.Direction == DoorDirection.N || doorInfo.ConnectDoor.Direction == DoorDirection.S)
                     {
-                        aisleSprite.Position = doorInfo.FloorRect.Position + new Vector2I(0, 1);
+                        aisleSprite.Position = doorInfo.AisleFloorRect.Position + new Vector2I(0, 1);
                     }
                     else
                     {
-                        aisleSprite.Position = doorInfo.FloorRect.Position;
+                        aisleSprite.Position = doorInfo.AisleFloorRect.Position;
                     }
 
                     // var aisleSpriteMaterial = ResourceManager.Load<ShaderMaterial>(ResourcePath.resource_material_Outline2_tres, false);

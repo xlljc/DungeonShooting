@@ -801,36 +801,15 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer1, tileInfo.CustomMiddle1);
         SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer2, tileInfo.CustomMiddle2);
         SetCustomLayerDataFromList(MapLayer.CustomTopLayer, tileInfo.CustomTop);
-
-        //如果有图块错误, 则找出错误的点位
-        if (roomSplit.ErrorType == RoomErrorType.TileError)
-        {
-            RunCheckHandler();
-        }
-        else
-        {
-            //导航网格
-            if (tileInfo.NavigationPolygon != null && tileInfo.NavigationVertices != null)
-            {
-                var polygon = _editorTileMap.L_NavigationRegion.Instance.NavigationPolygon;
-                polygon.Vertices = tileInfo.NavigationVertices.Select(v => v.AsVector2()).ToArray();
-                foreach (var p in tileInfo.NavigationPolygon)
-                {
-                    polygon.AddPolygon(p);
-                }
-
-                OnBakeFinished();
-            }
-        }
-        //聚焦
-        //MapEditorPanel.CallDelay(0.1f, OnClickCenterTool);
-        //CallDeferred(nameof(OnClickCenterTool), null);
         
         //加载门编辑区域
         foreach (var doorAreaInfo in CurrDoorConfigs)
         {
             MapEditorToolsPanel.CreateDoorTool(doorAreaInfo);
         }
+        
+        //执行生成墙壁和导航网格
+        RunCheckHandler();
         
         //聚焦 (需要延时一帧调用)
         this.CallDelayInNode(0, () => OnClickCenterTool(null));

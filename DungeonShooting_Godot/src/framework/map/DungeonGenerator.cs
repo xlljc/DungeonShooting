@@ -674,10 +674,10 @@ public class DungeonGenerator
                 roomInfo.Doors.Add(roomDoor);
                 nextRoomInfo.Doors.Add(nextRoomDoor);
 
-                roomDoor.FloorCell = floorCell;
-                nextRoomDoor.FloorCell = floorCell;
-                roomDoor.FloorRect = Utils.CalcRect(floorCell);;
-                nextRoomDoor.FloorRect = roomDoor.FloorRect;
+                roomDoor.AisleFloorCell = floorCell;
+                nextRoomDoor.AisleFloorCell = floorCell;
+                roomDoor.AisleFloorRect = Utils.CalcRect(floorCell);;
+                nextRoomDoor.AisleFloorRect = roomDoor.AisleFloorRect;
                 return true;
             }
         }
@@ -749,10 +749,10 @@ public class DungeonGenerator
                 roomInfo.Doors.Add(roomDoor);
                 nextRoomInfo.Doors.Add(nextRoomDoor);
                 
-                roomDoor.FloorCell = floorCell;
-                nextRoomDoor.FloorCell = floorCell;
-                roomDoor.FloorRect = Utils.CalcRect(floorCell);;
-                nextRoomDoor.FloorRect = roomDoor.FloorRect;
+                roomDoor.AisleFloorCell = floorCell;
+                nextRoomDoor.AisleFloorCell = floorCell;
+                roomDoor.AisleFloorRect = Utils.CalcRect(floorCell);;
+                nextRoomDoor.AisleFloorRect = roomDoor.AisleFloorRect;
                 return true;
             }
         }
@@ -1032,10 +1032,10 @@ public class DungeonGenerator
         floorCell.Add(new Vector2I(cross.X + 1, cross.Y + 2));
         floorCell.Add(new Vector2I(cross.X + 2, cross.Y + 2));
         
-        roomDoor.FloorCell = floorCell;
-        nextRoomDoor.FloorCell = floorCell;
-        roomDoor.FloorRect = Utils.CalcRect(floorCell);
-        nextRoomDoor.FloorRect = roomDoor.FloorRect;
+        roomDoor.AisleFloorCell = floorCell;
+        nextRoomDoor.AisleFloorCell = floorCell;
+        roomDoor.AisleFloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.AisleFloorRect = roomDoor.AisleFloorRect;
         return true;
     }
 
@@ -1075,10 +1075,10 @@ public class DungeonGenerator
         floorCell.Add(new Vector2I(cross.X + 1, cross.Y + 2));
         floorCell.Add(new Vector2I(cross.X + 2, cross.Y + 2));
         
-        roomDoor.FloorCell = floorCell;
-        nextRoomDoor.FloorCell = floorCell;
-        roomDoor.FloorRect = Utils.CalcRect(floorCell);
-        nextRoomDoor.FloorRect = roomDoor.FloorRect;
+        roomDoor.AisleFloorCell = floorCell;
+        nextRoomDoor.AisleFloorCell = floorCell;
+        roomDoor.AisleFloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.AisleFloorRect = roomDoor.AisleFloorRect;
         return true;
     }
 
@@ -1119,10 +1119,10 @@ public class DungeonGenerator
         floorCell.Add(new Vector2I(cross.X + 1, cross.Y + 2));
         floorCell.Add(new Vector2I(cross.X + 2, cross.Y + 2));
         
-        roomDoor.FloorCell = floorCell;
-        nextRoomDoor.FloorCell = floorCell;
-        roomDoor.FloorRect = Utils.CalcRect(floorCell);
-        nextRoomDoor.FloorRect = roomDoor.FloorRect;
+        roomDoor.AisleFloorCell = floorCell;
+        nextRoomDoor.AisleFloorCell = floorCell;
+        roomDoor.AisleFloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.AisleFloorRect = roomDoor.AisleFloorRect;
         return true;
     }
 
@@ -1163,10 +1163,10 @@ public class DungeonGenerator
         floorCell.Add(new Vector2I(cross.X + 1, cross.Y + 2));
         floorCell.Add(new Vector2I(cross.X + 2, cross.Y + 2));
         
-        roomDoor.FloorCell = floorCell;
-        nextRoomDoor.FloorCell = floorCell;
-        roomDoor.FloorRect = Utils.CalcRect(floorCell);
-        nextRoomDoor.FloorRect = roomDoor.FloorRect;
+        roomDoor.AisleFloorCell = floorCell;
+        nextRoomDoor.AisleFloorCell = floorCell;
+        roomDoor.AisleFloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.AisleFloorRect = roomDoor.AisleFloorRect;
         return true;
     }
     
@@ -1207,10 +1207,10 @@ public class DungeonGenerator
         floorCell.Add(new Vector2I(cross.X + 1, cross.Y + 2));
         floorCell.Add(new Vector2I(cross.X + 2, cross.Y + 2));
         
-        roomDoor.FloorCell = floorCell;
-        nextRoomDoor.FloorCell = floorCell;
-        roomDoor.FloorRect = Utils.CalcRect(floorCell);
-        nextRoomDoor.FloorRect = roomDoor.FloorRect;
+        roomDoor.AisleFloorCell = floorCell;
+        nextRoomDoor.AisleFloorCell = floorCell;
+        roomDoor.AisleFloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.AisleFloorRect = roomDoor.AisleFloorRect;
         return true;
     }
     
@@ -1251,10 +1251,10 @@ public class DungeonGenerator
         floorCell.Add(new Vector2I(cross.X + 1, cross.Y + 2));
         floorCell.Add(new Vector2I(cross.X + 2, cross.Y + 2));
         
-        roomDoor.FloorCell = floorCell;
-        nextRoomDoor.FloorCell = floorCell;
-        roomDoor.FloorRect = Utils.CalcRect(floorCell);
-        nextRoomDoor.FloorRect = roomDoor.FloorRect;
+        roomDoor.AisleFloorCell = floorCell;
+        nextRoomDoor.AisleFloorCell = floorCell;
+        roomDoor.AisleFloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.AisleFloorRect = roomDoor.AisleFloorRect;
         return true;
     }
     
@@ -1295,10 +1295,10 @@ public class DungeonGenerator
         floorCell.Add(new Vector2I(cross.X + 1, cross.Y + 2));
         floorCell.Add(new Vector2I(cross.X + 2, cross.Y + 2));
         
-        roomDoor.FloorCell = floorCell;
-        nextRoomDoor.FloorCell = floorCell;
-        roomDoor.FloorRect = Utils.CalcRect(floorCell);
-        nextRoomDoor.FloorRect = roomDoor.FloorRect;
+        roomDoor.AisleFloorCell = floorCell;
+        nextRoomDoor.AisleFloorCell = floorCell;
+        roomDoor.AisleFloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.AisleFloorRect = roomDoor.AisleFloorRect;
         return true;
     }
 
@@ -1339,10 +1339,10 @@ public class DungeonGenerator
         floorCell.Add(new Vector2I(cross.X + 1, cross.Y + 2));
         floorCell.Add(new Vector2I(cross.X + 2, cross.Y + 2));
         
-        roomDoor.FloorCell = floorCell;
-        nextRoomDoor.FloorCell = floorCell;
-        roomDoor.FloorRect = Utils.CalcRect(floorCell);
-        nextRoomDoor.FloorRect = roomDoor.FloorRect;
+        roomDoor.AisleFloorCell = floorCell;
+        nextRoomDoor.AisleFloorCell = floorCell;
+        roomDoor.AisleFloorRect = Utils.CalcRect(floorCell);
+        nextRoomDoor.AisleFloorRect = roomDoor.AisleFloorRect;
         return true;
     }
 
