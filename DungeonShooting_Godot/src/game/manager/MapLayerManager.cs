@@ -58,10 +58,5 @@ public static class MapLayerManager
         tileMap.SetLayerZIndex(MapLayer.CustomTopLayer, 10);
         tileMap.SetLayerNavigationEnabled(MapLayer.CustomTopLayer, false);
         tileMap.SetLayerName(MapLayer.CustomTopLayer, nameof(MapLayer.CustomTopLayer));
-        
-        tileMap.AddLayer(MapLayer.AutoAisleFloorLayer);
-        tileMap.SetLayerZIndex(MapLayer.AutoAisleFloorLayer, -10);
-        tileMap.SetLayerNavigationEnabled(MapLayer.AutoAisleFloorLayer, false);
-        tileMap.SetLayerName(MapLayer.AutoAisleFloorLayer, nameof(MapLayer.AutoAisleFloorLayer));
     }
 }

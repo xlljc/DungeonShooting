@@ -291,6 +291,10 @@ public class TileSetSplit : IDestroy
     /// </summary>
     private static void SetAtlasSourceCollision(TileSetTerrainInfo terrainInfo, TileSetAtlasSource tileSetAtlasSource, byte type, Vector2I bitCoords, bool isHalf)
     {
+        if (isHalf) //暂时让半块不设置碰撞信息
+        {
+            return;
+        }
         var index = terrainInfo.TerrainCoordsToIndex(bitCoords, type);
         var cellData = terrainInfo.GetTerrainCell(index, type);
         if (cellData != null)
@@ -298,17 +302,17 @@ public class TileSetSplit : IDestroy
             var pos = terrainInfo.GetPosition(cellData);
             var tileData = tileSetAtlasSource.GetTileData(pos, 0);
             tileData.AddCollisionPolygon(0);
-            if (isHalf)
-            {
-                tileData.SetCollisionPolygonPoints(0, 0, new[]
-                {
-                    new Vector2(-8, 2),
-                    new Vector2(8, 2),
-                    new Vector2(8, 8),
-                    new Vector2(-8, 8)
-                });
-            }
-            else
+            // if (isHalf)
+            // {
+            //     tileData.SetCollisionPolygonPoints(0, 0, new[]
+            //     {
+            //         new Vector2(-8, 7),
+            //         new Vector2(8, 7),
+            //         new Vector2(8, 8),
+            //         new Vector2(-8, 8)
+            //     });
+            // }
+            // else
             {
                 tileData.SetCollisionPolygonPoints(0, 0, new []
                 {

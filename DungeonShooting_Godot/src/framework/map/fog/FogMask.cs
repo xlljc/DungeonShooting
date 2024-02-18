@@ -241,7 +241,6 @@ public partial class FogMask : FogMaskBase
     {
         return tileMap.GetCellSourceId(MapLayer.AutoFloorLayer, pos) != -1 ||
                tileMap.GetCellSourceId(MapLayer.AutoMiddleLayer, pos) != -1 ||
-               tileMap.GetCellSourceId(MapLayer.AutoTopLayer, pos) != -1 ||
-               tileMap.GetCellSourceId(MapLayer.AutoAisleFloorLayer, pos) != -1;
+               tileMap.GetCellSourceId(MapLayer.AutoTopLayer, pos) != -1;
     }
 }

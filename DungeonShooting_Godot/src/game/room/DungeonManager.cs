@@ -233,13 +233,11 @@ public partial class DungeonManager : Node2D
         AutoTileConfig = new AutoTileConfig(0, tileSetSplit.TileSetInfo.Sources[0].Terrain[0]);
         _dungeonTileMap = new DungeonTileMap(World.TileRoot);
         yield return _dungeonTileMap.AutoFillRoomTile(AutoTileConfig, _dungeonGenerator.StartRoomInfo, World);
+        yield return _dungeonTileMap.AutoFillAisleTile(AutoTileConfig, _dungeonGenerator.StartRoomInfo, World);
         //yield return _dungeonTileMap.AddOutlineTile(AutoTileConfig.WALL_BLOCK);
-        
-        //生成寻路网格， 这一步操作只生成过道的导航
-        //_dungeonTileMap.GenerateNavigationPolygon(MapLayer.AutoAisleFloorLayer);
         yield return 0;
-        //挂载过道导航区域
-        //_dungeonTileMap.MountNavigationPolygon(World.NavigationRoot);
+        //生成墙壁, 生成导航网格
+        _dungeonTileMap.GenerateWallAndNavigation(World, AutoTileConfig);
         yield return 0;
         //初始化所有房间
         yield return _dungeonGenerator.EachRoomCoroutine(InitRoom);
@@ -320,8 +318,6 @@ public partial class DungeonManager : Node2D
     private void InitRoom(RoomInfo roomInfo)
     {
         roomInfo.CalcRange();
-        //挂载房间导航区域
-        MountNavFromRoomInfo(roomInfo);
         //创建门
         CreateDoor(roomInfo);
         //创建房间归属区域
@@ -336,28 +332,6 @@ public partial class DungeonManager : Node2D
         CreateRoomFogMask(roomInfo);
         //创建房间/过道预览sprite
         CreatePreviewSprite(roomInfo);
-    }
-    
-    //挂载房间导航区域
-    private void MountNavFromRoomInfo(RoomInfo roomInfo)
-    {
-        var offset = roomInfo.GetOffsetPosition();
-        var worldPosition = roomInfo.GetWorldPosition() - offset;
-        var polygon = roomInfo.RoomSplit.TileInfo.NavigationPolygon;
-        var vertices = roomInfo.RoomSplit.TileInfo.NavigationVertices;
-        var polygonData = new NavigationPolygon();
-        polygonData.CellSize = GameConfig.NavigationCellSize;
-        //这里的位置需要加上房间位置
-        polygonData.Vertices = vertices.Select(v => v.AsVector2() + worldPosition).ToArray();
-        for (var i = 0; i < polygon.Count; i++)
-        {
-            polygonData.AddPolygon(polygon[i]);
-        }
-        var navigationPolygon = new NavigationRegion2D();
-        navigationPolygon.Name = "NavigationRegion" + (GetChildCount() + 1);
-        navigationPolygon.NavigationPolygon = polygonData;
-        World.NavigationRoot.AddChild(navigationPolygon);
-        roomInfo.NavigationRegion = navigationPolygon;
     }
 
     //创建门

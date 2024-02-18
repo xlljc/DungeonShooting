@@ -61,7 +61,7 @@ public partial class Player : Role
         ActivePropsPack.SetCapacity(1);
         
         // debug用
-        DebugSet();
+        //DebugSet();
         
         //注册状态机
         StateController.Register(new PlayerIdleState());

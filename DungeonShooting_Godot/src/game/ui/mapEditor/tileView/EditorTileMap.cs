@@ -664,7 +664,10 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         if (CheckTerrain())
         {
             Debug.Log("开始绘制自动贴图...");
-            GenerateTerrain();
+            var rect = TileMapUtils.GenerateTerrain(this, _editorTileMap.L_NavigationRegion.Instance, _autoTileConfig);
+            CurrRoomPosition = rect.Position;
+            SetMapSize(rect.Size, true);
+            //GenerateTerrain();
             _isGenerateTerrain = true;
         }
         else
@@ -795,10 +798,8 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         SetCustomLayerDataFromList(MapLayer.CustomFloorLayer1, tileInfo.CustomFloor1);
         SetCustomLayerDataFromList(MapLayer.CustomFloorLayer2, tileInfo.CustomFloor2);
         SetCustomLayerDataFromList(MapLayer.CustomFloorLayer3, tileInfo.CustomFloor3);
-        SetAutoLayerDataFromList(MapLayer.AutoMiddleLayer, tileInfo.Middle);
         SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer1, tileInfo.CustomMiddle1);
         SetCustomLayerDataFromList(MapLayer.CustomMiddleLayer2, tileInfo.CustomMiddle2);
-        SetAutoLayerDataFromList(MapLayer.AutoTopLayer, tileInfo.Top);
         SetCustomLayerDataFromList(MapLayer.CustomTopLayer, tileInfo.CustomTop);
 
         //如果有图块错误, 则找出错误的点位
@@ -1236,212 +1237,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         });
         return _checkTerrainFlag;
     }
-    
-    //生成自动图块 (地形)
-    private void GenerateTerrain()
-    {
-        //ClearLayer(MapLayer.AutoFloorLayer);
-        var list = new List<Vector2I>();
-        var xStart = int.MaxValue;
-        var yStart = int.MaxValue;
-        var xEnd = int.MinValue;
-        var yEnd = int.MinValue;
-        
-        _autoCellLayerGrid.ForEach((x, y, flag) =>
-        {
-            if (flag)
-            {
-                //计算范围
-                if (x < xStart)
-                    xStart = x;
-                else if (x > xEnd)
-                    xEnd = x;
-
-                if (y < yStart)
-                    yStart = y;
-                else if (y > yEnd)
-                    yEnd = y;
-                
-                //填充墙壁
-                if (!_autoCellLayerGrid.Contains(x, y - 1))
-                {
-                    var left = _autoCellLayerGrid.Contains(x - 1, y - 1);
-                    var right = _autoCellLayerGrid.Contains(x + 1, y - 1);
-                    if (left && right)
-                    {
-                        var tileCellData1 = _autoTileConfig.Wall_Vertical_SingleTop;
-                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 2), tileCellData1.SourceId, tileCellData1.AutoTileCoords);
-                        var tileCellData2 = _autoTileConfig.Wall_Vertical_SingleBottom;
-                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 1), tileCellData2.SourceId, tileCellData2.AutoTileCoords);
-                    }
-                    else if (left)
-                    {
-                        var tileCellData1 = _autoTileConfig.Wall_Vertical_LeftTop;
-                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 2), tileCellData1.SourceId, tileCellData1.AutoTileCoords);
-                        var tileCellData2 = _autoTileConfig.Wall_Vertical_LeftBottom;
-                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 1), tileCellData2.SourceId, tileCellData2.AutoTileCoords);
-                    }
-                    else if (right)
-                    {
-                        var tileCellData1 = _autoTileConfig.Wall_Vertical_RightTop;
-                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 2), tileCellData1.SourceId, tileCellData1.AutoTileCoords);
-                        var tileCellData2 = _autoTileConfig.Wall_Vertical_RightBottom;
-                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 1), tileCellData2.SourceId, tileCellData2.AutoTileCoords);
-                    }
-                    else
-                    {
-                        var tileCellData1 = _autoTileConfig.Wall_Vertical_CenterTop;
-                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 2), tileCellData1.SourceId, tileCellData1.AutoTileCoords);
-                        var tileCellData2 = _autoTileConfig.Wall_Vertical_CenterBottom;
-                        SetCell(MapLayer.AutoFloorLayer, new Vector2I(x, y - 1), tileCellData2.SourceId, tileCellData2.AutoTileCoords);
-                    }
-                }
-            }
-
-            return true;
-        });
-        
-        //绘制临时边界
-        var temp1 = new List<Vector2I>();
-        for (var x = xStart - 3; x <= xEnd + 3; x++)
-        {
-            var p1 = new Vector2I(x, yStart - 5);
-            var p2 = new Vector2I(x, yEnd + 3);
-            temp1.Add(p1);
-            temp1.Add(p2);
-            //上横
-            SetCell(MapLayer.AutoFloorLayer, p1, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
-            //下横
-            SetCell(MapLayer.AutoFloorLayer, p2, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
-        }
-        for (var y = yStart - 5; y <= yEnd + 3; y++)
-        {
-            var p1 = new Vector2I(xStart - 3, y);
-            var p2 = new Vector2I(xEnd + 3, y);
-            temp1.Add(p1);
-            temp1.Add(p2);
-            //左竖
-            SetCell(MapLayer.AutoFloorLayer, p1, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
-            //右竖
-            SetCell(MapLayer.AutoFloorLayer, p2, _autoTileConfig.TopMask.SourceId, _autoTileConfig.TopMask.AutoTileCoords);
-        }
-        
-        //计算需要绘制的图块
-        var temp2 = new List<Vector2I>();
-        for (var x = xStart - 2; x <= xEnd + 2; x++)
-        {
-            for (var y = yStart - 4; y <= yEnd + 2; y++)
-            {
-                if (!_autoCellLayerGrid.Contains(x, y) && !_autoCellLayerGrid.Contains(x, y + 1) && !_autoCellLayerGrid.Contains(x, y + 2))
-                {
-                    list.Add(new Vector2I(x, y));
-                    if (!IsMaskCollisionGround(_autoCellLayerGrid, x, y))
-                    {
-                        temp2.Add(new Vector2I(x, y));
-                    }
-                }
-            }
-        }
-        var arr = new Array<Vector2I>(list);
-        //绘制自动图块
-        SetCellsTerrainConnect(MapLayer.AutoFloorLayer, arr, _mainTerrainSet, _mainTerrain, false);
-        
-        //擦除临时边界
-        for (var i = 0; i < temp1.Count; i++)
-        {
-            EraseCell(MapLayer.AutoFloorLayer, temp1[i]);
-        }
-
-        //计算区域
-        CalcTileRect(true);
-        
-        //开始绘制导航网格
-        GenerateNavigation();
-
-        //擦除临时边界2
-        for (var i = 0; i < temp2.Count; i++)
-        {
-            EraseCell(MapLayer.AutoFloorLayer, temp2[i]);
-        }
-        
-        //将墙壁移动到指定层
-        MoveTerrainCell();
-    }
-
-    private bool IsMaskCollisionGround(InfiniteGrid<bool> autoCellLayerGrid, int x, int y)
-    {
-        for (var i = -2; i <= 2; i++)
-        {
-            for (var j = -2; j <= 4; j++)
-            {
-                if (autoCellLayerGrid.Contains(x + i, y + j))
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-    
-    //将自动生成的图块从 MapLayer.AutoFloorLayer 移动到指定图层中
-    private void MoveTerrainCell()
-    {
-        ClearLayer(MapLayer.AutoTopLayer);
-        ClearLayer(MapLayer.AutoMiddleLayer);
-        
-        var x = CurrRoomPosition.X;
-        var y = CurrRoomPosition.Y - 1;
-        var w = CurrRoomSize.X;
-        var h = CurrRoomSize.Y + 1;
-
-        for (var i = 0; i < w; i++)
-        {
-            for (var j = 0; j < h; j++)
-            {
-                var pos = new Vector2I(x + i, y + j);
-                if (!_autoCellLayerGrid.Contains(pos) && GetCellSourceId(MapLayer.AutoFloorLayer, pos) != -1)
-                {
-                    var atlasCoords = GetCellAtlasCoords(MapLayer.AutoFloorLayer, pos);
-                    var layer = _autoTileConfig.GetLayer(atlasCoords);
-                    if (layer == MapLayer.AutoMiddleLayer)
-                    {
-                        layer = MapLayer.AutoMiddleLayer;
-                    }
-                    else if (layer == MapLayer.AutoTopLayer)
-                    {
-                        layer = MapLayer.AutoTopLayer;
-                    }
-                    else
-                    {
-                        Debug.LogError($"异常图块: {pos}, 这个图块的图集坐标'{atlasCoords}'不属于'MiddleMapLayer'和'TopMapLayer'!");
-                        continue;
-                    }
-                    EraseCell(MapLayer.AutoFloorLayer, pos);
-                    SetCell(layer, pos, _mainSource, atlasCoords);
-                }
-            }
-        }
-    }
-
-    //生成导航网格
-    private void GenerateNavigation()
-    {
-        var navigationRegion = _editorTileMap.L_NavigationRegion.Instance;
-        var navigationPolygon = navigationRegion.NavigationPolygon;
-        navigationPolygon.Clear();
-        navigationPolygon.ClearPolygons();
-        navigationPolygon.ClearOutlines();
-        var endPos = CurrRoomPosition + CurrRoomSize;
-        navigationPolygon.AddOutline(new []
-        {
-            CurrRoomPosition * GameConfig.TileCellSize,
-            new Vector2(endPos.X, CurrRoomPosition.Y) * GameConfig.TileCellSize,
-            endPos * GameConfig.TileCellSize,
-            new Vector2(CurrRoomPosition.X, endPos.Y) * GameConfig.TileCellSize
-        });
-        navigationRegion.BakeNavigationPolygon(false);
-    }
 
     //设置显示的错误cell, 会标记上红色的闪烁动画
     private void SetErrorCell(Vector2I pos)
@@ -1637,8 +1432,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
         tileInfo.NavigationPolygon.AddRange(polygon.Polygons);
         tileInfo.NavigationVertices.AddRange(polygon.Vertices.Select(v => new SerializeVector2(v)));
         tileInfo.Floor.Clear();
-        tileInfo.Middle.Clear();
-        tileInfo.Top.Clear();
         tileInfo.CustomFloor1.Clear();
         tileInfo.CustomFloor2.Clear();
         tileInfo.CustomFloor3.Clear();
@@ -1648,8 +1441,6 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
 
         //保存图块数据
         PushAutoLayerDataToList(MapLayer.AutoFloorLayer, tileInfo.Floor);
-        PushAutoLayerDataToList(MapLayer.AutoMiddleLayer, tileInfo.Middle);
-        PushAutoLayerDataToList(MapLayer.AutoTopLayer, tileInfo.Top);
         PushLayerDataToList(MapLayer.CustomFloorLayer1, tileInfo.CustomFloor1);
         PushLayerDataToList(MapLayer.CustomFloorLayer2, tileInfo.CustomFloor2);
         PushLayerDataToList(MapLayer.CustomFloorLayer3, tileInfo.CustomFloor3);

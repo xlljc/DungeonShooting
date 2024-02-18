@@ -136,11 +136,6 @@ public class RoomInfo : IDestroy
     public Vector2I Waypoints { get; set; }
 
     /// <summary>
-    /// 导航网格对象
-    /// </summary>
-    public NavigationRegion2D NavigationRegion { get; set; }
-
-    /// <summary>
     /// 在 DungeonGenerator 中是否可以回滚, 如果可以回滚, 那么当前房间就只会有一个 NextRoom
     /// </summary>
     public bool CanRollback { get; set; } = false;
