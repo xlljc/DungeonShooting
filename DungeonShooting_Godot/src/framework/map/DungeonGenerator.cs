@@ -158,7 +158,7 @@ public class DungeonGenerator
         _rule = rule;
         
         //最大尝试次数
-        var maxTryCount = 2000;
+        var maxTryCount = 1000;
 
         //当前尝试次数
         var currTryCount = 0;
@@ -298,10 +298,6 @@ public class DungeonGenerator
                 var direction = _rule.GetNextRoomDoorDirection(prevRoom, roomType);
                 //房间间隔
                 var space = _rule.GetNextRoomInterval(prevRoom, roomType, direction);
-                if (direction == RoomDirection.Up || direction == RoomDirection.Down)
-                {
-                    space += 2;
-                }
                 //中心偏移
                 var offset = _rule.GetNextRoomOffset(prevRoom, roomType, direction);
 
@@ -340,7 +336,7 @@ public class DungeonGenerator
                 }
 
                 //是否碰到其他房间或者过道
-                if (_roomGrid.RectCollision(room.Position - Vector2I.One, room.Size + new Vector2I(2, 2)))
+                if (_roomGrid.RectCollision(room.Position - new Vector2I(2, 2), room.Size + new Vector2I(4, 5)))
                 {
                     //碰到其他墙壁, 再一次尝试
                     continue;

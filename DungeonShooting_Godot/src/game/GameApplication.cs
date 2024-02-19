@@ -107,6 +107,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		
 		DungeonConfig = new DungeonConfig();
 		DungeonConfig.GroupName = "Test1";
+		DungeonConfig.RandomSeed = null;
 		DungeonConfig.BattleRoomCount = 15;
 		// DungeonConfig.BossRoomCount = 0;
 		// DungeonConfig.RewardRoomCount = 0;

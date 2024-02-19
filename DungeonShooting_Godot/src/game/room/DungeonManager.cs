@@ -196,35 +196,63 @@ public partial class DungeonManager : Node2D
         UiManager.Open_Loading();
         yield return 0;
         //生成地牢房间
-        var random = new SeedRandom(1);
-        _dungeonGenerator = new DungeonGenerator(CurrConfig, random);
-        var rule = new DefaultDungeonRule(_dungeonGenerator);
-        if (!_dungeonGenerator.Generate(rule)) //生成房间失败
+        
+        //最多尝试10次
+        const int maxCount = 10;
+        for (var i = 0; i < maxCount; i++)
         {
-            _dungeonGenerator.EachRoom(DisposeRoomInfo);
-            _dungeonGenerator = null;
-            UiManager.Hide_Loading();
-            
-            if (IsEditorMode) //在编辑器模式下打开的Ui
+            SeedRandom random;
+            if (CurrConfig.RandomSeed != null)
             {
-                EditorPlayManager.IsPlay = false;
-                IsEditorMode = false;
-                //显示上一个Ui
-                if (_prevUi != null)
+                random = new SeedRandom(CurrConfig.RandomSeed.Value);
+            }
+            else
+            {
+                random = new SeedRandom();
+            }
+       
+            var dungeonGenerator = new DungeonGenerator(CurrConfig, random);
+            var rule = new DefaultDungeonRule(dungeonGenerator);
+            if (!dungeonGenerator.Generate(rule)) //生成房间失败
+            {
+                dungeonGenerator.EachRoom(DisposeRoomInfo);
+                UiManager.Hide_Loading();
+            
+                if (IsEditorMode) //在编辑器模式下打开的Ui
                 {
-                    _prevUi.ShowUi();
+                    EditorPlayManager.IsPlay = false;
+                    IsEditorMode = false;
+                    //显示上一个Ui
+                    if (_prevUi != null)
+                    {
+                        _prevUi.ShowUi();
+                    }
+                }
+                else //正常关闭Ui
+                {
+                    UiManager.Open_Main();
+                }
+
+                if (i == maxCount - 1)
+                {
+                    EditorWindowManager.ShowTips("错误", "生成房间尝试次数过多，生成地牢房间失败，请加大房间门连接区域，或者修改地牢生成规则！");
+                    yield break;
+                }
+                else
+                {
+                    yield return 0;
                 }
             }
-            else //正常关闭Ui
+            else //生成成功!
             {
-                UiManager.Open_Main();
+                _dungeonGenerator = dungeonGenerator;
+                break;
             }
-            EditorWindowManager.ShowTips("错误", "生成房间尝试次数过多，生成地牢房间失败，请加大房间门连接区域，或者修改地牢生成规则！");
-            yield break;
         }
+        
         yield return 0;
         //创建世界场景
-        World = GameApplication.Instance.CreateNewWorld(random);
+        World = GameApplication.Instance.CreateNewWorld(_dungeonGenerator.Random);
         yield return 0;
         var group = GameApplication.Instance.RoomConfig[CurrConfig.GroupName];
         var tileSetSplit = GameApplication.Instance.TileSetConfig[group.TileSet];

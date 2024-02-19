@@ -126,6 +126,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     /// <summary>
+    /// 下坠逻辑是否执行完成
+    /// </summary>
+    public bool IsFallOver => _isFallOver;
+
+    /// <summary>
     /// 是否正在投抛过程中
     /// </summary>
     public bool IsThrowing => VerticalSpeed != 0 && !_isFallOver;
@@ -1443,6 +1448,19 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     /// <summary>
+    /// 获取投抛该物体时所产生的数据, 只在 IsFallOver 为 false 时有效
+    /// </summary>
+    public ActivityFallData GetFallData()
+    {
+        if (!IsFallOver && !_fallData.UseOrigin)
+        {
+            return _fallData;
+        }
+
+        return null;
+    }
+    
+    /// <summary>
     /// 触发投抛动作
     /// </summary>
     private void Throw()
@@ -1473,7 +1491,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     private void SetFallCollision()
     {
-        if (_fallData != null && _fallData.UseOrigin)
+        if (_fallData.UseOrigin)
         {
             _fallData.OriginShape = Collision.Shape;
             _fallData.OriginPosition = Collision.Position;
@@ -1507,7 +1525,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     private void RestoreCollision()
     {
-        if (_fallData != null && !_fallData.UseOrigin)
+        if (!_fallData.UseOrigin)
         {
             Collision.Shape = _fallData.OriginShape;
             Collision.Position = _fallData.OriginPosition;
@@ -1901,6 +1919,27 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         if (_mountObjects.Remove(target))
         {
             target.OnUnmount(this);
+        }
+    }
+
+    /// <summary>
+    /// 设置是否启用碰撞层, 该函数是设置下载状态下原碰撞层
+    /// </summary>
+    public void SetOriginCollisionLayerValue(uint layer, bool vale)
+    {
+        if (vale)
+        {
+            if (!Utils.CollisionMaskWithLayer(_fallData.OriginCollisionLayer, layer))
+            {
+                _fallData.OriginCollisionLayer |= layer;
+            }
+        }
+        else
+        {
+            if (Utils.CollisionMaskWithLayer(_fallData.OriginCollisionLayer, layer))
+            {
+                _fallData.OriginCollisionLayer ^= layer;
+            }
         }
     }
 }
