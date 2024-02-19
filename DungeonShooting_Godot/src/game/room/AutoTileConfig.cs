@@ -215,10 +215,10 @@ public class AutoTileConfig
                 Auto_010_010_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Center:
-                Auto_010_010_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoMiddleLayer);
+                Auto_010_010_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             case TerrainPeering.Center:
-                Auto_000_010_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoMiddleLayer);
+                Auto_000_010_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             //第二列
             case TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom:
@@ -228,10 +228,10 @@ public class AutoTileConfig
                 Auto_010_011_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Center | TerrainPeering.Right:
-                Auto_010_011_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoMiddleLayer);
+                Auto_010_011_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             case TerrainPeering.Center | TerrainPeering.Right:
-                Auto_000_011_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoMiddleLayer);
+                Auto_000_011_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             //第三列
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.Bottom:
@@ -242,10 +242,10 @@ public class AutoTileConfig
                 Auto_010_111_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right:
-                Auto_010_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoMiddleLayer);
+                Auto_010_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right:
-                Auto_000_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoMiddleLayer);
+                Auto_000_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             //第四列
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Bottom:
@@ -255,10 +255,10 @@ public class AutoTileConfig
                 Auto_010_110_010 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center:
-                Auto_010_110_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoMiddleLayer);
+                Auto_010_110_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             case TerrainPeering.Left | TerrainPeering.Center:
-                Auto_000_110_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoMiddleLayer);
+                Auto_000_110_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             //第五列
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
@@ -292,7 +292,7 @@ public class AutoTileConfig
                 break;
             case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.Right:
-                Auto_011_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoMiddleLayer);
+                Auto_011_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             //第七列
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom |
@@ -309,7 +309,7 @@ public class AutoTileConfig
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center |
                  TerrainPeering.Right:
-                Auto_110_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoMiddleLayer);
+                Auto_110_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             //第八列
             case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left | TerrainPeering.Center |
@@ -341,7 +341,7 @@ public class AutoTileConfig
                 Auto_011_111_011 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             case TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Center | TerrainPeering.Right:
-                Auto_011_011_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoMiddleLayer);
+                Auto_011_011_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             //第十列
             case TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right |
@@ -359,7 +359,7 @@ public class AutoTileConfig
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.RightTop | TerrainPeering.Left |
                  TerrainPeering.Center | TerrainPeering.Right:
-                Auto_111_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoMiddleLayer);
+                Auto_111_111_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             //第十一列
             case TerrainPeering.Left | TerrainPeering.Center | TerrainPeering.Right | TerrainPeering.LeftBottom |
@@ -387,7 +387,7 @@ public class AutoTileConfig
                 Auto_110_110_110 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
             case TerrainPeering.LeftTop | TerrainPeering.Top | TerrainPeering.Left | TerrainPeering.Center:
-                Auto_110_110_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoMiddleLayer);
+                Auto_110_110_000 = new TileCellData(sourceId, pos, peeringValue, TileSetTerrainInfo.TerrainLayerType, MapLayer.AutoTopLayer);
                 break;
 
             default:

@@ -169,21 +169,21 @@ public class TileSetSplit : IDestroy
     private static void InitMainSourceData(TileSetTerrainInfo terrainInfo, TileSetAtlasSource tileSetAtlasSource)
     {
         //ySort
-        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 2), 39);
-        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 2), 39);
-        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 2), 39);
-        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 2), 39);
-        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 3), 39);
-        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 3), 39);
-        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 3), 39);
-        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 3), 39);
-
-        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 3), 39);
-        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 3), 39);
-
-        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 3), 39);
-        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 3), 39);
-        SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 3), 39);
+        // SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 2), 39);
+        // SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 2), 39);
+        // SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 2), 39);
+        // SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 2), 39);
+        // SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(0, 3), 39);
+        // SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(1, 3), 39);
+        // SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(2, 3), 39);
+        // SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(3, 3), 39);
+        //
+        // SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(5, 3), 39);
+        // SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(6, 3), 39);
+        //
+        // SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(8, 3), 39);
+        // SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(9, 3), 39);
+        // SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 1, new Vector2I(11, 3), 39);
 
         SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(0, 0), 23);
         SetAtlasSourceYSortOrigin(terrainInfo, tileSetAtlasSource, 2, new Vector2I(1, 0), 23);
