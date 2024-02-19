@@ -21,6 +21,7 @@ radius = 8.06226
 [node name="EnemyTemplate" instance=ExtResource("1_5po38")]
 collision_layer = 16
 collision_mask = 25
+floor_stop_on_slope = false
 
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource("ShaderMaterial_k8mt5")

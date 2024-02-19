@@ -1,15 +1,3 @@
-#region 基础敌人设计思路
-/*
-敌人有三种状态: 
-状态1: 未发现玩家, 视野不可穿墙, 该状态下敌人移动比较规律, 移动速度较慢, 一旦玩家进入视野或者听到玩家枪声, 立刻切换至状态3, 该房间的敌人不能再回到状态1
-状态2: 发现有玩家, 但不知道在哪, 视野不可穿墙, 该情况下敌人移动速度明显加快, 移动不规律, 一旦玩家进入视野或者听到玩家枪声, 立刻切换至状态3
-状态3: 明确知道玩家的位置, 视野允许穿墙, 移动速度与状态2一致, 进入该状态时, 敌人之间会相互告知玩家所在位置, 并朝着玩家位置开火,
-       如果有墙格挡, 则有一定概率继续开火, 一旦玩家立刻敌人视野超哥一段时间, 敌人自动切换为状态2
-
-敌人状态1只存在于少数房间内, 比如特殊房间, 大部分情况下敌人应该是状态2, 或者玩家进入房间时就被敌人发现
-*/
-#endregion
-
 
 using System;
 using System.Collections.Generic;
@@ -156,6 +144,8 @@ public partial class Enemy : Role
         
         //默认状态
         StateController.ChangeStateInstant(AIStateEnum.AiNormal);
+
+        //NavigationAgent2D.VelocityComputed += OnVelocityComputed;
     }
 
     protected override RoleState OnCreateRoleState()
@@ -559,6 +549,11 @@ public partial class Enemy : Role
     /// </summary>
     public void DoMove()
     {
+        // //计算移动
+        // NavigationAgent2D.MaxSpeed = EnemyRoleState.MoveSpeed;
+        // var nextPos = NavigationAgent2D.GetNextPathPosition();
+        // NavigationAgent2D.Velocity = (nextPos - Position - NavigationPoint.Position).Normalized() * RoleState.MoveSpeed;
+        
         AnimatedSprite.Play(AnimatorNames.Run);
         //计算移动
         var nextPos = NavigationAgent2D.GetNextPathPosition();
@@ -594,4 +589,13 @@ public partial class Enemy : Role
         StateController.Enable = false;
         this.CallDelay(0.7f, () => StateController.Enable = true);
     }
+
+    // private void OnVelocityComputed(Vector2 velocity)
+    // {
+    //     if (Mathf.Abs(velocity.X) >= 0.01f && Mathf.Abs(velocity.Y) >= 0.01f)
+    //     {
+    //         AnimatedSprite.Play(AnimatorNames.Run);
+    //         BasisVelocity = velocity;
+    //     }
+    // }
 }
