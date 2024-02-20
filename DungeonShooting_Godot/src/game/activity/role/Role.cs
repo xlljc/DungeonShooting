@@ -962,6 +962,10 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool IsEnemyWithPlayer()
     {
+        if (Player.Current == null)
+        {
+            return false;
+        }
         return CollisionWithMask(Player.Current.EnemyLayer);
     }
 

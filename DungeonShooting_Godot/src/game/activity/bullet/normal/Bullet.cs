@@ -313,7 +313,8 @@ public partial class Bullet : ActivityObject, IBullet
         //距离太大, 自动销毁
         if (MoveController.Enable)
         {
-            CurrFlyDistance += Velocity.Length() * delta;
+            //CurrFlyDistance += Velocity.Length() * delta;
+            CurrFlyDistance += BulletData.FlySpeed * delta;
             if (CurrFlyDistance >= BulletData.MaxDistance)
             {
                 State = BulletStateEnum.MaxDistance;

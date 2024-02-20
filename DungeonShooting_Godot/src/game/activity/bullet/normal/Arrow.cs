@@ -16,7 +16,6 @@ public partial class Arrow : Bullet, IMountItem
         SetEnableMovement(true);
         EnableVerticalMotion = false;
         DefaultLayer = RoomLayerEnum.NormalLayer;
-        Debug.Log("IsFallOver: ", IsFallOver, ", ", CollisionLayer);
     }
 
     public override CheckInteractiveResult CheckInteractive(ActivityObject master)
@@ -132,6 +131,7 @@ public partial class Arrow : Bullet, IMountItem
         Reparent(target);
         AnimatedSprite.Play(AnimatorNames.HalfEnd);
         HalfSprite.Visible = true;
+        RefreshBulletColor(false);
         EnableVerticalMotion = false;
     }
 
