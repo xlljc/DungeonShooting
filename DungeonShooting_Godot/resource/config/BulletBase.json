@@ -337,8 +337,8 @@
       -1
     ],
     "DistanceRange": [
-      50,
-      50
+      250,
+      300
     ],
     "VerticalSpeed": [
       0

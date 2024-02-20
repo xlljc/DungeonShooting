@@ -1986,7 +1986,7 @@
     "StandbyAmmoCapacity": 80,
     "ShowReloadBar": false,
     "AutoReload": true,
-    "ReloadTime": 0.5,
+    "ReloadTime": 0.01,
     "AloneReload": false,
     "AloneReloadCount": 1,
     "AloneReloadBeginIntervalTime": 0,

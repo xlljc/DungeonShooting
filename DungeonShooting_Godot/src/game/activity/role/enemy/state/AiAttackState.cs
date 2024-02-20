@@ -136,7 +136,7 @@ public class AiAttackState : StateBase<Enemy, AIStateEnum>
         else //攻击状态
         {
             //触发扳机
-            AttackState = weapon.AiTriggerAttackState();
+            AttackState = weapon.AiTriggerAttackState(AttackState);
 
             if (AttackState == AiAttackEnum.LockingTime) //锁定玩家状态
             {
