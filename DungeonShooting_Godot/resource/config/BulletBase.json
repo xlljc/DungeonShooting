@@ -330,15 +330,15 @@
       0
     ],
     "SpeedRange": [
-      450,
-      480
+      400,
+      400
     ],
     "LifeTimeRange": [
       -1
     ],
     "DistanceRange": [
-      300,
-      350
+      50,
+      50
     ],
     "VerticalSpeed": [
       0

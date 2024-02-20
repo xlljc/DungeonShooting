@@ -67,13 +67,6 @@ public partial class RoomDoor : ActivityObject
         IsClose = true;
         //Visible = true;
         Collision.Disabled = false;
-        if (_door.Navigation != null)
-        {
-            _door.Navigation.OpenNavigationNode.Enabled = false;
-            _door.Navigation.OpenNavigationNode.Visible = false;
-            _door.Navigation.CloseNavigationNode.Enabled = true;
-            _door.Navigation.CloseNavigationNode.Visible = true;
-        }
 
         if (AnimatedSprite.SpriteFrames.HasAnimation(AnimatorNames.CloseDoor))
         {
@@ -125,13 +118,6 @@ public partial class RoomDoor : ActivityObject
     private void OpenDoorHandler()
     {
         Collision.Disabled = true;
-        if (_door.Navigation != null)
-        {
-            _door.Navigation.OpenNavigationNode.Enabled = true;
-            _door.Navigation.OpenNavigationNode.Visible = true;
-            _door.Navigation.CloseNavigationNode.Enabled = false;
-            _door.Navigation.CloseNavigationNode.Visible = false;
-        }
         //调整门的层级
         //ZIndex = MapLayer.AutoFloorLayer;
         

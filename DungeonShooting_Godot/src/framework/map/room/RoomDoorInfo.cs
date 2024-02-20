@@ -61,11 +61,6 @@ public class RoomDoorInfo : IDestroy
     public Vector2I Cross;
 
     /// <summary>
-    /// 占位导航网格
-    /// </summary>
-    public DoorNavigationInfo Navigation;
-
-    /// <summary>
     /// 连接过道使用预览纹理, 用于小地图
     /// </summary>
     public ImageTexture AislePreviewTexture;

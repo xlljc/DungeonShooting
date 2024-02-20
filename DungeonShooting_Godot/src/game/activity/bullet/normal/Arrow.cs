@@ -37,13 +37,53 @@ public partial class Arrow : Bullet, IMountItem
         return base.CheckInteractive(master);
     }
 
+    public override void OnPlayDisappearEffect()
+    {
+    }
+
+    protected override void OnArea2dEntered(Area2D other)
+    {
+        if (Velocity.Length() >= BulletData.FlySpeed / 2f)
+        {
+            base.OnArea2dEntered(other);
+        }
+    }
+
+    protected override void OnBodyEntered(Node2D body)
+    {
+        if (Velocity.Length() >= BulletData.FlySpeed / 2f)
+        {
+            base.OnBodyEntered(body);
+        }
+    }
+
     public override void OnCollisionTarget(IHurt hurt)
     {
         base.OnCollisionTarget(hurt);
-        var activityObject = hurt.GetActivityObject();
-        if (activityObject != null)
+        if (CurrentPenetration > BulletData.Penetration)
         {
-            CallDeferred(nameof(OnBindTarget), activityObject);
+            var activityObject = hurt.GetActivityObject();
+            if (activityObject != null)
+            {
+                CallDeferred(nameof(OnBindTarget), activityObject);
+            }
+        }
+    }
+
+    public override void OnMoveCollision(KinematicCollision2D collision)
+    {
+        if (Velocity.Length() >= BulletData.FlySpeed / 2f)
+        {
+            base.OnMoveCollision(collision);
+        }
+    }
+
+    protected override void OnThrowOver()
+    {
+        SetOriginCollisionLayerValue(PhysicsLayer.Prop, true);
+        if (!Utils.CollisionMaskWithLayer(CollisionLayer, PhysicsLayer.Prop))
+        {
+            CollisionLayer |= PhysicsLayer.Prop;
         }
     }
 
@@ -57,6 +97,10 @@ public partial class Arrow : Bullet, IMountItem
             {
                 Position -= slideCollision.GetTravel();
             }
+        }
+        else if (State == BulletStateEnum.MaxDistance) //到达最大动力距离, 则开始下坠
+        {
+            EnableVerticalMotion = true;
         }
         else if (State == BulletStateEnum.FallToGround) //落地, 啥也不干
         {
@@ -72,7 +116,7 @@ public partial class Arrow : Bullet, IMountItem
     //将弓箭挂载到目标物体上
     private void OnBindTarget(ActivityObject activityObject)
     {
-        if (activityObject.IsDestroyed)
+        if (activityObject.IsDestroyed) //目标已经销毁
         {
             OnUnmount(activityObject);
         }
@@ -88,11 +132,11 @@ public partial class Arrow : Bullet, IMountItem
         Reparent(target);
         AnimatedSprite.Play(AnimatorNames.HalfEnd);
         HalfSprite.Visible = true;
+        EnableVerticalMotion = false;
     }
 
     public void OnUnmount(ActivityObject target)
     {
-        SetOriginCollisionLayerValue(PhysicsLayer.Prop, true);
         AnimatedSprite.Play(AnimatorNames.Default);
         HalfSprite.Visible = false;
         SetEnableMovement(true);

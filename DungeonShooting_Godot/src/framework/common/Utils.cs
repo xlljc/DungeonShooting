@@ -50,36 +50,6 @@ public static class Utils
     {
         return (mask & layer) != 0;
     }
-
-    /// <summary>
-    /// 使用定的 canvasItem 绘制导航区域, 注意, 该函数只能在 draw 函数中调用
-    /// </summary>
-    public static void DrawNavigationPolygon(CanvasItem canvasItem, NavigationPolygonData[] polygonData, float width = 1)
-    {
-        for (var i = 0; i < polygonData.Length; i++)
-        {
-            var item = polygonData[i];
-            var points = item.GetPoints();
-            if (points.Length>= 2)
-            {
-                var array = new Vector2[points.Length + 1];
-                for (var j = 0; j < points.Length; j++)
-                {
-                    array[j] = points[j];
-                }
-                
-                array[array.Length - 1] = points[0];
-                if (item.Type == NavigationPolygonType.In)
-                {
-                    canvasItem.DrawPolyline(points, Colors.Orange, width);
-                }
-                else
-                {
-                    canvasItem.DrawPolyline(points, Colors.Orange, width);
-                }
-            }
-        }
-    }
     
     /// <summary>
     /// 将一个任意角度转为0到360度
