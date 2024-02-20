@@ -62,6 +62,11 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public bool IsEnemyBullet { get; private set; } = false;
 
+    /// <summary>
+    /// 子弹状态
+    /// </summary>
+    public BulletStateEnum State { get; protected set; } = BulletStateEnum.Normal;
+
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
 
@@ -136,7 +141,11 @@ public partial class Bullet : ActivityObject, IBullet
         //过期销毁
         if (data.LifeTime > 0)
         {
-            this.CallDelay(data.LifeTime, OnLimeOver);
+            this.CallDelay(data.LifeTime, () =>
+            {
+                State = BulletStateEnum.LimeOver;
+                OnLimeOver();
+            });
         }
         
         if (Particles2D != null)
@@ -172,6 +181,7 @@ public partial class Bullet : ActivityObject, IBullet
         CurrentBounce++;
         if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
         {
+            State = BulletStateEnum.MoveCollision;
             //创建粒子特效
             OnPlayCollisionEffect(collision);
             LogicalFinish();
@@ -200,6 +210,7 @@ public partial class Bullet : ActivityObject, IBullet
         CurrentPenetration++;
         if (CurrentPenetration > BulletData.Penetration)
         {
+            State = BulletStateEnum.CollisionTarget;
             CallDeferred(nameof(LogicalFinish));
         }
     }
@@ -224,6 +235,7 @@ public partial class Bullet : ActivityObject, IBullet
     
     protected override void OnFallToGround()
     {
+        State = BulletStateEnum.FallToGround;
         //落地销毁
         OnPlayDisappearEffect();
         LogicalFinish();
@@ -295,15 +307,16 @@ public partial class Bullet : ActivityObject, IBullet
     {
         if (ActivityMaterial.DynamicCollision)
         {
-            //子弹高度大于 16 关闭碰撞检测
-            CollisionShape2D.Disabled = Altitude >= 16;
+            //子弹高度大于 32 关闭碰撞检测
+            CollisionShape2D.Disabled = Altitude >= 32;
         }
         //距离太大, 自动销毁
         if (MoveController.Enable)
         {
-            CurrFlyDistance += BulletData.FlySpeed * delta;
+            CurrFlyDistance += Velocity.Length() * delta;
             if (CurrFlyDistance >= BulletData.MaxDistance)
             {
+                State = BulletStateEnum.MaxDistance;
                 OnMaxDistance();
             }
         }
@@ -342,6 +355,7 @@ public partial class Bullet : ActivityObject, IBullet
     
     public virtual void OnReclaim()
     {
+        State = BulletStateEnum.Normal;
         Visible = false;
         if (Particles2D != null)
         {

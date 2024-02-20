@@ -37,21 +37,6 @@ public partial class Arrow : Bullet, IMountItem
         return base.CheckInteractive(master);
     }
 
-    public override void OnPlayDisappearEffect()
-    {
-    }
-
-    public override void OnMoveCollision(KinematicCollision2D collision)
-    {
-        CurrentBounce++;
-        if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
-        {
-            //创建粒子特效
-            OnPlayCollisionEffect(collision);
-            ObjectPool.Reclaim(this);
-        }
-    }
-
     public override void OnCollisionTarget(IHurt hurt)
     {
         base.OnCollisionTarget(hurt);
@@ -64,11 +49,23 @@ public partial class Arrow : Bullet, IMountItem
 
     public override void LogicalFinish()
     {
-        SetEnableMovement(false);
-        var slideCollision = GetLastSlideCollision();
-        if (slideCollision != null)
+        if (State == BulletStateEnum.CollisionTarget) //碰撞到目标, 直接冻结
         {
-            Position -= slideCollision.GetTravel();
+            SetEnableMovement(false);
+            var slideCollision = GetLastSlideCollision();
+            if (slideCollision != null)
+            {
+                Position -= slideCollision.GetTravel();
+            }
+        }
+        else if (State == BulletStateEnum.FallToGround) //落地, 啥也不干
+        {
+            
+        }
+        else
+        {
+            //Debug.Log("碰撞速度: " + Velocity.Length());
+            base.LogicalFinish();
         }
     }
 

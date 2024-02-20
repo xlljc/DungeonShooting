@@ -1116,8 +1116,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
                     _altitude += VerticalSpeed * delta;
                     _verticalSpeed -= GameConfig.G * ActivityMaterial.GravityScale * delta;
 
-                    //当高度大于16时, 显示在所有物体上, 并且关闭碰撞
-                    if (Altitude >= 16)
+                    //当高度大于32时, 显示在所有物体上, 并且关闭碰撞
+                    if (Altitude >= 32)
                     {
                         AnimatedSprite.ZIndex = 20;
                     }
@@ -1128,7 +1128,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
                     //动态开关碰撞器
                     if (ActivityMaterial.DynamicCollision)
                     {
-                        Collision.Disabled = Altitude >= 16;
+                        Collision.Disabled = Altitude >= 32;
                     }
                 
                     //达到最高点
