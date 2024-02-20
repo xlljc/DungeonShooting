@@ -8,13 +8,19 @@ using Godot;
 /// </summary>
 public class RoomInfo : IDestroy
 {
+    public RoomInfo(int id, DungeonRoomType type)
+    {
+        Id = id;
+        RoomType = type;
+    }
+
     public RoomInfo(int id, DungeonRoomType type, DungeonRoomSplit roomSplit)
     {
         Id = id;
         RoomType = type;
         RoomSplit = roomSplit;
     }
-
+    
     /// <summary>
     /// 房间 id
     /// </summary>
@@ -31,7 +37,7 @@ public class RoomInfo : IDestroy
     public int Layer;
     
     /// <summary>
-    /// 生成该房间使用的配置数据
+    /// 生成该房间使用的配置数据, 可能为 null
     /// </summary>
     public DungeonRoomSplit RoomSplit;
     
@@ -106,7 +112,7 @@ public class RoomInfo : IDestroy
     public Rect2I OuterRect { get; private set; }
     
     /// <summary>
-    /// 画布占用区域
+    /// 画布占用区域, 单位: 像素
     /// </summary>
     public Rect2I CanvasRect { get; private set; }
 
@@ -265,6 +271,10 @@ public class RoomInfo : IDestroy
     /// <returns></returns>
     public Vector2I GetOffsetPosition()
     {
+        if (RoomSplit == null)
+        {
+            return Vector2I.Zero;
+        }
         return RoomSplit.RoomInfo.Position.AsVector2I() * GameConfig.TileCellSize;
     }
     

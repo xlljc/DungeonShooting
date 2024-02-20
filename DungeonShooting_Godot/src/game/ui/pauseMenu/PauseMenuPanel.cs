@@ -28,7 +28,7 @@ public partial class PauseMenuPanel : PauseMenu
     //继续游戏
     private void OnContinueClick()
     {
-        GameApplication.Instance.World.Pause = false;
+        World.Current.Pause = false;
         GameApplication.Instance.Cursor.SetGuiMode(false);
         Destroy();
     }

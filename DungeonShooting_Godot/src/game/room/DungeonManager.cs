@@ -41,9 +41,14 @@ public partial class DungeonManager : Node2D
     public DungeonConfig CurrConfig { get; private set; }
     
     /// <summary>
-    /// 当前使用的世界对象
+    /// 游戏大厅
     /// </summary>
-    public World World { get; private set; }
+    public Hall Hall { get; private set; }
+	
+    /// <summary>
+    /// 当前玩家所在游戏世界对象
+    /// </summary>
+    public World CurrWorld { get; private set; }
 
     /// <summary>
     /// 自动图块配置
@@ -65,6 +70,85 @@ public partial class DungeonManager : Node2D
         //绑定事件
         EventManager.AddEventListener(EventEnum.OnPlayerFirstEnterRoom, OnPlayerFirstEnterRoom);
         EventManager.AddEventListener(EventEnum.OnPlayerEnterRoom, OnPlayerEnterRoom);
+    }
+    
+    /// <summary>
+    /// 初始化游戏大厅
+    /// </summary>
+    public void InitHall(SeedRandom random)
+    {
+        if (Hall != null)
+        {
+            return;
+        }
+        Hall = ResourceManager.LoadAndInstantiate<Hall>(ResourcePath.scene_Hall_tscn);
+        Hall.InitRandomPool(random);
+    }
+
+    /// <summary>
+    /// 创建新的 World 对象, 相当于清理房间
+    /// </summary>
+    public World CreateNewWorld(SeedRandom random)
+    {
+        if (CurrWorld != null)
+        {
+            ClearWorld();
+            CurrWorld.QueueFree();
+        }
+        CurrWorld = ResourceManager.LoadAndInstantiate<World>(ResourcePath.scene_World_tscn);
+        CurrWorld.InitLayer();
+        CurrWorld.InitRandomPool(random);
+        return CurrWorld;
+    }
+
+    /// <summary>
+    /// 销毁 World 对象, 相当于清理房间
+    /// </summary>
+    public void DestroyWorld()
+    {
+        //销毁所有物体
+        if (CurrWorld != null)
+        {
+            ClearWorld();
+            CurrWorld.QueueFree();
+        }
+		
+        //销毁池中所有物体
+        ObjectPool.DisposeAllItem();
+
+        CurrWorld = null;
+    }
+    
+    
+    //清理世界
+    private void ClearWorld()
+    {
+        var childCount = CurrWorld.NormalLayer.GetChildCount();
+        for (var i = 0; i < childCount; i++)
+        {
+            var c = CurrWorld.NormalLayer.GetChild(i);
+            if (c is IDestroy destroy)
+            {
+                destroy.Destroy();
+            }
+        }
+        childCount = CurrWorld.YSortLayer.GetChildCount();
+        for (var i = 0; i < childCount; i++)
+        {
+            var c = CurrWorld.YSortLayer.GetChild(i);
+            if (c is IDestroy destroy)
+            {
+                destroy.Destroy();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 进入大厅
+    /// </summary>
+    public void LoadHall(Action finish = null)
+    {
+        GameApplication.Instance.StartCoroutine(RunLoadHallCoroutine(finish));
     }
     
     /// <summary>
@@ -156,7 +240,7 @@ public partial class DungeonManager : Node2D
     {
         if (IsInDungeon)
         {
-            if (World.Pause) //已经暂停
+            if (CurrWorld.Pause) //已经暂停
             {
                 return;
             }
@@ -164,7 +248,7 @@ public partial class DungeonManager : Node2D
             //暂停游戏
             if (InputManager.Menu)
             {
-                World.Pause = true;
+                CurrWorld.Pause = true;
                 //鼠标改为Ui鼠标
                 GameApplication.Instance.Cursor.SetGuiMode(true);
                 //打开暂停Ui
@@ -187,6 +271,77 @@ public partial class DungeonManager : Node2D
                 QueueRedraw();
             }
         }
+    }
+
+    private IEnumerator RunLoadHallCoroutine(Action finish)
+    {
+        if (Hall != null && CurrWorld == Hall) //本来就在大厅中
+        {
+            yield break;
+        }
+        //打开 loading UI
+        UiManager.Open_Loading();
+        yield return 0;
+        InitHall(Utils.Random);
+
+        yield return 0;
+
+        if (CurrWorld == null) //从主菜单进入大厅
+        {
+            GameApplication.Instance.SceneRoot.AddChild(Hall);
+            CurrWorld = Hall;
+        }
+        else //从地牢中进入大厅
+        {
+            DestroyWorld();
+            GameApplication.Instance.SceneRoot.AddChild(Hall);
+            CurrWorld = Hall;
+        }
+        yield return 0;
+        //创建房间数据
+        var roomInfo = new RoomInfo(0, DungeonRoomType.None, null);
+        roomInfo.Size = new Vector2I(50, 50);
+        roomInfo.Position = Vector2I.Zero;
+        Hall.RoomInfo = roomInfo;
+        yield return 0;
+        
+        //创建归属区域
+        var affiliation = new AffiliationArea();
+        affiliation.Name = "AffiliationArea_Hall";
+        affiliation.Init(roomInfo, new Rect2I(roomInfo.Position, roomInfo.Size * GameConfig.TileCellSize));
+        roomInfo.AffiliationArea = affiliation;
+        Hall.AffiliationAreaRoot.AddChild(affiliation);
+        yield return 0;
+        
+        //静态渲染精灵根节点, 用于放置sprite
+        var spriteRoot = new RoomStaticSprite(roomInfo);
+        spriteRoot.Name = "SpriteRoot";
+        roomInfo.StaticSprite = spriteRoot;
+        Hall.StaticSpriteRoot.AddChild(spriteRoot);
+        
+        //静态精灵画布
+        var canvasSprite = new ImageCanvas(roomInfo.Size.X * GameConfig.TileCellSize, roomInfo.Size.Y * GameConfig.TileCellSize);
+        canvasSprite.Position = roomInfo.Position;
+        roomInfo.StaticImageCanvas = canvasSprite;
+        roomInfo.StaticSprite.AddChild(canvasSprite);
+        
+        //液体画布
+        var liquidCanvas = new LiquidCanvas(roomInfo, roomInfo.Size.X * GameConfig.TileCellSize, roomInfo.Size.Y * GameConfig.TileCellSize);
+        liquidCanvas.Position = roomInfo.Position;
+        roomInfo.LiquidCanvas = liquidCanvas;
+        roomInfo.StaticSprite.AddChild(liquidCanvas);
+
+        yield return 0;
+        
+        //创建玩家
+        var player = ActivityObject.Create<Player>(ActivityObject.Ids.Id_role0001);
+        player.Name = "Player";
+        player.PutDown(RoomLayerEnum.YSortLayer);
+        Player.SetCurrentPlayer(player);
+        player.WeaponPack.PickupItem(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
+        GameApplication.Instance.Cursor.SetGuiMode(false);
+        yield return 0;
+        UiManager.Destroy_Loading();
     }
 
     //执行加载地牢协程
@@ -216,7 +371,7 @@ public partial class DungeonManager : Node2D
             if (!dungeonGenerator.Generate(rule)) //生成房间失败
             {
                 dungeonGenerator.EachRoom(DisposeRoomInfo);
-                UiManager.Hide_Loading();
+                UiManager.Destroy_Loading();
             
                 if (IsEditorMode) //在编辑器模式下打开的Ui
                 {
@@ -252,20 +407,20 @@ public partial class DungeonManager : Node2D
         
         yield return 0;
         //创建世界场景
-        World = GameApplication.Instance.CreateNewWorld(_dungeonGenerator.Random);
+        CurrWorld = CreateNewWorld(_dungeonGenerator.Random);
         yield return 0;
         var group = GameApplication.Instance.RoomConfig[CurrConfig.GroupName];
         var tileSetSplit = GameApplication.Instance.TileSetConfig[group.TileSet];
-        World.TileRoot.TileSet = tileSetSplit.GetTileSet();
+        CurrWorld.TileRoot.TileSet = tileSetSplit.GetTileSet();
         //填充地牢
         AutoTileConfig = new AutoTileConfig(0, tileSetSplit.TileSetInfo.Sources[0].Terrain[0]);
-        _dungeonTileMap = new DungeonTileMap(World.TileRoot);
-        yield return _dungeonTileMap.AutoFillRoomTile(AutoTileConfig, _dungeonGenerator.StartRoomInfo, World);
-        yield return _dungeonTileMap.AutoFillAisleTile(AutoTileConfig, _dungeonGenerator.StartRoomInfo, World);
+        _dungeonTileMap = new DungeonTileMap(CurrWorld.TileRoot);
+        yield return _dungeonTileMap.AutoFillRoomTile(AutoTileConfig, _dungeonGenerator.StartRoomInfo, CurrWorld);
+        yield return _dungeonTileMap.AutoFillAisleTile(AutoTileConfig, _dungeonGenerator.StartRoomInfo, CurrWorld);
         //yield return _dungeonTileMap.AddOutlineTile(AutoTileConfig.WALL_BLOCK);
         yield return 0;
         //生成墙壁, 生成导航网格
-        _dungeonTileMap.GenerateWallAndNavigation(World, AutoTileConfig);
+        _dungeonTileMap.GenerateWallAndNavigation(CurrWorld, AutoTileConfig);
         yield return 0;
         //初始化所有房间
         yield return _dungeonGenerator.EachRoomCoroutine(InitRoom);
@@ -311,7 +466,7 @@ public partial class DungeonManager : Node2D
         //打开 loading UI
         UiManager.Open_Loading();
         yield return 0;
-        World.Pause = true;
+        CurrWorld.Pause = true;
         yield return 0;
         _dungeonGenerator.EachRoom(DisposeRoomInfo);
         yield return 0;
@@ -322,8 +477,7 @@ public partial class DungeonManager : Node2D
         UiManager.Hide_RoomUI();
         yield return 0;
         Player.SetCurrentPlayer(null);
-        World = null;
-        GameApplication.Instance.DestroyWorld();
+        DestroyWorld();
         yield return 0;
         FogMaskHandler.ClearRecordRoom();
         LiquidBrushManager.ClearData();
@@ -409,7 +563,7 @@ public partial class DungeonManager : Node2D
             (roomInfo.Size - new Vector2I(4, 5)) * GameConfig.TileCellSize));
         
         roomInfo.AffiliationArea = affiliation;
-        World.AffiliationAreaRoot.AddChild(affiliation);
+        CurrWorld.AffiliationAreaRoot.AddChild(affiliation);
     }
 
     //创建 RoomStaticSprite
@@ -452,7 +606,7 @@ public partial class DungeonManager : Node2D
         roomFog.InitFog(roomInfo.Position + new Vector2I(1, 0), roomInfo.Size - new Vector2I(2, 1));
         //roomFog.InitFog(roomInfo.Position + new Vector2I(1, 1), roomInfo.Size - new Vector2I(2, 2));
 
-        World.FogMaskRoot.AddChild(roomFog);
+        CurrWorld.FogMaskRoot.AddChild(roomFog);
         roomInfo.RoomFogMask = roomFog;
         
         //生成通道迷雾
@@ -552,7 +706,7 @@ public partial class DungeonManager : Node2D
                 }
 
                 aisleFog.InitFog(calcRectPosition, calcRectSize);
-                World.FogMaskRoot.AddChild(aisleFog);
+                CurrWorld.FogMaskRoot.AddChild(aisleFog);
                 roomDoorInfo.AisleFogMask = aisleFog;
                 roomDoorInfo.ConnectDoor.AisleFogMask = aisleFog;
 
@@ -566,7 +720,7 @@ public partial class DungeonManager : Node2D
                 );
                 roomDoorInfo.AisleFogArea = fogArea;
                 roomDoorInfo.ConnectDoor.AisleFogArea = fogArea;
-                World.AffiliationAreaRoot.AddChild(fogArea);
+                CurrWorld.AffiliationAreaRoot.AddChild(fogArea);
             }
 
             //预览迷雾区域
@@ -574,13 +728,13 @@ public partial class DungeonManager : Node2D
             roomDoorInfo.PreviewRoomFogMask = previewRoomFog;
             previewRoomFog.Init(roomDoorInfo, PreviewFogMask.PreviewFogType.Room);
             previewRoomFog.SetActive(false);
-            World.FogMaskRoot.AddChild(previewRoomFog);
+            CurrWorld.FogMaskRoot.AddChild(previewRoomFog);
             
             var previewAisleFog = new PreviewFogMask();
             roomDoorInfo.PreviewAisleFogMask = previewAisleFog;
             previewAisleFog.Init(roomDoorInfo, PreviewFogMask.PreviewFogType.Aisle);
             previewAisleFog.SetActive(false);
-            World.FogMaskRoot.AddChild(previewAisleFog);
+            CurrWorld.FogMaskRoot.AddChild(previewAisleFog);
         }
     }
 
@@ -640,7 +794,7 @@ public partial class DungeonManager : Node2D
         if (room.IsSeclusion)
         {
             var playerAffiliationArea = Player.Current.AffiliationArea;
-            foreach (var enemy in World.Enemy_InstanceList)
+            foreach (var enemy in CurrWorld.Enemy_InstanceList)
             {
                 //不与玩家处于同一个房间
                 if (!enemy.IsDestroyed && enemy.AffiliationArea != playerAffiliationArea)

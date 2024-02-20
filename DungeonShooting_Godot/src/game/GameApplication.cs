@@ -43,11 +43,6 @@ public partial class GameApplication : Node2D, ICoroutine
 	public Cursor Cursor { get; private set; }
 
 	/// <summary>
-	/// 游戏世界
-	/// </summary>
-	public World World { get; private set; }
-
-	/// <summary>
 	/// 地牢管理器
 	/// </summary>
 	public DungeonManager DungeonManager { get; private set; }
@@ -171,41 +166,6 @@ public partial class GameApplication : Node2D, ICoroutine
 		
 		//协程更新
 		ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
-	}
-
-	/// <summary>
-	/// 创建新的 World 对象, 相当于清理房间
-	/// </summary>
-	public World CreateNewWorld(SeedRandom random)
-	{
-		if (World != null)
-		{
-			ClearWorld();
-			World.QueueFree();
-		}
-		World = ResourceManager.LoadAndInstantiate<World>(ResourcePath.scene_World_tscn);
-		SceneRoot.AddChild(World);
-		World.InitLayer();
-		World.InitRandomPool(random);
-		return World;
-	}
-
-	/// <summary>
-	/// 销毁 World 对象, 相当于清理房间
-	/// </summary>
-	public void DestroyWorld()
-	{
-		//销毁所有物体
-		if (World != null)
-		{
-			ClearWorld();
-			World.QueueFree();
-		}
-		
-		//销毁池中所有物体
-		ObjectPool.DisposeAllItem();
-
-		World = null;
 	}
 	
 	/// <summary>
@@ -331,28 +291,5 @@ public partial class GameApplication : Node2D, ICoroutine
 		cursorLayer.Layer = UiManager.GetUiLayer(UiLayer.Pop).Layer + 10;
 		AddChild(cursorLayer);
 		cursorLayer.AddChild(Cursor);
-	}
-
-	//清理世界
-	private void ClearWorld()
-	{
-		var childCount = World.NormalLayer.GetChildCount();
-		for (var i = 0; i < childCount; i++)
-		{
-			var c = World.NormalLayer.GetChild(i);
-			if (c is IDestroy destroy)
-			{
-				destroy.Destroy();
-			}
-		}
-		childCount = World.YSortLayer.GetChildCount();
-		for (var i = 0; i < childCount; i++)
-		{
-			var c = World.YSortLayer.GetChild(i);
-			if (c is IDestroy destroy)
-			{
-				destroy.Destroy();
-			}
-		}
 	}
 }

@@ -793,7 +793,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     /// <returns></returns>
     public bool IsInGround()
     {
-        return Master == null && GetParent() == GameApplication.Instance.World.NormalLayer;
+        return Master == null && GetParent() == World.Current.NormalLayer;
     }
 
     /// <summary>

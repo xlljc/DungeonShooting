@@ -1,0 +1,36 @@
+[gd_scene load_steps=4 format=3 uid="uid://c2hynqudkykxl"]
+
+[ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/World.tscn" id="1_31od0"]
+[ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
+[ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="3_3cr4y"]
+
+[node name="Hall" instance=ExtResource("1_31od0")]
+script = ExtResource("2_43fdu")
+
+[node name="Icon" type="Sprite2D" parent="." index="1"]
+position = Vector2(110, 85)
+texture = ExtResource("3_3cr4y")
+
+[node name="Icon2" type="Sprite2D" parent="." index="2"]
+position = Vector2(156, 248)
+texture = ExtResource("3_3cr4y")
+
+[node name="Icon3" type="Sprite2D" parent="." index="3"]
+position = Vector2(404, 52)
+texture = ExtResource("3_3cr4y")
+
+[node name="Icon4" type="Sprite2D" parent="." index="4"]
+position = Vector2(-193, 98)
+texture = ExtResource("3_3cr4y")
+
+[node name="Icon5" type="Sprite2D" parent="." index="5"]
+position = Vector2(-150, -173)
+texture = ExtResource("3_3cr4y")
+
+[node name="Icon6" type="Sprite2D" parent="." index="6"]
+position = Vector2(230, -270)
+texture = ExtResource("3_3cr4y")
+
+[node name="Icon7" type="Sprite2D" parent="." index="7"]
+position = Vector2(269, -134)
+texture = ExtResource("3_3cr4y")

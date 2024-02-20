@@ -338,7 +338,7 @@ public partial class Player : Role
         MoveController.ClearForce();
 
         //暂停游戏
-        GameApplication.Instance.World.Pause = true;
+        World.Current.Pause = true;
         //弹出结算面板
         GameApplication.Instance.Cursor.SetGuiMode(true);
         UiManager.Open_Settlement();

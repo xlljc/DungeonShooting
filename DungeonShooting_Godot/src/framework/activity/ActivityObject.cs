@@ -661,7 +661,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     {
         DefaultLayer = layer;
         var parent = GetParent();
-        var root = GameApplication.Instance.World.GetRoomLayer(layer);
+        var root = World.Current.GetRoomLayer(layer);
         if (parent != root)
         {
             if (parent != null)
@@ -1471,9 +1471,9 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         {
             this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         }
-        else if (parent != GameApplication.Instance.World.YSortLayer)
+        else if (parent != World.Current.YSortLayer)
         {
-            Reparent(GameApplication.Instance.World.YSortLayer);
+            Reparent(World.Current.YSortLayer);
         }
 
         CalcThrowAnimatedPosition();
@@ -1550,7 +1550,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     private void ThrowOver()
     {
         var parent = GetParent();
-        var roomLayer = GameApplication.Instance.World.GetRoomLayer(DefaultLayer);
+        var roomLayer = World.Current.GetRoomLayer(DefaultLayer);
         if (parent != roomLayer)
         {
             parent.RemoveChild(this);

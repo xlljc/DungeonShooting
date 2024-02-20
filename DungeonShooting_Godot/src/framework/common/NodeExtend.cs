@@ -52,7 +52,7 @@ public static class NodeExtend
     /// <param name="layer">放入的层</param>
     public static void AddToActivityRoot(this Node2D node, RoomLayerEnum layer)
     {
-        GameApplication.Instance.World.GetRoomLayer(layer).AddChild(node);
+        GameApplication.Instance.DungeonManager.CurrWorld.GetRoomLayer(layer).AddChild(node);
     }
     
     /// <summary>
@@ -62,7 +62,7 @@ public static class NodeExtend
     /// <param name="layer">放入的层</param>
     public static void AddToActivityRootDeferred(this Node2D node, RoomLayerEnum layer)
     {
-        GameApplication.Instance.World.GetRoomLayer(layer).CallDeferred(Node.MethodName.AddChild, node);
+        World.Current.GetRoomLayer(layer).CallDeferred(Node.MethodName.AddChild, node);
     }
 
     /// <summary>

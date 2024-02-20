@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bqf2vks5ggnsp"]
 
-[ext_resource type="Script" path="res://src/game/room/World.cs" id="1_kt3mm"]
+[ext_resource type="Script" path="res://src/game/World.cs" id="1_kt3mm"]
 
 [sub_resource type="Environment" id="Environment_g06jj"]
 background_mode = 3
