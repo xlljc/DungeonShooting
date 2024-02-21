@@ -193,7 +193,7 @@ public partial class Enemy : Role
         blood.Position = effPos - new Vector2(0, 12);
         blood.AddToActivityRoot(RoomLayerEnum.NormalLayer);
         blood.PlayEffect();
-
+        
         var realVelocity = GetRealVelocity();
         //创建敌人碎片
         var count = Utils.Random.RandomRangeInt(3, 6);
