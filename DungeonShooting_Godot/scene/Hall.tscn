@@ -1,36 +1,54 @@
-[gd_scene load_steps=4 format=3 uid="uid://c2hynqudkykxl"]
+[gd_scene load_steps=6 format=3 uid="uid://c2hynqudkykxl"]
 
 [ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/World.tscn" id="1_31od0"]
 [ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="3_3cr4y"]
+[ext_resource type="Script" path="res://src/game/hall/DungeonEntrance.cs" id="3_t3my6"]
 
-[node name="Hall" instance=ExtResource("1_31od0")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ru8u4"]
+size = Vector2(122, 116)
+
+[node name="Hall" node_paths=PackedStringArray("BirthMark") instance=ExtResource("1_31od0")]
 script = ExtResource("2_43fdu")
+BirthMark = NodePath("BirthMark")
 
-[node name="Icon" type="Sprite2D" parent="." index="1"]
-position = Vector2(110, 85)
+[node name="DungeonEntrance" type="Area2D" parent="." index="1"]
+position = Vector2(174, 117)
+collision_layer = 0
+collision_mask = 8
+monitorable = false
+script = ExtResource("3_t3my6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DungeonEntrance" index="0"]
+shape = SubResource("RectangleShape2D_ru8u4")
+
+[node name="Icon" type="Sprite2D" parent="DungeonEntrance" index="1"]
+modulate = Color(1, 0, 0, 1)
 texture = ExtResource("3_3cr4y")
 
-[node name="Icon2" type="Sprite2D" parent="." index="2"]
+[node name="BirthMark" type="Marker2D" parent="." index="2"]
+position = Vector2(271, -130)
+
+[node name="Icon2" type="Sprite2D" parent="." index="3"]
 position = Vector2(156, 248)
 texture = ExtResource("3_3cr4y")
 
-[node name="Icon3" type="Sprite2D" parent="." index="3"]
+[node name="Icon3" type="Sprite2D" parent="." index="4"]
 position = Vector2(404, 52)
 texture = ExtResource("3_3cr4y")
 
-[node name="Icon4" type="Sprite2D" parent="." index="4"]
+[node name="Icon4" type="Sprite2D" parent="." index="5"]
 position = Vector2(-193, 98)
 texture = ExtResource("3_3cr4y")
 
-[node name="Icon5" type="Sprite2D" parent="." index="5"]
+[node name="Icon5" type="Sprite2D" parent="." index="6"]
 position = Vector2(-150, -173)
 texture = ExtResource("3_3cr4y")
 
-[node name="Icon6" type="Sprite2D" parent="." index="6"]
+[node name="Icon6" type="Sprite2D" parent="." index="7"]
 position = Vector2(230, -270)
 texture = ExtResource("3_3cr4y")
 
-[node name="Icon7" type="Sprite2D" parent="." index="7"]
+[node name="Icon7" type="Sprite2D" parent="." index="8"]
 position = Vector2(269, -134)
 texture = ExtResource("3_3cr4y")

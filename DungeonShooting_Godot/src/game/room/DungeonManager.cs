@@ -1,8 +1,6 @@
 ﻿
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Godot;
 
 /// <summary>
@@ -39,11 +37,6 @@ public partial class DungeonManager : Node2D
     /// 当前使用的配置
     /// </summary>
     public DungeonConfig CurrConfig { get; private set; }
-    
-    /// <summary>
-    /// 游戏大厅
-    /// </summary>
-    public Hall Hall { get; private set; }
 	
     /// <summary>
     /// 当前玩家所在游戏世界对象
@@ -73,30 +66,22 @@ public partial class DungeonManager : Node2D
     }
     
     /// <summary>
-    /// 初始化游戏大厅
-    /// </summary>
-    public void InitHall(SeedRandom random)
-    {
-        if (Hall != null)
-        {
-            return;
-        }
-        Hall = ResourceManager.LoadAndInstantiate<Hall>(ResourcePath.scene_Hall_tscn);
-        Hall.InitRandomPool(random);
-    }
-
-    /// <summary>
     /// 创建新的 World 对象, 相当于清理房间
     /// </summary>
-    public World CreateNewWorld(SeedRandom random)
+    public World CreateNewWorld(SeedRandom random, string scenePath = ResourcePath.scene_World_tscn)
     {
         if (CurrWorld != null)
         {
             ClearWorld();
             CurrWorld.QueueFree();
         }
-        CurrWorld = ResourceManager.LoadAndInstantiate<World>(ResourcePath.scene_World_tscn);
-        CurrWorld.InitLayer();
+        CurrWorld = ResourceManager.LoadAndInstantiate<World>(scenePath);
+        GameApplication.Instance.SceneRoot.AddChild(CurrWorld);
+        if (CurrWorld is not Hall)
+        {
+            CurrWorld.InitLayer();
+        }
+
         CurrWorld.InitRandomPool(random);
         return CurrWorld;
     }
@@ -149,6 +134,11 @@ public partial class DungeonManager : Node2D
     public void LoadHall(Action finish = null)
     {
         GameApplication.Instance.StartCoroutine(RunLoadHallCoroutine(finish));
+    }
+
+    public void ExitHall(Action finish = null)
+    {
+        GameApplication.Instance.StartCoroutine(RunExitHallCoroutine(finish));
     }
     
     /// <summary>
@@ -275,34 +265,18 @@ public partial class DungeonManager : Node2D
 
     private IEnumerator RunLoadHallCoroutine(Action finish)
     {
-        if (Hall != null && CurrWorld == Hall) //本来就在大厅中
-        {
-            yield break;
-        }
         //打开 loading UI
         UiManager.Open_Loading();
         yield return 0;
-        InitHall(Utils.Random);
-
+        
+        var hall = (Hall)CreateNewWorld(Utils.Random, ResourcePath.scene_Hall_tscn);
         yield return 0;
 
-        if (CurrWorld == null) //从主菜单进入大厅
-        {
-            GameApplication.Instance.SceneRoot.AddChild(Hall);
-            CurrWorld = Hall;
-        }
-        else //从地牢中进入大厅
-        {
-            DestroyWorld();
-            GameApplication.Instance.SceneRoot.AddChild(Hall);
-            CurrWorld = Hall;
-        }
-        yield return 0;
         //创建房间数据
         var roomInfo = new RoomInfo(0, DungeonRoomType.None, null);
         roomInfo.Size = new Vector2I(50, 50);
         roomInfo.Position = Vector2I.Zero;
-        Hall.RoomInfo = roomInfo;
+        hall.RoomInfo = roomInfo;
         yield return 0;
         
         //创建归属区域
@@ -310,39 +284,86 @@ public partial class DungeonManager : Node2D
         affiliation.Name = "AffiliationArea_Hall";
         affiliation.Init(roomInfo, new Rect2I(roomInfo.Position, roomInfo.Size * GameConfig.TileCellSize));
         roomInfo.AffiliationArea = affiliation;
-        Hall.AffiliationAreaRoot.AddChild(affiliation);
+        hall.AffiliationAreaRoot.AddChild(affiliation);
         yield return 0;
         
         //静态渲染精灵根节点, 用于放置sprite
         var spriteRoot = new RoomStaticSprite(roomInfo);
         spriteRoot.Name = "SpriteRoot";
         roomInfo.StaticSprite = spriteRoot;
-        Hall.StaticSpriteRoot.AddChild(spriteRoot);
+        hall.StaticSpriteRoot.AddChild(spriteRoot);
+        yield return 0;
         
         //静态精灵画布
         var canvasSprite = new ImageCanvas(roomInfo.Size.X * GameConfig.TileCellSize, roomInfo.Size.Y * GameConfig.TileCellSize);
         canvasSprite.Position = roomInfo.Position;
         roomInfo.StaticImageCanvas = canvasSprite;
         roomInfo.StaticSprite.AddChild(canvasSprite);
+        yield return 0;
         
         //液体画布
         var liquidCanvas = new LiquidCanvas(roomInfo, roomInfo.Size.X * GameConfig.TileCellSize, roomInfo.Size.Y * GameConfig.TileCellSize);
         liquidCanvas.Position = roomInfo.Position;
         roomInfo.LiquidCanvas = liquidCanvas;
         roomInfo.StaticSprite.AddChild(liquidCanvas);
-
         yield return 0;
         
         //创建玩家
         var player = ActivityObject.Create<Player>(ActivityObject.Ids.Id_role0001);
         player.Name = "Player";
+        player.Position = hall.BirthMark.Position;
         player.PutDown(RoomLayerEnum.YSortLayer);
+        affiliation.InsertItem(player);
         Player.SetCurrentPlayer(player);
         player.WeaponPack.PickupItem(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
         GameApplication.Instance.Cursor.SetGuiMode(false);
         yield return 0;
+
+        //打开游戏中的ui
+        UiManager.Open_RoomUI();
         UiManager.Destroy_Loading();
+
+        if (finish != null)
+        {
+            finish();
+        }
     }
+    
+    private IEnumerator RunExitHallCoroutine(Action finish)
+    {
+        //打开 loading UI
+        UiManager.Open_Loading();
+        yield return 0;
+        
+        CurrWorld.Pause = true;
+        yield return 0;
+
+        var hall = (Hall)CurrWorld;
+        hall.RoomInfo.Destroy();
+        yield return 0;
+        
+        UiManager.Destroy_RoomUI();
+        yield return 0;
+        Player.SetCurrentPlayer(null);
+        DestroyWorld();
+        yield return 0;
+        FogMaskHandler.ClearRecordRoom();
+        LiquidBrushManager.ClearData();
+        BrushImageData.ClearBrushData();
+        QueueRedraw();
+        
+        //鼠标还原
+        GameApplication.Instance.Cursor.SetGuiMode(true);
+        yield return 0;
+        
+        //关闭 loading UI
+        UiManager.Destroy_Loading();
+        if (finish != null)
+        {
+            finish();
+        }
+    }
+    
 
     //执行加载地牢协程
     private IEnumerator RunLoadDungeonCoroutine(Action finish)
@@ -474,7 +495,7 @@ public partial class DungeonManager : Node2D
         AutoTileConfig = null;
         _dungeonGenerator = null;
         
-        UiManager.Hide_RoomUI();
+        UiManager.Destroy_RoomUI();
         yield return 0;
         Player.SetCurrentPlayer(null);
         DestroyWorld();

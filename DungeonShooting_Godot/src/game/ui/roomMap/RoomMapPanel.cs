@@ -229,6 +229,11 @@ public partial class RoomMapPanel : RoomMap
     private void InitMap()
     {
         var startRoom = GameApplication.Instance.DungeonManager.StartRoomInfo;
+        if (startRoom == null)
+        {
+            HideUi();
+            return;
+        }
         startRoom.EachRoom(roomInfo =>
         {
             //房间
