@@ -99,14 +99,6 @@ public partial class World : CanvasModulate, ICoroutine
     }
 
     /// <summary>
-    /// 初始化 TileMap 中的层级
-    /// </summary>
-    public void InitLayer()
-    {
-        MapLayerManager.InitMapLayer(TileRoot);
-    }
-
-    /// <summary>
     /// 获取指定层级根节点
     /// </summary>
     public Node2D GetRoomLayer(RoomLayerEnum layerEnum)
