@@ -68,7 +68,7 @@ public partial class DungeonManager : Node2D
     /// <summary>
     /// 创建新的 World 对象, 相当于清理房间
     /// </summary>
-    public World CreateNewWorld(SeedRandom random, string scenePath = ResourcePath.scene_World_tscn)
+    public World CreateNewWorld(SeedRandom random, string scenePath)
     {
         if (CurrWorld != null)
         {
@@ -77,11 +77,6 @@ public partial class DungeonManager : Node2D
         }
         CurrWorld = ResourceManager.LoadAndInstantiate<World>(scenePath);
         GameApplication.Instance.SceneRoot.AddChild(CurrWorld);
-        if (CurrWorld is not Hall)
-        {
-            CurrWorld.InitLayer();
-        }
-
         CurrWorld.InitRandomPool(random);
         return CurrWorld;
     }
@@ -428,7 +423,8 @@ public partial class DungeonManager : Node2D
         
         yield return 0;
         //创建世界场景
-        CurrWorld = CreateNewWorld(_dungeonGenerator.Random);
+        var dungeon = (Dungeon)CreateNewWorld(_dungeonGenerator.Random, ResourcePath.scene_Dungeon_tscn);
+        dungeon.InitLayer();
         yield return 0;
         var group = GameApplication.Instance.RoomConfig[CurrConfig.GroupName];
         var tileSetSplit = GameApplication.Instance.TileSetConfig[group.TileSet];

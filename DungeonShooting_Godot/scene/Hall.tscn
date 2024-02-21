@@ -1,9 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://c2hynqudkykxl"]
 
-[ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/World.tscn" id="1_31od0"]
+[ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/Dungeon.tscn" id="1_31od0"]
 [ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="3_3cr4y"]
 [ext_resource type="Script" path="res://src/game/hall/DungeonEntrance.cs" id="3_t3my6"]
+
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ru8u4"]
 size = Vector2(122, 116)
