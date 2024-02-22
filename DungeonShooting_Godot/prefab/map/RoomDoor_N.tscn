@@ -14,6 +14,7 @@ shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_t4ayq"]
 resource_local_to_scene = true
@@ -25,6 +26,7 @@ shader_parameter/show_outline = false
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_opsb6"]
 resource_local_to_scene = true
@@ -42,11 +44,8 @@ material = SubResource("ShaderMaterial_yvwpk")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_t4ayq")
-position = Vector2(0, -8)
 sprite_frames = ExtResource("3_apluc")
-animation = &"closeDoor"
 autoplay = "default"
-frame = 4
 frame_progress = 1.0
 
 [node name="Collision" type="CollisionShape2D" parent="."]
