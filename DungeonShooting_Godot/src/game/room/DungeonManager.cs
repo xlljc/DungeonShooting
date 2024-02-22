@@ -274,8 +274,8 @@ public partial class DungeonManager : Node2D
 
         //创建房间数据
         var roomInfo = new RoomInfo(0, DungeonRoomType.None, null);
-        roomInfo.Size = new Vector2I(50, 50);
-        roomInfo.Position = Vector2I.Zero;
+        roomInfo.Size = hall.BgSprite.Texture.GetSize().AsVector2I() / GameConfig.TileCellSize + new Vector2I(10, 10);
+        roomInfo.Position = hall.BgSprite.Position.AsVector2I() - new Vector2I(5, 5) * GameConfig.TileCellSize;
         hall.RoomInfo = roomInfo;
         yield return 0;
         

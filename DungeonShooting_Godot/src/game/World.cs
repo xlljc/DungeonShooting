@@ -81,7 +81,6 @@ public partial class World : CanvasModulate, ICoroutine
 
     public override void _Ready()
     {
-        Color = Colors.Black;
         //TileRoot.YSortEnabled = false;
         NormalLayer = GetNode<Node2D>("TileRoot/NormalLayer");
         YSortLayer = GetNode<Node2D>("TileRoot/YSortLayer");
