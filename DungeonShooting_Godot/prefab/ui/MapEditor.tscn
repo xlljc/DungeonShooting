@@ -212,6 +212,8 @@ layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="Bg/VBoxContainer/HSplitContainer/HSplitContainer2/HBoxContainer/Left/MarginContainer/MapView"]
 handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
 canvas_item_default_texture_filter = 0
 size = Vector2i(980, 1002)
 render_target_update_mode = 4

@@ -15,6 +15,14 @@ public partial class PauseMenuPanel : PauseMenu
         {
             S_Exit.Instance.Text = "返回编辑器";
         }
+        else if (World.Current is Dungeon) //在游戏地牢中
+        {
+            S_Exit.Instance.Text = "退出地牢";
+        }
+        else //在大厅中
+        {
+            S_Restart.Instance.Visible = false;
+        }
     }
 
     public override void Process(float delta)
@@ -43,7 +51,11 @@ public partial class PauseMenuPanel : PauseMenu
         }
         else //正常重新开始
         {
-            GameApplication.Instance.DungeonManager.RestartDungeon(GameApplication.Instance.DungeonConfig);
+            UiManager.Open_Loading();
+            GameApplication.Instance.DungeonManager.RestartDungeon(GameApplication.Instance.DungeonConfig, () =>
+            {
+                UiManager.Destroy_Loading();
+            });
         }
     }
 
@@ -55,10 +67,23 @@ public partial class PauseMenuPanel : PauseMenu
         {
             EditorPlayManager.Exit();
         }
-        else //正常关闭Ui
+        else if (World.Current is Dungeon) //在游戏地牢中
         {
+            UiManager.Open_Loading();
             GameApplication.Instance.DungeonManager.ExitDungeon(() =>
             {
+                GameApplication.Instance.DungeonManager.LoadHall(() =>
+                {
+                    UiManager.Destroy_Loading();
+                });
+            });
+        }
+        else //在大厅中
+        {
+            UiManager.Open_Loading();
+            GameApplication.Instance.DungeonManager.ExitHall(() =>
+            {
+                UiManager.Destroy_Loading();
                 UiManager.Open_Main();
             });
         }

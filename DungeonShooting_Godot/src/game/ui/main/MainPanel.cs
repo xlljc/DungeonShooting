@@ -19,7 +19,11 @@ public partial class MainPanel : Main
     //点击开始游戏
     private void OnStartGameClick()
     {
-        GameApplication.Instance.DungeonManager.LoadHall();
+        UiManager.Open_Loading();
+        GameApplication.Instance.DungeonManager.LoadHall(() =>
+        {
+            UiManager.Destroy_Loading();
+        });
         HideUi();
     }
 

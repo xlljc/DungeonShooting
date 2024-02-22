@@ -28,7 +28,11 @@ public partial class SettlementPanel : Settlement
         }
         else //正常重新开始
         {
-            GameApplication.Instance.DungeonManager.RestartDungeon(GameApplication.Instance.DungeonConfig);
+            UiManager.Open_Loading();
+            GameApplication.Instance.DungeonManager.RestartDungeon(GameApplication.Instance.DungeonConfig, () =>
+            {
+                UiManager.Destroy_Loading();
+            });
         }
     }
 

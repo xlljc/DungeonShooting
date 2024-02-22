@@ -149,13 +149,13 @@ public partial class DungeonManager : Node2D
     /// <summary>
     /// 重启地牢
     /// </summary>
-    public void RestartDungeon(DungeonConfig config)
+    public void RestartDungeon(DungeonConfig config, Action finish = null)
     {
         IsEditorMode = false;
         CurrConfig = config;
         ExitDungeon(() =>
         {
-            LoadDungeon(CurrConfig);
+            LoadDungeon(CurrConfig, finish);
         });
     }
 
@@ -174,7 +174,8 @@ public partial class DungeonManager : Node2D
     /// 在编辑器模式下进入地牢
     /// </summary>
     /// <param name="config">地牢配置</param>
-    public void EditorPlayDungeon(DungeonConfig config)
+    /// <param name="finish">执行完成回调</param>
+    public void EditorPlayDungeon(DungeonConfig config, Action finish = null)
     {
         IsEditorMode = true;
         CurrConfig = config;
@@ -182,15 +183,16 @@ public partial class DungeonManager : Node2D
         {
             _prevUi.HideUi();
         }
-        GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine(null));
+        GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine(finish));
     }
-    
+
     /// <summary>
     /// 在编辑器模式下进入地牢
     /// </summary>
     /// <param name="prevUi">记录上一个Ui</param>
     /// <param name="config">地牢配置</param>
-    public void EditorPlayDungeon(UiBase prevUi, DungeonConfig config)
+    /// <param name="finish">执行完成回调</param>
+    public void EditorPlayDungeon(UiBase prevUi, DungeonConfig config, Action finish = null)
     {
         IsEditorMode = true;
         CurrConfig = config;
@@ -199,13 +201,13 @@ public partial class DungeonManager : Node2D
         {
             _prevUi.HideUi();
         }
-        GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine(null));
+        GameApplication.Instance.StartCoroutine(RunLoadDungeonCoroutine(finish));
     }
 
     /// <summary>
     /// 在编辑器模式下退出地牢, 并且打开上一个Ui
     /// </summary>
-    public void EditorExitDungeon()
+    public void EditorExitDungeon(Action finish = null)
     {
         IsInDungeon = false;
         GameApplication.Instance.StartCoroutine(RunExitDungeonCoroutine(() =>
@@ -215,6 +217,10 @@ public partial class DungeonManager : Node2D
             if (_prevUi != null)
             {
                 _prevUi.ShowUi();
+            }
+            if (finish != null)
+            {
+                finish();
             }
         }));
     }
@@ -258,10 +264,9 @@ public partial class DungeonManager : Node2D
         }
     }
 
+    //执行加载大厅流程
     private IEnumerator RunLoadHallCoroutine(Action finish)
     {
-        //打开 loading UI
-        UiManager.Open_Loading();
         yield return 0;
         
         var hall = (Hall)CreateNewWorld(Utils.Random, ResourcePath.scene_Hall_tscn);
@@ -313,10 +318,10 @@ public partial class DungeonManager : Node2D
         player.WeaponPack.PickupItem(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
         GameApplication.Instance.Cursor.SetGuiMode(false);
         yield return 0;
-
+        
+        IsInDungeon = true;
         //打开游戏中的ui
         UiManager.Open_RoomUI();
-        UiManager.Destroy_Loading();
 
         if (finish != null)
         {
@@ -324,10 +329,10 @@ public partial class DungeonManager : Node2D
         }
     }
     
+    //执行退出大厅流程
     private IEnumerator RunExitHallCoroutine(Action finish)
     {
-        //打开 loading UI
-        UiManager.Open_Loading();
+        IsInDungeon = false;
         yield return 0;
         
         CurrWorld.Pause = true;
@@ -351,8 +356,6 @@ public partial class DungeonManager : Node2D
         GameApplication.Instance.Cursor.SetGuiMode(true);
         yield return 0;
         
-        //关闭 loading UI
-        UiManager.Destroy_Loading();
         if (finish != null)
         {
             finish();
@@ -363,8 +366,6 @@ public partial class DungeonManager : Node2D
     //执行加载地牢协程
     private IEnumerator RunLoadDungeonCoroutine(Action finish)
     {
-        //打开 loading UI
-        UiManager.Open_Loading();
         yield return 0;
         //生成地牢房间
         
@@ -387,25 +388,22 @@ public partial class DungeonManager : Node2D
             if (!dungeonGenerator.Generate(rule)) //生成房间失败
             {
                 dungeonGenerator.EachRoom(DisposeRoomInfo);
-                UiManager.Destroy_Loading();
-            
-                if (IsEditorMode) //在编辑器模式下打开的Ui
-                {
-                    EditorPlayManager.IsPlay = false;
-                    IsEditorMode = false;
-                    //显示上一个Ui
-                    if (_prevUi != null)
-                    {
-                        _prevUi.ShowUi();
-                    }
-                }
-                else //正常关闭Ui
-                {
-                    UiManager.Open_Main();
-                }
-
                 if (i == maxCount - 1)
                 {
+                    if (IsEditorMode) //在编辑器模式下打开的Ui
+                    {
+                        EditorPlayManager.IsPlay = false;
+                        IsEditorMode = false;
+                        //显示上一个Ui
+                        if (_prevUi != null)
+                        {
+                            _prevUi.ShowUi();
+                        }
+                    }
+                    else //正常关闭Ui
+                    {
+                        UiManager.Open_Main();
+                    }
                     EditorWindowManager.ShowTips("错误", "生成房间尝试次数过多，生成地牢房间失败，请加大房间门连接区域，或者修改地牢生成规则！");
                     yield break;
                 }
@@ -469,8 +467,6 @@ public partial class DungeonManager : Node2D
         IsInDungeon = true;
         QueueRedraw();
         yield return 0;
-        //关闭 loading UI
-        UiManager.Destroy_Loading();
         if (finish != null)
         {
             finish();
@@ -480,8 +476,6 @@ public partial class DungeonManager : Node2D
     //执行退出地牢流程
     private IEnumerator RunExitDungeonCoroutine(Action finish)
     {
-        //打开 loading UI
-        UiManager.Open_Loading();
         yield return 0;
         CurrWorld.Pause = true;
         yield return 0;
@@ -505,8 +499,6 @@ public partial class DungeonManager : Node2D
         //派发退出地牢事件
         EventManager.EmitEvent(EventEnum.OnExitDungeon);
         yield return 0;
-        //关闭 loading UI
-        UiManager.Destroy_Loading();
         if (finish != null)
         {
             finish();
@@ -849,7 +841,7 @@ public partial class DungeonManager : Node2D
     private void OnCheckEnemy()
     {
         var activeRoom = ActiveRoomInfo;
-        if (activeRoom != null)
+        if (activeRoom != null && activeRoom.RoomPreinstall != null)
         {
             if (activeRoom.RoomPreinstall.IsRunWave) //正在生成标记
             {
