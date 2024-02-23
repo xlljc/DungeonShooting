@@ -82,7 +82,6 @@ public partial class RoomDoor : ActivityObject
         switch (Direction)
         {
             case DoorDirection.E:
-                ZIndex = MapLayer.AutoTopLayer;
                 if (_animatedDown != null)
                 {
                     _animatedDown.ZIndex = MapLayer.AutoTopLayer;
@@ -90,7 +89,6 @@ public partial class RoomDoor : ActivityObject
 
                 break;
             case DoorDirection.W:
-                ZIndex = MapLayer.AutoTopLayer;
                 if (_animatedDown != null)
                 {
                     _animatedDown.ZIndex = MapLayer.AutoTopLayer;
@@ -98,10 +96,8 @@ public partial class RoomDoor : ActivityObject
 
                 break;
             case DoorDirection.S:
-                ZIndex = MapLayer.AutoTopLayer;
                 break;
             case DoorDirection.N:
-                ZIndex = MapLayer.AutoMiddleLayer;
                 break;
         }
     }
@@ -125,7 +121,6 @@ public partial class RoomDoor : ActivityObject
         switch (Direction)
         {
             case DoorDirection.E:
-                ZIndex = MapLayer.AutoMiddleLayer;
                 if (_animatedDown != null)
                 {
                     _animatedDown.ZIndex = MapLayer.AutoTopLayer;
@@ -133,7 +128,6 @@ public partial class RoomDoor : ActivityObject
 
                 break;
             case DoorDirection.W:
-                ZIndex = MapLayer.AutoMiddleLayer;
                 if (_animatedDown != null)
                 {
                     _animatedDown.ZIndex = MapLayer.AutoTopLayer;
@@ -141,10 +135,8 @@ public partial class RoomDoor : ActivityObject
 
                 break;
             case DoorDirection.S:
-                ZIndex = MapLayer.AutoTopLayer;
                 break;
             case DoorDirection.N:
-                ZIndex = MapLayer.AutoMiddleLayer;
                 break;
         }
     }
