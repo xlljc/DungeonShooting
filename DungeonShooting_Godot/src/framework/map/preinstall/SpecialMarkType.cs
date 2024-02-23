@@ -12,4 +12,8 @@ public enum SpecialMarkType
     /// 玩家出生点
     /// </summary>
     BirthPoint,
+    /// <summary>
+    /// 地牢出口
+    /// </summary>
+    OutPoint,
 }

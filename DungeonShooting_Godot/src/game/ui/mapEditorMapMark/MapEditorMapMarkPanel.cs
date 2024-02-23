@@ -214,7 +214,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         {
             var markCell = (EditorMarkCell)uiCell;
             var markType = markCell.Data.MarkInfo.SpecialMarkType;
-            if (markType == SpecialMarkType.BirthPoint) //某些特殊标记不能删除
+            if (markType != SpecialMarkType.Normal) //特殊标记不能删除
             {
                 S_DynamicTool.L_EditButton.Instance.Visible = true;
                 S_DynamicTool.L_DeleteButton.Instance.Visible = false;
