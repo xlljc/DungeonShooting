@@ -52,7 +52,7 @@ public partial class PauseMenuPanel : PauseMenu
         else //正常重新开始
         {
             UiManager.Open_Loading();
-            GameApplication.Instance.DungeonManager.RestartDungeon(GameApplication.Instance.DungeonConfig, () =>
+            GameApplication.Instance.DungeonManager.RestartDungeon(false, GameApplication.Instance.DungeonConfig, () =>
             {
                 UiManager.Destroy_Loading();
             });
@@ -70,7 +70,7 @@ public partial class PauseMenuPanel : PauseMenu
         else if (World.Current is Dungeon) //在游戏地牢中
         {
             UiManager.Open_Loading();
-            GameApplication.Instance.DungeonManager.ExitDungeon(() =>
+            GameApplication.Instance.DungeonManager.ExitDungeon(false, () =>
             {
                 GameApplication.Instance.DungeonManager.LoadHall(() =>
                 {
@@ -81,7 +81,7 @@ public partial class PauseMenuPanel : PauseMenu
         else //在大厅中
         {
             UiManager.Open_Loading();
-            GameApplication.Instance.DungeonManager.ExitHall(() =>
+            GameApplication.Instance.DungeonManager.ExitHall(false, () =>
             {
                 UiManager.Destroy_Loading();
                 UiManager.Open_Main();

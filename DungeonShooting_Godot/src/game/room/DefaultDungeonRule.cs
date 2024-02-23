@@ -46,6 +46,11 @@ public class DefaultDungeonRule : DungeonRule
         }
         else if (nextRoomType == DungeonRoomType.Reward)
         {
+            if (Generator.BattleRoomInfos.Count == 0)
+            {
+                return prevRoom;
+            }
+            
             foreach (var temp in rewardBindRoom)
             {
                 if (!excludePrevRoom.Contains(temp))

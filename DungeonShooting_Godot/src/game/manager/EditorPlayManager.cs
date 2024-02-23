@@ -39,7 +39,7 @@ public static class EditorPlayManager
 
         IsPlay = false;
         UiManager.Open_Loading();
-        GameApplication.Instance.DungeonManager.EditorExitDungeon(() =>
+        GameApplication.Instance.DungeonManager.EditorExitDungeon(false, () =>
         {
             UiManager.Destroy_Loading();
         });
@@ -52,7 +52,7 @@ public static class EditorPlayManager
             return;
         }
         UiManager.Open_Loading();
-        GameApplication.Instance.DungeonManager.ExitDungeon(() =>
+        GameApplication.Instance.DungeonManager.ExitDungeon(false, () =>
         {
             GameApplication.Instance.DungeonManager.EditorPlayDungeon(_config, () =>
             {

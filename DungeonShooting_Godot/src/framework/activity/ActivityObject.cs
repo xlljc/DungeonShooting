@@ -205,11 +205,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// 物体材质数据
     /// </summary>
     public ExcelConfig.ActivityMaterial ActivityMaterial { get; private set; }
-    
+
     /// <summary>
     /// 所在的 World 对象
     /// </summary>
-    public World World { get; private set; }
+    public World World { get; set; }
 
     /// <summary>
     /// 是否开启描边

@@ -29,7 +29,7 @@ public partial class SettlementPanel : Settlement
         else //正常重新开始
         {
             UiManager.Open_Loading();
-            GameApplication.Instance.DungeonManager.RestartDungeon(GameApplication.Instance.DungeonConfig, () =>
+            GameApplication.Instance.DungeonManager.RestartDungeon(false, GameApplication.Instance.DungeonConfig, () =>
             {
                 UiManager.Destroy_Loading();
             });
@@ -46,7 +46,7 @@ public partial class SettlementPanel : Settlement
         }
         else //正常关闭Ui
         {
-            GameApplication.Instance.DungeonManager.ExitDungeon(() =>
+            GameApplication.Instance.DungeonManager.ExitDungeon(false, () =>
             {
                 UiManager.Open_Main();
             });

@@ -77,6 +77,10 @@ public partial class Player : Role
 
     private void DebugSet()
     {
+        if (World is Hall)
+        {
+            return;
+        }
         RoleState.Acceleration = 3000;
         RoleState.Friction = 3000;
         RoleState.MoveSpeed = 500;

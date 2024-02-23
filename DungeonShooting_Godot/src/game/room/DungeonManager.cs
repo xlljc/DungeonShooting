@@ -131,9 +131,12 @@ public partial class DungeonManager : Node2D
         GameApplication.Instance.StartCoroutine(RunLoadHallCoroutine(finish));
     }
 
-    public void ExitHall(Action finish = null)
+    /// <summary>
+    /// 退出大厅
+    /// </summary>
+    public void ExitHall(bool keepPlayer, Action finish = null)
     {
-        GameApplication.Instance.StartCoroutine(RunExitHallCoroutine(finish));
+        GameApplication.Instance.StartCoroutine(RunExitHallCoroutine(keepPlayer, finish));
     }
     
     /// <summary>
@@ -149,11 +152,11 @@ public partial class DungeonManager : Node2D
     /// <summary>
     /// 重启地牢
     /// </summary>
-    public void RestartDungeon(DungeonConfig config, Action finish = null)
+    public void RestartDungeon(bool keepPlayer, DungeonConfig config, Action finish = null)
     {
         IsEditorMode = false;
         CurrConfig = config;
-        ExitDungeon(() =>
+        ExitDungeon(keepPlayer, () =>
         {
             LoadDungeon(CurrConfig, finish);
         });
@@ -162,10 +165,10 @@ public partial class DungeonManager : Node2D
     /// <summary>
     /// 退出地牢
     /// </summary>
-    public void ExitDungeon(Action finish = null)
+    public void ExitDungeon(bool keepPlayer, Action finish = null)
     {
         IsInDungeon = false;
-        GameApplication.Instance.StartCoroutine(RunExitDungeonCoroutine(finish));
+        GameApplication.Instance.StartCoroutine(RunExitDungeonCoroutine(keepPlayer, finish));
     }
     
     //-------------------------------------------------------------------------------------
@@ -207,10 +210,10 @@ public partial class DungeonManager : Node2D
     /// <summary>
     /// 在编辑器模式下退出地牢, 并且打开上一个Ui
     /// </summary>
-    public void EditorExitDungeon(Action finish = null)
+    public void EditorExitDungeon(bool keepPlayer, Action finish = null)
     {
         IsInDungeon = false;
-        GameApplication.Instance.StartCoroutine(RunExitDungeonCoroutine(() =>
+        GameApplication.Instance.StartCoroutine(RunExitDungeonCoroutine(keepPlayer, () =>
         {
             IsEditorMode = false;
             //显示上一个Ui
@@ -309,12 +312,17 @@ public partial class DungeonManager : Node2D
         yield return 0;
         
         //创建玩家
-        var player = ActivityObject.Create<Player>(ActivityObject.Ids.Id_role0001);
-        player.Name = "Player";
+        var player = Player.Current;
+        if (player == null)
+        {
+            player = ActivityObject.Create<Player>(ActivityObject.Ids.Id_role0001);
+            player.Name = "Player";
+        }
+        player.World = CurrWorld;
         player.Position = hall.BirthMark.Position;
         player.PutDown(RoomLayerEnum.YSortLayer);
-        affiliation.InsertItem(player);
         Player.SetCurrentPlayer(player);
+        affiliation.InsertItem(player);
         player.WeaponPack.PickupItem(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
         GameApplication.Instance.Cursor.SetGuiMode(false);
         yield return 0;
@@ -330,7 +338,7 @@ public partial class DungeonManager : Node2D
     }
     
     //执行退出大厅流程
-    private IEnumerator RunExitHallCoroutine(Action finish)
+    private IEnumerator RunExitHallCoroutine(bool keepPlayer, Action finish)
     {
         IsInDungeon = false;
         yield return 0;
@@ -344,7 +352,18 @@ public partial class DungeonManager : Node2D
         
         UiManager.Destroy_RoomUI();
         yield return 0;
-        Player.SetCurrentPlayer(null);
+        if (!keepPlayer)
+        {
+            Player.SetCurrentPlayer(null);
+        }
+        else
+        {
+            var player = Player.Current;
+            player.AffiliationArea?.RemoveItem(player);
+            player.GetParent().RemoveChild(player);
+            player.World = null;
+        }
+
         DestroyWorld();
         yield return 0;
         FogMaskHandler.ClearRecordRoom();
@@ -449,15 +468,22 @@ public partial class DungeonManager : Node2D
         //初始房间创建玩家标记
         var playerBirthMark = StartRoomInfo.RoomPreinstall.GetPlayerBirthMark();
         //创建玩家
-        var player = ActivityObject.Create<Player>(ActivityObject.Ids.Id_role0001);
+        var player = Player.Current;
+        if (player == null)
+        {
+            player = ActivityObject.Create<Player>(ActivityObject.Ids.Id_role0001);
+            player.Name = "Player";
+        }
         if (playerBirthMark != null)
         {
-            //player.Position = new Vector2(50, 50);
             player.Position = playerBirthMark.Position;
         }
-        player.Name = "Player";
+
+        player.World = CurrWorld;
         player.PutDown(RoomLayerEnum.YSortLayer);
         Player.SetCurrentPlayer(player);
+        StartRoomInfo.AffiliationArea.InsertItem(player);
+        
         GameApplication.Instance.Cursor.SetGuiMode(false);
         //打开游戏中的ui
         UiManager.Open_RoomUI();
@@ -474,7 +500,7 @@ public partial class DungeonManager : Node2D
     }
 
     //执行退出地牢流程
-    private IEnumerator RunExitDungeonCoroutine(Action finish)
+    private IEnumerator RunExitDungeonCoroutine(bool keepPlayer, Action finish)
     {
         yield return 0;
         CurrWorld.Pause = true;
@@ -487,7 +513,18 @@ public partial class DungeonManager : Node2D
         
         UiManager.Destroy_RoomUI();
         yield return 0;
-        Player.SetCurrentPlayer(null);
+        if (!keepPlayer)
+        {
+            Player.SetCurrentPlayer(null);
+        }
+        else
+        {
+            var player = Player.Current;
+            player.AffiliationArea?.RemoveItem(player);
+            player.GetParent().RemoveChild(player);
+            player.World = null;
+        }
+
         DestroyWorld();
         yield return 0;
         FogMaskHandler.ClearRecordRoom();
