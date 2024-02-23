@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/game/room/RoomDoor.cs" id="1_agux2"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_wx2w3"]
-[ext_resource type="SpriteFrames" uid="uid://cpdt5ywrsruu3" path="res://resource/spriteFrames/other/RoomDoor_W_Up.tres" id="3_veggu"]
+[ext_resource type="SpriteFrames" uid="uid://3ps6h2f54qa5" path="res://resource/spriteFrames/other/RoomDoor_E_Up.tres" id="3_jquy0"]
 [ext_resource type="SpriteFrames" uid="uid://qq3h0mh4r12i" path="res://resource/spriteFrames/other/RoomDoor_W_Down.tres" id="4_dnjb6"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yvwpk"]
@@ -23,7 +23,7 @@ shader = ExtResource("2_wx2w3")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
 shader_parameter/modulate = Color(1, 1, 1, 1)
-shader_parameter/show_outline = false
+shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
@@ -45,14 +45,14 @@ material = SubResource("ShaderMaterial_yvwpk")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_t4ayq")
-position = Vector2(-9, -10)
-sprite_frames = ExtResource("3_veggu")
-animation = &"openDoor"
+position = Vector2(-21, 10)
+scale = Vector2(-1, 1)
+sprite_frames = ExtResource("3_jquy0")
+animation = &"closeDoor"
 autoplay = "default"
-frame = 4
-frame_progress = 1.0
 
 [node name="AnimatedSpriteDown" type="AnimatedSprite2D" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_t4ayq")
 position = Vector2(-9, -10)
 sprite_frames = ExtResource("4_dnjb6")
@@ -62,5 +62,5 @@ frame = 4
 frame_progress = 1.0
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2(0, 4)
+position = Vector2(2.08165e-12, 13)
 shape = SubResource("RectangleShape2D_2ko2r")

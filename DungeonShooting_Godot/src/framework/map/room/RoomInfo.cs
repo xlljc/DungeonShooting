@@ -462,7 +462,7 @@ public class RoomInfo : IDestroy
     /// </summary>
     public void OnFirstEnter()
     {
-        if (RoomPreinstall.IsRunWave)
+        if (RoomPreinstall == null || RoomPreinstall.IsRunWave)
         {
             return;
         }

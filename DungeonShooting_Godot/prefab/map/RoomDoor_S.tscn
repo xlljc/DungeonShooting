@@ -22,7 +22,7 @@ shader = ExtResource("2_6vvcd")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
 shader_parameter/modulate = Color(1, 1, 1, 1)
-shader_parameter/show_outline = false
+shader_parameter/show_outline = true
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
@@ -45,6 +45,7 @@ material = SubResource("ShaderMaterial_yvwpk")
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_t4ayq")
 sprite_frames = ExtResource("3_vbbxp")
+animation = &"openDoor"
 autoplay = "default"
 
 [node name="Collision" type="CollisionShape2D" parent="."]

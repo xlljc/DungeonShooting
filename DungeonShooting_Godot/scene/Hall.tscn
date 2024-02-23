@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://c2hynqudkykxl"]
 
-[ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/Dungeon.tscn" id="1_31od0"]
+[ext_resource type="PackedScene" path="res://scene/Dungeon.tscn" id="1_31od0"]
 [ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
 [ext_resource type="Texture2D" uid="uid://b2j5mkqm3uv6w" path="res://resource/sprite/hall/HallBg.png" id="3_p8v6p"]
 [ext_resource type="Script" path="res://src/game/hall/DungeonEntrance.cs" id="3_t3my6"]
