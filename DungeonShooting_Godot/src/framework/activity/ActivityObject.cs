@@ -245,7 +245,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <summary>
     /// 是否是自定义阴影纹理
     /// </summary>
-    public bool IsCustomShadowSprite { get; private set; }
+    public bool IsCustomShadowSprite { get; set; }
 
     /// <summary>
     /// 记录绘制液体的笔刷上一次绘制的位置<br/>
@@ -1361,8 +1361,10 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         ShadowSprite.GlobalPosition = new Vector2(pos.X + ShadowOffset.X, pos.Y + ShadowOffset.Y + Altitude);
     }
 
-    //计算位置
-    private void CalcThrowAnimatedPosition()
+    /// <summary>
+    /// 计算物体精灵和阴影位置
+    /// </summary>
+    public void CalcThrowAnimatedPosition()
     {
         if (Scale.Y < 0)
         {

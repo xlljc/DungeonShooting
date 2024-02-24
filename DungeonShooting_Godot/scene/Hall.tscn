@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://c2hynqudkykxl"]
 
-[ext_resource type="PackedScene" path="res://scene/Dungeon.tscn" id="1_31od0"]
+[ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/Dungeon.tscn" id="1_31od0"]
 [ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
 [ext_resource type="Texture2D" uid="uid://b2j5mkqm3uv6w" path="res://resource/sprite/hall/HallBg.png" id="3_p8v6p"]
 [ext_resource type="Script" path="res://src/game/hall/DungeonEntrance.cs" id="3_t3my6"]
@@ -27,10 +27,14 @@ BgSprite = NodePath("HallBg")
 metadata/_edit_horizontal_guides_ = [666.0, -210.0]
 
 [node name="HallBg" type="Sprite2D" parent="." index="1"]
+z_index = -5
 texture = ExtResource("3_p8v6p")
 centered = false
 
-[node name="DungeonEntrance" type="Area2D" parent="." index="2"]
+[node name="BirthMark" type="Marker2D" parent="." index="2"]
+position = Vector2(553, 320)
+
+[node name="DungeonEntrance" type="Area2D" parent="." index="3"]
 position = Vector2(537, 209)
 collision_layer = 0
 collision_mask = 8
@@ -40,14 +44,7 @@ script = ExtResource("3_t3my6")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DungeonEntrance" index="0"]
 shape = SubResource("RectangleShape2D_ru8u4")
 
-[node name="BirthMark" type="Marker2D" parent="." index="3"]
-position = Vector2(553, 320)
-
-[node name="PointLight2D" type="PointLight2D" parent="." index="4"]
-position = Vector2(138, 306)
-texture_scale = 3.11
-
-[node name="StaticBody2D" type="StaticBody2D" parent="." index="5"]
+[node name="StaticBody2D" type="StaticBody2D" parent="." index="4"]
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" index="0"]
