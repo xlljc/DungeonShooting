@@ -17,6 +17,7 @@ public partial class PreviewFogMask : FogMaskBase
     private static bool _initTexture;
     private static Texture2D _previewAisle;
     private static Texture2D _previewAisle_ew;
+    private static Texture2D _previewAisle_s;
     private static Texture2D _previewRoom;
     private static Texture2D _previewRoom_n;
     private static Texture2D _previewRoom_ew;
@@ -50,6 +51,7 @@ public partial class PreviewFogMask : FogMaskBase
         _previewRoom_n = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_map_PreviewTransition3_png);
         _previewRoom_ew = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_map_PreviewTransition4_png);
         _previewAisle_ew = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_map_PreviewTransition5_png);
+        _previewAisle_s = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_map_PreviewTransition6_png);
     }
     
     /// <summary>
@@ -111,8 +113,8 @@ public partial class PreviewFogMask : FogMaskBase
         {
             if (fogType == PreviewFogType.Aisle)
             {
-                Texture = _previewAisle;
-                Position = globalPosition;
+                Texture = _previewAisle_s;
+                Position = globalPosition + new Vector2(0, GameConfig.TileCellSize * 0.5f);
                 RotationDegrees = 180;
             }
             else

@@ -30,7 +30,7 @@ shader_parameter/grey = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_opsb6"]
 resource_local_to_scene = true
-size = Vector2(32, 20)
+size = Vector2(32, 16)
 
 [node name="RoomDoor_N" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
 script = ExtResource("1_220be")
@@ -48,5 +48,5 @@ sprite_frames = ExtResource("3_apluc")
 autoplay = "default"
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1)
+position = Vector2(0, 4)
 shape = SubResource("RectangleShape2D_opsb6")
