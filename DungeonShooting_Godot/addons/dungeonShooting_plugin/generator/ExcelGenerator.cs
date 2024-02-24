@@ -95,8 +95,18 @@ public static class ExcelGenerator
     private static int compilerTool(string csProjectPath, string rid, string outputPath)
     {
         //dotnet publish excelTool -c Release -r win-x64 -o ./excelTool/publish/win-x64
+        //dotnet publish excelTool -c Release -r osx-x64 -o excelTool/publish/osx-x64
+        //dotnet publish excelTool -c Release -r osx-x64 --self-contained true -p:PublishSingleFile=true -o excelTool/publish/osx-x64
         var outLog = new Array();
-        var result = OS.Execute("dotnet", new string[] { "publish", csProjectPath, "-c", "Release", "-r", rid, "-o", outputPath }, outLog);
+        var result = OS.Execute("dotnet", new string[]
+        {
+            "publish", csProjectPath,
+            "-c", "Release", "-r", rid,
+            "--self-contained", "true",
+            "-p:PublishSingleFile=true",
+            "-o", outputPath
+        }, outLog);
+        //var result = OS.Execute("dotnet", new string[] { "publish", csProjectPath, "-c", "Release", "-r", rid, "-o", outputPath }, outLog);
         foreach (var variant in outLog)
         {
             GD.Print(variant);
