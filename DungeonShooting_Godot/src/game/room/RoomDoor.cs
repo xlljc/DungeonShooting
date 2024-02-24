@@ -37,6 +37,7 @@ public partial class RoomDoor : ActivityObject
         {
             _animatedDown = GetNode<AnimatedSprite2D>("AnimatedSpriteDown");
         }
+
         OpenDoorHandler();
     }
 
@@ -52,7 +53,7 @@ public partial class RoomDoor : ActivityObject
         {
             AnimatedSprite.Play(AnimatorNames.OpenDoor);
         }
-        
+
         if (_animatedDown != null && _animatedDown.SpriteFrames.HasAnimation(AnimatorNames.OpenDoor))
         {
             _animatedDown.Play(AnimatorNames.OpenDoor);
@@ -73,32 +74,14 @@ public partial class RoomDoor : ActivityObject
             AnimatedSprite.Play(AnimatorNames.CloseDoor);
         }
 
-        if (_animatedDown != null && _animatedDown.SpriteFrames.HasAnimation(AnimatorNames.CloseDoor))
+        if (_animatedDown != null)
         {
-            _animatedDown.Play(AnimatorNames.CloseDoor);
+            _animatedDown.Visible = false;
         }
 
-        //调整门的层级
-        switch (Direction)
+        if (Direction == DoorDirection.E || Direction == DoorDirection.W)
         {
-            case DoorDirection.E:
-                if (_animatedDown != null)
-                {
-                    _animatedDown.ZIndex = MapLayer.AutoTopLayer;
-                }
-
-                break;
-            case DoorDirection.W:
-                if (_animatedDown != null)
-                {
-                    _animatedDown.ZIndex = MapLayer.AutoTopLayer;
-                }
-
-                break;
-            case DoorDirection.S:
-                break;
-            case DoorDirection.N:
-                break;
+            ZIndex = MapLayer.CustomMiddleLayer2;
         }
     }
 
@@ -107,6 +90,15 @@ public partial class RoomDoor : ActivityObject
         if (!IsClose && waitDisabledCollision) //开门动画播放完成
         {
             waitDisabledCollision = false;
+            if (_animatedDown != null)
+            {
+                _animatedDown.Visible = true;
+            }
+
+            if (Direction == DoorDirection.E || Direction == DoorDirection.W)
+            {
+                ZIndex = 0;
+            }
             OpenDoorHandler();
         }
     }
@@ -116,28 +108,5 @@ public partial class RoomDoor : ActivityObject
         Collision.Disabled = true;
         //调整门的层级
         //ZIndex = MapLayer.AutoFloorLayer;
-        
-        //调整门的层级
-        switch (Direction)
-        {
-            case DoorDirection.E:
-                if (_animatedDown != null)
-                {
-                    _animatedDown.ZIndex = MapLayer.AutoTopLayer;
-                }
-
-                break;
-            case DoorDirection.W:
-                if (_animatedDown != null)
-                {
-                    _animatedDown.ZIndex = MapLayer.AutoTopLayer;
-                }
-
-                break;
-            case DoorDirection.S:
-                break;
-            case DoorDirection.N:
-                break;
-        }
     }
 }
