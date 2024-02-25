@@ -1054,6 +1054,8 @@ public abstract partial class Role : ActivityObject
             {
                 weapon.AffiliationArea.RemoveItem(weapon);
             }
+
+            weapon.World = World;
         });
     }
     

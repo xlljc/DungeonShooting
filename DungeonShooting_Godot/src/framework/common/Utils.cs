@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using UI.TileSetEditorCombination;
 
@@ -344,6 +345,11 @@ public static class Utils
     /// </summary>
     public static Rect2I CalcRect(IEnumerable<Vector2I> cells)
     {
+        var count = cells.Count();
+        if (count == 0)
+        {
+            return new Rect2I();
+        }
         //单位: 像素
         var canvasXStart = int.MaxValue;
         var canvasYStart = int.MaxValue;

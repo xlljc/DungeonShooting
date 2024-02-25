@@ -33,12 +33,12 @@ public partial class ActivityInstance : Node2D
     /// 是否显示阴影
     /// </summary>
     [Export]
-    public bool ShowSprite
+    public bool ShowShadow
     {
-        get => _showSprite;
+        get => _showShadow;
         set
         {
-            _showSprite = value;
+            _showShadow = value;
             if (_activityObject != null)
             {
                 if (value)
@@ -116,7 +116,7 @@ public partial class ActivityInstance : Node2D
     private string _id;
     private ActivityObject _activityObject;
     private Sprite2D _errorSprite;
-    private bool _showSprite = true;
+    private bool _showShadow = true;
     private Vector2 _showOffset = new Vector2(0, 2);
     private float _altitude;
 
@@ -227,7 +227,7 @@ public partial class ActivityInstance : Node2D
         activityObject.ShadowOffset = _showOffset;
         activityObject.Altitude = _altitude;
         activityObject.EnableVerticalMotion = VerticalMotion;
-        activityObject.PutDown(DefaultLayer, _showSprite);
+        activityObject.PutDown(DefaultLayer, _showShadow);
         QueueFree();
     }
 
@@ -272,7 +272,7 @@ public partial class ActivityInstance : Node2D
                     instance.IsCustomShadowSprite = instance.ShadowSprite.Texture != null;
                     instance.Altitude = _altitude;
                     instance.ShadowOffset = _showOffset;
-                    if (_showSprite)
+                    if (_showShadow)
                     {
                         instance.ShowShadowSprite();
                     }
