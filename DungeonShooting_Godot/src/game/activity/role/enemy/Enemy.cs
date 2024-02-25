@@ -164,6 +164,7 @@ public partial class Enemy : Role
         roleState.ViewRange = enemyBase.ViewRange;
         roleState.TailAfterViewRange = enemyBase.TailAfterViewRange;
         roleState.BackViewRange = enemyBase.BackViewRange;
+        roleState.AttackInterval = enemyBase.AttackInterval;
         
         roleState.Gold = Mathf.Max(0, Utils.Random.RandomConfigRange(enemyBase.Gold));
         return roleState;

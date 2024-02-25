@@ -2200,7 +2200,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                 {
                     flag = AiAttackEnum.Attack;
                     enemy.Attack();
-                    if (_attackFlag)
+                    if (_attackFlag) //成功触发攻击
                     {
                         enemy.LockingTime = 0;
                     }
@@ -2211,7 +2211,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                     {
                         flag = AiAttackEnum.Attack;
                         enemy.Attack();
-                        if (_attackFlag)
+                        if (_attackFlag) //成功触发攻击
                         {
                             enemy.LockingTime = 0;
                         }
@@ -2227,7 +2227,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                         {
                             flag = AiAttackEnum.Attack;
                             enemy.Attack();
-                            if (_attackFlag && _attackTimer > 0)
+                            if (_attackFlag && _attackTimer > 0) //成功触发攻击
                             {
                                 enemy.LockingTime = 0;
                             }

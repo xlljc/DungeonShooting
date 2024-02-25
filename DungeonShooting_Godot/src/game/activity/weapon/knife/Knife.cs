@@ -135,7 +135,13 @@ public partial class Knife : Weapon
             {
                 //反弹子弹
                 bullet.OnPlayDisappearEffect();
-                bullet.MoveController.ScaleAllVelocity(-1);
+                var scale = -1f;
+                var weapon = bullet.BulletData.Weapon;
+                if (weapon != null)
+                {
+                    scale /= weapon.AiUseAttribute.AiAttackAttr.BulletSpeedScale;
+                }
+                bullet.MoveController.ScaleAllVelocity(scale);
                 bullet.Rotation += Mathf.Pi;
                 bullet.AttackLayer = TriggerRole.AttackLayer;
                 bullet.RefreshBulletColor(false);
