@@ -39,9 +39,17 @@ public static class GameConfig
     /// </summary>
     public const string RoomTileDir = "resource/map/tileMaps/";
     /// <summary>
+    /// 房间TileSet路径
+    /// </summary>
+    public const string RoomTileSetDir = "resource/map/tileSet/";
+    /// <summary>
     /// 房间组配置文件名称
     /// </summary>
     public const string RoomGroupConfigFile = "GroupConfig.json";
+    /// <summary>
+    /// TileSet配置文件
+    /// </summary>
+    public const string TileSetConfigFile = "TileSetConfig.json";
     /// <summary>
     /// ui预制体路径
     /// </summary>
@@ -50,23 +58,6 @@ public static class GameConfig
     /// ui代码根路径
     /// </summary>
     public const string UiCodeDir = "src/game/ui/";
-    
-    /// <summary>
-    /// TileMap 地板的层级
-    /// </summary>
-    public const int FloorMapLayer = 0;
-    /// <summary>
-    /// TileMap 中层的层级
-    /// </summary>
-    public const int MiddleMapLayer = 1;
-    /// <summary>
-    /// TileMap 上层的层级
-    /// </summary>
-    public const int TopMapLayer = 2;
-    /// <summary>
-    /// 连接房间的过道的地板层级
-    /// </summary>
-    public const int AisleFloorMapLayer = 3;
 
     /// <summary>
     /// 配置层级的自定义数据名称
@@ -87,4 +78,31 @@ public static class GameConfig
     /// 迷雾过渡时间
     /// </summary>
     public const float FogTransitionTime = 0.3f;
+
+    /// <summary>
+    /// 导航网格代理收缩半径
+    /// </summary>
+    public const float NavigationAgentRadius = 6f;
+
+    /// <summary>
+    /// 寻路导航单格步长
+    /// </summary>
+    public const float NavigationCellSize = 4;
+    
+    /// <summary>
+    /// 地形掩码纹理大小, 顶部墙壁/47格地形
+    /// </summary>
+    public static readonly Vector2I TerrainBit3x3 = new Vector2I(12, 4);
+    /// <summary>
+    /// 地形掩码纹理大小, 13格地形
+    /// </summary>
+    public static readonly Vector2I TerrainBit2x2 = new Vector2I(5, 3);
+    /// <summary>
+    /// 地形掩码纹理大小, 侧方墙壁
+    /// </summary>
+    public static readonly Vector2I TerrainBitMiddle = new Vector2I(4, 2);
+    /// <summary>
+    /// 地形掩码纹理大小, 地板
+    /// </summary>
+    public static readonly Vector2I TerrainBitFloor = new Vector2I(1, 1);
 }

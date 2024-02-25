@@ -1,6 +1,5 @@
 [gd_scene load_steps=3 format=3 uid="uid://dr72ij0rwlafo"]
 
-[ext_resource type="TileSet" uid="uid://b00g22o1cqhe8" path="res://resource/map/tileSet/map1/TileSet1.tres" id="1_oisp3"]
 
 
 
@@ -10,7 +9,6 @@
 
 [node name="TileMap" type="TileMap" parent="."]
 y_sort_enabled = true
-tile_set = ExtResource("1_oisp3")
 format = 2
 layer_0/name = "layer1"
 layer_0/y_sort_enabled = true

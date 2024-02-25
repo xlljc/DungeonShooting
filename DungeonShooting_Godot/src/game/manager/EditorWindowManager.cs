@@ -1,18 +1,84 @@
 ﻿
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Config;
 using Godot;
+using UI.EditorColorPicker;
+using UI.EditorDungeonGroup;
+using UI.EditorForm;
+using UI.EditorImportCombination;
+using UI.EditorInfo;
+using UI.EditorInput;
+using UI.EditorTileImage;
 using UI.EditorTips;
 using UI.EditorWindow;
-using UI.MapEditorCreateGroup;
 using UI.MapEditorCreateMark;
 using UI.MapEditorCreatePreinstall;
 using UI.MapEditorCreateRoom;
 using UI.MapEditorSelectObject;
 
+/// <summary>
+/// 通用弹窗管理类
+/// </summary>
 public static class EditorWindowManager
 {
+    /// <summary>
+    /// 打开颜色选择器弹窗
+    /// </summary>
+    /// <param name="position">位置</param>
+    /// <param name="color">当前选中的颜色</param>
+    /// <param name="onChangeColor">颜色改变时回调</param>
+    /// <param name="onClose">关闭时回调</param>
+    public static void ShowColorPicker(Vector2 position, Color color, ColorPicker.ColorChangedEventHandler onChangeColor, Action onClose = null)
+    {
+        var window = CreateWindowInstance();
+        var colorPickerPanel = window.OpenBody<EditorColorPickerPanel>(UiManager.UiNames.EditorColorPicker);
+        window.SetWindowTitle("颜色选择器");
+        window.SetWindowSize(new Vector2I(298, 720));
+        window.S_Window.Instance.Position = new Vector2I((int)(position.X - 298f * 0.5f), (int)(position.Y + 80));
+        colorPickerPanel.S_ColorPicker.Instance.Color = color;
+        colorPickerPanel.S_ColorPicker.Instance.ColorChanged += onChangeColor;
+        if (onClose != null)
+        {
+            window.CloseEvent += onClose;
+        }
+    }
+
+    /// <summary>
+    /// 显示打开文件窗口
+    /// </summary>
+    /// <param name="filters">过滤文件后缀</param>
+    /// <param name="onClose">关闭回调, 回调参数为选择的文件路径, 如果选择文件, 则回调参数为null</param>
+    public static void ShowOpenFileDialog(string[] filters, Action<string> onClose)
+    {
+        var fileDialog = new FileDialog();
+        fileDialog.UseNativeDialog = true;
+        fileDialog.ModeOverridesTitle = false;
+        fileDialog.FileMode = FileDialog.FileModeEnum.OpenFile;
+        fileDialog.Access = FileDialog.AccessEnum.Filesystem;
+        fileDialog.Filters = filters;
+        fileDialog.FileSelected += (path) =>
+        {
+            onClose(path);
+            fileDialog.QueueFree();
+        };
+        fileDialog.Canceled += () =>
+        {
+            onClose(null);
+            fileDialog.QueueFree();
+        };
+        fileDialog.Confirmed += () =>
+        {
+            onClose(null);
+            fileDialog.QueueFree();
+        };
+        UiManager.GetUiLayer(UiLayer.Pop).AddChild(fileDialog);
+        fileDialog.Popup();
+    }
+    
     /// <summary>
     /// 弹出通用提示面板
     /// </summary>
@@ -45,7 +111,7 @@ public static class EditorWindowManager
     /// <param name="message">显示内容</param>
     /// <param name="onClose">关闭时的回调, 参数如果为 true 表示点击了确定</param>
     /// <param name="parentUi">所属父级Ui</param>
-    public static void ShowConfirm(string title, string message, Action<bool> onClose, UiBase parentUi = null)
+    public static EditorWindowPanel ShowConfirm(string title, string message, Action<bool> onClose, UiBase parentUi = null)
     {
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle(title);
@@ -66,6 +132,59 @@ public static class EditorWindowManager
         );
         var body = window.OpenBody<EditorTipsPanel>(UiManager.UiNames.EditorTips);
         body.SetMessage(message);
+        return  window;
+    }
+
+    /// <summary>
+    /// 弹出延时询问窗口
+    /// </summary>
+    /// <param name="title">标题</param>
+    /// <param name="message">显示内容</param>
+    /// <param name="delayTime">延时时间</param>
+    /// <param name="onClose">关闭时的回调, 参数如果为 true 表示点击了确定</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowDelayConfirm(string title, string message, float delayTime, Action<bool> onClose, UiBase parentUi = null)
+    {
+        var window = ShowConfirm(title, message, onClose, parentUi);
+        if (delayTime > 0)
+        {
+            var uiCell = (CustomButtonCell)window.ButtonGrid.GetCell(0);
+            window.StartCoroutine(DelayTimeLabel(delayTime, uiCell.CellNode.L_Button.Instance));
+        }
+    }
+
+    /// <summary>
+    /// 弹出通用输入框
+    /// </summary>
+    /// <param name="title">标题</param>
+    /// <param name="message">显示内容</param>
+    /// <param name="value">输入框默认值</param>
+    /// <param name="onClose">关闭时回调，参数1为输入框内容，参数2为 true 表示点击了确定，如果点击了确定但是回调函数返回 false 则不会关闭窗口</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowInput(string title, string message, string value, Func<string, bool, bool> onClose, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle(title);
+        window.SetWindowSize(new Vector2I(450, 230));
+        var body = window.OpenBody<EditorInputPanel>(UiManager.UiNames.EditorInput);
+        window.CloseEvent += () =>
+        {
+            onClose(body.GetValue(), false);
+        };
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                if (onClose(body.GetValue(), true))
+                {
+                    window.CloseWindow(false);
+                }
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+        body.Init(message, value);
     }
     
     /// <summary>
@@ -82,6 +201,7 @@ public static class EditorWindowManager
     {
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle(title);
+        window.SetWindowSize(new Vector2I(550, 350));
         window.CloseEvent += () =>
         {
             onClose(-1);
@@ -117,17 +237,67 @@ public static class EditorWindowManager
         var window = CreateWindowInstance(parentUi);
         window.SetWindowTitle("创建地牢组");
         window.SetWindowSize(new Vector2I(700, 500));
-        var body = window.OpenBody<MapEditorCreateGroupPanel>(UiManager.UiNames.MapEditorCreateGroup);
+        var body = window.OpenBody<EditorDungeonGroupPanel>(UiManager.UiNames.EditorDungeonGroup);
         window.SetButtonList(
             new EditorWindowPanel.ButtonData("确定", () =>
             {
                 //获取填写的数据, 并创建ui
-                var groupInfo = body.GetGroupInfo();
-                if (groupInfo != null)
+                var infoData = body.GetData();
+                //组名
+                var groupName = infoData.Name;
+        
+                //检查名称是否合规
+                if (string.IsNullOrEmpty(groupName))
                 {
-                    window.CloseWindow();
-                    onCreateGroup(groupInfo);
+                    ShowTips("错误", "组名称不能为空！");
+                    return;
                 }
+        
+                //验证是否有同名组
+                var path = MapProjectManager.CustomMapPath + groupName;
+                var dir = new DirectoryInfo(path);
+                if (dir.Exists && dir.GetDirectories().Length > 0)
+                {
+                    ShowTips("错误", $"已经有相同路径的房间了！");
+                    return;
+                }
+
+                var group = new DungeonRoomGroup();
+                group.GroupName = groupName;
+                group.TileSet = infoData.TileSet;
+                group.Remark = infoData.Remark;
+                window.CloseWindow();
+                onCreateGroup(group);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    /// <summary>
+    /// 打开创建地牢组弹窗
+    /// </summary>
+    /// <param name="group">原数据</param>
+    /// <param name="onEditGroup">提交时回调</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowEditGroup(DungeonRoomGroup group, Action<DungeonRoomGroup> onEditGroup, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle("编辑地牢组");
+        window.SetWindowSize(new Vector2I(700, 500));
+        var body = window.OpenBody<EditorDungeonGroupPanel>(UiManager.UiNames.EditorDungeonGroup);
+        body.InitData(group);
+        body.SetEditMode();
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                var infoData = body.GetData();
+                group.Remark = infoData.Remark;
+                group.TileSet = infoData.TileSet;
+                window.CloseWindow();
+                onEditGroup(group);
             }),
             new EditorWindowPanel.ButtonData("取消", () =>
             {
@@ -367,7 +537,303 @@ public static class EditorWindowManager
         };
     }
 
-    private static EditorWindowPanel CreateWindowInstance(UiBase parentUi)
+    /// <summary>
+    /// 显示导入组合确认弹窗
+    /// </summary>
+    /// <param name="showName">组合名称</param>
+    /// <param name="color">预览纹理背景颜色</param>
+    /// <param name="texture">显示纹理</param>
+    /// <param name="onAccept">确定时回调</param>
+    /// <param name="onCancel">取消时回调</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowImportCombination(string showName, Color color, Texture2D texture, Action<string> onAccept, Action onCancel, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.S_Window.Instance.Size = new Vector2I(750, 650);
+        window.SetWindowTitle("导入组合");
+        var body = window.OpenBody<EditorImportCombinationPanel>(UiManager.UiNames.EditorImportCombination);
+        body.InitData(showName, color, texture);
+        var accept = false;
+        if (onCancel != null)
+        {
+            window.CloseEvent += () =>
+            {
+                if (!accept) onCancel();
+            };
+        }
+
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                accept = true;
+                var selectObject = body.GetName();
+                window.CloseWindow();
+                onAccept(selectObject);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+    
+    /// <summary>
+    /// 显示编辑组合弹窗
+    /// </summary>
+    /// <param name="showName">组合名称</param>
+    /// <param name="color">预览纹理背景颜色</param>
+    /// <param name="texture">显示纹理</param>
+    /// <param name="onAccept">确定时回调</param>
+    /// <param name="onDelete">删除时回调</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowEditCombination(string showName, Color color, Texture2D texture, Action<string> onAccept, Action onDelete, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.S_Window.Instance.Size = new Vector2I(750, 650);
+        window.SetWindowTitle("编辑组合");
+        var body = window.OpenBody<EditorImportCombinationPanel>(UiManager.UiNames.EditorImportCombination);
+        body.InitData(showName, color, texture);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("删除", () =>
+            {
+                ShowConfirm("提示", "您确定要删除该组合吗，该操作不能取消！", (flag) =>
+                {
+                    if (flag)
+                    {
+                        window.CloseWindow();
+                        onDelete();
+                    }
+                }, window);
+            }),
+            new EditorWindowPanel.ButtonData("保存", () =>
+            {
+                var selectObject = body.GetName();
+                window.CloseWindow();
+                onAccept(selectObject);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    /// <summary>
+    /// 显示创建TileSet的面板
+    /// </summary>
+    /// <param name="onCreateTileSet">创建完成回调, 第一个参数为TileSet名称, 第二个参数数据数据</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowCreateTileSet(Action<string, TileSetSplit> onCreateTileSet, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle("创建TileSet");
+        window.SetWindowSize(new Vector2I(700, 500));
+        var body = window.OpenBody<EditorInfoPanel>(UiManager.UiNames.EditorInfo);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                //获取填写的数据, 并创建ui
+                var infoData = body.GetInfoData();
+                //名称
+                var name = infoData.Name;
+        
+                //检查名称是否合规
+                if (string.IsNullOrEmpty(name))
+                {
+                    ShowTips("错误", "名称不能为空！");
+                    return;
+                }
+
+                //验证是否有同名组
+                var path = EditorTileSetManager.CustomTileSetPath + name;
+                var dir = new DirectoryInfo(path);
+                if (dir.Exists && dir.GetFiles().Length > 0)
+                {
+                    ShowTips("错误", $"已经有相同名称的TileSet了！");
+                    return;
+                }
+
+                var tileSetSplit = new TileSetSplit();
+                tileSetSplit.Remark = infoData.Remark;
+                tileSetSplit.Path = EditorTileSetManager.CustomTileSetPath + name;
+                window.CloseWindow();
+                onCreateTileSet(infoData.Name, tileSetSplit);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    /// <summary>
+    /// 显示编辑TileSet的面板
+    /// </summary>
+    /// <param name="tileSetSplit">原数据</param>
+    /// <param name="onCreateTileSet">创建完成回调, 第一个参数为TileSet名称, 第二个参数数据数据</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowEditTileSet(TileSetSplit tileSetSplit, Action<TileSetSplit> onCreateTileSet, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle("编辑TileSet");
+        window.SetWindowSize(new Vector2I(700, 500));
+        var body = window.OpenBody<EditorInfoPanel>(UiManager.UiNames.EditorInfo);
+        body.InitData(new EditorInfoData(tileSetSplit.TileSetInfo.Name, tileSetSplit.Remark));
+        body.SetNameInputEnable(false);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                //获取填写的数据, 并创建ui
+                var infoData = body.GetInfoData();
+                tileSetSplit.Remark = infoData.Remark;
+                window.CloseWindow();
+                onCreateTileSet(tileSetSplit);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    /// <summary>
+    /// 显示创建地形的面板
+    /// </summary>
+    /// <param name="sourceInfo">创建地形时所在的TileSource</param>
+    /// <param name="onCreate">创建完成回调</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowCreateTerrain(TileSetSourceInfo sourceInfo, Action<TileSetTerrainInfo> onCreate, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle("创建Terrain");
+        window.SetWindowSize(new Vector2I(600, 350));
+        var body = window.OpenBody<EditorFormPanel>(UiManager.UiNames.EditorForm);
+        
+        //第一项
+        var item1 = new FormItemData<LineEdit>("地形名称", new LineEdit()
+        {
+            PlaceholderText = "请输入名称"
+        });
+        //第二项
+        var option = new OptionButton();
+        option.AddItem("3x3掩码（47格）");
+        option.AddItem("2x2掩码（13格）");
+        option.Selected = 0;
+        var item2 = new FormItemData<OptionButton>("掩码类型", option);
+        
+        body.AddItem(item1);
+        body.AddItem(item2);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                var text = item1.UiNode.Text;
+                if (string.IsNullOrEmpty(text))
+                {
+                    ShowTips("错误", $"名称不允许为空！");
+                    return;
+                }
+                
+                if (sourceInfo.Terrain.FindIndex(info => info.Name == text) >= 0)
+                {
+                    ShowTips("错误", $"已经有相同名称的Terrain了！");
+                    return;
+                }
+
+                var terrainInfo = new TileSetTerrainInfo();
+                terrainInfo.InitData();
+                terrainInfo.Name = text;
+                terrainInfo.TerrainType = (byte)option.Selected;
+                
+                window.CloseWindow();
+                onCreate(terrainInfo);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+    
+    /// <summary>
+    /// 显示编辑地形的MainBu
+    /// </summary>
+    /// <param name="sourceInfo">创建地形时所在的TileSource</param>
+    /// <param name="onCreate">创建完成回调</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowEditTerrain(TileSetSourceInfo sourceInfo, Action<TileSetTerrainInfo> onCreate, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle("创建Terrain");
+        window.SetWindowSize(new Vector2I(600, 350));
+        var body = window.OpenBody<EditorFormPanel>(UiManager.UiNames.EditorForm);
+        
+        //第一项
+        var item1 = new FormItemData<LineEdit>("地形名称", new LineEdit()
+        {
+            PlaceholderText = "请输入名称"
+        });
+        //第二项
+        var option = new OptionButton();
+        option.AddItem("3x3掩码（47格）");
+        option.AddItem("2x2掩码（13格）");
+        option.Selected = 0;
+        var item2 = new FormItemData<OptionButton>("掩码类型", option);
+        
+        body.AddItem(item1);
+        body.AddItem(item2);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                var text = item1.UiNode.Text;
+                if (sourceInfo.Terrain.FindIndex(info => info.Name == text) >= 0)
+                {
+                    ShowTips("错误", $"已经有相同名称的Terrain了！");
+                    return;
+                }
+
+                var terrainInfo = new TileSetTerrainInfo();
+                terrainInfo.InitData();
+                terrainInfo.Name = text;
+                terrainInfo.TerrainType = (byte)option.Selected;
+                
+                window.CloseWindow();
+                onCreate(terrainInfo);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+
+    /// <summary>
+    /// 显示导入纹理的面板
+    /// </summary>
+    /// <param name="image">初始纹理</param>
+    /// <param name="onCreate">点击确定后的回调</param>
+    /// <param name="parentUi">所属父级Ui</param>
+    public static void ShowImportTileImage(Image image, Action<Image> onCreate, UiBase parentUi = null)
+    {
+        var window = CreateWindowInstance(parentUi);
+        window.SetWindowTitle("导入纹理");
+        window.SetWindowSize(new Vector2I(1400, 800));
+        var body = window.OpenBody<EditorTileImagePanel>(UiManager.UiNames.EditorTileImage);
+        body.InitData(image);
+        window.SetButtonList(
+            new EditorWindowPanel.ButtonData("确定", () =>
+            {
+                var img = body.GetImage();
+                window.CloseWindow();
+                onCreate(img);
+            }),
+            new EditorWindowPanel.ButtonData("取消", () =>
+            {
+                window.CloseWindow();
+            })
+        );
+    }
+    
+    private static EditorWindowPanel CreateWindowInstance(UiBase parentUi = null)
     {
         if (parentUi != null)
         {
@@ -375,5 +841,19 @@ public static class EditorWindowManager
         }
 
         return UiManager.Open_EditorWindow();
+    }
+
+    private static IEnumerator DelayTimeLabel(float time, Button button)
+    {
+        var text = button.Text;
+        button.Disabled = true;
+        for (float i = time; i >= 0; i -= 1)
+        {
+            button.Text = $"{text}（{(int)i}秒）";
+            yield return new WaitForSeconds(1);
+        }
+
+        button.Text = text;
+        button.Disabled = false;
     }
 }

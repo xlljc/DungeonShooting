@@ -7,6 +7,11 @@ using System;
 public class RoleState
 {
     /// <summary>
+    /// 金币数量
+    /// </summary>
+    public int Gold = 0;
+    
+    /// <summary>
     /// 是否可以拾起武器
     /// </summary>
     public bool CanPickUpWeapon = false;

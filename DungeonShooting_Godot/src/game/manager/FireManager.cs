@@ -272,6 +272,7 @@ public static class FireManager
             BounceCount = Utils.Random.RandomConfigRange(bullet.BounceCount),
             LifeTime = Utils.Random.RandomConfigRange(bullet.LifeTimeRange),
             Position = weapon.FirePoint.GlobalPosition,
+            FlySpeed = Utils.Random.RandomConfigRange(bullet.SpeedRange),
         };
 
         var deviationAngle = Utils.Random.RandomConfigRange(bullet.DeviationAngleRange);

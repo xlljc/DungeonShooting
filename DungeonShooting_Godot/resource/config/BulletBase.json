@@ -211,12 +211,152 @@
     ]
   },
   {
+    "Id": "0007",
+    "Name": "\u62D6\u5C3E\u5B50\u5F391",
+    "Type": 1,
+    "Prefab": "bullet0006",
+    "HarmRange": [
+      10
+    ],
+    "RepelRange": [
+      45
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      350,
+      350
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      600,
+      600
+    ],
+    "VerticalSpeed": [
+      0
+    ],
+    "BounceCount": [
+      3
+    ],
+    "Penetration": [
+      1
+    ]
+  },
+  {
+    "Id": "0008",
+    "Name": "\u5B50\u5F394",
+    "Type": 1,
+    "Prefab": "bullet0007",
+    "HarmRange": [
+      4
+    ],
+    "RepelRange": [
+      15
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      350,
+      380
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      400,
+      450
+    ],
+    "VerticalSpeed": [
+      0
+    ],
+    "BounceCount": [
+      0
+    ],
+    "Penetration": [
+      0
+    ]
+  },
+  {
+    "Id": "0009",
+    "Name": "\u5B50\u5F395",
+    "Type": 1,
+    "Prefab": "bullet0008",
+    "HarmRange": [
+      4
+    ],
+    "RepelRange": [
+      15
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      350,
+      380
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      400,
+      450
+    ],
+    "VerticalSpeed": [
+      0
+    ],
+    "BounceCount": [
+      0
+    ],
+    "Penetration": [
+      0
+    ]
+  },
+  {
+    "Id": "0010",
+    "Name": "\u5F13\u7BAD",
+    "Type": 1,
+    "Prefab": "bullet0009",
+    "HarmRange": [
+      15
+    ],
+    "RepelRange": [
+      55
+    ],
+    "DeviationAngleRange": [
+      0
+    ],
+    "SpeedRange": [
+      400,
+      400
+    ],
+    "LifeTimeRange": [
+      -1
+    ],
+    "DistanceRange": [
+      250,
+      300
+    ],
+    "VerticalSpeed": [
+      0
+    ],
+    "BounceCount": [
+      0
+    ],
+    "Penetration": [
+      0
+    ]
+  },
+  {
     "Id": "1001",
     "Name": "\u6FC0\u51491",
     "Type": 2,
     "Prefab": "res://prefab/bullet/laser/Laser0001.tscn",
     "HarmRange": [
-      5
+      7
     ],
     "RepelRange": [
       35
@@ -225,8 +365,8 @@
       0
     ],
     "SpeedRange": [
-      300,
-      330
+      2000,
+      2000
     ],
     "LifeTimeRange": [
       -1

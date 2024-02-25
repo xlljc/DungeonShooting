@@ -1,0 +1,287 @@
+[gd_scene load_steps=8 format=3 uid="uid://tjbfj67t5akm"]
+
+[ext_resource type="Script" path="res://src/game/ui/mapEditorMapTile/MapEditorMapTilePanel.cs" id="1_gtth6"]
+[ext_resource type="Script" path="res://src/game/ui/mapEditorMapTile/FreeTileTab.cs" id="2_5c2no"]
+[ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="3_sibps"]
+[ext_resource type="Script" path="res://src/game/ui/mapEditorMapTile/TerrainTileTab.cs" id="4_jxcal"]
+[ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="5_f4thw"]
+[ext_resource type="Script" path="res://src/game/ui/mapEditorMapTile/CombinationTileTab.cs" id="5_ty17f"]
+[ext_resource type="Texture2D" uid="uid://c4ltpf5a3egu1" path="res://resource/sprite/ui/commonIcon/Error_mini.png" id="6_u35dn"]
+
+[node name="MapEditorMapTile" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gtth6")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "资源："
+
+[node name="SourceOption" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "笔刷类型："
+
+[node name="HandleOption" type="OptionButton" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 3
+selected = 0
+popup/item_0/text = "自由绘制"
+popup/item_0/id = 0
+popup/item_1/text = "地形绘制"
+popup/item_1/id = 1
+popup/item_2/text = "组合绘制"
+popup/item_2/id = 2
+
+[node name="Panel" type="Panel" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Tab1" type="ColorRect" parent="VBoxContainer/Panel/MarginContainer"]
+visible = false
+clip_children = 2
+layout_mode = 2
+color = Color(0.145098, 0.145098, 0.145098, 1)
+script = ExtResource("2_5c2no")
+
+[node name="TabRoot" type="Control" parent="VBoxContainer/Panel/MarginContainer/Tab1"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -0.5
+offset_right = 0.5
+offset_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TileSprite" type="Sprite2D" parent="VBoxContainer/Panel/MarginContainer/Tab1/TabRoot"]
+centered = false
+
+[node name="Brush" type="Control" parent="VBoxContainer/Panel/MarginContainer/Tab1/TabRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Grid" type="ColorRect" parent="VBoxContainer/Panel/MarginContainer/Tab1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="FocusBtn" type="TextureButton" parent="VBoxContainer/Panel/MarginContainer/Tab1"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -79.0
+offset_top = 14.0
+offset_right = -15.0
+offset_bottom = 78.0
+grow_horizontal = 0
+tooltip_text = "聚焦"
+texture_normal = ExtResource("3_sibps")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Tab2" type="Control" parent="VBoxContainer/Panel/MarginContainer"]
+layout_mode = 2
+script = ExtResource("4_jxcal")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Panel/MarginContainer/Tab2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TerrainItem" type="Button" parent="VBoxContainer/Panel/MarginContainer/Tab2/ScrollContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Select" type="NinePatchRect" parent="VBoxContainer/Panel/MarginContainer/Tab2/ScrollContainer/TerrainItem"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_f4thw")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="TerrainName" type="Label" parent="VBoxContainer/Panel/MarginContainer/Tab2/ScrollContainer/TerrainItem"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 104.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Name
+2x2"
+vertical_alignment = 1
+
+[node name="ErrorIcon" type="TextureRect" parent="VBoxContainer/Panel/MarginContainer/Tab2/ScrollContainer/TerrainItem"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -46.0
+offset_top = -20.0
+offset_right = -6.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_u35dn")
+
+[node name="TerrainPreview" type="TextureRect" parent="VBoxContainer/Panel/MarginContainer/Tab2/ScrollContainer/TerrainItem"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 97.0
+offset_bottom = -3.0
+grow_vertical = 2
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Tab3" type="Control" parent="VBoxContainer/Panel/MarginContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("5_ty17f")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Panel/MarginContainer/Tab3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CellButton" type="Button" parent="VBoxContainer/Panel/MarginContainer/Tab3/ScrollContainer"]
+custom_minimum_size = Vector2(120, 170)
+layout_mode = 2
+
+[node name="PreviewImage" type="TextureRect" parent="VBoxContainer/Panel/MarginContainer/Tab3/ScrollContainer/CellButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -52.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 2
+stretch_mode = 5
+
+[node name="CellName" type="Label" parent="VBoxContainer/Panel/MarginContainer/Tab3/ScrollContainer/CellButton"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -52.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 16
+text = "名称"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+text_overrun_behavior = 2
+
+[node name="SelectTexture" type="NinePatchRect" parent="VBoxContainer/Panel/MarginContainer/Tab3/ScrollContainer/CellButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_f4thw")
+region_rect = Rect2(0, 0, 36, 36)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="MaskBg" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.862745)
+
+[node name="Label" type="Label" parent="MaskBg"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "选中地板层时不能使用自定义图块"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Godot;
@@ -7,6 +8,19 @@ using Godot;
 /// </summary>
 public abstract partial class UiBase : Control, IDestroy, ICoroutine
 {
+    /// <summary>
+    /// Ui显示事件
+    /// </summary>
+    public event Action OnShowUiEvent;
+    /// <summary>
+    /// Ui隐藏事件
+    /// </summary>
+    public event Action OnHideUiEvent;
+    /// <summary>
+    /// Ui销毁事件
+    /// </summary>
+    public event Action OnDestroyUiEvent;
+    
     /// <summary>
     /// 当前 UI 所属层级
     /// </summary>
@@ -42,12 +56,23 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     /// </summary>
     public IUiNode ParentNode { get; private set; }
 
+    /// <summary>
+    /// 是否是嵌套的子 Ui
+    /// </summary>
+    public bool IsNestedUi => ParentUi != null;
+    
     //开启的协程
     private List<CoroutineData> _coroutineList;
     //嵌套打开的Ui列表
     private HashSet<UiBase> _nestedUiSet;
+    //嵌套模式下是否打开Ui
+    private bool _nestedOpen;
     //当前Ui包含的 IUiNodeScript 接口, 关闭Ui是需要调用 IUiNodeScript.OnDestroy()
     private HashSet<IUiNodeScript> _nodeScripts;
+    //存放事件集合的对象
+    private EventFactory _eventFactory;
+    //存放的IUiGrid对象
+    private List<IUiGrid> _uiGrids;
 
     public UiBase(string uiName)
     {
@@ -113,16 +138,24 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
             return;
         }
 
+        _nestedOpen = true;
         IsOpen = true;
         Visible = true;
         OnShowUi();
+        if (OnShowUiEvent != null)
+        {
+            OnShowUiEvent();
+        }
         
         //子Ui调用显示
         if (_nestedUiSet != null)
         {
             foreach (var uiBase in _nestedUiSet)
             {
-                uiBase.ShowUi();
+                if (uiBase._nestedOpen || uiBase.Visible)
+                {
+                    uiBase.ShowUi();
+                }
             }
         }
     }
@@ -142,16 +175,25 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
             return;
         }
 
+        _nestedOpen = false;
         IsOpen = false;
         Visible = false;
         OnHideUi();
+        if (OnHideUiEvent != null)
+        {
+            OnHideUiEvent();
+        }
         
         //子Ui调用隐藏
         if (_nestedUiSet != null)
         {
             foreach (var uiBase in _nestedUiSet)
             {
-                uiBase.HideUi();
+                if (uiBase._nestedOpen)
+                {
+                    uiBase.HideUi();
+                    uiBase._nestedOpen = true;
+                }
             }
         }
     }
@@ -170,6 +212,19 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         HideUi();
         IsDestroyed = true;
         OnDestroyUi();
+        if (OnDestroyUiEvent != null)
+        {
+            OnDestroyUiEvent();
+        }
+
+        if (_uiGrids != null)
+        {
+            foreach (var uiGrid in _uiGrids)
+            {
+                uiGrid.Destroy();
+            }
+            _uiGrids.Clear();
+        }
         
         //子Ui调用销毁
         if (_nestedUiSet != null)
@@ -196,10 +251,73 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         {
             ParentUi.RecordNestedUi(this, null, UiManager.RecordType.Close);
         }
-        
+
+        RemoveAllEventListener();
         QueueFree();
     }
 
+    /// <summary>
+    /// 添加监听事件, 所有事件会在当前 ui 销毁时自动销毁
+    /// </summary>
+    /// <param name="eventType">事件类型</param>
+    /// <param name="callback">回调函数</param>
+    public void AddEventListener(EventEnum eventType, Action<object> callback)
+    {
+        if (_eventFactory == null)
+        {
+            _eventFactory = new EventFactory();
+        }
+        _eventFactory.AddEventListener(eventType, callback);
+    }
+    
+    /// <summary>
+    /// 移除所有的监听事件
+    /// </summary>
+    public void RemoveAllEventListener()
+    {
+        if (_eventFactory != null)
+        {
+            _eventFactory.RemoveAllEventListener();
+        }
+    }
+
+    /// <summary>
+    /// 创建一个UiGrid对象, 该Ui对象会在Ui销毁时自动销毁
+    /// </summary>
+    /// <param name="template">模板对象</param>
+    /// <typeparam name="TNode">模板对象类型</typeparam>
+    /// <typeparam name="TData">存放的数据类型</typeparam>
+    /// <typeparam name="TCell">Cell处理类</typeparam>
+    public UiGrid<TNode, TData> CreateUiGrid<TNode, TData, TCell>(TNode template) where TNode : IUiCellNode where TCell : UiCell<TNode, TData>
+    {
+        var uiGrid = new UiGrid<TNode, TData>(template, typeof(TCell));
+        if (_uiGrids == null)
+        {
+            _uiGrids = new List<IUiGrid>();
+        }
+        _uiGrids.Add(uiGrid);
+        return uiGrid;
+    }
+
+    /// <summary>
+    /// 创建一个UiGrid对象, 该Ui对象会在Ui销毁时自动销毁
+    /// </summary>
+    /// <param name="template">模板对象</param>
+    /// <param name="parent">父节点</param>
+    /// <typeparam name="TNode">模板对象类型</typeparam>
+    /// <typeparam name="TData">存放的数据类型</typeparam>
+    /// <typeparam name="TCell">Cell处理类</typeparam>
+    public UiGrid<TNode, TData> CreateUiGrid<TNode, TData, TCell>(TNode template, Node parent) where TNode : IUiCellNode where TCell : UiCell<TNode, TData>
+    {
+        var uiGrid = new UiGrid<TNode, TData>(template, parent, typeof(TCell));
+        if (_uiGrids == null)
+        {
+            _uiGrids = new List<IUiGrid>();
+        }
+        _uiGrids.Add(uiGrid);
+        return uiGrid;
+    }
+    
     public sealed override void _Process(double delta)
     {
         if (!IsOpen)
@@ -220,6 +338,7 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
     {
         var packedScene = ResourceManager.Load<PackedScene>("res://" + GameConfig.UiPrefabDir + uiName + ".tscn");
         var uiBase = packedScene.Instantiate<UiBase>();
+        uiBase.Visible = false;
         uiBase.PrevUi = prevUi;
         AddChild(uiBase);
         RecordNestedUi(uiBase, null, UiManager.RecordType.Open);

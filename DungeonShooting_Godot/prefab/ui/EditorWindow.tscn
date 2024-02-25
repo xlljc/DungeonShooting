@@ -28,7 +28,7 @@ initial_position = 1
 size = Vector2i(500, 350)
 visible = false
 transient = true
-min_size = Vector2i(500, 350)
+min_size = Vector2i(100, 100)
 theme_override_constants/title_height = 33
 
 [node name="Panel" type="Panel" parent="Window"]

@@ -15,7 +15,7 @@ namespace UI.EditorTools;
 /// Godot编辑器扩展工具
 /// </summary>
 [Tool]
-public partial class EditorToolsPanel : EditorTools
+public partial class EditorToolsPanel : EditorTools, ISerializationListener
 {
     
 #if TOOLS
@@ -80,6 +80,15 @@ public partial class EditorToolsPanel : EditorTools
         container.L_HBoxContainer5.L_Button.Instance.Pressed -= GenerateUiManagerMethods;
         container.L_HBoxContainer7.L_Button.Instance.Pressed -= ExportExcel;
         container.L_HBoxContainer8.L_Button.Instance.Pressed -= OpenExportExcelFolder;
+    }
+    
+    public void OnBeforeSerialize()
+    {
+        OnHideUi();
+    }
+    public void OnAfterDeserialize()
+    {
+        OnShowUi();
     }
 
     /// <summary>
@@ -201,7 +210,7 @@ public partial class EditorToolsPanel : EditorTools
     {
         if (Plugin.Plugin.Instance != null)
         {
-            var root = Plugin.Plugin.Instance.GetEditorInterface().GetEditedSceneRoot();
+            var root = EditorInterface.Singleton.GetEditedSceneRoot();
             if (root != null && Plugin.Plugin.Instance.CheckIsUi(root))
             {
                 if (UiGenerator.GenerateUiCodeFromEditor(root))
@@ -309,10 +318,19 @@ public partial class EditorToolsPanel : EditorTools
     /// </summary>
     private void OpenExportExcelFolder()
     {
-        var path = Environment.CurrentDirectory + "\\excel";
-        System.Diagnostics.Process.Start("explorer.exe", path);
+        var path = Environment.CurrentDirectory + "/excel";
+        var osName = OS.GetName();
+        GD.Print("打开excel文件夹: " + path);
+        if (osName == "Windows")
+        {
+            System.Diagnostics.Process.Start("explorer.exe", path);
+        }
+        else
+        {
+            System.Diagnostics.Process.Start("open", path);
+        }
     }
-    
+
     /// <summary>
     /// 在编辑器中打开一个提示窗口
     /// </summary>
@@ -342,6 +360,12 @@ public partial class EditorToolsPanel : EditorTools
     }
     
     public override void OnHideUi()
+    {
+    }
+    public void OnBeforeSerialize()
+    {
+    }
+    public void OnAfterDeserialize()
     {
     }
 #endif

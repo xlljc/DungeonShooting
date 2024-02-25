@@ -87,6 +87,22 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="AutoFillTip" type="ColorRect" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+color = Color(0.360784, 0.764706, 1, 0.0784314)
+
+[node name="Label" type="Label" parent="VBoxContainer/ScrollContainer/VBoxContainer/AutoFillTip"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "当前预设启用了自动填充"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
 [node name="AddWaveButton" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 text = "添加波数"

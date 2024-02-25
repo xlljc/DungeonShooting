@@ -1,0 +1,181 @@
+[gd_scene load_steps=5 format=3 uid="uid://c0j60lj0euk3y"]
+
+[ext_resource type="Script" path="res://src/game/ui/editorTileImage/EditorTileImagePanel.cs" id="1_y1hns"]
+[ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="2_ntsra"]
+[ext_resource type="Script" path="res://src/game/ui/editorTileImage/ImageBg.cs" id="2_qkj2u"]
+[ext_resource type="Script" path="res://src/game/ui/editorTileImage/RectBrush.cs" id="3_fic1t"]
+
+[node name="EditorTileImage" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y1hns")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Left" type="Panel" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Bg" type="ColorRect" parent="HBoxContainer/Left"]
+clip_children = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.145098, 0.145098, 0.145098, 1)
+script = ExtResource("2_qkj2u")
+
+[node name="TextureRoot" type="Control" parent="HBoxContainer/Left/Bg"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -0.5
+offset_right = 0.5
+offset_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TileSprite" type="Sprite2D" parent="HBoxContainer/Left/Bg/TextureRoot"]
+centered = false
+
+[node name="Brush" type="Control" parent="HBoxContainer/Left/Bg/TextureRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_fic1t")
+
+[node name="FocusBtn" type="TextureButton" parent="HBoxContainer/Left/Bg"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -79.0
+offset_top = 14.0
+offset_right = -15.0
+offset_bottom = 78.0
+grow_horizontal = 0
+tooltip_text = "聚焦"
+texture_normal = ExtResource("2_ntsra")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Right" type="Panel" parent="HBoxContainer"]
+custom_minimum_size = Vector2(370, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Right"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 9.0
+offset_right = -4.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Right/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Right/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "起始X"
+
+[node name="StartX" type="SpinBox" parent="HBoxContainer/Right/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 9999.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/Right/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Right/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "起始Y"
+
+[node name="StartY" type="SpinBox" parent="HBoxContainer/Right/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 9999.0
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="HBoxContainer/Right/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Right/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "间距X"
+
+[node name="OffsetX" type="SpinBox" parent="HBoxContainer/Right/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 9999.0
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="HBoxContainer/Right/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Right/VBoxContainer/HBoxContainer4"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "间距Y"
+
+[node name="OffsetY" type="SpinBox" parent="HBoxContainer/Right/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 9999.0
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="HBoxContainer/Right/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Right/VBoxContainer/HBoxContainer5"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "横轴数量"
+
+[node name="HCount" type="SpinBox" parent="HBoxContainer/Right/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 9999.0
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="HBoxContainer/Right/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/Right/VBoxContainer/HBoxContainer6"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "纵轴数量"
+
+[node name="VCount" type="SpinBox" parent="HBoxContainer/Right/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 9999.0

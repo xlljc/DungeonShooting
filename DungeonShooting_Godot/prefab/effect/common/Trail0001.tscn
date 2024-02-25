@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://ddwikcidm0gsi"]
+
+[ext_resource type="Script" path="res://src/game/effects/Trail.cs" id="1_i68ib"]
+
+[sub_resource type="Curve" id="Curve_fnvhf"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_cjh8g"]
+resource_local_to_scene = true
+offsets = PackedFloat32Array(0.825949, 1)
+colors = PackedColorArray(1, 1, 1, 0.705882, 1, 1, 1, 0)
+
+[node name="Trail" type="Line2D"]
+width = 3.0
+width_curve = SubResource("Curve_fnvhf")
+gradient = SubResource("Gradient_cjh8g")
+script = ExtResource("1_i68ib")

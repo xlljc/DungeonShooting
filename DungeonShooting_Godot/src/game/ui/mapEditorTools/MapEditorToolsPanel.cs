@@ -53,7 +53,8 @@ public partial class MapEditorToolsPanel : MapEditorTools
 
     public override void OnCreateUi()
     {
-        EditorMap = ((MapEditorPanel)ParentUi).S_TileMap;
+        var mapEditorPanel = (MapEditorPanel)ParentUi;
+        EditorMap = mapEditorPanel.S_TileMap;
         
         S_N_HoverArea.Instance.Init(this, DoorDirection.N);
         S_S_HoverArea.Instance.Init(this, DoorDirection.S);
@@ -79,10 +80,11 @@ public partial class MapEditorToolsPanel : MapEditorTools
         {
             EventManager.EmitEvent(EventEnum.OnSelectRectTool);
         }));
-        //编辑攻击按钮
+        //编辑工具按钮
         _toolGrid.Add(new ToolBtnData(true, ResourcePath.resource_sprite_ui_commonIcon_DoorTool_png, () =>
         {
             EventManager.EmitEvent(EventEnum.OnSelectEditTool);
+            mapEditorPanel.S_MapEditorMapLayer.Instance.SetLayerVisible(MapLayer.MarkLayer, true);
         }));
         _editToolIndex = _toolGrid.Count - 1;
         //聚焦按钮
@@ -136,7 +138,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         }
         _currMarkToolsMap.Clear();
         //添加新的数据
-        var selectPreinstall = EditorManager.SelectPreinstall;
+        var selectPreinstall = EditorTileMapManager.SelectPreinstall;
         if (selectPreinstall != null)
         {
             foreach (var markInfos in selectPreinstall.WaveList)
@@ -158,8 +160,8 @@ public partial class MapEditorToolsPanel : MapEditorTools
             _toolGrid.Click(_editToolIndex);
         }
         
-        var selectIndex = EditorManager.SelectWaveIndex;
-        var waveList = EditorManager.SelectPreinstall.WaveList;
+        var selectIndex = EditorTileMapManager.SelectWaveIndex;
+        var waveList = EditorTileMapManager.SelectPreinstall.WaveList;
         for (var i = 0; i < waveList.Count; i++)
         {
             var wave = waveList[i];
@@ -325,11 +327,11 @@ public partial class MapEditorToolsPanel : MapEditorTools
         if (markTool != null) //选中当前
         {
             ActiveMark.OnSelect();
-            EditorManager.SetSelectMark(markTool.MarkInfo);
+            EditorTileMapManager.SetSelectMark(markTool.MarkInfo);
         }
         else
         {
-            EditorManager.SetSelectMark(null);
+            EditorTileMapManager.SetSelectMark(null);
         }
     }
 
@@ -380,7 +382,7 @@ public partial class MapEditorToolsPanel : MapEditorTools
         }
         toolInstance.Instance.QueueFree();
         //派发修改数据修改事件
-        EventManager.EmitEvent(EventEnum.OnEditorDirty);
+        EventManager.EmitEvent(EventEnum.OnTileMapDirty);
     }
 
     /// <summary>
@@ -408,15 +410,15 @@ public partial class MapEditorToolsPanel : MapEditorTools
         var ePos1 = S_E_HoverRoot.Instance.Position;
         var sPos1 = S_S_HoverRoot.Instance.Position;
         var wPos1 = S_W_HoverRoot.Instance.Position;
-        var nPos2 = position + GameConfig.TileCellSizeVector2I;
-        var ePos2 = new Vector2(position.X + size.X - GameConfig.TileCellSize, position.Y + GameConfig.TileCellSize);
-        var sPos2 = new Vector2(position.X + GameConfig.TileCellSize, position.Y + size.Y - GameConfig.TileCellSize);
-        var wPos2 = position + GameConfig.TileCellSizeVector2I;
+        var nPos2 = position + new Vector2I(GameConfig.TileCellSize * 2, GameConfig.TileCellSize * 3);
+        var ePos2 = new Vector2(position.X + size.X - GameConfig.TileCellSize * 2, position.Y + GameConfig.TileCellSize * 3);
+        var sPos2 = new Vector2(position.X + GameConfig.TileCellSize * 2, position.Y + size.Y - GameConfig.TileCellSize * 2);
+        var wPos2 = position + new Vector2I(GameConfig.TileCellSize * 2, GameConfig.TileCellSize * 3);
 
-        var nSize2 = new Vector2(size.X - GameConfig.TileCellSize * 2, S_N_HoverArea.Instance.Size.Y);
-        var eSize2 = new Vector2(size.Y - GameConfig.TileCellSize * 2, S_E_HoverArea.Instance.Size.Y);
-        var sSize2 = new Vector2(size.X - GameConfig.TileCellSize * 2, S_S_HoverArea.Instance.Size.Y);
-        var wSize2 = new Vector2(size.Y - GameConfig.TileCellSize * 2, S_W_HoverArea.Instance.Size.Y);
+        var nSize2 = new Vector2(size.X - GameConfig.TileCellSize * 4, S_N_HoverArea.Instance.Size.Y);
+        var eSize2 = new Vector2(size.Y - GameConfig.TileCellSize * 5, S_E_HoverArea.Instance.Size.Y);
+        var sSize2 = new Vector2(size.X - GameConfig.TileCellSize * 4, S_S_HoverArea.Instance.Size.Y);
+        var wSize2 = new Vector2(size.Y - GameConfig.TileCellSize * 5, S_W_HoverArea.Instance.Size.Y);
         
         S_N_HoverRoot.Instance.Position = nPos2;
         S_E_HoverRoot.Instance.Position = ePos2;

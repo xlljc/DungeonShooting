@@ -15,22 +15,22 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// <summary>
 	/// 游戏渲染视口
 	/// </summary>
-	[Export] public SubViewport SubViewport;
+	public SubViewport SubViewport;
 
 	/// <summary>
 	/// SubViewportContainer 组件
 	/// </summary>
-	[Export] public SubViewportContainer SubViewportContainer;
+	public SubViewportContainer SubViewportContainer;
 
 	/// <summary>
 	/// 场景根节点
 	/// </summary>
-	[Export] public Node2D SceneRoot;
+	public Node2D SceneRoot;
 	
 	/// <summary>
 	/// 全局根节点
 	/// </summary>
-	[Export] public Node2D GlobalNodeRoot;
+	public Node2D GlobalNodeRoot;
 	
 	/// <summary>
 	/// 游戏目标帧率
@@ -43,11 +43,6 @@ public partial class GameApplication : Node2D, ICoroutine
 	public Cursor Cursor { get; private set; }
 
 	/// <summary>
-	/// 游戏世界
-	/// </summary>
-	public World World { get; private set; }
-
-	/// <summary>
 	/// 地牢管理器
 	/// </summary>
 	public DungeonManager DungeonManager { get; private set; }
@@ -56,6 +51,11 @@ public partial class GameApplication : Node2D, ICoroutine
 	/// 房间配置
 	/// </summary>
 	public Dictionary<string, DungeonRoomGroup> RoomConfig { get; private set; }
+	
+	/// <summary>
+	/// TileSet配置
+	/// </summary>
+	public Dictionary<string, TileSetSplit> TileSetConfig { get; private set; }
 	
 	// /// <summary>
 	// /// 房间配置数据, key: 模板房间资源路径
@@ -83,30 +83,51 @@ public partial class GameApplication : Node2D, ICoroutine
 	public GameApplication()
 	{
 		Instance = this;
-		TargetFps = (int)DisplayServer.ScreenGetRefreshRate();
+		//TargetFps = 20;
+		TargetFps = Mathf.RoundToInt(DisplayServer.ScreenGetRefreshRate());
+		
+		Utils.InitRandom();
 
 		//初始化配置表
 		ExcelConfig.Init();
+		PreinstallMarkManager.Init();
 		//初始化房间配置数据
 		InitRoomConfig();
+		//初始化TileSet配置数据
+		InitTileSetConfig();
 		//初始化武器数据
 		Weapon.InitWeaponAttribute();
 		//初始化敌人数据
 		Enemy.InitEnemyAttribute();
 		
 		DungeonConfig = new DungeonConfig();
-		DungeonConfig.GroupName = RoomConfig.FirstOrDefault().Key;
-		DungeonConfig.RoomCount = 20;
+		DungeonConfig.GroupName = "Test1";
+		DungeonConfig.RandomSeed = null;
+		DungeonConfig.BattleRoomCount = 15;
+		// DungeonConfig.BossRoomCount = 0;
+		// DungeonConfig.RewardRoomCount = 0;
+		// DungeonConfig.ShopRoomCount = 0;
+		// DungeonConfig.OutRoomCount = 0;
+		// DungeonConfig.RoomHorizontalMinDispersion = -1;
+		// DungeonConfig.RoomHorizontalMaxDispersion = 1;
+		// DungeonConfig.RoomVerticalMinDispersion = -1;
+		// DungeonConfig.RoomVerticalMaxDispersion = 1;
+		// DungeonConfig.EnableLimitRange = false;
 	}
-	
+
 	public override void _EnterTree()
 	{
+		SubViewport = GetNode<SubViewport>("ViewCanvas/SubViewportContainer/SubViewport");
+		SubViewportContainer = GetNode<SubViewportContainer>("ViewCanvas/SubViewportContainer");
+		SceneRoot = GetNode<Node2D>("ViewCanvas/SubViewportContainer/SubViewport/SceneRoot");
+		GlobalNodeRoot = GetNode<Node2D>("GlobalNodeRoot");
+		
 		//背景颜色
 		RenderingServer.SetDefaultClearColor(new Color(0, 0, 0, 1));
 		//随机化种子
 		//GD.Randomize();
 		//固定帧率
-		Engine.MaxFps = TargetFps;
+		//Engine.MaxFps = TargetFps;
 		//调试绘制开关
 		ActivityObject.IsDebug = false;
 		//Engine.TimeScale = 0.2f;
@@ -130,6 +151,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		SceneRoot.AddChild(DungeonManager);
 
 		MapProjectManager.Init();
+		EditorTileSetManager.Init();
 		BottomTipsPanel.Init();
 		//打开主菜单Ui
 		UiManager.Open_Main();
@@ -141,43 +163,9 @@ public partial class GameApplication : Node2D, ICoroutine
 		var newDelta = (float)delta;
 		InputManager.Update(newDelta);
 		SoundManager.Update(newDelta);
-		DragUiManager.Update(newDelta);
 		
 		//协程更新
 		ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
-	}
-
-	/// <summary>
-	/// 创建新的 World 对象, 相当于清理房间
-	/// </summary>
-	public World CreateNewWorld()
-	{
-		if (World != null)
-		{
-			ClearWorld();
-			World.QueueFree();
-		}
-		World = ResourceManager.LoadAndInstantiate<World>(ResourcePath.scene_World_tscn);
-		SceneRoot.AddChild(World);
-		return World;
-	}
-
-	/// <summary>
-	/// 销毁 World 对象, 相当于清理房间
-	/// </summary>
-	public void DestroyWorld()
-	{
-		//销毁所有物体
-		if (World != null)
-		{
-			ClearWorld();
-			World.QueueFree();
-		}
-		
-		//销毁池中所有物体
-		ObjectPool.DisposeAllItem();
-
-		World = null;
 	}
 	
 	/// <summary>
@@ -260,6 +248,20 @@ public partial class GameApplication : Node2D, ICoroutine
 		}
 	}
 
+	//初始化TileSet配置
+	private void InitTileSetConfig()
+	{
+		//加载房间配置信息
+		var asText = ResourceManager.LoadText("res://" + GameConfig.RoomTileSetDir + GameConfig.TileSetConfigFile);
+		TileSetConfig = JsonSerializer.Deserialize<Dictionary<string, TileSetSplit>>(asText);
+		
+		//加载所有数据
+		foreach (var tileSetSplit in TileSetConfig)
+		{
+			tileSetSplit.Value.ReloadTileSetInfo();
+		}
+	}
+
 	//窗体大小改变
 	private void OnWindowSizeChanged()
 	{
@@ -289,28 +291,5 @@ public partial class GameApplication : Node2D, ICoroutine
 		cursorLayer.Layer = UiManager.GetUiLayer(UiLayer.Pop).Layer + 10;
 		AddChild(cursorLayer);
 		cursorLayer.AddChild(Cursor);
-	}
-
-	//清理世界
-	private void ClearWorld()
-	{
-		var childCount = World.NormalLayer.GetChildCount();
-		for (var i = 0; i < childCount; i++)
-		{
-			var c = World.NormalLayer.GetChild(i);
-			if (c is IDestroy destroy)
-			{
-				destroy.Destroy();
-			}
-		}
-		childCount = World.YSortLayer.GetChildCount();
-		for (var i = 0; i < childCount; i++)
-		{
-			var c = World.YSortLayer.GetChild(i);
-			if (c is IDestroy destroy)
-			{
-				destroy.Destroy();
-			}
-		}
 	}
 }

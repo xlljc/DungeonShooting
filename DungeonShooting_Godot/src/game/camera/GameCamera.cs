@@ -86,7 +86,7 @@ public partial class GameCamera : Camera2D
         var newDelta = (float)delta;
         _Shake(newDelta);
         
-        var world = GameApplication.Instance.World;
+        var world = World.Current;
         if (world != null && !world.Pause && _followTarget != null)
         {
             var mousePosition = InputManager.CursorPosition;
@@ -196,12 +196,20 @@ public partial class GameCamera : Camera2D
         if (EnableShake)
         {
             var distance = _CalculateDistanceSquared(delta);
-            distance = new Vector2(Mathf.Sqrt(distance.X), Mathf.Sqrt(distance.Y));
-            var offset = Offset;
-            _shakeOffset += _processDirection + new Vector2(
-                (float)GD.RandRange(-distance.X, distance.X) - offset.X,
-                (float)GD.RandRange(-distance.Y, distance.Y) - offset.Y
-            );
+            if (distance == Vector2.Zero)
+            {
+                _shakeOffset += _processDirection - Offset / 2f;
+            }
+            else
+            {
+                distance = new Vector2(Mathf.Sqrt(Mathf.Abs(distance.X)), Mathf.Sqrt(Mathf.Abs(distance.Y)));
+                var offset = Offset;
+                _shakeOffset += _processDirection + new Vector2(
+                    (float)GD.RandRange(-distance.X, distance.X) - offset.X,
+                    (float)GD.RandRange(-distance.Y, distance.Y) - offset.Y
+                );
+            }
+
             _processDistanceSquared = Vector2.Zero;
             _processDirection = _processDirection.Lerp(Vector2.Zero, RecoveryCoefficient * delta);
         }
@@ -220,10 +228,10 @@ public partial class GameCamera : Camera2D
         foreach (var keyValuePair in _shakeMap)
         {
             var shakeData = keyValuePair.Value;
-            var tempLenght = shakeData.Value.LengthSquared();
-            if (tempLenght > length)
+            var tempLength = shakeData.Value.LengthSquared();
+            if (tempLength > length)
             {
-                length = tempLenght;
+                length = tempLength;
                 temp = shakeData.Value;
                 if (shakeData.Decline)
                 {

@@ -16,7 +16,11 @@ public partial class PreviewFogMask : FogMaskBase
 
     private static bool _initTexture;
     private static Texture2D _previewAisle;
+    private static Texture2D _previewAisle_ew;
+    private static Texture2D _previewAisle_s;
     private static Texture2D _previewRoom;
+    private static Texture2D _previewRoom_n;
+    private static Texture2D _previewRoom_ew;
     
     /// <summary>
     /// 房间门
@@ -44,6 +48,10 @@ public partial class PreviewFogMask : FogMaskBase
         _initTexture = true;
         _previewAisle = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_map_PreviewTransition_png);
         _previewRoom = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_map_PreviewTransition2_png);
+        _previewRoom_n = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_map_PreviewTransition3_png);
+        _previewRoom_ew = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_map_PreviewTransition4_png);
+        _previewAisle_ew = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_map_PreviewTransition5_png);
+        _previewAisle_s = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_map_PreviewTransition6_png);
     }
     
     /// <summary>
@@ -60,14 +68,14 @@ public partial class PreviewFogMask : FogMaskBase
         {
             if (fogType == PreviewFogType.Aisle)
             {
-                Texture = _previewAisle;
-                Position = globalPosition + new Vector2(GameConfig.TileCellSize, 0);
+                Texture = _previewAisle_ew;
+                Position = globalPosition + new Vector2(GameConfig.TileCellSize, -GameConfig.TileCellSize * 0.5f);
                 RotationDegrees = 90;
             }
             else
             {
-                Texture = _previewRoom;
-                Position = globalPosition + new Vector2(-GameConfig.TileCellSize, 0);
+                Texture = _previewRoom_ew;
+                Position = globalPosition + new Vector2(-GameConfig.TileCellSize, -GameConfig.TileCellSize * 0.5f);
                 RotationDegrees = 270;
             }
         }
@@ -75,14 +83,14 @@ public partial class PreviewFogMask : FogMaskBase
         {
             if (fogType == PreviewFogType.Aisle)
             {
-                Texture = _previewAisle;
-                Position = globalPosition + new Vector2(-GameConfig.TileCellSize, 0);
+                Texture = _previewAisle_ew;
+                Position = globalPosition + new Vector2(-GameConfig.TileCellSize, -GameConfig.TileCellSize * 0.5f);
                 RotationDegrees = 270;
             }
             else
             {
-                Texture = _previewRoom;
-                Position = globalPosition + new Vector2(GameConfig.TileCellSize, 0);
+                Texture = _previewRoom_ew;
+                Position = globalPosition + new Vector2(GameConfig.TileCellSize, -GameConfig.TileCellSize * 0.5f);
                 RotationDegrees = 90;
             }
         }
@@ -91,13 +99,13 @@ public partial class PreviewFogMask : FogMaskBase
             if (fogType == PreviewFogType.Aisle)
             {
                 Texture = _previewAisle;
-                Position = globalPosition + new Vector2(0, -GameConfig.TileCellSize);
+                Position = globalPosition + new Vector2(0, -GameConfig.TileCellSize * 3);
                 RotationDegrees = 0;
             }
             else
             {
-                Texture = _previewRoom;
-                Position = globalPosition + new Vector2(0, GameConfig.TileCellSize);
+                Texture = _previewRoom_n;
+                Position = globalPosition;
                 RotationDegrees = 180;
             }
         }
@@ -105,8 +113,8 @@ public partial class PreviewFogMask : FogMaskBase
         {
             if (fogType == PreviewFogType.Aisle)
             {
-                Texture = _previewAisle;
-                Position = globalPosition;
+                Texture = _previewAisle_s;
+                Position = globalPosition + new Vector2(0, GameConfig.TileCellSize * 0.5f);
                 RotationDegrees = 180;
             }
             else

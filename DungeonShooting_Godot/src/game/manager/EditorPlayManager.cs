@@ -6,10 +6,10 @@ public static class EditorPlayManager
     /// <summary>
     /// 是否正在播放
     /// </summary>
-    public static bool IsPlay { get; private set; }
+    public static bool IsPlay { get; set; }
 
     private static DungeonConfig _config;
-    
+
     public static void Play(UiBase prevUi)
     {
         if (IsPlay)
@@ -19,12 +19,16 @@ public static class EditorPlayManager
 
         IsPlay = true;
         _config = new DungeonConfig();
-        _config.GroupName = EditorManager.SelectDungeonGroup.GroupName;
-        _config.DesignatedType = EditorManager.SelectRoom.RoomInfo.RoomType;
+        _config.GroupName = EditorTileMapManager.SelectDungeonGroup.GroupName;
+        _config.DesignatedType = EditorTileMapManager.SelectRoom.RoomInfo.RoomType;
         _config.DesignatedRoom = new List<DungeonRoomSplit>();
-        _config.DesignatedRoom.Add(EditorManager.SelectRoom);
-        GameApplication.Instance.DungeonManager.EditorPlayDungeon(prevUi, _config);
-    }
+        _config.DesignatedRoom.Add(EditorTileMapManager.SelectRoom);
+        UiManager.Open_Loading();
+        GameApplication.Instance.DungeonManager.EditorPlayDungeon(prevUi, _config, () =>
+        {
+            UiManager.Destroy_Loading();
+        });
+}
 
     public static void Exit()
     {
@@ -34,7 +38,11 @@ public static class EditorPlayManager
         }
 
         IsPlay = false;
-        GameApplication.Instance.DungeonManager.EditorExitDungeon();
+        UiManager.Open_Loading();
+        GameApplication.Instance.DungeonManager.EditorExitDungeon(false, () =>
+        {
+            UiManager.Destroy_Loading();
+        });
     }
 
     public static void Restart()
@@ -43,10 +51,13 @@ public static class EditorPlayManager
         {
             return;
         }
-        
-        GameApplication.Instance.DungeonManager.ExitDungeon(() =>
+        UiManager.Open_Loading();
+        GameApplication.Instance.DungeonManager.ExitDungeon(false, () =>
         {
-            GameApplication.Instance.DungeonManager.EditorPlayDungeon(_config);
+            GameApplication.Instance.DungeonManager.EditorPlayDungeon(_config, () =>
+            {
+                UiManager.Destroy_Loading();
+            });
         });
     }
 }

@@ -2,16 +2,17 @@
 
 namespace UI.MapEditorMapLayer;
 
-public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, MapEditorMapLayerPanel.LayerButtonData>
+public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, TileMapLayerData>
 {
     private bool _visible;
     
     public override void OnInit()
     {
         CellNode.L_VisibleButton.Instance.Pressed += OnVisibleButtonClick;
+        CellNode.L_SelectTexture.Instance.Visible = false;
     }
 
-    public override void OnSetData(MapEditorMapLayerPanel.LayerButtonData data)
+    public override void OnSetData(TileMapLayerData data)
     {
         if (data.IsLock)
         {
@@ -26,9 +27,10 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, MapEditorMa
         var panel = CellNode.UiPanel.ParentUi as MapEditorPanel;
         if (panel != null)
         {
-            if (Data.Layer == EditorTileMap.MarkLayer) //标记层
+            if (Data.Layer == MapLayer.MarkLayer) //标记层
             {
                 _visible = true;
+                CellNode.UiPanel.EditorTileMap.IsDrawMark = _visible;
             }
             else
             {
@@ -38,22 +40,31 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, MapEditorMa
         }
     }
 
-    private void OnVisibleButtonClick()
+    /// <summary>
+    /// 设置层级是否显示
+    /// </summary>
+    public void SetLayerVisible(bool visible)
     {
         var panel = CellNode.UiPanel.ParentUi as MapEditorPanel;
         if (panel != null)
         {
-            _visible = !_visible;
-            if (Data.Layer == EditorTileMap.MarkLayer) //隐藏标记层
+            _visible = visible;
+            if (Data.Layer == MapLayer.MarkLayer) //隐藏标记层
             {
-                panel.S_MapEditorTools.Instance.S_ToolRoot.Instance.Visible = _visible;
+                CellNode.UiPanel.EditorTileMap.IsDrawMark = visible;
+                panel.S_MapEditorTools.Instance.S_ToolRoot.Instance.Visible = visible;
             }
             else //隐藏地图层级
             {
-                panel.S_TileMap.Instance.SetLayerEnabled(Data.Layer, _visible);
+                panel.S_TileMap.Instance.SetLayerEnabled(Data.Layer, visible);
             }
-            SetVisibleIcon(_visible);
+            SetVisibleIcon(visible);
         }
+    }
+
+    private void OnVisibleButtonClick()
+    {
+        SetLayerVisible(!_visible);
     }
 
     private void SetVisibleIcon(bool visible)
@@ -66,5 +77,21 @@ public class LayerButtonCell : UiCell<MapEditorMapLayer.LayerButton, MapEditorMa
         {
             CellNode.L_VisibleButton.Instance.TextureNormal = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Hide_png);
         }
+    }
+
+    public override void OnSelect()
+    {
+        CellNode.L_SelectTexture.Instance.Visible = true;
+        CellNode.UiPanel.EditorTileMap.SetCurrLayer(Data);
+    }
+
+    public override void OnUnSelect()
+    {
+        CellNode.L_SelectTexture.Instance.Visible = false;
+    }
+
+    public override bool CanSelect()
+    {
+        return !Data.IsLock;
     }
 }

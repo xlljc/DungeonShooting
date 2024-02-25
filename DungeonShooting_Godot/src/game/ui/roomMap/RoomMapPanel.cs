@@ -19,7 +19,7 @@ public partial class RoomMapPanel : RoomMap
     //是否放大地图
     private bool _isMagnifyMap = false;
 
-    private DragBinder _dragBinder;
+    private UiEventBinder _dragBinder;
     //放大地图后拖拽的偏移
     private Vector2 _mapOffset;
     //放大地图后鼠标悬停的房间
@@ -45,11 +45,6 @@ public partial class RoomMapPanel : RoomMap
     public override void OnDestroyUi()
     {
         _factory.RemoveAllEventListener();
-        
-        if (_dragBinder != null)
-        {
-            _dragBinder.UnBind();
-        }
 
         if (_transmissionTween != null)
         {
@@ -126,7 +121,7 @@ public partial class RoomMapPanel : RoomMap
                             sprite = _enemySpriteList[i];
                         }
                         //更新标记位置
-                        sprite.Position = enemy.Position / 16;
+                        sprite.Position = enemy.GetCenterPosition() / 16;
                     }
                 }
                 
@@ -152,27 +147,32 @@ public partial class RoomMapPanel : RoomMap
             _needRefresh.Clear();
         }
 
-        //更新地图中心点位置
-        if (!_isMagnifyMap)
+        if (Player.Current != null)
         {
-            S_Root.Instance.Position = CalcRootPosition(Player.Current.Position);
-        }
-        else
-        {
-            S_Root.Instance.Position = CalcRootPosition(Player.Current.Position) + _mapOffset;
-            S_Mark.Instance.Position = S_DrawContainer.Instance.Size / 2 + _mapOffset;
-        }
+            //更新地图中心点位置
+            var playPosition = Player.Current.GetCenterPosition();
+            if (!_isMagnifyMap)
+            {
+                S_Root.Instance.Position = CalcRootPosition(playPosition);
+            }
+            else
+            {
+                S_Root.Instance.Position = CalcRootPosition(playPosition) + _mapOffset;
+                S_Mark.Instance.Position = S_DrawContainer.Instance.Size / 2 + _mapOffset;
+            }
 
-        //传送
-        if (_pressMapFlag && _mouseHoverRoom != null &&
-            !Player.Current.AffiliationArea.RoomInfo.IsSeclusion &&
-            Input.IsMouseButtonPressed(MouseButton.Right))
-        {
-            //执行传送操作
-            DoTransmission((_mouseHoverRoom.Waypoints + new Vector2(0.5f, 0.5f)) * GameConfig.TileCellSize);
-            ResetMap();
-            _isMagnifyMap = false;
-            World.Current.Pause = false;
+            var area = Player.Current.AffiliationArea;
+            //传送
+            if (_pressMapFlag && _mouseHoverRoom != null &&
+                area != null && !area.RoomInfo.IsSeclusion &&
+                Input.IsMouseButtonPressed(MouseButton.Right))
+            {
+                //执行传送操作
+                DoTransmission((_mouseHoverRoom.Waypoints + new Vector2(0.5f, 0.5f)) * GameConfig.TileCellSize);
+                ResetMap();
+                _isMagnifyMap = false;
+                World.Current.Pause = false;
+            }
         }
     }
 
@@ -191,8 +191,8 @@ public partial class RoomMapPanel : RoomMap
         S_MagnifyMapBar.Instance.Visible = true;
         S_MapBar.Instance.Visible = false;
         _mapOffset = Vector2.Zero;
-        
-        _dragBinder = DragUiManager.BindDrag(S_DrawContainer.Instance, (state, delta) =>
+
+        _dragBinder = S_DrawContainer.Instance.AddDragListener((state, delta) =>
         {
             if (state == DragState.DragMove)
             {
@@ -215,6 +215,7 @@ public partial class RoomMapPanel : RoomMap
         if (_dragBinder != null)
         {
             _dragBinder.UnBind();
+            _dragBinder = null;
         }
     }
 
@@ -231,6 +232,11 @@ public partial class RoomMapPanel : RoomMap
     private void InitMap()
     {
         var startRoom = GameApplication.Instance.DungeonManager.StartRoomInfo;
+        if (startRoom == null)
+        {
+            HideUi();
+            return;
+        }
         startRoom.EachRoom(roomInfo =>
         {
             //房间
@@ -248,14 +254,18 @@ public partial class RoomMapPanel : RoomMap
                 var shaderMaterial = (ShaderMaterial)roomInfo.PreviewSprite.Material;
                 _originOutlineColor = shaderMaterial.GetShaderParameter("outline_color").AsColor();
                 //玩家所在的房间门是否打开
-                var isOpen = !Player.Current.AffiliationArea.RoomInfo.IsSeclusion;
-                if (isOpen)
+                var area = Player.Current.AffiliationArea;
+                if (area != null)
                 {
-                    shaderMaterial.SetShaderParameter("outline_color", new Color(0, 1, 0, 0.9f));
-                }
-                else
-                {
-                    shaderMaterial.SetShaderParameter("outline_color", new Color(1, 0, 0, 0.9f));
+                    var isOpen = !area.RoomInfo.IsSeclusion;
+                    if (isOpen)
+                    {
+                        shaderMaterial.SetShaderParameter("outline_color", new Color(0, 1, 0, 0.9f));
+                    }
+                    else
+                    {
+                        shaderMaterial.SetShaderParameter("outline_color", new Color(1, 0, 0, 0.9f));
+                    }
                 }
             };
             roomInfo.PreviewSprite.MouseExited += () =>
@@ -336,24 +346,24 @@ public partial class RoomMapPanel : RoomMap
             if (!flag2) //偏向过道
             {
                 if (roomDoorInfo.Direction == DoorDirection.N)
-                    pos += new Vector2I(0, -2);
+                    pos += new Vector2I(0, -1);
                 else if (roomDoorInfo.Direction == DoorDirection.S)
-                    pos += new Vector2I(0, 2);
+                    pos += new Vector2I(0, 3);
                 else if (roomDoorInfo.Direction == DoorDirection.E)
-                    pos += new Vector2I(2, 0);
+                    pos += new Vector2I(2, 1);
                 else if (roomDoorInfo.Direction == DoorDirection.W)
-                    pos += new Vector2I(-2, 0);
+                    pos += new Vector2I(-2, 1);
             }
             else //偏向房间
             {
                 if (roomDoorInfo.Direction == DoorDirection.N)
-                    pos -= new Vector2I(0, -2);
+                    pos -= new Vector2I(0, -4);
                 else if (roomDoorInfo.Direction == DoorDirection.S)
-                    pos -= new Vector2I(0, 2);
+                    pos -= new Vector2I(0, 1);
                 else if (roomDoorInfo.Direction == DoorDirection.E)
-                    pos -= new Vector2I(2, 0);
+                    pos -= new Vector2I(3, -1);
                 else if (roomDoorInfo.Direction == DoorDirection.W)
-                    pos -= new Vector2I(-2, 0);
+                    pos -= new Vector2I(-3, -1);
             }
             unknownSprite.Position = pos;
         }

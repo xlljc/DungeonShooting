@@ -33,6 +33,7 @@ public partial class AutoDestroySprite : AnimatedSprite2D, IEffect
     
     public virtual void PlayEffect()
     {
+        ZIndex = 1;
         if (Particles2D != null)
         {
             foreach (var gpuParticles2D in Particles2D)

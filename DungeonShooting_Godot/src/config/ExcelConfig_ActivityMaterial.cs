@@ -77,7 +77,7 @@ public static partial class ExcelConfig
         public float FallBounceRotation;
 
         /// <summary>
-        /// 动态开关碰撞器,在物体高度大于16时是否关闭碰撞检测
+        /// 动态开关碰撞器,在物体高度大于32时是否关闭碰撞检测
         /// </summary>
         [JsonInclude]
         public bool DynamicCollision;

@@ -3,24 +3,36 @@
     "Id": "0001",
     "__Activity": "enemy0001",
     "Remark": "\u654C\u4EBA1",
-    "MoveSpeed": 120,
+    "Hp": 20,
+    "MoveSpeed": 80,
     "Acceleration": 1500,
     "Friction": 900,
+    "AttackInterval": 0,
     "CanPickUpWeapon": true,
     "ViewRange": 250,
     "TailAfterViewRange": 400,
-    "BackViewRange": 50
+    "BackViewRange": 50,
+    "Gold": [
+      -2,
+      3
+    ]
   },
   {
     "Id": "0002",
     "__Activity": "enemy0002",
     "Remark": "\u654C\u4EBA2",
+    "Hp": 25,
     "MoveSpeed": 120,
     "Acceleration": 1500,
     "Friction": 900,
+    "AttackInterval": 2.2,
     "CanPickUpWeapon": false,
-    "ViewRange": 250,
-    "TailAfterViewRange": 400,
-    "BackViewRange": 50
+    "ViewRange": 200,
+    "TailAfterViewRange": 300,
+    "BackViewRange": 50,
+    "Gold": [
+      -2,
+      4
+    ]
   }
 ]

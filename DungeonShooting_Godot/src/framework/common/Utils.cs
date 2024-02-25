@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Godot;
+using UI.TileSetEditorCombination;
 
 /// <summary>
 /// 常用函数工具类
@@ -8,9 +12,12 @@ public static class Utils
     /// <summary>
     /// 默认随机数对象
     /// </summary>
-    public static SeedRandom Random { get; }
+    public static SeedRandom Random { get; private set; }
     
-    static Utils()
+    /// <summary>
+    /// 初始化随机种子
+    /// </summary>
+    public static void InitRandom()
     {
         Random = new SeedRandom();
         Debug.Log("随机种子为: ", Random.Seed);
@@ -45,36 +52,6 @@ public static class Utils
     {
         return (mask & layer) != 0;
     }
-
-    /// <summary>
-    /// 使用定的 canvasItem 绘制导航区域, 注意, 该函数只能在 draw 函数中调用
-    /// </summary>
-    public static void DrawNavigationPolygon(CanvasItem canvasItem, NavigationPolygonData[] polygonData, float width = 1)
-    {
-        for (var i = 0; i < polygonData.Length; i++)
-        {
-            var item = polygonData[i];
-            var points = item.GetPoints();
-            if (points.Length>= 2)
-            {
-                var array = new Vector2[points.Length + 1];
-                for (var j = 0; j < points.Length; j++)
-                {
-                    array[j] = points[j];
-                }
-
-                array[array.Length - 1] = points[0];
-                if (item.Type == NavigationPolygonType.In)
-                {
-                    canvasItem.DrawPolyline(array, Colors.Orange, width);
-                }
-                else
-                {
-                    canvasItem.DrawPolyline(array, Colors.Orange, width);
-                }
-            }
-        }
-    }
     
     /// <summary>
     /// 将一个任意角度转为0到360度
@@ -96,7 +73,7 @@ public static class Utils
     /// </summary>
     /// <param name="value">原数值</param>
     /// <param name="step">吸附步长</param>
-    public static float Adsorption(float value, float step)
+    public static float Adsorption(this float value, float step)
     {
         var f = Mathf.Round(value / step);
         return f * step;
@@ -107,7 +84,7 @@ public static class Utils
     /// </summary>
     /// <param name="value">原数值</param>
     /// <param name="step">吸附步长</param>
-    public static int Adsorption(float value, int step)
+    public static int Adsorption(this float value, int step)
     {
         var f = Mathf.RoundToInt(value / step);
         return f * step;
@@ -118,7 +95,7 @@ public static class Utils
     /// </summary>
     /// <param name="value">原数值</param>
     /// <param name="step">吸附步长</param>
-    public static Vector2 Adsorption(Vector2 value, Vector2 step)
+    public static Vector2 Adsorption(this Vector2 value, Vector2 step)
     {
         var x = Mathf.Round(value.X / step.X);
         var y = Mathf.Round(value.Y / step.Y);
@@ -130,10 +107,56 @@ public static class Utils
     /// </summary>
     /// <param name="value">原数值</param>
     /// <param name="step">吸附步长</param>
-    public static Vector2I Adsorption(Vector2 value, Vector2I step)
+    public static Vector2I Adsorption(this Vector2 value, Vector2I step)
     {
         var x = Mathf.RoundToInt(value.X / step.X);
         var y = Mathf.RoundToInt(value.Y / step.Y);
+        return new Vector2I(x * step.X, y * step.Y);
+    }
+    
+    /// <summary>
+    /// 根据步长按照 Floor() 函数吸附值
+    /// </summary>
+    /// <param name="value">原数值</param>
+    /// <param name="step">吸附步长</param>
+    public static float FloorAdsorption(this float value, float step)
+    {
+        var f = Mathf.Floor(value / step);
+        return f * step;
+    }
+    
+    /// <summary>
+    /// 根据步长按照 Floor() 函数吸附值
+    /// </summary>
+    /// <param name="value">原数值</param>
+    /// <param name="step">吸附步长</param>
+    public static int FloorAdsorption(this float value, int step)
+    {
+        var f = Mathf.FloorToInt(value / step);
+        return f * step;
+    }
+
+    /// <summary>
+    /// 根据步长按照 Floor() 函数吸附值
+    /// </summary>
+    /// <param name="value">原数值</param>
+    /// <param name="step">吸附步长</param>
+    public static Vector2 FloorAdsorption(this Vector2 value, Vector2 step)
+    {
+        var x = Mathf.Floor(value.X / step.X);
+        var y = Mathf.Floor(value.Y / step.Y);
+        return new Vector2(x * step.X, y * step.Y);
+    }
+    
+    /// <summary>
+    /// 根据步长按照 Floor() 函数吸附值
+    /// </summary>
+    /// <param name="value">原数值</param>
+    /// <param name="step">吸附步长</param>
+    public static Vector2I FloorAdsorption(this Vector2 value, Vector2I step)
+    {
+        var x = Mathf.FloorToInt(value.X / step.X);
+        var y = Mathf.FloorToInt(value.Y / step.Y);
         return new Vector2I(x * step.X, y * step.Y);
     }
 
@@ -159,17 +182,6 @@ public static class Utils
     public static Vector2I AsVector2I(this Vector2 vector2)
     {
         return new Vector2I((int)vector2.X, (int)vector2.Y);
-    }
-
-    /// <summary>
-    /// 返回指定坐标是否在UI节范围点内
-    /// </summary>
-    public static bool IsPositionOver(this Control control, Vector2 position)
-    {
-        var globalPosition = control.GlobalPosition;
-        var size = control.Size * control.Scale;
-        return position.X >= globalPosition.X && position.X <= (globalPosition.X + size.X) &&
-               position.Y >= globalPosition.Y && position.Y <= (globalPosition.Y + size.Y);
     }
 
     /// <summary>
@@ -290,6 +302,27 @@ public static class Utils
 
         return isInside;
     }
+    
+    /// <summary>
+    /// 返回一个点是否在 Polygon 内部
+    /// </summary>
+    /// <param name="polygon">多边形顶点</param>
+    /// <param name="point">目标点</param>
+    public static bool IsPointInPolygon(List<Vector2> polygon, Vector2 point)
+    {
+        var isInside = false;
+        for (int i = 0, j = polygon.Count - 1; i < polygon.Count; j = i++)
+        {
+            if ((polygon[i].Y > point.Y) != (polygon[j].Y > point.Y) &&
+                point.X < (polygon[j].X - polygon[i].X) * (point.Y - polygon[i].Y) / (polygon[j].Y - polygon[i].Y) +
+                polygon[i].X)
+            {
+                isInside = !isInside;
+            }
+        }
+
+        return isInside;
+    }
 
     /// <summary>
     /// 根据法线翻转向量
@@ -305,5 +338,240 @@ public static class Utils
     public static float ReflectByNormal(float rotation, Vector2 normal)
     {
         return ReflectByNormal(Vector2.FromAngle(rotation), normal).Angle();
+    }
+
+    /// <summary>
+    /// 计算Vector2点所占用的区域
+    /// </summary>
+    public static Rect2I CalcRect(IEnumerable<Vector2I> cells)
+    {
+        var count = cells.Count();
+        if (count == 0)
+        {
+            return new Rect2I();
+        }
+        //单位: 像素
+        var canvasXStart = int.MaxValue;
+        var canvasYStart = int.MaxValue;
+        var canvasXEnd = int.MinValue;
+        var canvasYEnd = int.MinValue;
+
+        foreach (var pos in cells)
+        {
+            canvasXStart = Mathf.Min(pos.X, canvasXStart);
+            canvasYStart = Mathf.Min(pos.Y, canvasYStart);
+            canvasXEnd = Mathf.Max(pos.X + 1, canvasXEnd);
+            canvasYEnd = Mathf.Max(pos.Y + 1, canvasYEnd);
+        }
+
+        return new Rect2I(
+            canvasXStart,
+            canvasYStart,
+            canvasXEnd - canvasXStart,
+            canvasYEnd - canvasYStart
+        );
+    }
+    
+    /// <summary>
+    /// 计算TileSet Cell所占用的区域
+    /// </summary>
+    public static Rect2I CalcTileRect(IEnumerable<Vector2I> cells)
+    {
+        //单位: 像素
+        var canvasXStart = int.MaxValue;
+        var canvasYStart = int.MaxValue;
+        var canvasXEnd = int.MinValue;
+        var canvasYEnd = int.MinValue;
+
+        foreach (var pos in cells)
+        {
+            canvasXStart = Mathf.Min(pos.X, canvasXStart);
+            canvasYStart = Mathf.Min(pos.Y, canvasYStart);
+            canvasXEnd = Mathf.Max(pos.X + GameConfig.TileCellSize, canvasXEnd);
+            canvasYEnd = Mathf.Max(pos.Y + GameConfig.TileCellSize, canvasYEnd);
+        }
+
+        return new Rect2I(
+            canvasXStart,
+            canvasYStart,
+            canvasXEnd - canvasXStart,
+            canvasYEnd - canvasYStart
+        );
+    }
+    
+    /// <summary>
+    /// 计算TileSet Cell所占用的区域
+    /// </summary>
+    public static Rect2I CalcTileRect(IEnumerable<SerializeVector2> cells)
+    {
+        //单位: 像素
+        var canvasXStart = float.MaxValue;
+        var canvasYStart = float.MaxValue;
+        var canvasXEnd = float.MinValue;
+        var canvasYEnd = float.MinValue;
+
+        foreach (var pos in cells)
+        {
+            canvasXStart = Mathf.Min(pos.X, canvasXStart);
+            canvasYStart = Mathf.Min(pos.Y, canvasYStart);
+            canvasXEnd = Mathf.Max(pos.X + GameConfig.TileCellSize, canvasXEnd);
+            canvasYEnd = Mathf.Max(pos.Y + GameConfig.TileCellSize, canvasYEnd);
+        }
+
+        return new Rect2I(
+            (int)canvasXStart,
+            (int)canvasYStart,
+            (int)(canvasXEnd - canvasXStart),
+            (int)(canvasYEnd - canvasYStart)
+        );
+    }
+
+    /// <summary>
+    /// 根据鼠标位置执行单步放大逻辑
+    /// </summary>
+    public static bool DoMagnifyByMousePosition(Control control, float maxXScale)
+    {
+        var offset = control.GetLocalMousePosition();
+        var prevScale = control.Scale;
+        var newScale = prevScale * 1.1f;
+        if (newScale.X <= maxXScale)
+        {
+            control.Scale = newScale;
+            var position = control.Position - offset * 0.1f * prevScale;
+            control.Position = position;
+            return true;
+        }
+
+        return false;
+    }
+    
+    /// <summary>
+    /// 根据鼠标位置执行单步放大逻辑
+    /// </summary>
+    public static bool DoMagnifyByMousePosition(Node2D node, float maxXScale)
+    {
+        var offset = node.GetLocalMousePosition();
+        var prevScale = node.Scale;
+        var newScale = prevScale * 1.1f;
+        if (newScale.X <= maxXScale)
+        {
+            node.Scale = newScale;
+            var position = node.Position - offset * 0.1f * prevScale;
+            node.Position = position;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 根据鼠标位置执行单步缩小逻辑
+    /// </summary>
+    public static bool DoShrinkByMousePosition(Control control, float minXScale)
+    {
+        var offset = control.GetLocalMousePosition();
+        var prevScale = control.Scale;
+        var newScale = prevScale / 1.1f;
+        if (newScale.X >= minXScale)
+        {
+            control.Scale = newScale;
+            var position = control.Position + offset * 0.1f * newScale;
+            control.Position = position;
+            return true;
+        }
+
+        return false;
+    }
+    
+    /// <summary>
+    /// 根据鼠标位置执行单步缩小逻辑
+    /// </summary>
+    public static bool DoShrinkByMousePosition(Node2D node, float minXScale)
+    {
+        var offset = node.GetLocalMousePosition();
+        var prevScale = node.Scale;
+        var newScale = prevScale / 1.1f;
+        if (newScale.X >= minXScale)
+        {
+            node.Scale = newScale;
+            var position = node.Position + offset * 0.1f * newScale;
+            node.Position = position;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 聚焦Ui节点
+    /// </summary>
+    /// <param name="control">需要聚焦的节点</param>
+    /// <param name="parentSize">父节点容器大小</param>
+    /// <param name="selfSize">当前节点容器大小</param>
+    public static void DoFocusNode(Control control, Vector2 parentSize, Vector2 selfSize)
+    {
+        control.Position = parentSize / 2 - selfSize * 0.5f * control.Scale;
+    }
+
+    /// <summary>
+    /// 返回鼠标所在的单元格位置, 相对于Ui节点左上角
+    /// </summary>
+    public static Vector2I GetMouseCellPosition(CanvasItem control)
+    {
+        var pos = control.GetLocalMousePosition() / GameConfig.TileCellSize;
+        return pos.AsVector2I();
+    }
+
+    /// <summary>
+    /// 创建一个数组, 并填充该对象
+    /// </summary>
+    public static T[] MakeArray<T>(this T data, int len)
+    {
+        var arr = new T[len];
+        for (var i = 0; i < len; i++)
+        {
+            arr[i] = data;
+        }
+        return arr;
+    }
+
+    /// <summary>
+    /// 根据金币数量获取金币对象id数组
+    /// </summary>
+    public static string[] GetGoldList(int gold)
+    {
+        var list = new List<string>();
+        while (gold > 0)
+        {
+            if (gold >= 10)
+            {
+                list.Add(ActivityObject.Ids.Id_gold_10);
+                gold -= 10;
+            }
+            else if (gold >= 5)
+            {
+                list.Add(ActivityObject.Ids.Id_gold_5);
+                gold -= 5;
+            }
+            else
+            {
+                list.Add(ActivityObject.Ids.Id_gold_1);
+                gold -= 1;
+            }
+        }
+        return list.ToArray();
+    }
+
+    /// <summary>
+    /// 遍历节点树
+    /// </summary>
+    public static void EachNode(Node node, Action<Node> action)
+    {
+        action(node);
+        var childCount = node.GetChildCount();
+        for (var i = 0; i < childCount; i++)
+        {
+            EachNode(node.GetChild(i), action);
+        }
     }
 }

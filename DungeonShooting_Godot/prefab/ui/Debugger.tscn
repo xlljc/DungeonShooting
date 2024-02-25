@@ -60,10 +60,10 @@ autowrap_mode = 3
 
 [node name="HoverButton" type="Button" parent="."]
 layout_mode = 0
-offset_left = 18.0
-offset_top = 169.0
-offset_right = 46.0
-offset_bottom = 193.0
+offset_left = 1295.0
+offset_top = 10.0
+offset_right = 1323.0
+offset_bottom = 34.0
 scale = Vector2(2, 2)
 icon = ExtResource("2_acjpv")
 flat = true
@@ -74,8 +74,8 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -4.5
-offset_right = 4.5
+offset_left = 400.0
+offset_right = 504.0
 offset_bottom = 40.0
 grow_horizontal = 2
 text = "FPS:60"

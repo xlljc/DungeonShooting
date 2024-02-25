@@ -9,6 +9,7 @@ public partial class ActiveProp5000 : ActiveProp
 {
     public override void OnInit()
     {
+        base.OnInit();
         AutoDestroy = true;
         MaxCount = 10;
         Superposition = true;

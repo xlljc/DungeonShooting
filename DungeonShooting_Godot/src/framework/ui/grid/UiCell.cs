@@ -195,6 +195,7 @@ public abstract class UiCell<TUiCellNode, T> : IUiCell, IData<T> where TUiCellNo
         }
 
         OnDestroy();
+        CellNode.GetUiInstance().QueueFree();
         IsDestroyed = true;
     }
 }

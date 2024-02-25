@@ -10,19 +10,20 @@ public partial class BoomBullet : Bullet
     public override void OnLimeOver()
     {
         PlayBoom();
-        DoReclaim();
+        LogicalFinish();
     }
 
     public override void OnMaxDistance()
     {
         PlayBoom();
-        DoReclaim();
+        LogicalFinish();
     }
 
-    public override void OnCollisionTarget(ActivityObject o)
+    public override void OnCollisionTarget(IHurt o)
     {
+        State = BulletStateEnum.CollisionTarget;
         PlayBoom();
-        DoReclaim();
+        LogicalFinish();
     }
 
     public override void OnMoveCollision(KinematicCollision2D lastSlideCollision)
@@ -30,8 +31,9 @@ public partial class BoomBullet : Bullet
         CurrentBounce++;
         if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
         {
+            State = BulletStateEnum.MoveCollision;
             PlayBoom();
-            DoReclaim();
+            LogicalFinish();
         }
         else
         {
@@ -53,7 +55,7 @@ public partial class BoomBullet : Bullet
     public void PlayBoom()
     {
         var explode = ObjectManager.GetPoolItem<Explode>(ResourcePath.prefab_bullet_explode_Explode0001_tscn);
-        var pos = Position;
+        var pos = CollisionArea.GlobalPosition;
         explode.Position = pos;
         explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
         explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);

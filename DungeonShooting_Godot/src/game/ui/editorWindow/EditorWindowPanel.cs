@@ -29,7 +29,10 @@ public partial class EditorWindowPanel : EditorWindow
     /// </summary>
     public event Action CloseEvent;
 
-    private UiGrid<CustomButton, ButtonData> _uiGrid;
+    /// <summary>
+    /// 设置按钮列表
+    /// </summary>
+    public UiGrid<CustomButton, ButtonData> ButtonGrid { get; private set; }
 
     public override void OnCreateUi()
     {
@@ -42,14 +45,14 @@ public partial class EditorWindowPanel : EditorWindow
     /// </summary>
     public void SetButtonList(params ButtonData[] buttons)
     {
-        if (_uiGrid == null)
+        if (ButtonGrid == null)
         {
             S_CustomButton.Instance.Visible = true;
-            _uiGrid = new UiGrid<CustomButton, ButtonData>(S_CustomButton, typeof(CustomButtonCell));
-            _uiGrid.SetHorizontalExpand(true);
+            ButtonGrid = CreateUiGrid<CustomButton, ButtonData, CustomButtonCell>(S_CustomButton);
+            ButtonGrid.SetHorizontalExpand(true);
         }
-        _uiGrid.SetColumns(buttons.Length);
-        _uiGrid.SetDataList(buttons);
+        ButtonGrid.SetColumns(buttons.Length);
+        ButtonGrid.SetDataList(buttons);
     }
 
     /// <summary>
@@ -102,6 +105,10 @@ public partial class EditorWindowPanel : EditorWindow
     /// <param name="triggerEvent">是否派发关闭窗口的事件</param>
     public void CloseWindow(bool triggerEvent = true)
     {
+        if (IsDestroyed)
+        {
+            return;
+        }
         if (triggerEvent && CloseEvent != null)
         {
             CloseEvent();

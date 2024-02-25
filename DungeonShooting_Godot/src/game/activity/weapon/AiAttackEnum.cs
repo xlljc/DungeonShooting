@@ -40,4 +40,8 @@ public enum AiAttackEnum
     /// 成功触发攻击
     /// </summary>
     Attack,
+    /// <summary>
+    /// 攻击蓄力中
+    /// </summary>
+    AttackCharge,
 }

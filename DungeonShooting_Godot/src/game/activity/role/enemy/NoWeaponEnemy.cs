@@ -14,6 +14,7 @@ public partial class NoWeaponEnemy : Enemy
     {
         base.OnInit();
         NoWeaponAttack = true;
+        WeaponPack.SetCapacity(0);
         AnimationPlayer.AnimationFinished += OnAnimationFinished;
         
         _brushData = LiquidBrushManager.GetBrush("0002");
@@ -41,7 +42,7 @@ public partial class NoWeaponEnemy : Enemy
     public virtual void OnAttack()
     {
         //攻击特效
-        var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_weapon_ShotFire3_tscn);
+        var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_weapon_ShotFire0003_tscn);
         var node = (Node2D)effect;
         node.GlobalPosition = FirePoint.GlobalPosition;
         node.Rotation = MountPoint.Rotation;
@@ -66,8 +67,11 @@ public partial class NoWeaponEnemy : Enemy
         var debris = Create<EnemyDead0002>(Ids.Id_enemy_dead0002);
         debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
         debris.MoveController.AddForce(Velocity + realVelocity);
-        debris.SetFace(Face);
+        debris.SetForwardDirection(Face);
         debris.BrushPrevPosition =  BrushPrevPosition;
+        
+        //创建金币
+        CreateGold();
         
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
@@ -78,7 +82,7 @@ public partial class NoWeaponEnemy : Enemy
     {
         if (name == AnimatorNames.Attack)
         {
-            AttackTimer = 3f;
+            AttackTimer = EnemyRoleState.AttackInterval;
         }
     }
 }

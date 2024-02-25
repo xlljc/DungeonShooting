@@ -61,7 +61,7 @@ public partial class MarkTool : TextureRect, IUiNodeScript
                     if (_startPos != pos)
                     {
                         _startPos = pos;
-                        EventManager.EmitEvent(EventEnum.OnEditorDirty);
+                        EventManager.EmitEvent(EventEnum.OnTileMapDirty);
                     }
                 }
             }

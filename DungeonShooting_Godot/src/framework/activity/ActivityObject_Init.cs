@@ -69,6 +69,31 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_weapon0009 = "weapon0009";
         /// <summary>
+        /// 名称: M1型热能狙击枪 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_weapon0010 = "weapon0010";
+        /// <summary>
+        /// 名称: weapon0011 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_weapon0011 = "weapon0011";
+        /// <summary>
+        /// 名称: P90 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_weapon0013 = "weapon0013";
+        /// <summary>
+        /// 名称: 左轮 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_weapon0014 = "weapon0014";
+        /// <summary>
+        /// 名称: 木质短弓 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_weapon0016 = "weapon0016";
+        /// <summary>
         /// 名称:  <br/>
         /// 简介: 
         /// </summary>
@@ -93,6 +118,26 @@ public partial class ActivityObject
         /// 简介: 
         /// </summary>
         public const string Id_bullet0005 = "bullet0005";
+        /// <summary>
+        /// 名称: 拖尾子弹 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_bullet0006 = "bullet0006";
+        /// <summary>
+        /// 名称:  <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_bullet0007 = "bullet0007";
+        /// <summary>
+        /// 名称:  <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_bullet0008 = "bullet0008";
+        /// <summary>
+        /// 名称: 弓箭 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_bullet0009 = "bullet0009";
         /// <summary>
         /// 名称:  <br/>
         /// 简介: 
@@ -204,6 +249,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_prop5001 = "prop5001";
         /// <summary>
+        /// 名称: 木质宝箱 <br/>
+        /// 简介: 木质宝箱
+        /// </summary>
+        public const string Id_treasure_box0001 = "treasure_box0001";
+        /// <summary>
         /// 名称:  <br/>
         /// 简介: 地牢房间的门(东侧)
         /// </summary>
@@ -223,5 +273,20 @@ public partial class ActivityObject
         /// 简介: 地牢房间的门(北侧)
         /// </summary>
         public const string Id_other_door_n = "other_door_n";
+        /// <summary>
+        /// 名称: 金币 <br/>
+        /// 简介: 获得10金币
+        /// </summary>
+        public const string Id_gold_10 = "gold_10";
+        /// <summary>
+        /// 名称: 银币 <br/>
+        /// 简介: 获得5金币
+        /// </summary>
+        public const string Id_gold_5 = "gold_5";
+        /// <summary>
+        /// 名称: 铜币 <br/>
+        /// 简介: 获得1金币
+        /// </summary>
+        public const string Id_gold_1 = "gold_1";
     }
 }

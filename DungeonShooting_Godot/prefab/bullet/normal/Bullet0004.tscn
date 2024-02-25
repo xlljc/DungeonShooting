@@ -62,6 +62,7 @@ anim_offset_max = 1.0
 
 [node name="Bullet0003" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "Particles2D", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2
+collision_mask = 0
 script = ExtResource("1_1jbgr")
 CollisionArea = NodePath("AnimatedSprite/CollisionArea")
 CollisionShape2D = NodePath("AnimatedSprite/CollisionArea/CollisionShape2D")

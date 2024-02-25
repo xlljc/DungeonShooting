@@ -47,6 +47,10 @@ public enum EventEnum
     /// </summary>
     OnPlayerMaxShieldChange,
     /// <summary>
+    /// 玩家金币发生改变, 参数为玩家金币值
+    /// </summary>
+    OnPlayerGoldChange,
+    /// <summary>
     /// 玩家拾起武器, 参数为<see cref="Weapon"/>
     /// </summary>
     OnPlayerPickUpWeapon,
@@ -80,17 +84,21 @@ public enum EventEnum
     /// </summary>
     OnCreateGroupFinish,
     /// <summary>
+    /// 删除地牢组完成时调用, 参数为<see cref="DungeonRoomGroup"/>
+    /// </summary>
+    OnDeleteGroupFinish,
+    /// <summary>
     /// 创建地牢房间完成时调用, 参数为<see cref="DungeonRoomSplit"/>
     /// </summary>
     OnCreateRoomFinish,
     /// <summary>
     /// 标记房间数据脏了, 也就是数据有修改
     /// </summary>
-    OnEditorDirty,
+    OnTileMapDirty,
     /// <summary>
     /// 编辑器触发保存, 参数为<see cref="DungeonRoomSplit"/>>
     /// </summary>
-    OnEditorSave,
+    OnTileMapSave,
     /// <summary>
     /// 选中拖拽工具
     /// </summary>
@@ -147,4 +155,61 @@ public enum EventEnum
     /// 设置标记显示状态, 参数<see cref="MarkInfoVisibleData"/>
     /// </summary>
     OnSetMarkVisible,
+    /// <summary>
+    /// 选中TileMap编辑器中的层级, 参数为选择的层级索引, 参数<see cref="int"/>
+    /// </summary>
+    OnSelectTileLayer,
+    
+    /// <summary>
+    /// 保存TileSet, 参数为<see cref="TileSetSplit"/>
+    /// </summary>
+    OnTileSetSave,
+    /// <summary>
+    /// 标记TileSet脏了, 无参数
+    /// </summary>
+    OnTileSetDirty,
+    /// <summary>
+    /// 创建TileSet资源, 参数为<see cref="TileSetSourceInfo"/>
+    /// </summary>
+    OnCreateTileSetSource,
+    /// <summary>
+    /// 选中TileSet资源, 参数为<see cref="TileSetSourceInfo"/>, 参数为 null 表示取消选中
+    /// </summary>
+    OnSelectTileSetSource,
+    /// <summary>
+    /// 删除TileSet资源, 参数为<see cref="TileSetSourceInfo"/>
+    /// </summary>
+    OnDeleteTileSetSource,
+    /// <summary>
+    /// 设置TileSet纹理, 参数<see cref="Godot.Texture2D"/>
+    /// </summary>
+    OnSetTileTexture,
+    /// <summary>
+    /// 设置TileSet编辑器的背景颜色, 参数为<see cref="Godot.Color"/>
+    /// </summary>
+    OnSetTileSetBgColor,
+    /// <summary>
+    /// 选中组合模式下的Cell图块, 参数为<see cref="Godot.Vector2I"/>
+    /// </summary>
+    OnSelectCombinationCell,
+    /// <summary>
+    /// 移除组合模式下的Cell图块, 参数为<see cref="Godot.Vector2I"/>
+    /// </summary>
+    OnRemoveCombinationCell,
+    /// <summary>
+    /// 清除组合模式下的Cell图块
+    /// </summary>
+    OnClearCombinationCell,
+    /// <summary>
+    /// 导入组合, 参数为<see cref="ImportCombinationData"/>
+    /// </summary>
+    OnImportCombination,
+    /// <summary>
+    /// 移除组合, 参数为<see cref="ImportCombinationData"/>
+    /// </summary>
+    OnRemoveCombination,
+    /// <summary>
+    /// 修改组合名称, 参数为<see cref="ImportCombinationData"/>
+    /// </summary>
+    OnUpdateCombination,
 }

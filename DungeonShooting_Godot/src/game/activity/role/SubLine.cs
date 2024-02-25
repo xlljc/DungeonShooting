@@ -28,7 +28,7 @@ public class SubLine : Component<Role>
         AddChild(_line2D);
 
         _rayCast2D = new RayCast2D();
-        _rayCast2D.CollisionMask = PhysicsLayer.Wall;
+        _rayCast2D.CollisionMask = PhysicsLayer.Wall | PhysicsLayer.Obstacle;
         AddChild(_rayCast2D);
         
         Master.WeaponPack.ChangeActiveItemEvent += OnChangeWeapon;

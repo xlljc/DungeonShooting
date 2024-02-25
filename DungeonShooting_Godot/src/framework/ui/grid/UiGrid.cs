@@ -11,6 +11,11 @@ using Godot;
 /// <typeparam name="TData">传给Cell的数据类型</typeparam>
 public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNode
 {
+    /// <summary>
+    /// 选中Cell的时的回调, 参数为 Cell 索引
+    /// </summary>
+    public event Action<int> SelectEvent;
+    
     public bool IsDestroyed { get; private set; }
 
     public int SelectIndex
@@ -48,6 +53,11 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
                     var uiCell = _cellList[newIndex];
                     uiCell.OnSelect();
                 }
+                
+                if (SelectEvent != null)
+                {
+                    SelectEvent(newIndex);
+                }
             }
         }
     }
@@ -65,6 +75,9 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
 
     public int Count => _cellList.Count;
 
+    /// <summary>
+    /// Godot 原生网格容器
+    /// </summary>
     public GridContainer GridContainer { get; private set; }
 
     //模板对象
@@ -94,6 +107,25 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
     //选中的cell索引
     private int _selectIndex = -1;
 
+    public UiGrid(TUiCellNode template, Node parent, Type cellType)
+    {
+        GridContainer = new UiGridContainer(OnReady, OnProcess);
+        GridContainer.Ready += OnReady;
+        _template = template;
+        _cellType = cellType;
+        parent.AddChild(GridContainer);
+        var uiInstance = _template.GetUiInstance();
+        uiInstance.GetParent()?.RemoveChild(uiInstance);
+        if (uiInstance is Control control)
+        {
+            _size = control.Size;
+            if (control.CustomMinimumSize == Vector2.Zero)
+            {
+                control.CustomMinimumSize = _size;
+            }
+        }
+    }
+    
     public UiGrid(TUiCellNode template, Type cellType)
     {
         GridContainer = new UiGridContainer(OnReady, OnProcess);
@@ -240,6 +272,47 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
 
         return _cellList[index];
     }
+    
+    /// <summary>
+    /// 根据自定义回调查询数据
+    /// </summary>
+    public UiCell<TUiCellNode, TData> Find(Func<UiCell<TUiCellNode, TData>, bool> func)
+    {
+        foreach (var uiCell in _cellList)
+        {
+            if (func(uiCell))
+            {
+                return uiCell;
+            }
+        }
+
+        return null;
+    }
+    
+    /// <summary>
+    /// 遍历所有 Cell
+    /// </summary>
+    public void ForEach(Action<UiCell<TUiCellNode, TData>> callback)
+    {
+        foreach (var uiCell in _cellList)
+        {
+            callback(uiCell);
+        }
+    }
+    
+    /// <summary>
+    /// 遍历所有 Cell, 回调函数返回 false 跳出循环
+    /// </summary>
+    public void ForEach(Func<UiCell<TUiCellNode, TData>, bool> callback)
+    {
+        foreach (var uiCell in _cellList)
+        {
+            if (!callback(uiCell))
+            {
+                return;
+            }
+        }
+    }
 
     /// <summary>
     /// 设置当前网格组件中的所有 Cell 数据, 性能较低
@@ -274,15 +347,17 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
     }
 
     /// <summary>
-    /// 添加单条 Cell 数据
+    /// 添加单条 Cell 数据, select 为是否立即选中
     /// </summary>
-    public void Add(TData data)
+    public void Add(TData data, bool select = false)
     {
-        //取消选中
-        SelectIndex = -1;
         var cell = GetCellInstance();
         GridContainer.AddChild(cell.CellNode.GetUiInstance());
         cell.SetData(data);
+        if (select)
+        {
+            SelectIndex = Count - 1;
+        }
     }
 
     /// <summary>
@@ -420,6 +495,7 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
 
         _cellList = null;
         _cellPool = null;
+        _template.GetUiInstance().QueueFree();
         GridContainer.QueueFree();
     }
 
@@ -439,7 +515,7 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
         }
 
         //调用 cell 更新
-        var uiCells = _cellPool.ToArray();
+        var uiCells = _cellList.ToArray();
         for (var i = 0; i < uiCells.Length; i++)
         {
             var item = uiCells[i];

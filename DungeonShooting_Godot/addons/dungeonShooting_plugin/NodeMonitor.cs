@@ -95,7 +95,7 @@ public class NodeMonitor
             catch (Exception e)
             {
                 //检查节点存在报错, 直接跳过该节点的检查
-                Debug.Log(e.Message);
+                GD.Print(e.Message);
             }
         }
 
@@ -131,7 +131,7 @@ public class NodeMonitor
             catch (Exception e)
             {
                 //检查节点存在报错, 直接跳过该节点的检查
-                Debug.Log(e.Message);
+                GD.Print(e.Message);
                 _targetNode = null;
             }
             _checkTreeTimer = 0;

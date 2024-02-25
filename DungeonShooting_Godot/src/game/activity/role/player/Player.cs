@@ -48,7 +48,7 @@ public partial class Player : Role
 
         IsAi = false;
         StateController = AddComponent<StateController<Player, PlayerStateEnum>>();
-        AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Enemy;
+        AttackLayer = PhysicsLayer.Obstacle | PhysicsLayer.Enemy;
         EnemyLayer = EnemyLayer = PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
 
@@ -61,18 +61,7 @@ public partial class Player : Role
         ActivePropsPack.SetCapacity(1);
         
         // debug用
-        // RoleState.Acceleration = 3000;
-        // RoleState.Friction = 3000;
-        // RoleState.MoveSpeed = 500;
-        // CollisionLayer = 0;
-        // CollisionMask = 0;
-        // GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
-        //GameCamera.Main.Zoom = new Vector2(0.2f, 0.2f);
-        // this.CallDelay(0.5f, () =>
-        // {
-        //     var weapon = Create<Weapon>(Ids.Id_weapon0009);
-        //     PickUpWeapon(weapon);
-        // });
+        //DebugSet();
         
         //注册状态机
         StateController.Register(new PlayerIdleState());
@@ -84,6 +73,41 @@ public partial class Player : Role
         //InitSubLine();
         
         _brushData2 = new BrushImageData(ExcelConfig.LiquidMaterial_Map["0001"]);
+    }
+
+    private void DebugSet()
+    {
+        if (World is Hall)
+        {
+            return;
+        }
+        RoleState.Acceleration = 3000;
+        RoleState.Friction = 3000;
+        RoleState.MoveSpeed = 500;
+        CollisionLayer = PhysicsLayer.None;
+        CollisionMask = PhysicsLayer.None;
+        //GameCamera.Main.Zoom = new Vector2(0.5f, 0.5f);
+        // this.CallDelay(0.5f, () =>
+        // {
+        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0009));
+        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0008));
+        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0007));
+        //     PickUpWeapon(Create<Weapon>(Ids.Id_weapon0006));
+        // });
+        World.Color = new Color(1, 1, 1, 1); //关闭迷雾
+        //显示房间小地图
+        this.CallDelay(1, () =>
+        {
+            GameApplication.Instance.DungeonManager.StartRoomInfo.EachRoom(info =>
+            {
+                info.PreviewSprite.Visible = true;
+                foreach (var roomDoorInfo in info.Doors)
+                {
+                    roomDoorInfo.AislePreviewSprite.Visible = true;
+                }
+            });
+        });
+
     }
 
     protected override RoleState OnCreateRoleState()
@@ -200,14 +224,14 @@ public partial class Player : Role
         {
             //Hurt(1000, 0);
             Hp = 0;
-            Hurt(this, 1000, 0);
+            HurtHandler(this, 1000, 0);
         }
         else if (Input.IsKeyPressed(Key.O)) //测试用, 消灭房间内所有敌人
         {
             var enemyList = AffiliationArea.FindIncludeItems(o => o.CollisionWithMask(PhysicsLayer.Enemy));
             foreach (var enemy in enemyList)
             {
-                ((Enemy)enemy).Hurt(this, 1000, 0);
+                ((Enemy)enemy).HurtArea.Hurt(this, 1000, 0);
             }
         }
         // //测试用
@@ -318,7 +342,7 @@ public partial class Player : Role
         MoveController.ClearForce();
 
         //暂停游戏
-        GameApplication.Instance.World.Pause = true;
+        World.Current.Pause = true;
         //弹出结算面板
         GameApplication.Instance.Cursor.SetGuiMode(true);
         UiManager.Open_Settlement();
@@ -384,4 +408,10 @@ public partial class Player : Role
     //     base.DebugDraw();
     //     DrawArc(GetLocalMousePosition(), 25, 0, Mathf.Pi * 2f, 20, Colors.Red, 1);
     // }
+
+    public override void AddGold(int goldCount)
+    {
+        base.AddGold(goldCount);
+        EventManager.EmitEvent(EventEnum.OnPlayerGoldChange, RoleState.Gold);
+    }
 }

@@ -17,19 +17,19 @@ public class LifeCell : UiCell<RoomUI.Life, LifeIconEnum>
         switch (data)
         {
             case LifeIconEnum.FullHeart:
-                CellNode.Instance.Texture = ResourceManager.Load<Texture2D>(ResourcePath.resource_sprite_ui_roomUI_Life_full_png);
+                CellNode.L_LifeIcon.Instance.Texture = ResourceManager.Load<Texture2D>(ResourcePath.resource_sprite_ui_roomUI_Life_full_png);
                 break;
             case LifeIconEnum.HalfHeart:
-                CellNode.Instance.Texture = ResourceManager.Load<Texture2D>(ResourcePath.resource_sprite_ui_roomUI_Life_half_png);
+                CellNode.L_LifeIcon.Instance.Texture = ResourceManager.Load<Texture2D>(ResourcePath.resource_sprite_ui_roomUI_Life_half_png);
                 break;
             case LifeIconEnum.EmptyHeart:
-                CellNode.Instance.Texture = ResourceManager.Load<Texture2D>(ResourcePath.resource_sprite_ui_roomUI_Life_empty_png);
+                CellNode.L_LifeIcon.Instance.Texture = ResourceManager.Load<Texture2D>(ResourcePath.resource_sprite_ui_roomUI_Life_empty_png);
                 break;
             case LifeIconEnum.FullShield:
-                CellNode.Instance.Texture = ResourceManager.Load<Texture2D>(ResourcePath.resource_sprite_ui_roomUI_Shield_full_png);
+                CellNode.L_LifeIcon.Instance.Texture = ResourceManager.Load<Texture2D>(ResourcePath.resource_sprite_ui_roomUI_Shield_full_png);
                 break;
             case LifeIconEnum.EmptyShield:
-                CellNode.Instance.Texture = ResourceManager.Load<Texture2D>(ResourcePath.resource_sprite_ui_roomUI_Shield_empty_png);
+                CellNode.L_LifeIcon.Instance.Texture = ResourceManager.Load<Texture2D>(ResourcePath.resource_sprite_ui_roomUI_Shield_empty_png);
                 break;
         }
     }

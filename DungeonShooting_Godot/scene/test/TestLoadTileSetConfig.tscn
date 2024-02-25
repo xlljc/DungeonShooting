@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cye62nvkf8ld1"]
+
+[ext_resource type="Script" path="res://src/test/TestLoadTileSetConfig.cs" id="1_1wodj"]
+
+[node name="TestLoadTileSetConfig" type="Node2D"]
+script = ExtResource("1_1wodj")
+
+[node name="TileMap" type="TileMap" parent="."]
+scale = Vector2(4, 4)
+format = 2

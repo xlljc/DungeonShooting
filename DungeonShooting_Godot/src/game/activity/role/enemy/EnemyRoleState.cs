@@ -15,4 +15,9 @@ public class EnemyRoleState : RoleState
     /// 背后的视野半径, 单位像素
     /// </summary>
     public float BackViewRange = 50;
+
+    /// <summary>
+    /// 攻击间隔时间, 秒
+    /// </summary>
+    public float AttackInterval = 0;
 }

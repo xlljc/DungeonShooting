@@ -70,7 +70,7 @@ public partial class MarkAreaTool : Node2D
                     _startWidth = _markInfo.Size.X;
                     _startHeight = _markInfo.Size.Y;
                     //派发修改事件
-                    EventManager.EmitEvent(EventEnum.OnEditorDirty);
+                    EventManager.EmitEvent(EventEnum.OnTileMapDirty);
                 }
                 IsDrag = false;
             }

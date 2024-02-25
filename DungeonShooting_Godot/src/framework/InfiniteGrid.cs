@@ -10,8 +10,10 @@ public class InfiniteGrid<T>
     /// <summary>
     /// 遍历网格数据回调
     /// </summary>
-    public delegate void EachGridCallback(int x, int y, T data);
+    public delegate bool EachGridCallback(int x, int y, T data);
 
+    private bool _isDirty = false;
+    private Rect2I _rect = new Rect2I();
     private readonly Dictionary<int, Dictionary<int, T>> _map = new Dictionary<int, Dictionary<int, T>>();
 
     /// <summary>
@@ -49,6 +51,7 @@ public class InfiniteGrid<T>
             value = new Dictionary<int, T>();
             value.Add(y, data);
             _map.Add(x, value);
+            _isDirty = true;
         }
     }
 
@@ -91,7 +94,11 @@ public class InfiniteGrid<T>
     {
         if (_map.TryGetValue(x, out var value))
         {
-            return value.Remove(y);
+            if (value.Remove(y))
+            {
+                _isDirty = true;
+                return true;
+            }
         }
 
         return false;
@@ -120,6 +127,7 @@ public class InfiniteGrid<T>
                     value = new Dictionary<int, T>();
                     value.Add(y + j, data);
                     _map.Add(x + i, value);
+                    _isDirty = true;
                 }
             }
         }
@@ -140,7 +148,11 @@ public class InfiniteGrid<T>
             {
                 if (_map.TryGetValue(x + i, out var value))
                 {
-                    value.Remove(y + j);
+                    if (value.Remove(y + j))
+                    {
+                        _isDirty = true;
+                    }
+
                     if (value.Count == 0)
                     {
                         _map.Remove(x + i);
@@ -156,6 +168,7 @@ public class InfiniteGrid<T>
     public void Clear()
     {
         _map.Clear();
+        _isDirty = true;
     }
     
     /// <summary>
@@ -191,7 +204,7 @@ public class InfiniteGrid<T>
     }
 
     /// <summary>
-    /// 遍历网格数据
+    /// 遍历网格数据, 回调返回 false 则停止遍历
     /// </summary>
     public void ForEach(EachGridCallback cb)
     {
@@ -199,8 +212,51 @@ public class InfiniteGrid<T>
         {
             foreach (var pair2 in pair1.Value)
             {
-                cb(pair1.Key, pair2.Key, pair2.Value);
+                if (!cb(pair1.Key, pair2.Key, pair2.Value))
+                {
+                    return;
+                }
             }
         }
+    }
+
+    /// <summary>
+    /// 获取网格的包围矩形
+    /// </summary>
+    public Rect2I GetRect()
+    {
+        if (!_isDirty)
+        {
+            return _rect;
+        }
+
+        _isDirty = false;
+
+        var flag = false;
+        var minX = int.MaxValue;
+        var minY = int.MaxValue;
+        var maxX = int.MinValue;
+        var maxY = int.MinValue;
+        foreach (var pair1 in _map)
+        {
+            var x = pair1.Key;
+            foreach (var pair2 in pair1.Value)
+            {
+                var y = pair2.Key;
+                minX = Mathf.Min(x, minX);
+                minY = Mathf.Min(y, minY);
+                maxX = Mathf.Max(x, maxX);
+                maxY = Mathf.Max(y, maxY);
+                flag = true;
+            }
+        }
+
+        if (!flag)
+        {
+            return new Rect2I();
+        }
+
+        _rect = new Rect2I(minX, minY, maxX - minX + 1, maxY - minY + 1);
+        return _rect;
     }
 }

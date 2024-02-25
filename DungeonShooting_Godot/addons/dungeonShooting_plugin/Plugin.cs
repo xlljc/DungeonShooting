@@ -7,7 +7,7 @@ using UI.EditorTools;
 namespace Plugin
 {
     [Tool]
-    public partial class Plugin : EditorPlugin
+    public partial class Plugin : EditorPlugin, ISerializationListener
     {
         /// <summary>
         /// 自定义节点类型数据
@@ -42,18 +42,12 @@ namespace Plugin
         //自定义节点
         private CustomTypeInfo[] _customTypeInfos = new CustomTypeInfo[]
         {
-            // new CustomTypeInfo(
-            //     "ActivityMark",
-            //     "Node2D",
-            //     "res://src/framework/map/mark/ActivityMark.cs",
-            //     "res://addons/dungeonShooting_plugin/Mark.svg"
-            // ),
-            // new CustomTypeInfo(
-            //     "EnemyMark",
-            //     "Node2D",
-            //     "res://src/framework/map/mark/EnemyMark.cs",
-            //     "res://addons/dungeonShooting_plugin/Mark.svg"
-            // ),
+            new CustomTypeInfo(
+                "ActivityInstance",
+                "Node2D",
+                "res://src/framework/activity/ActivityInstance.cs",
+                "res://addons/dungeonShooting_plugin/Mark.svg"
+            ),
         };
         
         public override void _Process(double delta)
@@ -68,13 +62,15 @@ namespace Plugin
             {
                 _uiMonitor = new NodeMonitor();
                 _uiMonitor.SceneNodeChangeEvent += GenerateUiCode;
-                OnSceneChanged(GetEditorInterface().GetEditedSceneRoot());
+                OnSceneChanged(EditorInterface.Singleton.GetEditedSceneRoot());
             }
         }
 
         public override void _EnterTree()
         {
             Instance = this;
+
+            #region MyRegion
 
             if (_customTypeInfos != null)
             {
@@ -95,7 +91,7 @@ namespace Plugin
             }
 
             _editorTools = GD.Load<PackedScene>(ResourcePath.prefab_ui_EditorTools_tscn).Instantiate<EditorToolsPanel>();
-            var editorMainScreen = GetEditorInterface().GetEditorMainScreen();
+            var editorMainScreen = EditorInterface.Singleton.GetEditorMainScreen();
             editorMainScreen.AddChild(_editorTools);
 
             try
@@ -116,15 +112,27 @@ namespace Plugin
                 Debug.LogError(e.ToString());
             }
             
-            
             _MakeVisible(false);
+            
+            #endregion
             
             //场景切换事件
             SceneChanged += OnSceneChanged;
 
             _uiMonitor = new NodeMonitor();
             _uiMonitor.SceneNodeChangeEvent += GenerateUiCode;
-            OnSceneChanged(GetEditorInterface().GetEditedSceneRoot());
+
+            OnSceneChanged(EditorInterface.Singleton.GetEditedSceneRoot());
+        }
+        
+        public void OnBeforeSerialize()
+        {
+            SceneChanged -= OnSceneChanged;
+        }
+        
+        public void OnAfterDeserialize()
+        {
+            SceneChanged += OnSceneChanged;
         }
 
         public override void _ExitTree()
@@ -252,7 +260,6 @@ namespace Plugin
                 }
             }
         }
-
     }
 }
 #endif

@@ -21,6 +21,11 @@ public abstract partial class Prop : ActivityObject
     /// </summary>
     public abstract void OnRemoveItem();
 
+    public override void OnInit()
+    {
+        ThrowCollisionMask = PhysicsLayer.Wall;
+    }
+
     /// <summary>
     /// 如果道具放入了角色背包中, 则每帧调用
     /// </summary>

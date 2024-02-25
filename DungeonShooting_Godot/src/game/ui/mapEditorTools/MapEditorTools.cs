@@ -12,7 +12,7 @@ public abstract partial class MapEditorTools : UiBase
     {
         get
         {
-            if (_L_ToolRoot == null) _L_ToolRoot = new ToolRoot((MapEditorToolsPanel)this, GetNodeOrNull<Godot.Control>("ToolRoot"));
+            if (_L_ToolRoot == null) _L_ToolRoot = new ToolRoot((MapEditorToolsPanel)this, GetNode<Godot.Control>("ToolRoot"));
             return _L_ToolRoot;
         }
     }
@@ -25,7 +25,7 @@ public abstract partial class MapEditorTools : UiBase
     {
         get
         {
-            if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer((MapEditorToolsPanel)this, GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+            if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer((MapEditorToolsPanel)this, GetNode<Godot.HBoxContainer>("HBoxContainer"));
             return _L_HBoxContainer;
         }
     }
@@ -63,7 +63,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_N_HoverArea == null) _L_N_HoverArea = new N_HoverArea(UiPanel, Instance.GetNodeOrNull<DoorHoverArea>("N_HoverArea"));
+                if (_L_N_HoverArea == null) _L_N_HoverArea = new N_HoverArea(UiPanel, Instance.GetNode<DoorHoverArea>("N_HoverArea"));
                 return _L_N_HoverArea;
             }
         }
@@ -94,7 +94,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_E_HoverArea == null) _L_E_HoverArea = new E_HoverArea(UiPanel, Instance.GetNodeOrNull<DoorHoverArea>("E_HoverArea"));
+                if (_L_E_HoverArea == null) _L_E_HoverArea = new E_HoverArea(UiPanel, Instance.GetNode<DoorHoverArea>("E_HoverArea"));
                 return _L_E_HoverArea;
             }
         }
@@ -125,7 +125,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_S_HoverArea == null) _L_S_HoverArea = new S_HoverArea(UiPanel, Instance.GetNodeOrNull<DoorHoverArea>("S_HoverArea"));
+                if (_L_S_HoverArea == null) _L_S_HoverArea = new S_HoverArea(UiPanel, Instance.GetNode<DoorHoverArea>("S_HoverArea"));
                 return _L_S_HoverArea;
             }
         }
@@ -156,7 +156,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_W_HoverArea == null) _L_W_HoverArea = new W_HoverArea(UiPanel, Instance.GetNodeOrNull<DoorHoverArea>("W_HoverArea"));
+                if (_L_W_HoverArea == null) _L_W_HoverArea = new W_HoverArea(UiPanel, Instance.GetNode<DoorHoverArea>("W_HoverArea"));
                 return _L_W_HoverArea;
             }
         }
@@ -187,7 +187,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_HoverPreview == null) _L_HoverPreview = new HoverPreview(UiPanel, Instance.GetNodeOrNull<Godot.TextureRect>("HoverPreview"));
+                if (_L_HoverPreview == null) _L_HoverPreview = new HoverPreview(UiPanel, Instance.GetNode<Godot.TextureRect>("HoverPreview"));
                 return _L_HoverPreview;
             }
         }
@@ -236,7 +236,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_DoorArea == null) _L_DoorArea = new DoorArea(UiPanel, Instance.GetNodeOrNull<Godot.ColorRect>("DoorArea"));
+                if (_L_DoorArea == null) _L_DoorArea = new DoorArea(UiPanel, Instance.GetNode<Godot.ColorRect>("DoorArea"));
                 return _L_DoorArea;
             }
         }
@@ -249,7 +249,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_StartBtn == null) _L_StartBtn = new StartBtn(UiPanel, Instance.GetNodeOrNull<UI.MapEditorTools.DoorDragButton>("StartBtn"));
+                if (_L_StartBtn == null) _L_StartBtn = new StartBtn(UiPanel, Instance.GetNode<UI.MapEditorTools.DoorDragButton>("StartBtn"));
                 return _L_StartBtn;
             }
         }
@@ -262,7 +262,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_EndBtn == null) _L_EndBtn = new EndBtn(UiPanel, Instance.GetNodeOrNull<UI.MapEditorTools.DoorDragButton>("EndBtn"));
+                if (_L_EndBtn == null) _L_EndBtn = new EndBtn(UiPanel, Instance.GetNode<UI.MapEditorTools.DoorDragButton>("EndBtn"));
                 return _L_EndBtn;
             }
         }
@@ -293,7 +293,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_N_HoverRoot == null) _L_N_HoverRoot = new N_HoverRoot(UiPanel, Instance.GetNodeOrNull<Godot.Control>("N_HoverRoot"));
+                if (_L_N_HoverRoot == null) _L_N_HoverRoot = new N_HoverRoot(UiPanel, Instance.GetNode<Godot.Control>("N_HoverRoot"));
                 return _L_N_HoverRoot;
             }
         }
@@ -306,7 +306,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_E_HoverRoot == null) _L_E_HoverRoot = new E_HoverRoot(UiPanel, Instance.GetNodeOrNull<Godot.Control>("E_HoverRoot"));
+                if (_L_E_HoverRoot == null) _L_E_HoverRoot = new E_HoverRoot(UiPanel, Instance.GetNode<Godot.Control>("E_HoverRoot"));
                 return _L_E_HoverRoot;
             }
         }
@@ -319,7 +319,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_S_HoverRoot == null) _L_S_HoverRoot = new S_HoverRoot(UiPanel, Instance.GetNodeOrNull<Godot.Control>("S_HoverRoot"));
+                if (_L_S_HoverRoot == null) _L_S_HoverRoot = new S_HoverRoot(UiPanel, Instance.GetNode<Godot.Control>("S_HoverRoot"));
                 return _L_S_HoverRoot;
             }
         }
@@ -332,7 +332,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_W_HoverRoot == null) _L_W_HoverRoot = new W_HoverRoot(UiPanel, Instance.GetNodeOrNull<Godot.Control>("W_HoverRoot"));
+                if (_L_W_HoverRoot == null) _L_W_HoverRoot = new W_HoverRoot(UiPanel, Instance.GetNode<Godot.Control>("W_HoverRoot"));
                 return _L_W_HoverRoot;
             }
         }
@@ -345,7 +345,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_HoverPreviewRoot == null) _L_HoverPreviewRoot = new HoverPreviewRoot(UiPanel, Instance.GetNodeOrNull<Godot.Control>("HoverPreviewRoot"));
+                if (_L_HoverPreviewRoot == null) _L_HoverPreviewRoot = new HoverPreviewRoot(UiPanel, Instance.GetNode<Godot.Control>("HoverPreviewRoot"));
                 return _L_HoverPreviewRoot;
             }
         }
@@ -358,7 +358,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_DoorToolTemplate == null) _L_DoorToolTemplate = new DoorToolTemplate(UiPanel, Instance.GetNodeOrNull<UI.MapEditorTools.DoorDragArea>("DoorToolTemplate"));
+                if (_L_DoorToolTemplate == null) _L_DoorToolTemplate = new DoorToolTemplate(UiPanel, Instance.GetNode<UI.MapEditorTools.DoorDragArea>("DoorToolTemplate"));
                 return _L_DoorToolTemplate;
             }
         }
@@ -371,7 +371,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_MarkTemplate == null) _L_MarkTemplate = new MarkTemplate(UiPanel, Instance.GetNodeOrNull<UI.MapEditorTools.MarkTool>("MarkTemplate"));
+                if (_L_MarkTemplate == null) _L_MarkTemplate = new MarkTemplate(UiPanel, Instance.GetNode<UI.MapEditorTools.MarkTool>("MarkTemplate"));
                 return _L_MarkTemplate;
             }
         }
@@ -402,7 +402,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_Select == null) _L_Select = new Select(UiPanel, Instance.GetNodeOrNull<Godot.NinePatchRect>("Select"));
+                if (_L_Select == null) _L_Select = new Select(UiPanel, Instance.GetNode<Godot.NinePatchRect>("Select"));
                 return _L_Select;
             }
         }
@@ -424,7 +424,7 @@ public abstract partial class MapEditorTools : UiBase
         {
             get
             {
-                if (_L_ToolButton == null) _L_ToolButton = new ToolButton(UiPanel, Instance.GetNodeOrNull<Godot.TextureButton>("ToolButton"));
+                if (_L_ToolButton == null) _L_ToolButton = new ToolButton(UiPanel, Instance.GetNode<Godot.TextureButton>("ToolButton"));
                 return _L_ToolButton;
             }
         }

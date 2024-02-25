@@ -214,7 +214,8 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     private Vector2 _gripOffset;
 
     //碰撞器位置
-    private Vector2 _collPoint;
+    private Vector2 _collPoint1;
+    private Vector2 _collPoint2;
 
     //换弹计时器
     private float _reloadTimer = 0;
@@ -240,6 +241,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     //换弹投抛弹壳记录
     private bool _reloadShellFlag = false;
 
+    //抖动强度
+    private float _shakeStrength = 0;
+    
+    //抖动间隔
+    private float _shakeInterval = 1 / 60f;
+    
+    //抖动计时器
+    private float _shakeTimer = 0;
+    
     // ----------------------------------------------
     private uint _tempLayer;
 
@@ -294,10 +304,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         AnimationPlayer.AnimationFinished += OnAnimationPlayerFinished;
         _gripPoint = AnimatedSprite.Position;
         _gripOffset = AnimatedSprite.Offset;
-        _collPoint = Collision.Position;
+        _collPoint1 = Collision.Position;
+        _collPoint2 = _collPoint1 - AnimatedSprite.Offset - AnimatedSprite.Position;
         AnimatedSprite.Position = Vector2.Zero;
         AnimatedSprite.Offset = Vector2.Zero;
-        Collision.Position = Vector2.Zero;
+        Collision.Position = _collPoint2;
     }
 
     /// <summary>
@@ -307,12 +318,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     {
         _playerWeaponAttribute = attribute;
         SetCurrentWeaponAttribute(attribute);
-        if (attribute.AiUseAttribute != null)
+        if (ExcelConfig.WeaponBase_Map.TryGetValue(attribute.Id + "_ai", out var aiAttr))
         {
-            _aiWeaponAttribute = attribute.AiUseAttribute;
+            _aiWeaponAttribute = aiAttr;
         }
         else
         {
+            Debug.LogError("警告: 未找到 AI 武器属性: " + attribute.Id);
             _aiWeaponAttribute = attribute;
         }
 
@@ -325,8 +337,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         CurrAmmo = Attribute.AmmoCapacity;
         //剩余弹药量
         ResidueAmmo = Mathf.Min(Attribute.StandbyAmmoCapacity + CurrAmmo, Attribute.MaxAmmoCapacity) - CurrAmmo;
-        
-        ThrowCollisionSize = attribute.ThrowCollisionSize.AsVector2();
     }
 
     /// <summary>
@@ -374,6 +384,31 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     /// 注意, 该函数仅在 Attribute.LooseShoot == false 时才能被调用
     /// </summary>
     protected virtual void OnBeginCharge()
+    {
+    }
+
+    /// <summary>
+    /// 结束蓄力时调用
+    /// 注意, 该函数仅在 Attribute.LooseShoot == false 时才能被调用
+    /// </summary>
+    protected virtual void OnEndCharge()
+    {
+    }
+    
+    /// <summary>
+    /// 蓄力完成时调用
+    /// </summary>
+    protected virtual void OnChargeFinish()
+    {
+    }
+    
+    /// <summary>
+    /// 蓄力时每帧调用
+    /// 注意, 该函数仅在 Attribute.LooseShoot == false 时才能被调用
+    /// </summary>
+    /// <param name="delta"></param>
+    /// <param name="charge">蓄力时长</param>
+    protected virtual void OnChargeProcess(float delta, float charge)
     {
     }
 
@@ -459,6 +494,24 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
 
     protected override void Process(float delta)
     {
+        //抖动 AnimatedSprite
+        if (_shakeStrength != 0)
+        {
+            _shakeTimer += delta;
+            if (_shakeTimer >= _shakeInterval)
+            {
+                _shakeTimer = 0;
+                AnimatedSprite.Offset = new Vector2(
+                    Utils.Random.RandomRangeFloat(-_shakeStrength, _shakeStrength),
+                    Utils.Random.RandomRangeFloat(-_shakeStrength, _shakeStrength)
+                );
+            }
+        }
+        else
+        {
+            _shakeTimer = 0;
+        }
+        
         //未开火时间
         _noAttackTime += delta;
         
@@ -620,6 +673,12 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                     {
                         BeLoaded();
                     }
+                    
+                    //子弹换弹
+                    if (CurrAmmo <= 0 && Attribute.AutoReload)
+                    {
+                        Reload();
+                    }
                 }
             }
             else if (_delayedTime > 0) //攻击延时
@@ -636,7 +695,14 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
             {
                 if (_looseShootFlag) //蓄力时长
                 {
+                    var pv = _chargeTime;
                     _chargeTime += delta;
+                    OnChargeProcess(delta, _chargeTime);
+                    //蓄力完成
+                    if (pv < Attribute.MinChargeTime && _chargeTime >= Attribute.MinChargeTime)
+                    {
+                        OnChargeFinish();
+                    }
                 }
 
                 _downTimer += delta;
@@ -706,12 +772,28 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     }
 
     /// <summary>
+    /// 设置抖动强度
+    /// </summary>
+    public void SetShake(float strength)
+    {
+        _shakeStrength = strength;
+    }
+    
+    /// <summary>
+    /// 设置抖动间隔
+    /// </summary>
+    public void SetShakeInterval(float interval)
+    {
+        _shakeInterval = interval;
+    }
+
+    /// <summary>
     /// 返回武器是否在地上
     /// </summary>
     /// <returns></returns>
     public bool IsInGround()
     {
-        return Master == null && GetParent() == GameApplication.Instance.World.NormalLayer;
+        return Master == null && GetParent() == World.Current.NormalLayer;
     }
 
     /// <summary>
@@ -901,6 +983,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     }
     
     /// <summary>
+    /// 获取蓄力是否结束
+    /// 注意, 该函数仅在 Attribute.LooseShoot == false 时有正确的返回值, 否则返回 false
+    /// </summary>
+    public bool IsChargeFinish()
+    {
+        return _chargeTime >= Attribute.MinChargeTime;
+    }
+    
+    /// <summary>
     /// 获取延时射击倒计时, 单位: 秒
     /// </summary>
     public float GetDelayedAttackTime()
@@ -986,6 +1077,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                 _continuousCount = 0;
             }
             _chargeTime = 0;
+            OnEndCharge();
         }
 
         OnUpTrigger();
@@ -1500,23 +1592,30 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     //抛弹逻辑
     private void ThrowShellHandler(float speedScale)
     {
-        if (Attribute.Shell == null)
+        var attribute = Attribute;
+        if (attribute.Shell == null)
         {
             return;
         }
         //创建一个弹壳
-        if (Attribute.ThrowShellDelayTime > 0)
+        if (attribute.ThrowShellDelayTime > 0)
         {
-            this.CallDelay(Attribute.ThrowShellDelayTime, () =>
+            this.CallDelay(attribute.ThrowShellDelayTime, () =>
             {
                 _reloadShellFlag = true;
-                FireManager.ThrowShell(this, Attribute.Shell, speedScale);
+                for (var i = 0; i < attribute.ThrowShellCount; i++)
+                {
+                    FireManager.ThrowShell(this, attribute.Shell, speedScale);
+                }
             });
         }
-        else if (Attribute.ThrowShellDelayTime == 0)
+        else if (attribute.ThrowShellDelayTime == 0)
         {
             _reloadShellFlag = true;
-            FireManager.ThrowShell(this, Attribute.Shell, speedScale);
+            for (var i = 0; i < attribute.ThrowShellCount; i++)
+            {
+                FireManager.ThrowShell(this, attribute.Shell, speedScale);
+            }
         }
     }
 
@@ -1915,7 +2014,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         //精灵位置, 旋转中心点
         AnimatedSprite.Position = Vector2.Zero;
         AnimatedSprite.Offset = Vector2.Zero;
-        Collision.Position = Vector2.Zero;
+        Collision.Position = _collPoint2;
         //清除 Ai 拾起标记
         RemoveSign(SignNames.AiFindWeaponSign);
         //停止换弹
@@ -1945,7 +2044,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         //Collision.Disabled = true;
         AnimatedSprite.Position = _gripPoint;
         AnimatedSprite.Offset = _gripOffset;
-        Collision.Position = _collPoint;
+        Collision.Position = _collPoint1;
         //修改层级
         _tempLayer = CollisionLayer;
         CollisionLayer = PhysicsLayer.OnHand;
@@ -2032,8 +2131,22 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     /// <summary>
     /// Ai调用, 触发扣动扳机, 并返回攻击状态
     /// </summary>
-    public AiAttackEnum AiTriggerAttackState()
+    public AiAttackEnum AiTriggerAttackState(AiAttackEnum prevState)
     {
+        var chargeFinish = false;
+        if (prevState == AiAttackEnum.AttackCharge) //蓄力中
+        {
+            var enemy = (Enemy)Master;
+            if (!IsChargeFinish())
+            {
+                enemy.Attack();
+                return prevState;
+            }
+
+            chargeFinish = true;
+            enemy.LockingTime = 0;
+        }
+        
         AiAttackEnum flag;
         if (IsTotalAmmoEmpty()) //当前武器弹药打空
         {
@@ -2070,7 +2183,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         {
             flag = AiAttackEnum.AttackInterval;
         }
-        else if (_continuousCount >= 1) //连发中
+        else if (_continuousCount >= 1 && (!chargeFinish || _continuousCount >= 2)) //连发中
         {
             flag = AiAttackEnum.Attack;
         }
@@ -2087,7 +2200,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                 {
                     flag = AiAttackEnum.Attack;
                     enemy.Attack();
-                    if (_attackFlag)
+                    if (_attackFlag) //成功触发攻击
                     {
                         enemy.LockingTime = 0;
                     }
@@ -2098,18 +2211,26 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                     {
                         flag = AiAttackEnum.Attack;
                         enemy.Attack();
-                        if (_attackFlag)
+                        if (_attackFlag) //成功触发攻击
                         {
                             enemy.LockingTime = 0;
                         }
                     }
                     else //单发
                     {
-                        flag = AiAttackEnum.Attack;
-                        enemy.Attack();
-                        if (_attackFlag)
+                        if (Attribute.LooseShoot && Attribute.MinChargeTime > 0) //松发并蓄力攻击
                         {
-                            enemy.LockingTime = 0;
+                            flag = AiAttackEnum.AttackCharge;
+                            enemy.Attack();
+                        }
+                        else
+                        {
+                            flag = AiAttackEnum.Attack;
+                            enemy.Attack();
+                            if (_attackFlag && _attackTimer > 0) //成功触发攻击
+                            {
+                                enemy.LockingTime = 0;
+                            }
                         }
                     }
                 }

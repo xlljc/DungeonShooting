@@ -1,64 +1,69 @@
 {
-  "TestGroup1": {
-    "GroupName": "TestGroup1",
+  "Test1": {
+    "GroupName": "Test1",
+    "TileSet": "TileSet1",
     "BattleList": [
       {
         "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/battle/Battle1"
+        "Path": "resource/map/tileMaps/Test1/battle/Battle1"
       },
       {
         "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/battle/Battle2"
+        "Path": "resource/map/tileMaps/Test1/battle/Battle2"
       },
       {
         "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/battle/Battle3"
+        "Path": "resource/map/tileMaps/Test1/battle/Battle3"
       },
       {
         "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/battle/Battle4"
+        "Path": "resource/map/tileMaps/Test1/battle/Battle4"
       },
       {
         "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/battle/Battle5"
+        "Path": "resource/map/tileMaps/Test1/battle/Battle5"
       },
       {
         "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/battle/Battle6"
+        "Path": "resource/map/tileMaps/Test1/battle/Battle6"
       }
     ],
     "InletList": [
       {
         "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/inlet/Start1"
-      },
-      {
-        "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/inlet/Start2"
-      },
-      {
-        "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/inlet/Start3"
-      },
-      {
-        "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/inlet/Start4"
-      },
-      {
-        "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/inlet/Start5"
+        "Path": "resource/map/tileMaps/Test1/inlet/Start"
       }
     ],
     "OutletList": [
       {
         "ErrorType": 0,
-        "Path": "resource/map/tileMaps/TestGroup1/outlet/End1"
+        "Path": "resource/map/tileMaps/Test1/outlet/End1"
       }
     ],
-    "BossList": [],
-    "RewardList": [],
-    "ShopList": [],
-    "EventList": [],
-    "Remark": "\u6D4B\u8BD5\u7EC4"
+    "BossList": [
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/Test1/boss/Boss1"
+      }
+    ],
+    "RewardList": [
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/Test1/reward/Award1"
+      }
+    ],
+    "ShopList": [
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/Test1/shop/Shop1"
+      }
+    ],
+    "EventList": [
+      {
+        "ErrorType": 2,
+        "Path": "resource/map/tileMaps/Test1/event/\u6D4B\u8BD5\u623F\u95F4"
+      }
+    ],
+    "Remark": ""
   }
 }

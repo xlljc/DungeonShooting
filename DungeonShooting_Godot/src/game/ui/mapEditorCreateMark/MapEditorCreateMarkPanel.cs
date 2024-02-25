@@ -78,10 +78,9 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
             S_DelayInput.Instance.Value = data.DelayTime;
         }
 
-        if (_markInfo.SpecialMarkType == SpecialMarkType.BirthPoint) //出生标记
+        if (_markInfo.SpecialMarkType != SpecialMarkType.Normal) //特殊标记
         {
             var markInfoItem = new MarkInfoItem();
-            markInfoItem.Id = ActivityObject.Ids.Id_role0001;
             markInfoItem.SpecialMarkType = _markInfo.SpecialMarkType;
             _grid.Add(markInfoItem);
             //隐藏选项
@@ -132,6 +131,10 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
         
         //标记物体数据
         if (data.SpecialMarkType == SpecialMarkType.BirthPoint) //出生标记
+        {
+            
+        }
+        else if (data.SpecialMarkType == SpecialMarkType.OutPoint) //出口标记
         {
             
         }
@@ -203,10 +206,25 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
     //选中物体回调, 创建标记数据
     private void OnSelectObject(ExcelConfig.ActivityBase activityObject)
     {
-        _grid.Add(new MarkInfoItem()
+        var markInfoItem = new MarkInfoItem()
         {
             Id = activityObject.Id,
             Weight = 100,
-        });
+        };
+        
+        //初始高度
+        if (activityObject.Type == ActivityType.Weapon || activityObject.Type == ActivityType.Prop)
+        {
+            markInfoItem.Altitude = 8;
+        }
+        else if (activityObject.Type == ActivityType.Other)
+        {
+            //随机道具或者随机武器
+            if (activityObject.Id == PreinstallMarkManager.RandomWeapon.Id || activityObject.Id == PreinstallMarkManager.RandomProp.Id)
+            {
+                markInfoItem.Altitude = 8;
+            }
+        }
+        _grid.Add(markInfoItem);
     }
 }

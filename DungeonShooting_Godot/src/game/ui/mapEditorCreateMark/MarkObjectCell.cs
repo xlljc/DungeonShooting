@@ -24,34 +24,45 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
 
     public override void OnSetData(MarkInfoItem data)
     {
-        //记得判断随机对象, 后面再做
-        _activityObject = ExcelConfig.ActivityBase_Map[data.Id];
-        //图标
-        if (string.IsNullOrEmpty(_activityObject.Icon))
-        {
-            CellNode.L_VBoxContainer.L_HBoxContainer.L_Icon.Instance.Visible = false;
-        }
-        else
-        {
-            CellNode.L_VBoxContainer.L_HBoxContainer.L_Icon.Instance.Visible = true;
-            CellNode.L_VBoxContainer.L_HBoxContainer.L_Icon.Instance.Texture = ResourceManager.LoadTexture2D(_activityObject.Icon);
-        }
         //物体Id
         CellNode.L_VBoxContainer.L_HBoxContainer.L_IdLabel.Instance.Text = data.Id;
-        //物体名称
-        CellNode.L_VBoxContainer.L_HBoxContainer.L_NameLabel.Instance.Text = _activityObject.Name;
-        //物体类型
-        CellNode.L_VBoxContainer.L_HBoxContainer.L_TypeLabel.Instance.Text = NameManager.GetActivityTypeName(_activityObject.Type);
         //权重
         CellNode.L_VBoxContainer.L_HBoxContainer.L_WeightEdit.Instance.Value = data.Weight;
         
-        if (data.SpecialMarkType == SpecialMarkType.BirthPoint) //出生标记
+        if (data.SpecialMarkType != SpecialMarkType.Normal) //特殊标记
         {
+            //物体名称
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_NameLabel.Instance.Text = PreinstallMarkManager.GetSpecialName(data.SpecialMarkType);
+            //物体类型
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_TypeLabel.Instance.Text = ActivityId.GetTypeName(ActivityType.Player);
+            
+            //图标
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_Icon.Instance.Visible = true;
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_Icon.Instance.Texture = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_BirthMark_png);
+            
             CellNode.L_VBoxContainer.L_HBoxContainer.L_CenterContainer.L_DeleteButton.Instance.Visible = false;
             CellNode.L_VBoxContainer.L_HBoxContainer.L_WeightEdit.Instance.Visible = false;
         }
         else //普通标记
         {
+            //记得判断随机对象, 后面再做
+            _activityObject = PreinstallMarkManager.GetMarkConfig(data.Id);
+            //物体名称
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_NameLabel.Instance.Text = _activityObject.Name;
+            //物体类型
+            CellNode.L_VBoxContainer.L_HBoxContainer.L_TypeLabel.Instance.Text = ActivityId.GetTypeName(_activityObject.Type);
+            
+            //图标
+            if (string.IsNullOrEmpty(_activityObject.Icon))
+            {
+                CellNode.L_VBoxContainer.L_HBoxContainer.L_Icon.Instance.Visible = false;
+            }
+            else
+            {
+                CellNode.L_VBoxContainer.L_HBoxContainer.L_Icon.Instance.Visible = true;
+                CellNode.L_VBoxContainer.L_HBoxContainer.L_Icon.Instance.Texture = ResourceManager.LoadTexture2D(_activityObject.Icon);
+            }
+            
             // 包含额外属性
             if (_expandPanel == null)
             {
@@ -66,8 +77,11 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
     {
         if (_expandPanel != null)
         {
-            _attributeBases.Clear();
-            _attributeBases = null;
+            if (_attributeBases != null)
+            {
+                _attributeBases.Clear();
+                _attributeBases = null;
+            }
             _expandPanel.QueueFree();
             _expandPanel = null;
             _altitude = null;
@@ -186,24 +200,13 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
 
         if (markInfoItem != null)
         {
-            if (markInfoItem.Attr == null)
-            {
-                //初始高度
-                if (activityObject.Type == (int)ActivityType.Weapon || activityObject.Type == (int)ActivityType.Prop)
-                {
-                    _altitude.L_NumInput.Instance.Value = 8;
-                }
-            }
-            else
-            {
-                //海拔高度
-                _altitude.L_NumInput.Instance.Value = markInfoItem.Altitude;
-                //纵轴速度
-                _vSpeed.L_NumInput.Instance.Value = markInfoItem.VerticalSpeed;
-            }
+            //海拔高度
+            _altitude.L_NumInput.Instance.Value = markInfoItem.Altitude;
+            //纵轴速度
+            _vSpeed.L_NumInput.Instance.Value = markInfoItem.VerticalSpeed;
         }
         
-        if (activityObject.Type == (int)ActivityType.Weapon) //武器类型
+        if (activityObject.Type == ActivityType.Weapon) //武器类型
         {
             var numberBar = CellNode.UiPanel.CreateNumberBar("CurrAmmon", "弹夹弹药量：");
             var numberBar2 = CellNode.UiPanel.CreateNumberBar("ResidueAmmo", "剩余弹药量：");
@@ -243,7 +246,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
                 }
             }
         }
-        else if (activityObject.Type == (int)ActivityType.Enemy) //敌人
+        else if (activityObject.Type == ActivityType.Enemy) //敌人
         {
             var faceBar = CellNode.UiPanel.CreateOptionBar("Face", "脸朝向：");
             faceBar.Instance.AddItem("随机", 0);

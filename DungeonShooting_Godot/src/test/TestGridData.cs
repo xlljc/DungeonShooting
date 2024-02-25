@@ -97,7 +97,7 @@ public partial class TestGridData : Node2D
         time = DateTime.Now;
         testGrid2.ForEach((i, i1, arg3) =>
         {
-            
+            return true;
         });
         Debug.Log("Grid遍历用时： " + (DateTime.Now - time).Milliseconds);
     }

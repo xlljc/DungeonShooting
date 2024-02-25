@@ -382,29 +382,32 @@ public class MoveController : Component
                 var no = collision.GetNormal().Rotated(Mathf.Pi * 0.5f);
                 newVelocity = finallyEf.Reflect(no);
                 var rotation = newVelocity.Angle();
-
-                if (Master.ActivityMaterial.RotationType == 1) //跟着反弹角度
-                {
-                    Rotation = rotation;
-                }
-                else if (Master.ActivityMaterial.RotationType == 2) //跟着反弹角度, 带垂直角度
-                {
-                    Rotation = rotation;
-                    AnimatedSprite.Rotation = new Vector2(newVelocity.X, newVelocity.Y - Master.VerticalSpeed).Angle() - rotation;
-                }
                 
-                var length = _forceList.Count;
-                if (length != 0)
-                {
-                    var v = newVelocity / (length / Master.ActivityMaterial.BounceStrength);
-                    for (var i = 0; i < _forceList.Count; i++)
-                    {
-                        _forceList[i].Velocity = v;
-                    }
-                }
-
                 //调用反弹函数
                 Master.OnBounce(rotation);
+
+                if (Enable && !Master.IsDestroyed)
+                {
+                    if (Master.ActivityMaterial.RotationType == 1) //跟着反弹角度
+                    {
+                        Rotation = rotation;
+                    }
+                    else if (Master.ActivityMaterial.RotationType == 2) //跟着反弹角度, 带垂直角度
+                    {
+                        Rotation = rotation;
+                        AnimatedSprite.Rotation = new Vector2(newVelocity.X, newVelocity.Y - Master.VerticalSpeed).Angle() - rotation;
+                    }
+                
+                    var length = _forceList.Count;
+                    if (length != 0)
+                    {
+                        var v = newVelocity / (length / Master.ActivityMaterial.BounceStrength);
+                        for (var i = 0; i < _forceList.Count; i++)
+                        {
+                            _forceList[i].Velocity = v;
+                        }
+                    }
+                }
             }
             else //没有撞到物体
             {

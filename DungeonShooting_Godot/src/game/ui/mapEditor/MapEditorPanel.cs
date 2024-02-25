@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 
 namespace UI.MapEditor;
@@ -26,20 +27,22 @@ public partial class MapEditorPanel : MapEditor
     
     public override void OnCreateUi()
     {
-        //临时处理, 加载TileSet
-        var tileSet = ResourceManager.Load<TileSet>(ResourcePath.resource_map_tileSet_map1_TileSet1_tres);
-        var tileSetAtlasSource = (TileSetAtlasSource)tileSet.GetSource(0);
-        tileSetAtlasSource.Texture = ImageTexture.CreateFromImage(Image.LoadFromFile("resource/map/tileSprite/map1/16x16 dungeon ii wall reconfig v04 spritesheet.png"));
-        S_TileMap.Instance.TileSet = tileSet;
-        
-        S_TabContainer.Instance.SetTabTitle(0, "对象");
-        S_TabContainer.Instance.SetTabTitle(1, "图层");
-        S_TabContainer.Instance.SetTabTitle(2, "图块");
+        S_TabContainer.Instance.SetTabTitle(0, "图块");
+        S_TabContainer.Instance.SetTabTitle(1, "对象");
+        S_TabContainer.Instance.TabChanged += OnTabChanged;
         //S_MapLayer.Instance.Init(S_MapLayer);
         S_Left.Instance.Resized += OnMapViewResized;
         S_Back.Instance.Pressed += OnBackClick;
         S_Save.Instance.Pressed += OnSave;
         S_Play.Instance.Pressed += OnPlay;
+
+        OnTabChanged(0);
+    }
+
+    //切换页签
+    private void OnTabChanged(long tab)
+    {
+        S_LayerPanel.Instance.Visible = tab == 0;
     }
 
     public override void OnShowUi()
@@ -50,11 +53,11 @@ public partial class MapEditorPanel : MapEditor
     public override void OnDestroyUi()
     {
         //清除选中的标记
-        EditorManager.SetSelectMark(null);
+        EditorTileMapManager.SetSelectMark(null);
         //清除选中的波
-        EditorManager.SetSelectWaveIndex(-1);
+        EditorTileMapManager.SetSelectWaveIndex(-1);
         //清除选中的预设
-        EditorManager.SetSelectPreinstallIndex(-1);
+        EditorTileMapManager.SetSelectPreinstallIndex(-1);
     }
 
     //点击播放按钮
@@ -65,13 +68,13 @@ public partial class MapEditorPanel : MapEditor
         //有错误数据
         if (check.HasError)
         {
-            EditorWindowManager.ShowTips("提示", EditorManager.GetRoomErrorTypeMessage(check.ErrorType) + "，不能运行房间！");
+            EditorWindowManager.ShowTips("提示", EditorTileMapManager.GetRoomErrorTypeMessage(check.ErrorType) + "，不能运行房间！");
             return;
         }
         //保存数据
         S_TileMap.Instance.TriggerSave(RoomErrorType.None, () =>
         {
-            var groupName = EditorManager.SelectDungeonGroup.GroupName;
+            var groupName = EditorTileMapManager.SelectDungeonGroup.GroupName;
             var result = DungeonManager.CheckDungeon(groupName);
             if (result.HasError)
             {
@@ -88,11 +91,20 @@ public partial class MapEditorPanel : MapEditor
     /// <summary>
     /// 加载地牢, 返回是否加载成功
     /// </summary>
-    public bool LoadMap(DungeonRoomSplit roomSplit)
+    public bool LoadMap(DungeonRoomSplit roomSplit, TileSetSplit tileSetSplit)
     {
         _title = "正在编辑：" + roomSplit.RoomInfo.RoomName;
         S_Title.Instance.Text = _title;
-        var loadMap = S_TileMap.Instance.Load(roomSplit);
+        
+        //初始化 TileMap 层
+        S_TileMap.Instance.InitLayer();
+        //加载层级
+        S_MapEditorMapLayer.Instance.InitData();
+        //加载MapTile面板
+        S_MapEditorMapTile.Instance.InitData(tileSetSplit);
+        
+        //加载Tile
+        var loadMap = S_TileMap.Instance.Load(roomSplit, tileSetSplit);
         S_MapEditorMapMark.Instance.RefreshPreinstallSelect();
         return loadMap;
     }
@@ -126,7 +138,7 @@ public partial class MapEditorPanel : MapEditor
         //有错误的数据
         if (check.HasError)
         {
-            EditorWindowManager.ShowConfirm("提示", EditorManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
+            EditorWindowManager.ShowConfirm("提示", EditorTileMapManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
             {
                 if (v)
                 {
@@ -155,7 +167,7 @@ public partial class MapEditorPanel : MapEditor
                     var check = CheckError();
                     if (check.HasError) //有错误
                     {
-                        EditorWindowManager.ShowConfirm("提示", EditorManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
+                        EditorWindowManager.ShowConfirm("提示", EditorTileMapManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果现在保存并退出，运行游戏将不会刷出该房间！\n是否仍要保存？", (v) =>
                         {
                             if (v)
                             {
@@ -193,7 +205,7 @@ public partial class MapEditorPanel : MapEditor
             var check = CheckError();
             if (check.HasError) //有错误
             {
-                EditorWindowManager.ShowConfirm("提示", EditorManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果不解决错误就退出，运行游戏将不会刷出该房间！\n是否仍要退出？", (v) =>
+                EditorWindowManager.ShowConfirm("提示", EditorTileMapManager.GetRoomErrorTypeMessage(check.ErrorType) + "，如果不解决错误就退出，运行游戏将不会刷出该房间！\n是否仍要退出？", (v) =>
                 {
                     if (v)
                     {
@@ -245,7 +257,7 @@ public partial class MapEditorPanel : MapEditor
             }
         }
         
-        if (EditorManager.SelectRoom.Preinstall == null || EditorManager.SelectRoom.Preinstall.Count == 0)
+        if (EditorTileMapManager.SelectRoom.Preinstall == null || EditorTileMapManager.SelectRoom.Preinstall.Count == 0)
         {
             return new CheckResult(true, RoomErrorType.NoPreinstallError);
         }

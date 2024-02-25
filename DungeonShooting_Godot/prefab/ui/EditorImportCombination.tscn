@@ -1,0 +1,78 @@
+[gd_scene load_steps=2 format=3 uid="uid://dl0u8eggomust"]
+
+[ext_resource type="Script" path="res://src/game/ui/editorImportCombination/EditorImportCombinationPanel.cs" id="1_4wd6k"]
+
+[node name="EditorImportCombination" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4wd6k")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 20.0
+text = "组名称："
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="NameInput" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 80.0
+placeholder_text = "请输入组合名称"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PreviewLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+size_flags_stretch_ratio = 20.0
+text = "预览："
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="PreviewBg" type="ColorRect" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+clip_children = 2
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 80.0
+color = Color(0.270588, 0.270588, 0.270588, 1)
+
+[node name="PreviewTexture" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer2/PreviewBg"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 80.0
+expand_mode = 2
+stretch_mode = 5

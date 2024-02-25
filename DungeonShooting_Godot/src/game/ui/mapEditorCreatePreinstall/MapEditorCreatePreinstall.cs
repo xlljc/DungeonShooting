@@ -12,7 +12,7 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
     {
         get
         {
-            if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer((MapEditorCreatePreinstallPanel)this, GetNodeOrNull<Godot.MarginContainer>("MarginContainer"));
+            if (_L_MarginContainer == null) _L_MarginContainer = new MarginContainer((MapEditorCreatePreinstallPanel)this, GetNode<Godot.MarginContainer>("MarginContainer"));
             return _L_MarginContainer;
         }
     }
@@ -25,6 +25,7 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
 
     public sealed override void OnInitNestedUi()
     {
+
     }
 
     /// <summary>
@@ -57,7 +58,7 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
         {
             get
             {
-                if (_L_PreinstallNameLabel == null) _L_PreinstallNameLabel = new PreinstallNameLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("PreinstallNameLabel"));
+                if (_L_PreinstallNameLabel == null) _L_PreinstallNameLabel = new PreinstallNameLabel(UiPanel, Instance.GetNode<Godot.Label>("PreinstallNameLabel"));
                 return _L_PreinstallNameLabel;
             }
         }
@@ -70,7 +71,7 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
         {
             get
             {
-                if (_L_PreinstallNameInput == null) _L_PreinstallNameInput = new PreinstallNameInput(UiPanel, Instance.GetNodeOrNull<Godot.LineEdit>("PreinstallNameInput"));
+                if (_L_PreinstallNameInput == null) _L_PreinstallNameInput = new PreinstallNameInput(UiPanel, Instance.GetNode<Godot.LineEdit>("PreinstallNameInput"));
                 return _L_PreinstallNameInput;
             }
         }
@@ -78,6 +79,59 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
 
         public HBoxContainer(MapEditorCreatePreinstallPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
         public override HBoxContainer Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: MapEditorCreatePreinstall.MarginContainer.VBoxContainer.HBoxContainer2.PreinstallNameLabel
+    /// </summary>
+    public class PreinstallNameLabel_1 : UiNode<MapEditorCreatePreinstallPanel, Godot.Label, PreinstallNameLabel_1>
+    {
+        public PreinstallNameLabel_1(MapEditorCreatePreinstallPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override PreinstallNameLabel_1 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.CheckBox"/>, 路径: MapEditorCreatePreinstall.MarginContainer.VBoxContainer.HBoxContainer2.AutoCheckInput
+    /// </summary>
+    public class AutoCheckInput : UiNode<MapEditorCreatePreinstallPanel, Godot.CheckBox, AutoCheckInput>
+    {
+        public AutoCheckInput(MapEditorCreatePreinstallPanel uiPanel, Godot.CheckBox node) : base(uiPanel, node) {  }
+        public override AutoCheckInput Clone() => new (UiPanel, (Godot.CheckBox)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.HBoxContainer"/>, 路径: MapEditorCreatePreinstall.MarginContainer.VBoxContainer.HBoxContainer2
+    /// </summary>
+    public class HBoxContainer2 : UiNode<MapEditorCreatePreinstallPanel, Godot.HBoxContainer, HBoxContainer2>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreatePreinstall.MarginContainer.VBoxContainer.PreinstallNameLabel
+        /// </summary>
+        public PreinstallNameLabel_1 L_PreinstallNameLabel
+        {
+            get
+            {
+                if (_L_PreinstallNameLabel == null) _L_PreinstallNameLabel = new PreinstallNameLabel_1(UiPanel, Instance.GetNode<Godot.Label>("PreinstallNameLabel"));
+                return _L_PreinstallNameLabel;
+            }
+        }
+        private PreinstallNameLabel_1 _L_PreinstallNameLabel;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.CheckBox"/>, 节点路径: MapEditorCreatePreinstall.MarginContainer.VBoxContainer.AutoCheckInput
+        /// </summary>
+        public AutoCheckInput L_AutoCheckInput
+        {
+            get
+            {
+                if (_L_AutoCheckInput == null) _L_AutoCheckInput = new AutoCheckInput(UiPanel, Instance.GetNode<Godot.CheckBox>("AutoCheckInput"));
+                return _L_AutoCheckInput;
+            }
+        }
+        private AutoCheckInput _L_AutoCheckInput;
+
+        public HBoxContainer2(MapEditorCreatePreinstallPanel uiPanel, Godot.HBoxContainer node) : base(uiPanel, node) {  }
+        public override HBoxContainer2 Clone() => new (UiPanel, (Godot.HBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -110,7 +164,7 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
         {
             get
             {
-                if (_L_WeightNameLabel == null) _L_WeightNameLabel = new WeightNameLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("WeightNameLabel"));
+                if (_L_WeightNameLabel == null) _L_WeightNameLabel = new WeightNameLabel(UiPanel, Instance.GetNode<Godot.Label>("WeightNameLabel"));
                 return _L_WeightNameLabel;
             }
         }
@@ -123,7 +177,7 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
         {
             get
             {
-                if (_L_WeightInput == null) _L_WeightInput = new WeightInput(UiPanel, Instance.GetNodeOrNull<Godot.SpinBox>("WeightInput"));
+                if (_L_WeightInput == null) _L_WeightInput = new WeightInput(UiPanel, Instance.GetNode<Godot.SpinBox>("WeightInput"));
                 return _L_WeightInput;
             }
         }
@@ -163,7 +217,7 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
         {
             get
             {
-                if (_L_RemarkNameLabel == null) _L_RemarkNameLabel = new RemarkNameLabel(UiPanel, Instance.GetNodeOrNull<Godot.Label>("RemarkNameLabel"));
+                if (_L_RemarkNameLabel == null) _L_RemarkNameLabel = new RemarkNameLabel(UiPanel, Instance.GetNode<Godot.Label>("RemarkNameLabel"));
                 return _L_RemarkNameLabel;
             }
         }
@@ -176,7 +230,7 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
         {
             get
             {
-                if (_L_RemarkInput == null) _L_RemarkInput = new RemarkInput(UiPanel, Instance.GetNodeOrNull<Godot.TextEdit>("RemarkInput"));
+                if (_L_RemarkInput == null) _L_RemarkInput = new RemarkInput(UiPanel, Instance.GetNode<Godot.TextEdit>("RemarkInput"));
                 return _L_RemarkInput;
             }
         }
@@ -198,11 +252,24 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
         {
             get
             {
-                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer"));
+                if (_L_HBoxContainer == null) _L_HBoxContainer = new HBoxContainer(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer"));
                 return _L_HBoxContainer;
             }
         }
         private HBoxContainer _L_HBoxContainer;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreatePreinstall.MarginContainer.HBoxContainer2
+        /// </summary>
+        public HBoxContainer2 L_HBoxContainer2
+        {
+            get
+            {
+                if (_L_HBoxContainer2 == null) _L_HBoxContainer2 = new HBoxContainer2(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer2"));
+                return _L_HBoxContainer2;
+            }
+        }
+        private HBoxContainer2 _L_HBoxContainer2;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreatePreinstall.MarginContainer.HBoxContainer4
@@ -211,7 +278,7 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
         {
             get
             {
-                if (_L_HBoxContainer4 == null) _L_HBoxContainer4 = new HBoxContainer4(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer4"));
+                if (_L_HBoxContainer4 == null) _L_HBoxContainer4 = new HBoxContainer4(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer4"));
                 return _L_HBoxContainer4;
             }
         }
@@ -224,7 +291,7 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
         {
             get
             {
-                if (_L_HBoxContainer5 == null) _L_HBoxContainer5 = new HBoxContainer5(UiPanel, Instance.GetNodeOrNull<Godot.HBoxContainer>("HBoxContainer5"));
+                if (_L_HBoxContainer5 == null) _L_HBoxContainer5 = new HBoxContainer5(UiPanel, Instance.GetNode<Godot.HBoxContainer>("HBoxContainer5"));
                 return _L_HBoxContainer5;
             }
         }
@@ -246,7 +313,7 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer(UiPanel, Instance.GetNodeOrNull<Godot.VBoxContainer>("VBoxContainer"));
+                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer(UiPanel, Instance.GetNode<Godot.VBoxContainer>("VBoxContainer"));
                 return _L_VBoxContainer;
             }
         }
@@ -258,11 +325,6 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
 
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreatePreinstall.MarginContainer.VBoxContainer.HBoxContainer.PreinstallNameLabel
-    /// </summary>
-    public PreinstallNameLabel S_PreinstallNameLabel => L_MarginContainer.L_VBoxContainer.L_HBoxContainer.L_PreinstallNameLabel;
-
-    /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.LineEdit"/>, 节点路径: MapEditorCreatePreinstall.MarginContainer.VBoxContainer.HBoxContainer.PreinstallNameInput
     /// </summary>
     public PreinstallNameInput S_PreinstallNameInput => L_MarginContainer.L_VBoxContainer.L_HBoxContainer.L_PreinstallNameInput;
@@ -271,6 +333,16 @@ public abstract partial class MapEditorCreatePreinstall : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreatePreinstall.MarginContainer.VBoxContainer.HBoxContainer
     /// </summary>
     public HBoxContainer S_HBoxContainer => L_MarginContainer.L_VBoxContainer.L_HBoxContainer;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.CheckBox"/>, 节点路径: MapEditorCreatePreinstall.MarginContainer.VBoxContainer.HBoxContainer2.AutoCheckInput
+    /// </summary>
+    public AutoCheckInput S_AutoCheckInput => L_MarginContainer.L_VBoxContainer.L_HBoxContainer2.L_AutoCheckInput;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.HBoxContainer"/>, 节点路径: MapEditorCreatePreinstall.MarginContainer.VBoxContainer.HBoxContainer2
+    /// </summary>
+    public HBoxContainer2 S_HBoxContainer2 => L_MarginContainer.L_VBoxContainer.L_HBoxContainer2;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: MapEditorCreatePreinstall.MarginContainer.VBoxContainer.HBoxContainer4.WeightNameLabel

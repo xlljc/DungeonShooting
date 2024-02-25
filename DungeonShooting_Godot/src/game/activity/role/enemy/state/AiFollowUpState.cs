@@ -112,7 +112,7 @@ public class AiFollowUpState : StateBase<Enemy, AIStateEnum>
                     {
                         ChangeState(AIStateEnum.AiSurround);
                     }
-                    else if (weapon.TriggerIsReady()) //可以攻击
+                    else if (!Master.IsAttack && weapon.TriggerIsReady()) //可以攻击
                     {
                         //攻击状态
                         ChangeState(AIStateEnum.AiAttack);

@@ -80,13 +80,13 @@ public static class UiGenerator
             //打开ui
             if (open)
             {
-                Plugin.Plugin.Instance.GetEditorInterface().OpenSceneFromPath(prefabResPath);
-            }   
+                EditorInterface.Singleton.OpenSceneFromPath(prefabResPath);
+            }
 
         }
         catch (Exception e)
         {
-            Debug.LogError(e.ToString());
+            GD.PrintErr(e.ToString());
             return false;
         }
 
@@ -117,7 +117,7 @@ public static class UiGenerator
             
             var uiName = control.Name.ToString();
             var path = GameConfig.UiCodeDir + uiName.FirstToLower() + "/" + uiName + ".cs";
-            Debug.Log("重新生成ui代码: " + path);
+            GD.Print("重新生成ui代码: " + path);
 
             var uiNode = EachNodeFromEditor(control.Name, control);
             var code = GenerateClassCode(uiNode);
@@ -126,7 +126,7 @@ public static class UiGenerator
             {
                 if (pair.Value > 1)
                 {
-                    Debug.Log($"检测到同名节点: '{pair.Key}', 使用该名称的节点将无法生成唯一节点属性!");
+                    GD.Print($"检测到同名节点: '{pair.Key}', 使用该名称的节点将无法生成唯一节点属性!");
                 }
             }
             
@@ -134,7 +134,7 @@ public static class UiGenerator
         }
         catch (Exception e)
         {
-            Debug.LogError(e.ToString());
+            GD.PrintErr(e.ToString());
             return false;
         }
 
@@ -177,25 +177,23 @@ public static class UiGenerator
         {
             str += retraction + $"    _ = {node};\n";
         }
-        else
+
+        if (uiNodeInfo.Children != null)
         {
-            if (uiNodeInfo.Children != null)
+            for (var i = 0; i < uiNodeInfo.Children.Count; i++)
             {
-                for (var i = 0; i < uiNodeInfo.Children.Count; i++)
+                var item = uiNodeInfo.Children[i];
+                if (uiNodeInfo.OriginName == uiNodeInfo.UiRootName)
                 {
-                    var item = uiNodeInfo.Children[i];
-                    if (uiNodeInfo.OriginName == uiNodeInfo.UiRootName)
-                    {
-                        str += GenerateUiScriptCode("", item, retraction);
-                    }
-                    else
-                    {
-                        str += GenerateUiScriptCode(node, item, retraction);
-                    }
+                    str += GenerateUiScriptCode("", item, retraction);
+                }
+                else
+                {
+                    str += GenerateUiScriptCode(node, item, retraction);
                 }
             }
         }
-        
+
         return str;
     }
 
@@ -400,12 +398,12 @@ public static class UiGenerator
             bool isNodeScript;
             if (match.Success) //存在命名空间
             {
-                isNodeScript = IsNodeScript(match.Value + "." + fileName);
+                isNodeScript = CheckNodeScript(match.Value + "." + fileName);
                 uiNode = new UiNodeInfo(uiRootName, fieldName, originName, className, match.Value + "." + fileName, isNodeScript);
             }
             else //不存在命名空间
             {
-                isNodeScript = IsNodeScript(fileName);
+                isNodeScript = CheckNodeScript(fileName);
                 uiNode = new UiNodeInfo(uiRootName, fieldName, originName, className, fileName, isNodeScript);
             }
             //检测是否是引用Ui
@@ -447,7 +445,7 @@ public static class UiGenerator
         return uiNode;
     }
 
-    private static bool IsNodeScript(string typeName)
+    private static bool CheckNodeScript(string typeName)
     {
         var type = typeof(UiGenerator).Assembly.GetType(typeName);
         if (type == null)
@@ -501,6 +499,10 @@ public static class UiGenerator
             ClassName = className;
             NodeTypeName = nodeTypeName;
             IsNodeScript = isNodeScript;
+            if (isNodeScript)
+            {
+                GD.Print("发现 IUiNodeScript 节点: " + originName);
+            }
         }
     }
     

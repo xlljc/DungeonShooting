@@ -33,7 +33,7 @@ public static class MapProjectManager
         CustomMapPath = GameConfig.RoomTileDir;
         //CustomMapPath = "";
 #endif
-        EventManager.AddEventListener(EventEnum.OnEditorSave, OnRoomSave);
+        EventManager.AddEventListener(EventEnum.OnTileMapSave, OnRoomSave);
     }
 
     //房间保存时回调
@@ -128,6 +128,33 @@ public static class MapProjectManager
     }
 
     /// <summary>
+    /// 根据名称删除地牢组
+    /// </summary>
+    public static void DeleteGroup(string name)
+    {
+        if (GroupMap.Remove(name))
+        {
+            try
+            {
+                //删除文件
+                var path = CustomMapPath + name;
+                if (Directory.Exists(path))
+                {
+                    Directory.Delete(path, true);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+            //将组数据保存为json
+            SaveGroupMap();
+            //删除地牢组事件
+            EventManager.EmitEvent(EventEnum.OnDeleteGroupFinish, name);
+        }
+    }
+
+    /// <summary>
     /// 创建地牢房间
     /// </summary>
     public static void CreateRoom(DungeonRoomSplit roomSplit)
@@ -150,6 +177,7 @@ public static class MapProjectManager
             preinstallInfo.Name = "Preinstall1";
             preinstallInfo.Weight = 100;
             preinstallInfo.Remark = "";
+            preinstallInfo.AutoFill = true;
             preinstallInfo.InitWaveList();
             preinstallInfo.InitSpecialMark(roomSplit.RoomInfo.RoomType);
             roomSplit.Preinstall.Add(preinstallInfo);

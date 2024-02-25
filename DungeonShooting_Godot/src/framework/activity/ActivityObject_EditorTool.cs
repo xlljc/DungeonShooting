@@ -73,7 +73,7 @@ public partial class ActivityObject
             {
                 owner = parent.Owner;
             }
-            else if (Plugin.Plugin.Instance.GetEditorInterface().GetEditedSceneRoot() == this)
+            else if (EditorInterface.Singleton.GetEditedSceneRoot() == this)
             {
                 owner = this;
             }

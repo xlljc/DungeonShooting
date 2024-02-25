@@ -9,15 +9,17 @@ public class LifeBarHandler
     private RoomUI.LifeBar _bar;
     private UiGrid<RoomUI.Life, LifeIconEnum> _grid;
     private EventFactory _eventFactory;
-    private bool _refreshFlag = false;
+    private bool _refreshHpFlag = false;
+    private bool _refreshGoldFlag = false;
 
     public LifeBarHandler(RoomUI.LifeBar lifeBar)
     {
         _bar = lifeBar;
         var uiNodeLife = lifeBar.L_Life;
 
-        _grid = new UiGrid<RoomUI.Life, LifeIconEnum>(uiNodeLife, typeof(LifeCell));
-        _grid.SetColumns(20);
+        _grid = lifeBar.UiPanel.CreateUiGrid<RoomUI.Life, LifeIconEnum, LifeCell>(uiNodeLife);
+        _grid.SetAutoColumns(true);
+        _grid.SetHorizontalExpand(true);
         _grid.SetCellOffset(new Vector2I(1, 2));
     }
 
@@ -28,7 +30,9 @@ public class LifeBarHandler
         _eventFactory.AddEventListener(EventEnum.OnPlayerMaxHpChange, o => RefreshLife());
         _eventFactory.AddEventListener(EventEnum.OnPlayerShieldChange, o => RefreshLife());
         _eventFactory.AddEventListener(EventEnum.OnPlayerMaxShieldChange, o => RefreshLife());
+        _eventFactory.AddEventListener(EventEnum.OnPlayerGoldChange, o => RefreshGold());
         RefreshLife();
+        RefreshGold();
     }
 
     public void OnHide()
@@ -38,16 +42,27 @@ public class LifeBarHandler
 
     public void Process(float delta)
     {
-        if (_refreshFlag)
+        if (_refreshHpFlag)
         {
-            _refreshFlag = false;
+            _refreshHpFlag = false;
             HandlerRefreshLife();
         }
+
+        if (_refreshGoldFlag)
+        {
+            _refreshGoldFlag = false;
+            HandlerRefreshGold();
+        }
+    }
+
+    public void RefreshGold()
+    {
+        _refreshGoldFlag = true;
     }
     
     public void RefreshLife()
     {
-        _refreshFlag = true;
+        _refreshHpFlag = true;
     }
 
     private void HandlerRefreshLife()
@@ -89,6 +104,11 @@ public class LifeBarHandler
         
         //var maxHp
         _grid.SetDataList(list.ToArray());
+    }
+    
+    private void HandlerRefreshGold()
+    {
+        _bar.L_Gold.L_GoldText.Instance.Text = Player.Current.RoleState.Gold.ToString();
     }
 
 }

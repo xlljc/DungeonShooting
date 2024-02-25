@@ -70,6 +70,7 @@ public partial class Explode : Area2D, IPoolItem
             CollisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
             CircleShape = (CircleShape2D)CollisionShape.Shape;
             AnimationPlayer.AnimationFinished += OnAnimationFinish;
+            AreaEntered += OnArea2dEntered;
             BodyEntered += OnBodyEntered;
         }
 
@@ -133,34 +134,45 @@ public partial class Explode : Area2D, IPoolItem
 
     private void OnBodyEntered(Node2D node)
     {
-        var o = node.AsActivityObject();
-        if (o != null)
+        if (node is IHurt hurt)
         {
-            var temp = o.Position - Position;
-            var len = temp.Length();
-            var angle = temp.Angle();
-
-            if (len <= _hitRadius) //在伤害半径内
+            HandlerCollision(hurt);
+        }
+        else if (node is Bullet bullet) //是子弹
+        {
+            if (bullet is BoomBullet boomBullet) //如果是爆炸子弹, 则直接销毁
             {
-                if (o is Role role) //是角色
-                {
-                    role.CallDeferred(nameof(role.Hurt), BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, _harm, angle);
-                }
-                else if (o is Bullet bullet) //是子弹
-                {
-                    if (bullet is BoomBullet boomBullet) //如果是爆炸子弹, 则直接销毁
-                    {
-                        boomBullet.PlayBoom();
-                    }
-                    bullet.Destroy();
-                    return;
-                }
+                boomBullet.PlayBoom();
             }
-            
-            if (len <= _repelledRadius) //击退半径内
+            bullet.Destroy();
+        }
+    }
+    
+    private void OnArea2dEntered(Area2D other)
+    {
+        if (other is IHurt hurt)
+        {
+            HandlerCollision(hurt);
+        }
+    }
+
+    private void HandlerCollision(IHurt hurt)
+    {
+        var temp = hurt.GetPosition() - Position;
+        var len = temp.Length();
+        var angle = temp.Angle();
+
+        if (len <= _hitRadius) //在伤害半径内
+        {
+            hurt.Hurt(BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, _harm, angle);
+        }
+        
+        if (len <= _repelledRadius) //击退半径内
+        {
+            var o = hurt.GetActivityObject();
+            if (o != null)
             {
                 var repelled = (_repelledRadius - len) / _repelledRadius * _maxRepelled;
-                //o.MoveController.SetAllVelocity(Vector2.Zero);
                 o.AddRepelForce(Vector2.FromAngle(angle) * repelled);
             }
         }

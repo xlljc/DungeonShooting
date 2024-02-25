@@ -1,0 +1,10 @@
+{
+  "TileSet1": {
+	"Path": "resource/map/tileSet/TileSet1",
+	"Remark": ""
+  },
+  "TileSet2": {
+	"Path": "resource/map/tileSet/TileSet2",
+	"Remark": ""
+  }
+}

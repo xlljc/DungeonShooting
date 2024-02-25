@@ -420,7 +420,7 @@ public partial class DoorDragArea : Control
             DoorAreaInfo.End = doorAreaRange.Y;
             Debug.Log("提交修改: " + doorAreaRange);
             //派发修改数据修改事件
-            EventManager.EmitEvent(EventEnum.OnEditorDirty);
+            EventManager.EmitEvent(EventEnum.OnTileMapDirty);
         }
     }
 

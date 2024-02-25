@@ -7,16 +7,19 @@
 vertices = PackedVector2Array(1138, 78, 1168, 948, 1070, 733, 1033, 218, 79, 73, 950, 211, 975, 834, 888, 830, 62, 978, 806, 831, 883, 208, 796, 205, 288, 833, 286, 610, 807, 609, 208, 836, 212, 202, 795, 525, 300, 527, 292, 192)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 0, 3, 5), PackedInt32Array(6, 2, 1), PackedInt32Array(7, 6, 1, 8, 9), PackedInt32Array(5, 6, 7, 10), PackedInt32Array(4, 5, 10), PackedInt32Array(4, 10, 11), PackedInt32Array(12, 13, 14, 9), PackedInt32Array(12, 9, 8, 15), PackedInt32Array(15, 8, 4, 16), PackedInt32Array(11, 17, 18, 19), PackedInt32Array(4, 11, 19), PackedInt32Array(4, 19, 16)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(79, 73, 62, 978, 1168, 948, 1138, 78), PackedVector2Array(212, 202, 208, 836, 288, 833, 286, 610, 807, 609, 806, 831, 888, 830, 883, 208, 796, 205, 795, 525, 300, 527, 292, 192), PackedVector2Array(950, 211, 975, 834, 1070, 733, 1033, 218)])
+source_geometry_group_name = &"navigation_polygon_source_group"
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_oawm0"]
 vertices = PackedVector2Array(606, 123, 648, 952, 62, 978, 79, 73)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(79, 73, 62, 978, 648, 952, 606, 123)])
+source_geometry_group_name = &"navigation_polygon_source_group"
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_nrkta"]
 vertices = PackedVector2Array(379, 510, 374, 753, 172, 747, 161, 524)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
 outlines = Array[PackedVector2Array]([PackedVector2Array(161, 524, 172, 747, 374, 753, 379, 510)])
+source_geometry_group_name = &"navigation_polygon_source_group"
 
 [node name="TestNavigation2" type="Node2D"]
 script = ExtResource("1")

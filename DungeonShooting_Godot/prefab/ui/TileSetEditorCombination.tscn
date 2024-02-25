@@ -1,0 +1,305 @@
+[gd_scene load_steps=11 format=3 uid="uid://daias2tkvj20c"]
+
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorCombination/TileSetEditorCombinationPanel.cs" id="1_to1lc"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorCombination/leftBottom/TileEditArea.cs" id="2_h43yx"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorCombination/leftTop/RectBrush.cs" id="3_avikb"]
+[ext_resource type="Texture2D" uid="uid://fkg21rtph51d" path="res://resource/sprite/ui/commonIcon/Delete2.png" id="5_6jqro"]
+[ext_resource type="Texture2D" uid="uid://7l7aqhsaexoh" path="res://resource/sprite/ui/commonIcon/Play.png" id="6_75xjp"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorCombination/leftTop/TileEditCombination.cs" id="6_bb3jf"]
+[ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="6_g5ey6"]
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorCombination/right/TileSelected.cs" id="6_gql80"]
+[ext_resource type="Script" path="res://src/game/common/ui/EditorMaskBrush.cs" id="7_k0dkc"]
+[ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="7_mbnpy"]
+
+[node name="TileSetEditorCombination" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_to1lc")
+Layer = null
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VSplitContainer" type="VSplitContainer" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 69.0
+
+[node name="LeftTop" type="Panel" parent="HSplitContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 50.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/VSplitContainer/LeftTop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="LeftTopBg" type="ColorRect" parent="HSplitContainer/VSplitContainer/LeftTop/MarginContainer"]
+clip_children = 2
+z_index = 1
+layout_mode = 2
+color = Color(0.203922, 0.203922, 0.203922, 1)
+script = ExtResource("6_bb3jf")
+
+[node name="CombinationRoot" type="Control" parent="HSplitContainer/VSplitContainer/LeftTop/MarginContainer/LeftTopBg"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -0.5
+offset_right = 0.5
+offset_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(3, 3)
+mouse_filter = 2
+
+[node name="CanvasRoot" type="Node2D" parent="HSplitContainer/VSplitContainer/LeftTop/MarginContainer/LeftTopBg/CombinationRoot"]
+
+[node name="BrushRoot" type="Node2D" parent="HSplitContainer/VSplitContainer/LeftTop/MarginContainer/LeftTopBg/CombinationRoot"]
+
+[node name="RectBrush" type="Node2D" parent="HSplitContainer/VSplitContainer/LeftTop/MarginContainer/LeftTopBg/CombinationRoot"]
+script = ExtResource("3_avikb")
+
+[node name="Grid" type="ColorRect" parent="HSplitContainer/VSplitContainer/LeftTop/MarginContainer/LeftTopBg"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="FocusBtn" type="TextureButton" parent="HSplitContainer/VSplitContainer/LeftTop/MarginContainer/LeftTopBg"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -79.0
+offset_top = 14.0
+offset_right = -15.0
+offset_bottom = 78.0
+grow_horizontal = 0
+tooltip_text = "聚焦"
+texture_normal = ExtResource("7_mbnpy")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="DeleteBtn" type="TextureButton" parent="HSplitContainer/VSplitContainer/LeftTop/MarginContainer/LeftTopBg"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -151.0
+offset_top = 14.0
+offset_right = -87.0
+offset_bottom = 78.0
+grow_horizontal = 0
+tooltip_text = "删除所有图块"
+texture_normal = ExtResource("5_6jqro")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ImportBtn" type="Button" parent="HSplitContainer/VSplitContainer/LeftTop/MarginContainer/LeftTopBg"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -191.0
+offset_top = -84.0
+offset_right = -15.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "导入组合"
+icon = ExtResource("6_75xjp")
+
+[node name="LeftBottom" type="Panel" parent="HSplitContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 50.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/VSplitContainer/LeftBottom"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="LeftBottomBg" type="ColorRect" parent="HSplitContainer/VSplitContainer/LeftBottom/MarginContainer"]
+clip_children = 2
+z_index = 1
+layout_mode = 2
+color = Color(0.203922, 0.203922, 0.203922, 1)
+script = ExtResource("2_h43yx")
+
+[node name="TileTexture" type="TextureRect" parent="HSplitContainer/VSplitContainer/LeftBottom/MarginContainer/LeftBottomBg"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+mouse_filter = 2
+
+[node name="MaskRoot" type="Control" parent="HSplitContainer/VSplitContainer/LeftBottom/MarginContainer/LeftBottomBg/TileTexture"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MaskRect" type="ColorRect" parent="HSplitContainer/VSplitContainer/LeftBottom/MarginContainer/LeftBottomBg/TileTexture/MaskRoot"]
+layout_mode = 1
+offset_right = 16.0
+offset_bottom = 16.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.588235)
+
+[node name="MaskBrush" type="Control" parent="HSplitContainer/VSplitContainer/LeftBottom/MarginContainer/LeftBottomBg/TileTexture"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("7_k0dkc")
+
+[node name="Grid" type="ColorRect" parent="HSplitContainer/VSplitContainer/LeftBottom/MarginContainer/LeftBottomBg"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="FocusBtn" type="TextureButton" parent="HSplitContainer/VSplitContainer/LeftBottom/MarginContainer/LeftBottomBg"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -79.0
+offset_top = 14.0
+offset_right = -15.0
+offset_bottom = 78.0
+grow_horizontal = 0
+tooltip_text = "聚焦"
+texture_normal = ExtResource("7_mbnpy")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="Right" type="Panel" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 31.0
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Right"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="RightBg" type="VBoxContainer" parent="HSplitContainer/Right/MarginContainer"]
+layout_mode = 2
+script = ExtResource("6_gql80")
+
+[node name="Label" type="Label" parent="HSplitContainer/Right/MarginContainer/RightBg"]
+layout_mode = 2
+text = "已经导入的组合："
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/Right/MarginContainer/RightBg"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CellButton" type="Button" parent="HSplitContainer/Right/MarginContainer/RightBg/ScrollContainer"]
+custom_minimum_size = Vector2(120, 170)
+layout_mode = 2
+
+[node name="PreviewImage" type="TextureRect" parent="HSplitContainer/Right/MarginContainer/RightBg/ScrollContainer/CellButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -52.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 2
+stretch_mode = 5
+
+[node name="CellName" type="Label" parent="HSplitContainer/Right/MarginContainer/RightBg/ScrollContainer/CellButton"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -52.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 16
+text = "名称"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
+text_overrun_behavior = 2
+
+[node name="SelectTexture" type="NinePatchRect" parent="HSplitContainer/Right/MarginContainer/RightBg/ScrollContainer/CellButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_g5ey6")
+region_rect = Rect2(0, 0, 36, 36)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3

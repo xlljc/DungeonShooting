@@ -85,12 +85,13 @@ public partial class AffiliationArea : Area2D, IDestroy
             activityObject.AffiliationArea._includeItems.Remove(activityObject);
         }
         activityObject.AffiliationArea = this;
-        _includeItems.Add(activityObject);
-
-        //如果是玩家
-        if (activityObject == Player.Current)
+        if (_includeItems.Add(activityObject))
         {
-            CallDeferred(nameof(OnPlayerInsertRoom));
+            //如果是玩家
+            if (activityObject == Player.Current)
+            {
+                CallDeferred(nameof(OnPlayerInsertRoom));
+            }
         }
     }
 

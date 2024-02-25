@@ -51,7 +51,7 @@ public class AiAttackState : StateBase<Enemy, AIStateEnum>
         if (weapon != null)
         {
             _hasWeapon = true;
-            if (!weapon.TriggerIsReady())
+            if (Master.IsAttack || !weapon.TriggerIsReady())
             {
                 throw new Exception("进入 AIAdvancedStateEnum.AiAttack 状态时角色武器还无法触动扳机!");
             }
@@ -136,7 +136,7 @@ public class AiAttackState : StateBase<Enemy, AIStateEnum>
         else //攻击状态
         {
             //触发扳机
-            AttackState = weapon.AiTriggerAttackState();
+            AttackState = weapon.AiTriggerAttackState(AttackState);
 
             if (AttackState == AiAttackEnum.LockingTime) //锁定玩家状态
             {
@@ -205,6 +205,11 @@ public class AiAttackState : StateBase<Enemy, AIStateEnum>
                 else //正常移动
                 {
                     MoveHandler(delta);
+                }
+
+                if (AttackState == AiAttackEnum.AttackInterval) //触发攻击完成
+                {
+                    Master.AttackTimer = weapon.Attribute.TriggerInterval + Master.EnemyRoleState.AttackInterval;
                 }
             }
         }

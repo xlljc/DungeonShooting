@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using Godot;
 
 namespace Generator;
 
@@ -104,7 +105,7 @@ public static class UiManagerMethodsGenerator
         }
         catch (Exception e)
         {
-            Debug.LogError(e.ToString());
+            GD.PrintErr(e.ToString());
             return false;
         }
 

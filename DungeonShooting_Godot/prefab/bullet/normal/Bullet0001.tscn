@@ -1,8 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://bj4kmvt8jg1cf"]
+[gd_scene load_steps=7 format=3 uid="uid://bj4kmvt8jg1cf"]
 
 [ext_resource type="Script" path="res://src/game/activity/bullet/normal/Bullet.cs" id="1_3d3df"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_mxa72"]
-[ext_resource type="Texture2D" uid="uid://bu0b11hiuecxy" path="res://resource/sprite/bullet/normal/bullet0001.png" id="3_pm4pr"]
+[ext_resource type="SpriteFrames" uid="uid://baoxep7vami72" path="res://resource/spriteFrames/bullet/Bullet0001.tres" id="3_q4a0o"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w5w0i"]
 resource_local_to_scene = true
@@ -28,22 +28,12 @@ shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = false
 shader_parameter/grey = 0.0
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_5wvmf"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_pm4pr")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lcqb8"]
 size = Vector2(9, 4)
 
 [node name="Bullet0001" type="CharacterBody2D" node_paths=PackedStringArray("CollisionArea", "CollisionShape2D", "Particles2D", "ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 2
+collision_mask = 0
 script = ExtResource("1_3d3df")
 CollisionArea = NodePath("AnimatedSprite/CollisionArea")
 CollisionShape2D = NodePath("AnimatedSprite/CollisionArea/CollisionShape2D")
@@ -59,7 +49,7 @@ material = SubResource("ShaderMaterial_w5w0i")
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 modulate = Color(1.6, 1.6, 1.6, 1)
 material = SubResource("ShaderMaterial_qhkgc")
-sprite_frames = SubResource("SpriteFrames_5wvmf")
+sprite_frames = ExtResource("3_q4a0o")
 
 [node name="CollisionArea" type="Area2D" parent="AnimatedSprite"]
 collision_layer = 0

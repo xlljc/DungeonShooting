@@ -182,6 +182,10 @@ public static class ResourceManager
             {
                 return LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_BirthMark_png);
             }
+            else if (markInfo.SpecialMarkType == SpecialMarkType.OutPoint) //出口标记
+            {
+                return LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_BirthMark_png);
+            }
             else if (markInfo.MarkList != null) //普通标记
             {
                 if (markInfo.MarkList.Count > 1) //多个物体
@@ -191,9 +195,13 @@ public static class ResourceManager
                 else if (markInfo.MarkList.Count == 1) //单个物体
                 {
                     var id = markInfo.MarkList[0].Id;
-                    if (id != null && ExcelConfig.ActivityBase_Map.TryGetValue(id, out var activityBase))
+                    if (id != null)
                     {
-                        return LoadTexture2D(activityBase.Icon);
+                        var activityBase = PreinstallMarkManager.GetMarkConfig(id);
+                        if (activityBase != null)
+                        {
+                            return LoadTexture2D(activityBase.Icon);
+                        }
                     }
                 }
             }

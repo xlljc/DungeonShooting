@@ -21,12 +21,18 @@ public interface IBullet : ICoroutine, IPoolItem
     /// 子弹数据
     /// </summary>
     BulletData BulletData { get; }
+    
+    /// <summary>
+    /// 子弹状态
+    /// </summary>
+    BulletStateEnum State { get; }
+
     /// <summary>
     /// 初始化子弹数据
     /// </summary>
     void InitData(BulletData data, uint attackLayer);
     /// <summary>
-    /// 执行子弹回收操作
+    /// 子弹运行逻辑执行完成
     /// </summary>
-    void DoReclaim();
+    void LogicalFinish();
 }

@@ -5,7 +5,7 @@ using Godot;
 /// <summary>
 /// 可序列化的 Vector2 对象
 /// </summary>
-public class SerializeVector2
+public class SerializeVector2 : IClone<SerializeVector2>
 {
     public SerializeVector2(float x, float y)
     {
@@ -55,5 +55,11 @@ public class SerializeVector2
     public Vector2I AsVector2I()
     {
         return new Vector2I((int)X, (int)Y);
+    }
+
+
+    public SerializeVector2 Clone()
+    {
+        return new SerializeVector2(this);
     }
 }

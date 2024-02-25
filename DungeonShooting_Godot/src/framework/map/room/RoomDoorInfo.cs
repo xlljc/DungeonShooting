@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -40,6 +41,16 @@ public class RoomDoorInfo : IDestroy
     public Vector2I OriginPosition;
 
     /// <summary>
+    /// 地板所占的地板格子, 单位: 格, 使用时不需要加上 OriginPosition
+    /// </summary>
+    public HashSet<Vector2I> AisleFloorCell;
+    
+    /// <summary>
+    /// 地板所占的矩形, 单位: 格, 使用时不需要加上 OriginPosition
+    /// </summary>
+    public Rect2I AisleFloorRect;
+
+    /// <summary>
     /// 与下一道门是否有交叉点
     /// </summary>
     public bool HasCross;
@@ -48,16 +59,6 @@ public class RoomDoorInfo : IDestroy
     /// 与下一道门的交叉点, 单位: 格
     /// </summary>
     public Vector2I Cross;
-
-    /// <summary>
-    /// 占位导航网格
-    /// </summary>
-    public DoorNavigationInfo Navigation;
-
-    /// <summary>
-    /// 连接过道使用的导航网格 (暂未用到)
-    /// </summary>
-    public NavigationPolygonData AisleNavigation;
 
     /// <summary>
     /// 连接过道使用预览纹理, 用于小地图

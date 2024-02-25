@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqf2vks5ggnsp"]
+
+[ext_resource type="Script" path="res://src/game/room/Dungeon.cs" id="1_txiyv"]
+
+[sub_resource type="Environment" id="Environment_g06jj"]
+background_mode = 3
+glow_enabled = true
+glow_normalized = true
+glow_strength = 1.05
+glow_blend_mode = 1
+
+[node name="Dungeon" type="CanvasModulate"]
+script = ExtResource("1_txiyv")
+metadata/_edit_vertical_guides_ = []
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_g06jj")
+
+[node name="TileRoot" type="TileMap" parent="." groups=["navigation"]]
+y_sort_enabled = true
+format = 2
+
+[node name="NavigationRoot" type="Node2D" parent="TileRoot"]
+z_index = -2
+
+[node name="StaticSpriteRoot" type="Node2D" parent="TileRoot"]
+z_index = -2
+
+[node name="NormalLayer" type="Node2D" parent="TileRoot"]
+z_index = -1
+
+[node name="YSortLayer" type="Node2D" parent="TileRoot"]
+z_index = 2
+y_sort_enabled = true
+
+[node name="AffiliationAreaRoot" type="Node2D" parent="TileRoot"]
+
+[node name="FogMaskRoot" type="Node2D" parent="TileRoot"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dbrig6dq441wo"]
+[gd_scene load_steps=5 format=3 uid="uid://dbrig6dq441wo"]
 
 [ext_resource type="PackedScene" uid="uid://cyrcv2jdgr8cf" path="res://prefab/role/template/RoleTemplate.tscn" id="1_5po38"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_x8agd"]
@@ -15,12 +15,19 @@ shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
 shader_parameter/grey = 0.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_wu0xv"]
+radius = 8.06226
+
 [node name="EnemyTemplate" instance=ExtResource("1_5po38")]
 collision_layer = 16
 collision_mask = 25
+floor_stop_on_slope = false
 
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource("ShaderMaterial_k8mt5")
+
+[node name="InteractiveCollision" parent="InteractiveArea" index="0"]
+shape = SubResource("CircleShape2D_wu0xv")
 
 [node name="ViewRay" type="RayCast2D" parent="." index="6"]
 position = Vector2(0, -8)
@@ -29,7 +36,6 @@ enabled = false
 [node name="FirePoint" type="Marker2D" parent="." index="8"]
 
 [node name="NavigationPoint" type="Marker2D" parent="." index="9"]
-position = Vector2(0, -5)
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="NavigationPoint" index="0"]
 path_desired_distance = 3.0

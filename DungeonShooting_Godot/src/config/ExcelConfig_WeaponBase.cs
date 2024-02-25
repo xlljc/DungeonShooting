@@ -70,6 +70,18 @@ public static partial class ExcelConfig
         public int StandbyAmmoCapacity;
 
         /// <summary>
+        /// 换弹是否显示换弹进度
+        /// </summary>
+        [JsonInclude]
+        public bool ShowReloadBar;
+
+        /// <summary>
+        /// 弹夹打空是否自动换弹
+        /// </summary>
+        [JsonInclude]
+        public bool AutoReload;
+
+        /// <summary>
         /// 装弹时间 (单位: 秒)
         /// </summary>
         [JsonInclude]
@@ -259,7 +271,7 @@ public static partial class ExcelConfig
         public float UpliftAngleRestore;
 
         /// <summary>
-        /// 开火特效
+        /// 开火特效, 该特效脚本必须实现IEffect接口
         /// </summary>
         [JsonInclude]
         public string FireEffect;
@@ -281,16 +293,16 @@ public static partial class ExcelConfig
         public bool ReloadThrowShell;
 
         /// <summary>
+        /// 抛壳数量
+        /// </summary>
+        [JsonInclude]
+        public int ThrowShellCount;
+
+        /// <summary>
         /// 投抛弹壳的延时时间
         /// </summary>
         [JsonInclude]
         public float ThrowShellDelayTime;
-
-        /// <summary>
-        /// 投抛状态下物体碰撞器大小
-        /// </summary>
-        [JsonInclude]
-        public SerializeVector2 ThrowCollisionSize;
 
         /// <summary>
         /// 是否可以触发近战攻击
@@ -368,13 +380,6 @@ public static partial class ExcelConfig
         public Dictionary<string, Sound> OtherSoundMap;
 
         /// <summary>
-        /// Ai属性 <br/>
-        /// Ai 使用该武器时的武器数据, 设置该字段, 可让同一把武器在敌人和玩家手上有不同属性 <br/>
-        /// 如果不填则Ai和玩家使用同一种属性
-        /// </summary>
-        public WeaponBase AiUseAttribute;
-
-        /// <summary>
         /// Ai使用该武器开火时的一些额外配置属性 <br/>
         /// 玩家使用的武器不需要填写该字段
         /// </summary>
@@ -396,6 +401,8 @@ public static partial class ExcelConfig
             inst.AmmoCapacity = AmmoCapacity;
             inst.MaxAmmoCapacity = MaxAmmoCapacity;
             inst.StandbyAmmoCapacity = StandbyAmmoCapacity;
+            inst.ShowReloadBar = ShowReloadBar;
+            inst.AutoReload = AutoReload;
             inst.ReloadTime = ReloadTime;
             inst.AloneReload = AloneReload;
             inst.AloneReloadCount = AloneReloadCount;
@@ -431,8 +438,8 @@ public static partial class ExcelConfig
             inst.Bullet = Bullet;
             inst.Shell = Shell;
             inst.ReloadThrowShell = ReloadThrowShell;
+            inst.ThrowShellCount = ThrowShellCount;
             inst.ThrowShellDelayTime = ThrowShellDelayTime;
-            inst.ThrowCollisionSize = ThrowCollisionSize;
             inst.CanMeleeAttack = CanMeleeAttack;
             inst.MeleeAttackHarmRange = MeleeAttackHarmRange;
             inst.MeleeAttackRepelRange = MeleeAttackRepelRange;
@@ -446,7 +453,6 @@ public static partial class ExcelConfig
             inst.BeLoadedSound = BeLoadedSound;
             inst.BeLoadedSoundDelayTime = BeLoadedSoundDelayTime;
             inst.OtherSoundMap = OtherSoundMap;
-            inst.AiUseAttribute = AiUseAttribute;
             inst.AiAttackAttr = AiAttackAttr;
             return inst;
         }
@@ -479,9 +485,6 @@ public static partial class ExcelConfig
 
         [JsonInclude]
         public Dictionary<string, string> __OtherSoundMap;
-
-        [JsonInclude]
-        public string __AiUseAttribute;
 
         [JsonInclude]
         public string __AiAttackAttr;

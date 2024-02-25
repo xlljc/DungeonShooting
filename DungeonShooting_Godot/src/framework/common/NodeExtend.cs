@@ -8,39 +8,43 @@ using Godot;
 public static class NodeExtend
 {
     /// <summary>
-    /// 尝试将一个 Node2d 节点转换成一个 ActivityObject 对象, 如果转换失败, 则返回 null
+    /// 获取 IHurt 绑定的 ActivityObject, 没有则返回 null
     /// </summary>
-    public static ActivityObject AsActivityObject(this Node2D node2d)
+    /// <param name="hurt"></param>
+    /// <returns></returns>
+    public static ActivityObject GetActivityObject(this IHurt hurt)
     {
-        if (node2d is ActivityObject p)
+        if (hurt is ActivityObject activityObject)
         {
-            return p;
+            return activityObject;
         }
-        var parent = node2d.GetParent();
-        if (parent != null && parent is ActivityObject p2)
+
+        if (hurt is HurtArea hurtArea)
         {
-            return p2;
+            return hurtArea.ActivityObject;
         }
-        return null;
-    }
-    
-    /// <summary>
-    /// 尝试将一个 Node2d 节点转换成一个 ActivityObject 对象, 如果转换失败, 则返回 null
-    /// </summary>
-    public static T AsActivityObject<T>(this Node2D node2d) where T : ActivityObject
-    {
-        if (node2d is T p)
-        {
-            return p;
-        }
-        var parent = node2d.GetParent();
-        if (parent != null && parent is T p2)
-        {
-            return p2;
-        }
+
         return null;
     }
 
+    /// <summary>
+    /// 获取 IHurt 节点的坐标
+    /// </summary>
+    public static Vector2 GetPosition(this IHurt hurt)
+    {
+        if (hurt is ActivityObject role)
+        {
+            return role.GetCenterPosition();
+        }
+
+        if (hurt is Node2D node2D)
+        {
+            return node2D.GlobalPosition;
+        }
+        
+        return Vector2.Zero;
+    }
+    
     /// <summary>
     /// 将节点插入的房间物体根节点
     /// </summary>
@@ -48,7 +52,7 @@ public static class NodeExtend
     /// <param name="layer">放入的层</param>
     public static void AddToActivityRoot(this Node2D node, RoomLayerEnum layer)
     {
-        GameApplication.Instance.World.GetRoomLayer(layer).AddChild(node);
+        GameApplication.Instance.DungeonManager.CurrWorld.GetRoomLayer(layer).AddChild(node);
     }
     
     /// <summary>
@@ -58,7 +62,7 @@ public static class NodeExtend
     /// <param name="layer">放入的层</param>
     public static void AddToActivityRootDeferred(this Node2D node, RoomLayerEnum layer)
     {
-        GameApplication.Instance.World.GetRoomLayer(layer).CallDeferred(Node.MethodName.AddChild, node);
+        World.Current.GetRoomLayer(layer).CallDeferred(Node.MethodName.AddChild, node);
     }
 
     /// <summary>
@@ -82,6 +86,21 @@ public static class NodeExtend
     public static bool GetHorizontalExpand(this Control control)
     {
         return (control.SizeFlagsHorizontal & Control.SizeFlags.Expand) != 0;
+    }
+    
+    /// <summary>
+    /// 返回鼠标是否在Ui矩形内
+    /// </summary>
+    public static bool IsMouseInRect(this Control control, float border = 0)
+    {
+        var pos = control.GetLocalMousePosition();
+        if (pos.X < border || pos.Y < border)
+        {
+            return false;
+        }
+
+        var size = control.Size;
+        return pos.X <= size.X - border && pos.Y <= size.Y - border;
     }
 
     /// <summary>
@@ -188,5 +207,108 @@ public static class NodeExtend
     {
         yield return new WaitForSeconds(delayTime);
         cb(arg1,arg2, arg3);
+    }
+
+    /// <summary>
+    /// 给Ui节点添加拖拽事件
+    /// </summary>
+    /// <param name="control">需要绑定事件的节点对象</param>
+    /// <param name="callback">拖拽回调函数</param>
+    public static UiEventBinder AddDragListener(this Control control, Action<DragState, Vector2> callback)
+    {
+        return AddDragListener(control, DragButtonEnum.Left, callback);
+    }
+
+    /// <summary>
+    /// 给Ui节点添加拖拽事件
+    /// </summary>
+    /// <param name="control">需要绑定拖拽的节点对象</param>
+    /// <param name="triggerButton">可触发拖拽的按钮</param>
+    /// <param name="callback">拖拽回调函数</param>
+    public static UiEventBinder AddDragListener(this Control control, DragButtonEnum triggerButton, Action<DragState, Vector2> callback)
+    {
+        var dragFlag = false;
+        Control.GuiInputEventHandler handler = (ev) =>
+        {
+            if (!dragFlag) //未开始拖拽
+            {
+                if (ev is InputEventMouseButton mouseButton && mouseButton.Pressed &&
+                    CheckDragButton(mouseButton.ButtonIndex, triggerButton)) //按下按钮
+                {
+                    control.AcceptEvent();
+                    dragFlag = true;
+                    callback(DragState.DragStart, Vector2.Zero);
+                }
+            }
+            else //拖拽中
+            {
+                if (ev is InputEventMouseButton mouseButton)
+                {
+                    if (!mouseButton.Pressed && CheckDragButton(mouseButton.ButtonIndex, triggerButton)) //松开按钮
+                    {
+                        control.AcceptEvent();
+                        dragFlag = false;
+                        callback(DragState.DragEnd, Vector2.Zero);
+                    }
+                } else if (ev is InputEventMouseMotion mouseMotion) //拖拽中
+                {
+                    control.AcceptEvent();
+                    var delta = mouseMotion.Relative;
+                    if (delta != Vector2.Zero)
+                    {
+                        callback(DragState.DragMove, mouseMotion.Relative);
+                    }
+                }
+            }
+        };
+        control.GuiInput += handler;
+        return new UiEventBinder(control, handler);
+    }
+
+    private static bool CheckDragButton(MouseButton button, DragButtonEnum triggerButton)
+    {
+        DragButtonEnum buttonEnum;
+        switch (button)
+        {
+            case MouseButton.Left:
+                buttonEnum = DragButtonEnum.Left;
+                break;
+            case MouseButton.Right:
+                buttonEnum = DragButtonEnum.Right;
+                break;
+            case MouseButton.Middle:
+                buttonEnum = DragButtonEnum.Middle;
+                break;
+            default: return false;
+        }
+
+        return (buttonEnum & triggerButton) != 0;
+    }
+
+    /// <summary>
+    /// 给Ui节点添加鼠标滚轮事件
+    /// </summary>
+    /// <param name="control">需要绑定事件的节点对象</param>
+    /// <param name="callback">滚轮回调, 参数 -1 表示滚轮向下滚动, 1 表示滚轮向上滚动</param>
+    public static UiEventBinder AddMouseWheelListener(this Control control, Action<int> callback)
+    {
+        Control.GuiInputEventHandler handler = (ev) =>
+        {
+            if (ev is InputEventMouseButton mouseButton)
+            {
+                if (mouseButton.ButtonIndex == MouseButton.WheelDown)
+                {
+                    control.AcceptEvent();
+                    callback(-1);
+                }
+                else if (mouseButton.ButtonIndex == MouseButton.WheelUp)
+                {
+                    control.AcceptEvent();
+                    callback(1);
+                }
+            }
+        };
+        control.GuiInput += handler;
+        return new UiEventBinder(control, handler);
     }
 }

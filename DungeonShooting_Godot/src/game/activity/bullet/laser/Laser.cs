@@ -37,6 +37,7 @@ public partial class Laser : Area2D, IBullet
     }
 
     public BulletData BulletData { get; private set; }
+    public BulletStateEnum State { get; protected set; } = BulletStateEnum.Normal;
 
     public bool IsDestroyed { get; private set; }
     
@@ -45,7 +46,6 @@ public partial class Laser : Area2D, IBullet
     //开启的协程
     private List<CoroutineData> _coroutineList;
     private float _pixelScale;
-    private float _speed = 2000;
     private Tween _tween;
     private bool _init = false;
 
@@ -53,7 +53,7 @@ public partial class Laser : Area2D, IBullet
     {
         InitData(data, attackLayer, LaserDefaultWidth);
     }
-    
+
     public void InitData(BulletData data, uint attackLayer, float width)
     {
         if (!_init)
@@ -65,10 +65,12 @@ public partial class Laser : Area2D, IBullet
             _pixelScale = 1f / LineSprite.Texture.GetHeight();
 
             AreaEntered += OnArea2dEntered;
+            BodyEntered += OnBodyEntered;
             
             _init = true;
         }
-        
+
+        ZIndex = 1;
         BulletData = data;
         AttackLayer = attackLayer;
         
@@ -77,7 +79,7 @@ public partial class Laser : Area2D, IBullet
 
         //计算射线最大距离, 也就是撞到墙壁的距离
         var targetPosition = data.Position + Vector2.FromAngle(data.Rotation) * data.MaxDistance;
-        var parameters = PhysicsRayQueryParameters2D.Create(data.Position, targetPosition, PhysicsLayer.Wall);
+        var parameters = PhysicsRayQueryParameters2D.Create(data.Position + new Vector2(0, data.Altitude), targetPosition + new Vector2(0, data.Altitude), PhysicsLayer.Wall);
         var result = GetWorld2D().DirectSpaceState.IntersectRay(parameters);
         float distance;
         var doRebound = false; //是否需要执行反弹
@@ -86,7 +88,7 @@ public partial class Laser : Area2D, IBullet
         if (result != null && result.TryGetValue("position", out var point)) //撞到墙壁
         {
             doRebound = true;
-            reboundPosition = (Vector2)point;
+            reboundPosition = (Vector2)point - new Vector2(0, data.Altitude);
             reboundNormal = (Vector2)result["normal"];
             distance = Position.DistanceTo(reboundPosition.Value);
         }
@@ -111,7 +113,7 @@ public partial class Laser : Area2D, IBullet
         }
         
         //激光飞行时间
-        var time = distance / _speed;
+        var time = distance / data.FlySpeed;
 
         _tween = CreateTween();
         _tween.SetParallel();
@@ -136,8 +138,9 @@ public partial class Laser : Area2D, IBullet
         _tween.Chain();
         _tween.TweenCallback(Callable.From(() =>
         {
+            State = BulletStateEnum.MaxDistance;
             _tween = null;
-            DoReclaim();
+            LogicalFinish();
         }));
         _tween.Play();
         
@@ -192,20 +195,36 @@ public partial class Laser : Area2D, IBullet
             }
         }
     }
+
+    private void OnBodyEntered(Node2D body)
+    {
+        if (body is IHurt hurt)
+        {
+            HandlerCollision(hurt);
+        }
+    }
     
     private void OnArea2dEntered(Area2D other)
     {
-        var role = other.AsActivityObject<Role>();
-        if (role != null)
+        if (other is IHurt hurt)
         {
-            //击退
-            if (BulletData.Repel != 0)
-            {
-                role.AddRepelForce(Vector2.FromAngle(Rotation) * BulletData.Repel);
-            }
-            //造成伤害
-            role.CallDeferred(nameof(Role.Hurt), BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
+            HandlerCollision(hurt);
         }
+    }
+
+    private void HandlerCollision(IHurt hurt)
+    {
+        if (BulletData.Repel != 0)
+        {
+            var o = hurt.GetActivityObject();
+            if (o != null && o is not Player) //目标不是玩家才会触发击退
+            {
+                o.AddRepelForce(Vector2.FromAngle(Rotation) * BulletData.Repel);
+            }
+        }
+
+        //造成伤害
+        hurt.Hurt(BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
     }
 
     public long StartCoroutine(IEnumerator able)
@@ -228,13 +247,14 @@ public partial class Laser : Area2D, IBullet
         ProxyCoroutineHandler.ProxyStopAllCoroutine(ref _coroutineList);
     }
     
-    public void DoReclaim()
+    public void LogicalFinish()
     {
         ObjectPool.Reclaim(this);
     }
     
     public virtual void OnReclaim()
     {
+        State = BulletStateEnum.Normal;
         if (Particles2D != null)
         {
             foreach (var particles2D in Particles2D)

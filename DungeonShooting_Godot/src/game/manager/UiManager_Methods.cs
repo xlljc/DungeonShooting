@@ -7,27 +7,39 @@ public static partial class UiManager
     {
         public const string BottomTips = "BottomTips";
         public const string Debugger = "Debugger";
+        public const string EditorColorPicker = "EditorColorPicker";
+        public const string EditorDungeonGroup = "EditorDungeonGroup";
+        public const string EditorForm = "EditorForm";
+        public const string EditorImportCombination = "EditorImportCombination";
+        public const string EditorInfo = "EditorInfo";
+        public const string EditorInput = "EditorInput";
+        public const string EditorManager = "EditorManager";
+        public const string EditorTileImage = "EditorTileImage";
         public const string EditorTips = "EditorTips";
         public const string EditorTools = "EditorTools";
         public const string EditorWindow = "EditorWindow";
         public const string Loading = "Loading";
         public const string Main = "Main";
         public const string MapEditor = "MapEditor";
-        public const string MapEditorCreateGroup = "MapEditorCreateGroup";
         public const string MapEditorCreateMark = "MapEditorCreateMark";
         public const string MapEditorCreatePreinstall = "MapEditorCreatePreinstall";
         public const string MapEditorCreateRoom = "MapEditorCreateRoom";
         public const string MapEditorMapLayer = "MapEditorMapLayer";
         public const string MapEditorMapMark = "MapEditorMapMark";
+        public const string MapEditorMapTile = "MapEditorMapTile";
         public const string MapEditorProject = "MapEditorProject";
         public const string MapEditorSelectObject = "MapEditorSelectObject";
-        public const string MapEditorTileSet = "MapEditorTileSet";
         public const string MapEditorTools = "MapEditorTools";
         public const string PauseMenu = "PauseMenu";
         public const string RoomMap = "RoomMap";
         public const string RoomUI = "RoomUI";
         public const string Setting = "Setting";
         public const string Settlement = "Settlement";
+        public const string TileSetEditor = "TileSetEditor";
+        public const string TileSetEditorCombination = "TileSetEditorCombination";
+        public const string TileSetEditorImport = "TileSetEditorImport";
+        public const string TileSetEditorProject = "TileSetEditorProject";
+        public const string TileSetEditorTerrain = "TileSetEditorTerrain";
     }
 
     /// <summary>
@@ -124,6 +136,390 @@ public static partial class UiManager
     public static UI.Debugger.DebuggerPanel[] Get_Debugger_Instance()
     {
         return GetUiInstance<UI.Debugger.DebuggerPanel>(nameof(UI.Debugger.Debugger));
+    }
+
+    /// <summary>
+    /// 创建 EditorColorPicker, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorColorPicker.EditorColorPickerPanel Create_EditorColorPicker()
+    {
+        return CreateUi<UI.EditorColorPicker.EditorColorPickerPanel>(UiNames.EditorColorPicker);
+    }
+
+    /// <summary>
+    /// 打开 EditorColorPicker, 并返回UI实例
+    /// </summary>
+    public static UI.EditorColorPicker.EditorColorPickerPanel Open_EditorColorPicker()
+    {
+        return OpenUi<UI.EditorColorPicker.EditorColorPickerPanel>(UiNames.EditorColorPicker);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorColorPicker 的所有实例
+    /// </summary>
+    public static void Hide_EditorColorPicker()
+    {
+        var uiInstance = Get_EditorColorPicker_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorColorPicker 的所有实例
+    /// </summary>
+    public static void Destroy_EditorColorPicker()
+    {
+        var uiInstance = Get_EditorColorPicker_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorColorPicker 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorColorPicker.EditorColorPickerPanel[] Get_EditorColorPicker_Instance()
+    {
+        return GetUiInstance<UI.EditorColorPicker.EditorColorPickerPanel>(nameof(UI.EditorColorPicker.EditorColorPicker));
+    }
+
+    /// <summary>
+    /// 创建 EditorDungeonGroup, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorDungeonGroup.EditorDungeonGroupPanel Create_EditorDungeonGroup()
+    {
+        return CreateUi<UI.EditorDungeonGroup.EditorDungeonGroupPanel>(UiNames.EditorDungeonGroup);
+    }
+
+    /// <summary>
+    /// 打开 EditorDungeonGroup, 并返回UI实例
+    /// </summary>
+    public static UI.EditorDungeonGroup.EditorDungeonGroupPanel Open_EditorDungeonGroup()
+    {
+        return OpenUi<UI.EditorDungeonGroup.EditorDungeonGroupPanel>(UiNames.EditorDungeonGroup);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorDungeonGroup 的所有实例
+    /// </summary>
+    public static void Hide_EditorDungeonGroup()
+    {
+        var uiInstance = Get_EditorDungeonGroup_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorDungeonGroup 的所有实例
+    /// </summary>
+    public static void Destroy_EditorDungeonGroup()
+    {
+        var uiInstance = Get_EditorDungeonGroup_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorDungeonGroup 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorDungeonGroup.EditorDungeonGroupPanel[] Get_EditorDungeonGroup_Instance()
+    {
+        return GetUiInstance<UI.EditorDungeonGroup.EditorDungeonGroupPanel>(nameof(UI.EditorDungeonGroup.EditorDungeonGroup));
+    }
+
+    /// <summary>
+    /// 创建 EditorForm, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorForm.EditorFormPanel Create_EditorForm()
+    {
+        return CreateUi<UI.EditorForm.EditorFormPanel>(UiNames.EditorForm);
+    }
+
+    /// <summary>
+    /// 打开 EditorForm, 并返回UI实例
+    /// </summary>
+    public static UI.EditorForm.EditorFormPanel Open_EditorForm()
+    {
+        return OpenUi<UI.EditorForm.EditorFormPanel>(UiNames.EditorForm);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorForm 的所有实例
+    /// </summary>
+    public static void Hide_EditorForm()
+    {
+        var uiInstance = Get_EditorForm_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorForm 的所有实例
+    /// </summary>
+    public static void Destroy_EditorForm()
+    {
+        var uiInstance = Get_EditorForm_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorForm 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorForm.EditorFormPanel[] Get_EditorForm_Instance()
+    {
+        return GetUiInstance<UI.EditorForm.EditorFormPanel>(nameof(UI.EditorForm.EditorForm));
+    }
+
+    /// <summary>
+    /// 创建 EditorImportCombination, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorImportCombination.EditorImportCombinationPanel Create_EditorImportCombination()
+    {
+        return CreateUi<UI.EditorImportCombination.EditorImportCombinationPanel>(UiNames.EditorImportCombination);
+    }
+
+    /// <summary>
+    /// 打开 EditorImportCombination, 并返回UI实例
+    /// </summary>
+    public static UI.EditorImportCombination.EditorImportCombinationPanel Open_EditorImportCombination()
+    {
+        return OpenUi<UI.EditorImportCombination.EditorImportCombinationPanel>(UiNames.EditorImportCombination);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorImportCombination 的所有实例
+    /// </summary>
+    public static void Hide_EditorImportCombination()
+    {
+        var uiInstance = Get_EditorImportCombination_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorImportCombination 的所有实例
+    /// </summary>
+    public static void Destroy_EditorImportCombination()
+    {
+        var uiInstance = Get_EditorImportCombination_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorImportCombination 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorImportCombination.EditorImportCombinationPanel[] Get_EditorImportCombination_Instance()
+    {
+        return GetUiInstance<UI.EditorImportCombination.EditorImportCombinationPanel>(nameof(UI.EditorImportCombination.EditorImportCombination));
+    }
+
+    /// <summary>
+    /// 创建 EditorInfo, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorInfo.EditorInfoPanel Create_EditorInfo()
+    {
+        return CreateUi<UI.EditorInfo.EditorInfoPanel>(UiNames.EditorInfo);
+    }
+
+    /// <summary>
+    /// 打开 EditorInfo, 并返回UI实例
+    /// </summary>
+    public static UI.EditorInfo.EditorInfoPanel Open_EditorInfo()
+    {
+        return OpenUi<UI.EditorInfo.EditorInfoPanel>(UiNames.EditorInfo);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorInfo 的所有实例
+    /// </summary>
+    public static void Hide_EditorInfo()
+    {
+        var uiInstance = Get_EditorInfo_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorInfo 的所有实例
+    /// </summary>
+    public static void Destroy_EditorInfo()
+    {
+        var uiInstance = Get_EditorInfo_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorInfo 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorInfo.EditorInfoPanel[] Get_EditorInfo_Instance()
+    {
+        return GetUiInstance<UI.EditorInfo.EditorInfoPanel>(nameof(UI.EditorInfo.EditorInfo));
+    }
+
+    /// <summary>
+    /// 创建 EditorInput, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorInput.EditorInputPanel Create_EditorInput()
+    {
+        return CreateUi<UI.EditorInput.EditorInputPanel>(UiNames.EditorInput);
+    }
+
+    /// <summary>
+    /// 打开 EditorInput, 并返回UI实例
+    /// </summary>
+    public static UI.EditorInput.EditorInputPanel Open_EditorInput()
+    {
+        return OpenUi<UI.EditorInput.EditorInputPanel>(UiNames.EditorInput);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorInput 的所有实例
+    /// </summary>
+    public static void Hide_EditorInput()
+    {
+        var uiInstance = Get_EditorInput_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorInput 的所有实例
+    /// </summary>
+    public static void Destroy_EditorInput()
+    {
+        var uiInstance = Get_EditorInput_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorInput 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorInput.EditorInputPanel[] Get_EditorInput_Instance()
+    {
+        return GetUiInstance<UI.EditorInput.EditorInputPanel>(nameof(UI.EditorInput.EditorInput));
+    }
+
+    /// <summary>
+    /// 创建 EditorManager, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorManager.EditorManagerPanel Create_EditorManager()
+    {
+        return CreateUi<UI.EditorManager.EditorManagerPanel>(UiNames.EditorManager);
+    }
+
+    /// <summary>
+    /// 打开 EditorManager, 并返回UI实例
+    /// </summary>
+    public static UI.EditorManager.EditorManagerPanel Open_EditorManager()
+    {
+        return OpenUi<UI.EditorManager.EditorManagerPanel>(UiNames.EditorManager);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorManager 的所有实例
+    /// </summary>
+    public static void Hide_EditorManager()
+    {
+        var uiInstance = Get_EditorManager_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorManager 的所有实例
+    /// </summary>
+    public static void Destroy_EditorManager()
+    {
+        var uiInstance = Get_EditorManager_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorManager 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorManager.EditorManagerPanel[] Get_EditorManager_Instance()
+    {
+        return GetUiInstance<UI.EditorManager.EditorManagerPanel>(nameof(UI.EditorManager.EditorManager));
+    }
+
+    /// <summary>
+    /// 创建 EditorTileImage, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.EditorTileImage.EditorTileImagePanel Create_EditorTileImage()
+    {
+        return CreateUi<UI.EditorTileImage.EditorTileImagePanel>(UiNames.EditorTileImage);
+    }
+
+    /// <summary>
+    /// 打开 EditorTileImage, 并返回UI实例
+    /// </summary>
+    public static UI.EditorTileImage.EditorTileImagePanel Open_EditorTileImage()
+    {
+        return OpenUi<UI.EditorTileImage.EditorTileImagePanel>(UiNames.EditorTileImage);
+    }
+
+    /// <summary>
+    /// 隐藏 EditorTileImage 的所有实例
+    /// </summary>
+    public static void Hide_EditorTileImage()
+    {
+        var uiInstance = Get_EditorTileImage_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 EditorTileImage 的所有实例
+    /// </summary>
+    public static void Destroy_EditorTileImage()
+    {
+        var uiInstance = Get_EditorTileImage_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 EditorTileImage 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.EditorTileImage.EditorTileImagePanel[] Get_EditorTileImage_Instance()
+    {
+        return GetUiInstance<UI.EditorTileImage.EditorTileImagePanel>(nameof(UI.EditorTileImage.EditorTileImage));
     }
 
     /// <summary>
@@ -415,54 +811,6 @@ public static partial class UiManager
     }
 
     /// <summary>
-    /// 创建 MapEditorCreateGroup, 并返回UI实例, 该函数不会打开 Ui
-    /// </summary>
-    public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel Create_MapEditorCreateGroup()
-    {
-        return CreateUi<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(UiNames.MapEditorCreateGroup);
-    }
-
-    /// <summary>
-    /// 打开 MapEditorCreateGroup, 并返回UI实例
-    /// </summary>
-    public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel Open_MapEditorCreateGroup()
-    {
-        return OpenUi<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(UiNames.MapEditorCreateGroup);
-    }
-
-    /// <summary>
-    /// 隐藏 MapEditorCreateGroup 的所有实例
-    /// </summary>
-    public static void Hide_MapEditorCreateGroup()
-    {
-        var uiInstance = Get_MapEditorCreateGroup_Instance();
-        foreach (var uiPanel in uiInstance)
-        {
-            uiPanel.HideUi();
-        }
-    }
-
-    /// <summary>
-    /// 销毁 MapEditorCreateGroup 的所有实例
-    /// </summary>
-    public static void Destroy_MapEditorCreateGroup()
-    {
-        var uiInstance = Get_MapEditorCreateGroup_Instance();
-        foreach (var uiPanel in uiInstance)
-        {
-            uiPanel.Destroy();
-        }
-    }
-
-    /// <summary>
-    /// 获取所有 MapEditorCreateGroup 的实例, 如果没有实例, 则返回一个空数组
-    /// </summary>
-    public static UI.MapEditorCreateGroup.MapEditorCreateGroupPanel[] Get_MapEditorCreateGroup_Instance()
-    {
-        return GetUiInstance<UI.MapEditorCreateGroup.MapEditorCreateGroupPanel>(nameof(UI.MapEditorCreateGroup.MapEditorCreateGroup));
-    }
-
-    /// <summary>
     /// 创建 MapEditorCreateMark, 并返回UI实例, 该函数不会打开 Ui
     /// </summary>
     public static UI.MapEditorCreateMark.MapEditorCreateMarkPanel Create_MapEditorCreateMark()
@@ -703,6 +1051,54 @@ public static partial class UiManager
     }
 
     /// <summary>
+    /// 创建 MapEditorMapTile, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.MapEditorMapTile.MapEditorMapTilePanel Create_MapEditorMapTile()
+    {
+        return CreateUi<UI.MapEditorMapTile.MapEditorMapTilePanel>(UiNames.MapEditorMapTile);
+    }
+
+    /// <summary>
+    /// 打开 MapEditorMapTile, 并返回UI实例
+    /// </summary>
+    public static UI.MapEditorMapTile.MapEditorMapTilePanel Open_MapEditorMapTile()
+    {
+        return OpenUi<UI.MapEditorMapTile.MapEditorMapTilePanel>(UiNames.MapEditorMapTile);
+    }
+
+    /// <summary>
+    /// 隐藏 MapEditorMapTile 的所有实例
+    /// </summary>
+    public static void Hide_MapEditorMapTile()
+    {
+        var uiInstance = Get_MapEditorMapTile_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 MapEditorMapTile 的所有实例
+    /// </summary>
+    public static void Destroy_MapEditorMapTile()
+    {
+        var uiInstance = Get_MapEditorMapTile_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 MapEditorMapTile 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.MapEditorMapTile.MapEditorMapTilePanel[] Get_MapEditorMapTile_Instance()
+    {
+        return GetUiInstance<UI.MapEditorMapTile.MapEditorMapTilePanel>(nameof(UI.MapEditorMapTile.MapEditorMapTile));
+    }
+
+    /// <summary>
     /// 创建 MapEditorProject, 并返回UI实例, 该函数不会打开 Ui
     /// </summary>
     public static UI.MapEditorProject.MapEditorProjectPanel Create_MapEditorProject()
@@ -796,54 +1192,6 @@ public static partial class UiManager
     public static UI.MapEditorSelectObject.MapEditorSelectObjectPanel[] Get_MapEditorSelectObject_Instance()
     {
         return GetUiInstance<UI.MapEditorSelectObject.MapEditorSelectObjectPanel>(nameof(UI.MapEditorSelectObject.MapEditorSelectObject));
-    }
-
-    /// <summary>
-    /// 创建 MapEditorTileSet, 并返回UI实例, 该函数不会打开 Ui
-    /// </summary>
-    public static UI.MapEditorTileSet.MapEditorTileSetPanel Create_MapEditorTileSet()
-    {
-        return CreateUi<UI.MapEditorTileSet.MapEditorTileSetPanel>(UiNames.MapEditorTileSet);
-    }
-
-    /// <summary>
-    /// 打开 MapEditorTileSet, 并返回UI实例
-    /// </summary>
-    public static UI.MapEditorTileSet.MapEditorTileSetPanel Open_MapEditorTileSet()
-    {
-        return OpenUi<UI.MapEditorTileSet.MapEditorTileSetPanel>(UiNames.MapEditorTileSet);
-    }
-
-    /// <summary>
-    /// 隐藏 MapEditorTileSet 的所有实例
-    /// </summary>
-    public static void Hide_MapEditorTileSet()
-    {
-        var uiInstance = Get_MapEditorTileSet_Instance();
-        foreach (var uiPanel in uiInstance)
-        {
-            uiPanel.HideUi();
-        }
-    }
-
-    /// <summary>
-    /// 销毁 MapEditorTileSet 的所有实例
-    /// </summary>
-    public static void Destroy_MapEditorTileSet()
-    {
-        var uiInstance = Get_MapEditorTileSet_Instance();
-        foreach (var uiPanel in uiInstance)
-        {
-            uiPanel.Destroy();
-        }
-    }
-
-    /// <summary>
-    /// 获取所有 MapEditorTileSet 的实例, 如果没有实例, 则返回一个空数组
-    /// </summary>
-    public static UI.MapEditorTileSet.MapEditorTileSetPanel[] Get_MapEditorTileSet_Instance()
-    {
-        return GetUiInstance<UI.MapEditorTileSet.MapEditorTileSetPanel>(nameof(UI.MapEditorTileSet.MapEditorTileSet));
     }
 
     /// <summary>
@@ -1132,6 +1480,246 @@ public static partial class UiManager
     public static UI.Settlement.SettlementPanel[] Get_Settlement_Instance()
     {
         return GetUiInstance<UI.Settlement.SettlementPanel>(nameof(UI.Settlement.Settlement));
+    }
+
+    /// <summary>
+    /// 创建 TileSetEditor, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.TileSetEditor.TileSetEditorPanel Create_TileSetEditor()
+    {
+        return CreateUi<UI.TileSetEditor.TileSetEditorPanel>(UiNames.TileSetEditor);
+    }
+
+    /// <summary>
+    /// 打开 TileSetEditor, 并返回UI实例
+    /// </summary>
+    public static UI.TileSetEditor.TileSetEditorPanel Open_TileSetEditor()
+    {
+        return OpenUi<UI.TileSetEditor.TileSetEditorPanel>(UiNames.TileSetEditor);
+    }
+
+    /// <summary>
+    /// 隐藏 TileSetEditor 的所有实例
+    /// </summary>
+    public static void Hide_TileSetEditor()
+    {
+        var uiInstance = Get_TileSetEditor_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 TileSetEditor 的所有实例
+    /// </summary>
+    public static void Destroy_TileSetEditor()
+    {
+        var uiInstance = Get_TileSetEditor_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 TileSetEditor 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.TileSetEditor.TileSetEditorPanel[] Get_TileSetEditor_Instance()
+    {
+        return GetUiInstance<UI.TileSetEditor.TileSetEditorPanel>(nameof(UI.TileSetEditor.TileSetEditor));
+    }
+
+    /// <summary>
+    /// 创建 TileSetEditorCombination, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.TileSetEditorCombination.TileSetEditorCombinationPanel Create_TileSetEditorCombination()
+    {
+        return CreateUi<UI.TileSetEditorCombination.TileSetEditorCombinationPanel>(UiNames.TileSetEditorCombination);
+    }
+
+    /// <summary>
+    /// 打开 TileSetEditorCombination, 并返回UI实例
+    /// </summary>
+    public static UI.TileSetEditorCombination.TileSetEditorCombinationPanel Open_TileSetEditorCombination()
+    {
+        return OpenUi<UI.TileSetEditorCombination.TileSetEditorCombinationPanel>(UiNames.TileSetEditorCombination);
+    }
+
+    /// <summary>
+    /// 隐藏 TileSetEditorCombination 的所有实例
+    /// </summary>
+    public static void Hide_TileSetEditorCombination()
+    {
+        var uiInstance = Get_TileSetEditorCombination_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 TileSetEditorCombination 的所有实例
+    /// </summary>
+    public static void Destroy_TileSetEditorCombination()
+    {
+        var uiInstance = Get_TileSetEditorCombination_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 TileSetEditorCombination 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.TileSetEditorCombination.TileSetEditorCombinationPanel[] Get_TileSetEditorCombination_Instance()
+    {
+        return GetUiInstance<UI.TileSetEditorCombination.TileSetEditorCombinationPanel>(nameof(UI.TileSetEditorCombination.TileSetEditorCombination));
+    }
+
+    /// <summary>
+    /// 创建 TileSetEditorImport, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.TileSetEditorImport.TileSetEditorImportPanel Create_TileSetEditorImport()
+    {
+        return CreateUi<UI.TileSetEditorImport.TileSetEditorImportPanel>(UiNames.TileSetEditorImport);
+    }
+
+    /// <summary>
+    /// 打开 TileSetEditorImport, 并返回UI实例
+    /// </summary>
+    public static UI.TileSetEditorImport.TileSetEditorImportPanel Open_TileSetEditorImport()
+    {
+        return OpenUi<UI.TileSetEditorImport.TileSetEditorImportPanel>(UiNames.TileSetEditorImport);
+    }
+
+    /// <summary>
+    /// 隐藏 TileSetEditorImport 的所有实例
+    /// </summary>
+    public static void Hide_TileSetEditorImport()
+    {
+        var uiInstance = Get_TileSetEditorImport_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 TileSetEditorImport 的所有实例
+    /// </summary>
+    public static void Destroy_TileSetEditorImport()
+    {
+        var uiInstance = Get_TileSetEditorImport_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 TileSetEditorImport 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.TileSetEditorImport.TileSetEditorImportPanel[] Get_TileSetEditorImport_Instance()
+    {
+        return GetUiInstance<UI.TileSetEditorImport.TileSetEditorImportPanel>(nameof(UI.TileSetEditorImport.TileSetEditorImport));
+    }
+
+    /// <summary>
+    /// 创建 TileSetEditorProject, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.TileSetEditorProject.TileSetEditorProjectPanel Create_TileSetEditorProject()
+    {
+        return CreateUi<UI.TileSetEditorProject.TileSetEditorProjectPanel>(UiNames.TileSetEditorProject);
+    }
+
+    /// <summary>
+    /// 打开 TileSetEditorProject, 并返回UI实例
+    /// </summary>
+    public static UI.TileSetEditorProject.TileSetEditorProjectPanel Open_TileSetEditorProject()
+    {
+        return OpenUi<UI.TileSetEditorProject.TileSetEditorProjectPanel>(UiNames.TileSetEditorProject);
+    }
+
+    /// <summary>
+    /// 隐藏 TileSetEditorProject 的所有实例
+    /// </summary>
+    public static void Hide_TileSetEditorProject()
+    {
+        var uiInstance = Get_TileSetEditorProject_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 TileSetEditorProject 的所有实例
+    /// </summary>
+    public static void Destroy_TileSetEditorProject()
+    {
+        var uiInstance = Get_TileSetEditorProject_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 TileSetEditorProject 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.TileSetEditorProject.TileSetEditorProjectPanel[] Get_TileSetEditorProject_Instance()
+    {
+        return GetUiInstance<UI.TileSetEditorProject.TileSetEditorProjectPanel>(nameof(UI.TileSetEditorProject.TileSetEditorProject));
+    }
+
+    /// <summary>
+    /// 创建 TileSetEditorTerrain, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.TileSetEditorTerrain.TileSetEditorTerrainPanel Create_TileSetEditorTerrain()
+    {
+        return CreateUi<UI.TileSetEditorTerrain.TileSetEditorTerrainPanel>(UiNames.TileSetEditorTerrain);
+    }
+
+    /// <summary>
+    /// 打开 TileSetEditorTerrain, 并返回UI实例
+    /// </summary>
+    public static UI.TileSetEditorTerrain.TileSetEditorTerrainPanel Open_TileSetEditorTerrain()
+    {
+        return OpenUi<UI.TileSetEditorTerrain.TileSetEditorTerrainPanel>(UiNames.TileSetEditorTerrain);
+    }
+
+    /// <summary>
+    /// 隐藏 TileSetEditorTerrain 的所有实例
+    /// </summary>
+    public static void Hide_TileSetEditorTerrain()
+    {
+        var uiInstance = Get_TileSetEditorTerrain_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 TileSetEditorTerrain 的所有实例
+    /// </summary>
+    public static void Destroy_TileSetEditorTerrain()
+    {
+        var uiInstance = Get_TileSetEditorTerrain_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 TileSetEditorTerrain 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.TileSetEditorTerrain.TileSetEditorTerrainPanel[] Get_TileSetEditorTerrain_Instance()
+    {
+        return GetUiInstance<UI.TileSetEditorTerrain.TileSetEditorTerrainPanel>(nameof(UI.TileSetEditorTerrain.TileSetEditorTerrain));
     }
 
 }

@@ -62,6 +62,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
 
         //S_DynamicTool.Instance.GetParent().RemoveChild(S_DynamicTool.Instance);
         S_DynamicTool.Instance.Visible = false;
+        S_AutoFillTip.Instance.Visible = false;
         
         _grid = new UiGrid<WaveItem, List<MarkInfo>>(S_WaveItem, typeof(EditorWaveCell));
         _grid.SetCellOffset(new Vector2I(0, 10));
@@ -127,7 +128,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     public RoomPreinstallInfo GetSelectPreinstall()
     {
         var index = S_PreinstallOption.Instance.Selected;
-        var preinstall = EditorManager.SelectRoom.Preinstall;
+        var preinstall = EditorTileMapManager.SelectRoom.Preinstall;
         if (index >= preinstall.Count)
         {
             return null;
@@ -140,7 +141,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void RefreshPreinstallSelect(int index = -1)
     {
-        var preinstall = EditorManager.SelectRoom.Preinstall;
+        var preinstall = EditorTileMapManager.SelectRoom.Preinstall;
         var optionButton = S_PreinstallOption.Instance;
         var selectIndex = index < 0 ? (preinstall.Count > 0 ? 0 : -1) : index;
         optionButton.Clear();
@@ -167,10 +168,10 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         //清除选中项
         RemoveSelectCell();
         //记录选中波数
-        EditorManager.SetSelectWaveIndex(-1);
+        EditorTileMapManager.SetSelectWaveIndex(-1);
         //记录选中的预设
-        EditorManager.SetSelectPreinstallIndex((int)index);
-        var preinstall = EditorManager.SelectRoom.Preinstall;
+        EditorTileMapManager.SetSelectPreinstallIndex((int)index);
+        var preinstall = EditorTileMapManager.SelectRoom.Preinstall;
         if (index >= 0 && index <= preinstall.Count)
         {
             _grid.SetDataList(preinstall[(int)index].WaveList.ToArray());
@@ -179,6 +180,8 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         {
             _grid.RemoveAll();
         }
+        
+        RefreshAutoFillTip();
     }
     
     /// <summary>
@@ -211,7 +214,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         {
             var markCell = (EditorMarkCell)uiCell;
             var markType = markCell.Data.MarkInfo.SpecialMarkType;
-            if (markType == SpecialMarkType.BirthPoint) //某些特殊标记不能删除
+            if (markType != SpecialMarkType.Normal) //特殊标记不能删除
             {
                 S_DynamicTool.L_EditButton.Instance.Visible = true;
                 S_DynamicTool.L_DeleteButton.Instance.Visible = false;
@@ -266,15 +269,15 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnAddPreinstall()
     {
-        var roomInfoRoomType = EditorManager.SelectRoom.RoomInfo.RoomType;
-        var roomSplitPreinstall = EditorManager.SelectRoom.Preinstall;
+        var roomInfoRoomType = EditorTileMapManager.SelectRoom.RoomInfo.RoomType;
+        var roomSplitPreinstall = EditorTileMapManager.SelectRoom.Preinstall;
         EditorWindowManager.ShowCreatePreinstall(roomInfoRoomType, roomSplitPreinstall, preinstall =>
         {
             //创建逻辑
             roomSplitPreinstall.Add(preinstall);
             RefreshPreinstallSelect(roomSplitPreinstall.Count - 1);
             //派发数据修改事件
-            EventManager.EmitEvent(EventEnum.OnEditorDirty);
+            EventManager.EmitEvent(EventEnum.OnTileMapDirty);
         });
     }
 
@@ -283,16 +286,17 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnEditPreinstall()
     {
-        var roomInfoRoomType = EditorManager.SelectRoom.RoomInfo.RoomType;
-        var roomSplitPreinstall = EditorManager.SelectRoom.Preinstall;
+        var roomInfoRoomType = EditorTileMapManager.SelectRoom.RoomInfo.RoomType;
+        var roomSplitPreinstall = EditorTileMapManager.SelectRoom.Preinstall;
         var selectPreinstall = GetSelectPreinstall();
         EditorWindowManager.ShowEditPreinstall(roomInfoRoomType, roomSplitPreinstall, selectPreinstall, preinstall =>
         {
             //修改下拉菜单数据
             var optionButton = S_PreinstallOption.Instance;
             optionButton.SetItemText(optionButton.Selected, $"{preinstall.Name} ({preinstall.Weight})");
+            RefreshAutoFillTip();
             //派发数据修改事件
-            EventManager.EmitEvent(EventEnum.OnEditorDirty);
+            EventManager.EmitEvent(EventEnum.OnTileMapDirty);
         });
     }
 
@@ -301,7 +305,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnDeletePreinstall()
     {
-        var index = EditorManager.SelectPreinstallIndex;
+        var index = EditorTileMapManager.SelectPreinstallIndex;
         if (index < 0)
         {
             return;
@@ -312,13 +316,13 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             if (v)
             {
                 //先把选中项置为-1
-                EditorManager.SetSelectPreinstallIndex(-1);
+                EditorTileMapManager.SetSelectPreinstallIndex(-1);
                 //移除预设数据
-                EditorManager.SelectRoom.Preinstall.RemoveAt(index);
+                EditorTileMapManager.SelectRoom.Preinstall.RemoveAt(index);
                 //刷新选项
-                RefreshPreinstallSelect(EditorManager.SelectRoom.Preinstall.Count - 1);
+                RefreshPreinstallSelect(EditorTileMapManager.SelectRoom.Preinstall.Count - 1);
                 //派发数据修改事件
-                EventManager.EmitEvent(EventEnum.OnEditorDirty);
+                EventManager.EmitEvent(EventEnum.OnTileMapDirty);
             }
         });
     }
@@ -335,7 +339,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             return;
         }
 
-        var preinstall = EditorManager.SelectRoom.Preinstall;
+        var preinstall = EditorTileMapManager.SelectRoom.Preinstall;
         if (index >= preinstall.Count)
         {
             EditorWindowManager.ShowTips("警告", "未知预设选项!");
@@ -346,7 +350,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
         item.WaveList.Add(wave);
         _grid.Add(wave);
         //派发数据修改事件
-        EventManager.EmitEvent(EventEnum.OnEditorDirty);
+        EventManager.EmitEvent(EventEnum.OnTileMapDirty);
     }
 
     //工具节点编辑按钮点击
@@ -377,7 +381,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     /// </summary>
     public void OnDeleteWave()
     {
-        var index = EditorManager.SelectWaveIndex;
+        var index = EditorTileMapManager.SelectWaveIndex;
         if (index < 0)
         {
             return;
@@ -405,9 +409,9 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                 //移除数据
                 selectPreinstall.WaveList.RemoveAt(index);
                 _grid.RemoveByIndex(index);
-                EditorManager.SetSelectWaveIndex(-1);
+                EditorTileMapManager.SetSelectWaveIndex(-1);
                 //派发数据修改事件
-                EventManager.EmitEvent(EventEnum.OnEditorDirty);
+                EventManager.EmitEvent(EventEnum.OnTileMapDirty);
             }
         });
     }
@@ -431,7 +435,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                 markCell.Grid.Sort();
                 EventManager.EmitEvent(EventEnum.OnEditMark, dataMarkInfo);
                 //派发数据修改事件
-                EventManager.EmitEvent(EventEnum.OnEditorDirty);
+                EventManager.EmitEvent(EventEnum.OnTileMapDirty);
             });
         }
     }
@@ -443,7 +447,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
     {
         if (SelectCell is EditorMarkCell markCell)
         {
-            var index = EditorManager.SelectWaveIndex;
+            var index = EditorTileMapManager.SelectWaveIndex;
             if (index < 0)
             {
                 return;
@@ -470,9 +474,20 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                     waveCell.MarkGrid.RemoveByIndex(markCellIndex);
                     waveCell.Data.Remove(markInfo);
                     //派发数据修改事件
-                    EventManager.EmitEvent(EventEnum.OnEditorDirty);
+                    EventManager.EmitEvent(EventEnum.OnTileMapDirty);
                 }
             });
         }
+    }
+
+    private void RefreshAutoFillTip()
+    {
+        var preinstall = EditorTileMapManager.SelectPreinstall;
+        if (preinstall != null)
+        {
+            S_AutoFillTip.Instance.Visible = preinstall.AutoFill;
+            return;
+        }
+        S_AutoFillTip.Instance.Visible = false;
     }
 }

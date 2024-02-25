@@ -49,11 +49,14 @@ material = SubResource("ShaderMaterial_8hgu2")
 sprite_frames = ExtResource("4_galcc")
 animation = &"roll"
 
+[node name="Collision" parent="." index="3"]
+position = Vector2(0, 0)
+
 [node name="HurtCollision" parent="HurtArea" index="0"]
 shape = SubResource("RectangleShape2D_ve262")
 
-[node name="InteractiveArea" parent="." index="5"]
-visible = true
+[node name="InteractiveCollision" parent="InteractiveArea" index="0"]
+position = Vector2(0, 0)
 
 [node name="AnimationPlayer" parent="." index="8"]
 libraries = {

@@ -1,0 +1,120 @@
+[gd_scene load_steps=4 format=3 uid="uid://d4h6gt4jkx25e"]
+
+[ext_resource type="Script" path="res://src/game/ui/tileSetEditorImport/TileSetEditorImportPanel.cs" id="1_rkxih"]
+[ext_resource type="Texture2D" uid="uid://duos2p6if4kcp" path="res://resource/sprite/ui/commonIcon/Import.png" id="2_cc6ug"]
+[ext_resource type="Texture2D" uid="uid://d2wslibovwv7w" path="res://resource/sprite/ui/commonIcon/CenterTool.png" id="3_tbedj"]
+
+[node name="TileSetEditorImport" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rkxih")
+Layer = null
+
+[node name="ImportPreviewBg" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.145098, 0.145098, 0.145098, 1)
+
+[node name="ImportButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="ImportLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -388.0
+offset_top = 39.0
+offset_right = 388.0
+offset_bottom = 79.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "点击导入纹理或者将纹理拖拽到该区域, 格式为'.png'"
+
+[node name="ImportIcon" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_cc6ug")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -0.5
+offset_right = 0.5
+offset_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ImportPreview" type="Sprite2D" parent="Control"]
+
+[node name="ImportColorPicker" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -269.0
+offset_top = 50.0
+offset_right = -65.0
+offset_bottom = 107.0
+grow_horizontal = 0
+text = "背景颜色"
+
+[node name="ReimportButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -269.0
+offset_top = 131.0
+offset_right = -65.0
+offset_bottom = 188.0
+grow_horizontal = 0
+text = "重新导入"
+
+[node name="FocusBtn" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -129.0
+offset_top = 212.0
+offset_right = -65.0
+offset_bottom = 276.0
+grow_horizontal = 0
+tooltip_text = "聚焦"
+texture_normal = ExtResource("3_tbedj")
+ignore_texture_size = true
+stretch_mode = 5

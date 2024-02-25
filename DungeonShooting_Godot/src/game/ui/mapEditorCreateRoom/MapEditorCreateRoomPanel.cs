@@ -31,6 +31,7 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
         for (var i = 0; i < roomTypes.Length; i++)
         {
             var item = roomTypes[i];
+            if (item == DungeonRoomType.None) continue;
             var text = DungeonManager.DungeonRoomTypeToDescribeString(item);
             selectButton.AddItem(text, (int)item);
         }
@@ -134,9 +135,7 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
                 return null;
             }
             
-            roomInfo.Size = new SerializeVector2();
-            roomInfo.Position = new SerializeVector2();
-            roomInfo.DoorAreaInfos = new List<DoorAreaInfo>();
+            roomInfo.InitData();
 
             var roomSplit = new DungeonRoomSplit();
             roomSplit.ErrorType = RoomErrorType.Empty;
@@ -144,10 +143,7 @@ public partial class MapEditorCreateRoomPanel : MapEditorCreateRoom
             roomSplit.RoomInfo = roomInfo;
 
             var tileInfo = new DungeonTileInfo();
-            tileInfo.NavigationList = new List<NavigationPolygonData>();
-            tileInfo.Floor = new List<int>();
-            tileInfo.Middle = new List<int>();
-            tileInfo.Top = new List<int>();
+            tileInfo.InitData();
 
             roomSplit.TileInfo = tileInfo;
             roomSplit.Preinstall = new List<RoomPreinstallInfo>();

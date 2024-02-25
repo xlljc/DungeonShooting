@@ -75,7 +75,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// 阴影偏移
     /// </summary>
     [Export]
-    public Vector2 ShadowOffset { get; protected set; } = new Vector2(0, 2);
+    public Vector2 ShadowOffset { get; set; } = new Vector2(0, 2);
     
     /// <summary>
     /// 移动控制器
@@ -126,6 +126,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     /// <summary>
+    /// 下坠逻辑是否执行完成
+    /// </summary>
+    public bool IsFallOver => _isFallOver;
+
+    /// <summary>
     /// 是否正在投抛过程中
     /// </summary>
     public bool IsThrowing => VerticalSpeed != 0 && !_isFallOver;
@@ -159,12 +164,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     private float _verticalSpeed;
-
-    /// <summary>
-    /// 投抛状态下物体碰撞器大小, 如果 (x, y) 都小于 0, 则默认使用 AnimatedSprite 的默认动画第一帧的大小
-    /// </summary>
-    [Export]
-    public Vector2 ThrowCollisionSize { get; set; } = new Vector2(-1, -1);
 
     /// <summary>
     /// 是否启用垂直方向上的运动模拟, 默认开启, 如果禁用, 那么下落和投抛效果, 同样 Throw() 函数也将失效
@@ -206,11 +205,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// 物体材质数据
     /// </summary>
     public ExcelConfig.ActivityMaterial ActivityMaterial { get; private set; }
-    
+
     /// <summary>
     /// 所在的 World 对象
     /// </summary>
-    public World World { get; private set; }
+    public World World { get; set; }
 
     /// <summary>
     /// 是否开启描边
@@ -246,13 +245,23 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <summary>
     /// 是否是自定义阴影纹理
     /// </summary>
-    public bool IsCustomShadowSprite { get; private set; }
+    public bool IsCustomShadowSprite { get; set; }
 
     /// <summary>
     /// 记录绘制液体的笔刷上一次绘制的位置<br/>
     /// 每次调用 DrawLiquid() 后都会记录这一次绘制的位置, 记录这个位置用作执行补间操作, 但是一旦停止绘制了, 需要手动清理记录的位置, 也就是将 BrushPrevPosition 置为 null
     /// </summary>
     public Vector2I? BrushPrevPosition { get; set; }
+    
+    /// <summary>
+    /// 默认所在层级
+    /// </summary>
+    public RoomLayerEnum DefaultLayer { get; set; }
+
+    /// <summary>
+    /// 投抛状态下的碰撞器层级
+    /// </summary>
+    public uint ThrowCollisionMask { get; set; } = PhysicsLayer.Wall;
     
     // --------------------------------------------------------------------------------
 
@@ -278,9 +287,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     //存储投抛该物体时所产生的数据
     private readonly ActivityFallData _fallData = new ActivityFallData();
     
-    //所在层级
-    private RoomLayerEnum _currLayer;
-    
     //标记字典
     private Dictionary<string, object> _signMap;
     
@@ -295,9 +301,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     
     //下坠是否已经结束
     private bool _isFallOver = true;
-
-    //下坠状态碰撞器形状
-    private RectangleShape2D _throwRectangleShape;
 
     //投抛移动速率
     private ExternalForce _throwForce;
@@ -314,6 +317,12 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
 
     //击退外力
     private ExternalForce _repelForce;
+
+    //绑定销毁物体集合
+    private HashSet<IDestroy> _destroySet;
+
+    //挂载的物体集合
+    private HashSet<IMountItem> _mountObjects;
 
     // --------------------------------------------------------------------------------
     
@@ -650,9 +659,9 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     public virtual void PutDown(RoomLayerEnum layer, bool showShadow = true)
     {
-        _currLayer = layer;
+        DefaultLayer = layer;
         var parent = GetParent();
-        var root = GameApplication.Instance.World.GetRoomLayer(layer);
+        var root = World.Current.GetRoomLayer(layer);
         if (parent != root)
         {
             if (parent != null)
@@ -705,17 +714,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <param name="rotateSpeed">旋转速度</param>
     public void Throw(float altitude, float verticalSpeed, Vector2 velocity, float rotateSpeed)
     {
-        var parent = GetParent();
-        if (parent == null)
-        {
-            GameApplication.Instance.World.YSortLayer.AddChild(this);
-        }
-        else if (parent != GameApplication.Instance.World.YSortLayer)
-        {
-            parent.RemoveChild(this);
-            GameApplication.Instance.World.YSortLayer.AddChild(this);
-        }
-        
         Altitude = altitude;
         //Position = Position + new Vector2(0, altitude);
         VerticalSpeed = verticalSpeed;
@@ -1118,8 +1116,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
                     _altitude += VerticalSpeed * delta;
                     _verticalSpeed -= GameConfig.G * ActivityMaterial.GravityScale * delta;
 
-                    //当高度大于16时, 显示在所有物体上, 并且关闭碰撞
-                    if (Altitude >= 16)
+                    //当高度大于32时, 显示在所有物体上, 并且关闭碰撞
+                    if (Altitude >= 32)
                     {
                         AnimatedSprite.ZIndex = 20;
                     }
@@ -1130,7 +1128,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
                     //动态开关碰撞器
                     if (ActivityMaterial.DynamicCollision)
                     {
-                        Collision.Disabled = Altitude >= 16;
+                        Collision.Disabled = Altitude >= 32;
                     }
                 
                     //达到最高点
@@ -1363,8 +1361,10 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         ShadowSprite.GlobalPosition = new Vector2(pos.X + ShadowOffset.X, pos.Y + ShadowOffset.Y + Altitude);
     }
 
-    //计算位置
-    private void CalcThrowAnimatedPosition()
+    /// <summary>
+    /// 计算物体精灵和阴影位置
+    /// </summary>
+    public void CalcThrowAnimatedPosition()
     {
         if (Scale.Y < 0)
         {
@@ -1386,6 +1386,16 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         if (IsDestroyed)
         {
             return;
+        }
+        
+        if (_mountObjects != null)
+        {
+            foreach (var item in _mountObjects)
+            {
+                item.OnUnmount(this);
+            }
+
+            _mountObjects = null;
         }
 
         IsDestroyed = true;
@@ -1409,6 +1419,16 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
 
         _components.Clear();
+        
+        if (_destroySet != null)
+        {
+            foreach (var destroy in _destroySet)
+            {
+                destroy.Destroy();
+            }
+
+            _destroySet = null;
+        }
     }
 
     /// <summary>
@@ -1430,6 +1450,19 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     /// <summary>
+    /// 获取投抛该物体时所产生的数据, 只在 IsFallOver 为 false 时有效
+    /// </summary>
+    public ActivityFallData GetFallData()
+    {
+        if (!IsFallOver && !_fallData.UseOrigin)
+        {
+            return _fallData;
+        }
+
+        return null;
+    }
+    
+    /// <summary>
     /// 触发投抛动作
     /// </summary>
     private void Throw()
@@ -1440,10 +1473,9 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         {
             this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         }
-        else if (parent == GameApplication.Instance.World.NormalLayer)
+        else if (parent != World.Current.YSortLayer)
         {
-            parent.RemoveChild(this);
-            this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
+            Reparent(World.Current.YSortLayer);
         }
 
         CalcThrowAnimatedPosition();
@@ -1461,7 +1493,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     private void SetFallCollision()
     {
-        if (_fallData != null && _fallData.UseOrigin)
+        if (_fallData.UseOrigin)
         {
             _fallData.OriginShape = Collision.Shape;
             _fallData.OriginPosition = Collision.Position;
@@ -1476,12 +1508,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
             _fallData.OriginCollisionMask = CollisionMask;
             _fallData.OriginCollisionLayer = CollisionLayer;
 
-            if (_throwRectangleShape == null)
-            {
-                _throwRectangleShape = new RectangleShape2D();
-            }
-            
-            Collision.Shape = _throwRectangleShape;
             Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
@@ -1490,7 +1516,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
             Collision.Position = Vector2.Zero;
             Collision.Rotation = 0;
             Collision.Scale = Vector2.One;
-            CollisionMask = 1;
+            CollisionMask = ThrowCollisionMask;
             CollisionLayer = _fallData.OriginCollisionLayer | PhysicsLayer.Throwing;
             _fallData.UseOrigin = false;
         }
@@ -1501,7 +1527,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     private void RestoreCollision()
     {
-        if (_fallData != null && !_fallData.UseOrigin)
+        if (!_fallData.UseOrigin)
         {
             Collision.Shape = _fallData.OriginShape;
             Collision.Position = _fallData.OriginPosition;
@@ -1526,7 +1552,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     private void ThrowOver()
     {
         var parent = GetParent();
-        var roomLayer = GameApplication.Instance.World.GetRoomLayer(_currLayer);
+        var roomLayer = World.Current.GetRoomLayer(DefaultLayer);
         if (parent != roomLayer)
         {
             parent.RemoveChild(this);
@@ -1546,15 +1572,6 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         _firstFall = true;
         _hasResilienceVerticalSpeed = false;
         _resilienceVerticalSpeed = 0;
-                
-        if (ThrowCollisionSize.X < 0 && ThrowCollisionSize.Y < 0)
-        {
-            _throwRectangleShape.Size = GetDefaultTexture().GetSize();
-        }
-        else
-        {
-            _throwRectangleShape.Size = ThrowCollisionSize;
-        }
 
         Throw();
     }
@@ -1754,7 +1771,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <summary>
     /// 设置物体朝向
     /// </summary>
-    public void SetFace(FaceDirection face)
+    public void SetForwardDirection(FaceDirection face)
     {
         if ((face == FaceDirection.Left && Scale.X > 0) || (face == FaceDirection.Right && Scale.X < 0))
         {
@@ -1846,6 +1863,85 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
             var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position) + offset;
             AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(brush, BrushPrevPosition, pos, 0);
             BrushPrevPosition = pos;
+        }
+    }
+
+    /// <summary>
+    /// 绑定可销毁对象, 绑定的物体会在当前物体销毁时触发销毁
+    /// </summary>
+    public void AddDestroyObject(IDestroy destroy)
+    {
+        if (_destroySet == null)
+        {
+            _destroySet = new HashSet<IDestroy>();
+        }
+
+        _destroySet.Add(destroy);
+    }
+
+    /// <summary>
+    /// 移除绑定可销毁对象
+    /// </summary>
+    public void RemoveDestroyObject(IDestroy destroy)
+    {
+        if (_destroySet == null)
+        {
+            return;
+        }
+        
+        _destroySet.Remove(destroy);
+    }
+
+    /// <summary>
+    /// 绑定挂载对象, 绑定的物体会在当前物体销毁时触发扔出
+    /// </summary>
+    public void AddMountObject(IMountItem target)
+    {
+        if (_mountObjects == null)
+        {
+            _mountObjects = new HashSet<IMountItem>();
+        }
+
+        if (_mountObjects.Add(target))
+        {
+            target.OnMount(this);
+        }
+    }
+    
+    /// <summary>
+    /// 移除绑定挂载对象
+    /// </summary>
+    public void RemoveMountObject(IMountItem target)
+    {
+        if (_mountObjects == null)
+        {
+            return;
+        }
+
+        if (_mountObjects.Remove(target))
+        {
+            target.OnUnmount(this);
+        }
+    }
+
+    /// <summary>
+    /// 设置是否启用碰撞层, 该函数是设置下载状态下原碰撞层
+    /// </summary>
+    public void SetOriginCollisionLayerValue(uint layer, bool vale)
+    {
+        if (vale)
+        {
+            if (!Utils.CollisionMaskWithLayer(_fallData.OriginCollisionLayer, layer))
+            {
+                _fallData.OriginCollisionLayer |= layer;
+            }
+        }
+        else
+        {
+            if (Utils.CollisionMaskWithLayer(_fallData.OriginCollisionLayer, layer))
+            {
+                _fallData.OriginCollisionLayer ^= layer;
+            }
         }
     }
 }

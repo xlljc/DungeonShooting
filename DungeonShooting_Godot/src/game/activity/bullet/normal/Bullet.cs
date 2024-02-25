@@ -42,6 +42,9 @@ public partial class Bullet : ActivityObject, IBullet
         set => CollisionArea.CollisionMask = value;
     }
 
+    /// <summary>
+    /// 子弹使用的数据
+    /// </summary>
     public BulletData BulletData { get; private set; }
     
     /// <summary>
@@ -54,11 +57,20 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public int CurrentPenetration { get; protected set; } = 0;
     
+    /// <summary>
+    /// 是否是敌人使用的子弹
+    /// </summary>
+    public bool IsEnemyBullet { get; private set; } = false;
+
+    /// <summary>
+    /// 子弹状态
+    /// </summary>
+    public BulletStateEnum State { get; protected set; } = BulletStateEnum.Normal;
+
     //当前子弹已经飞行的距离
     private float CurrFlyDistance = 0;
 
     private bool _init = false;
-    private bool _isEnemyBullet = false;
 
     public override void OnInit()
     {
@@ -72,6 +84,7 @@ public partial class Bullet : ActivityObject, IBullet
         if (!_init)
         {
             CollisionArea.AreaEntered += OnArea2dEntered;
+            CollisionArea.BodyEntered += OnBodyEntered;
             _init = true;
         }
         
@@ -107,20 +120,16 @@ public partial class Bullet : ActivityObject, IBullet
         MoveController.AddForce(new Vector2(data.FlySpeed, 0).Rotated(Rotation));
         
         //如果子弹会对玩家造成伤害, 则显示红色描边
-        if (Player.Current.CollisionWithMask(attackLayer))
+        if (Player.Current != null && Player.Current.CollisionWithMask(attackLayer))
         {
-            if (!_isEnemyBullet)
+            if (!IsEnemyBullet)
             {
-                _isEnemyBullet = true;
-                ShowOutline = true;
-                SetBlendSchedule(1);
+                RefreshBulletColor(true);
             }
         }
-        else if (_isEnemyBullet)
+        else if (IsEnemyBullet)
         {
-            _isEnemyBullet = false;
-            ShowOutline = false;
-            SetBlendSchedule(0);
+            RefreshBulletColor(false);
         }
         
         PutDown(RoomLayerEnum.YSortLayer);
@@ -132,7 +141,11 @@ public partial class Bullet : ActivityObject, IBullet
         //过期销毁
         if (data.LifeTime > 0)
         {
-            this.CallDelay(data.LifeTime, OnLimeOver);
+            this.CallDelay(data.LifeTime, () =>
+            {
+                State = BulletStateEnum.LimeOver;
+                OnLimeOver();
+            });
         }
         
         if (Particles2D != null)
@@ -144,44 +157,61 @@ public partial class Bullet : ActivityObject, IBullet
         }
     }
 
+    /// <summary>
+    /// 刷新子弹的颜色
+    /// </summary>
+    /// <param name="isEnemyBullet">是否是敌人使用的子弹</param>
+    public virtual void RefreshBulletColor(bool isEnemyBullet)
+    {
+        IsEnemyBullet = isEnemyBullet;
+        if (isEnemyBullet)
+        {
+            ShowOutline = true;
+            SetBlendSchedule(1);
+        }
+        else
+        {
+            ShowOutline = false;
+            SetBlendSchedule(0);
+        }
+    }
+    
     public override void OnMoveCollision(KinematicCollision2D collision)
     {
         CurrentBounce++;
         if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
         {
+            State = BulletStateEnum.MoveCollision;
             //创建粒子特效
             OnPlayCollisionEffect(collision);
-            DoReclaim();
+            LogicalFinish();
         }
     }
 
     /// <summary>
     /// 碰到目标
     /// </summary>
-    public virtual void OnCollisionTarget(ActivityObject o)
+    public virtual void OnCollisionTarget(IHurt hurt)
     {
-        if (o is Role role)
+        OnPlayDisappearEffect();
+        if (BulletData.Repel != 0)
         {
-            OnPlayDisappearEffect();
-
-            //击退
-            if (role is not Player) //目标不是玩家才会触发击退
+            var o = hurt.GetActivityObject();
+            if (o != null && o is not Player) //目标不是玩家才会触发击退
             {
-                if (BulletData.Repel != 0)
-                {
-                    role.AddRepelForce(Velocity.Normalized() * BulletData.Repel);
-                }
+                o.AddRepelForce(Velocity.Normalized() * BulletData.Repel);
             }
-            
-            //造成伤害
-            role.CallDeferred(nameof(Role.Hurt), BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
+        }
 
-            //穿透次数
-            CurrentPenetration++;
-            if (CurrentPenetration > BulletData.Penetration)
-            {
-                DoReclaim();
-            }
+        //造成伤害
+        hurt.Hurt(BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
+
+        //穿透次数
+        CurrentPenetration++;
+        if (CurrentPenetration > BulletData.Penetration)
+        {
+            State = BulletStateEnum.CollisionTarget;
+            CallDeferred(nameof(LogicalFinish));
         }
     }
 
@@ -191,7 +221,7 @@ public partial class Bullet : ActivityObject, IBullet
     public virtual void OnMaxDistance()
     {
         OnPlayDisappearEffect();
-        DoReclaim();
+        LogicalFinish();
     }
     
     /// <summary>
@@ -200,14 +230,15 @@ public partial class Bullet : ActivityObject, IBullet
     public virtual void OnLimeOver()
     {
         OnPlayDisappearEffect();
-        DoReclaim();
+        LogicalFinish();
     }
     
     protected override void OnFallToGround()
     {
+        State = BulletStateEnum.FallToGround;
         //落地销毁
         OnPlayDisappearEffect();
-        DoReclaim();
+        LogicalFinish();
     }
     
     /// <summary>
@@ -259,7 +290,7 @@ public partial class Bullet : ActivityObject, IBullet
     
     
     /// <summary>
-    /// 播放子弹消失特效
+    /// 播放子弹撞墙消失特效
     /// </summary>
     public void PlayCollisionEffect(KinematicCollision2D collision, string path)
     {
@@ -276,34 +307,56 @@ public partial class Bullet : ActivityObject, IBullet
     {
         if (ActivityMaterial.DynamicCollision)
         {
-            //子弹高度大于 16 关闭碰撞检测
-            CollisionShape2D.Disabled = Altitude >= 16;
+            //子弹高度大于 32 关闭碰撞检测
+            CollisionShape2D.Disabled = Altitude >= 32;
         }
         //距离太大, 自动销毁
-        CurrFlyDistance += BulletData.FlySpeed * delta;
-        if (CurrFlyDistance >= BulletData.MaxDistance)
+        if (MoveController.Enable)
         {
-            OnMaxDistance();
+            //CurrFlyDistance += Velocity.Length() * delta;
+            CurrFlyDistance += BulletData.FlySpeed * delta;
+            if (CurrFlyDistance >= BulletData.MaxDistance)
+            {
+                State = BulletStateEnum.MaxDistance;
+                OnMaxDistance();
+            }
         }
     }
-    
-    private void OnArea2dEntered(Area2D other)
+
+    protected virtual void OnBodyEntered(Node2D body)
     {
         if (IsDestroyed)
         {
             return;
         }
-        var activityObject = other.AsActivityObject();
-        OnCollisionTarget(activityObject);
+
+        if (body is IHurt hurt)
+        {
+            OnCollisionTarget(hurt);
+        }
     }
     
-    public virtual void DoReclaim()
+    protected virtual void OnArea2dEntered(Area2D other)
+    {
+        if (IsDestroyed)
+        {
+            return;
+        }
+        
+        if (other is IHurt hurt)
+        {
+            OnCollisionTarget(hurt);
+        }
+    }
+
+    public virtual void LogicalFinish()
     {
         ObjectPool.Reclaim(this);
     }
     
     public virtual void OnReclaim()
     {
+        State = BulletStateEnum.Normal;
         Visible = false;
         if (Particles2D != null)
         {
@@ -332,5 +385,16 @@ public partial class Bullet : ActivityObject, IBullet
         {
             OnLeavePoolEvent();
         }
+    }
+
+    /// <summary>
+    /// 设置是否启用移动逻辑
+    /// </summary>
+    public void SetEnableMovement(bool v)
+    {
+        MoveController.Enable = v;
+        CollisionArea.Monitoring = v;
+        CollisionArea.Monitorable = v;
+        Collision.Disabled = !v;
     }
 }
