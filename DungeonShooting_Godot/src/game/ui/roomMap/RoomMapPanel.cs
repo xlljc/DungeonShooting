@@ -147,29 +147,32 @@ public partial class RoomMapPanel : RoomMap
             _needRefresh.Clear();
         }
 
-        //更新地图中心点位置
-        var playPosition = Player.Current.GetCenterPosition();
-        if (!_isMagnifyMap)
+        if (Player.Current != null)
         {
-            S_Root.Instance.Position = CalcRootPosition(playPosition);
-        }
-        else
-        {
-            S_Root.Instance.Position = CalcRootPosition(playPosition) + _mapOffset;
-            S_Mark.Instance.Position = S_DrawContainer.Instance.Size / 2 + _mapOffset;
-        }
+            //更新地图中心点位置
+            var playPosition = Player.Current.GetCenterPosition();
+            if (!_isMagnifyMap)
+            {
+                S_Root.Instance.Position = CalcRootPosition(playPosition);
+            }
+            else
+            {
+                S_Root.Instance.Position = CalcRootPosition(playPosition) + _mapOffset;
+                S_Mark.Instance.Position = S_DrawContainer.Instance.Size / 2 + _mapOffset;
+            }
 
-        var area = Player.Current.AffiliationArea;
-        //传送
-        if (_pressMapFlag && _mouseHoverRoom != null &&
-            area != null && !area.RoomInfo.IsSeclusion &&
-            Input.IsMouseButtonPressed(MouseButton.Right))
-        {
-            //执行传送操作
-            DoTransmission((_mouseHoverRoom.Waypoints + new Vector2(0.5f, 0.5f)) * GameConfig.TileCellSize);
-            ResetMap();
-            _isMagnifyMap = false;
-            World.Current.Pause = false;
+            var area = Player.Current.AffiliationArea;
+            //传送
+            if (_pressMapFlag && _mouseHoverRoom != null &&
+                area != null && !area.RoomInfo.IsSeclusion &&
+                Input.IsMouseButtonPressed(MouseButton.Right))
+            {
+                //执行传送操作
+                DoTransmission((_mouseHoverRoom.Waypoints + new Vector2(0.5f, 0.5f)) * GameConfig.TileCellSize);
+                ResetMap();
+                _isMagnifyMap = false;
+                World.Current.Pause = false;
+            }
         }
     }
 
@@ -229,6 +232,11 @@ public partial class RoomMapPanel : RoomMap
     private void InitMap()
     {
         var startRoom = GameApplication.Instance.DungeonManager.StartRoomInfo;
+        if (startRoom == null)
+        {
+            HideUi();
+            return;
+        }
         startRoom.EachRoom(roomInfo =>
         {
             //房间

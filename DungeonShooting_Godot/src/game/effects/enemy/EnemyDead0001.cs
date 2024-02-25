@@ -22,14 +22,14 @@ public partial class EnemyDead0001 : ActivityObject
     {
         var frameCount = AnimatedSprite.SpriteFrames.GetFrameCount(AnimatorNames.Default);
         AnimatedSprite.Frame = Utils.Random.RandomRangeInt(0, frameCount - 1);
-
+        
         Throw(
             Utils.Random.RandomRangeInt(0, 16),
             Utils.Random.RandomRangeInt(10, 60),
             new Vector2(Utils.Random.RandomRangeInt(-25, 25), Utils.Random.RandomRangeInt(-25, 25)),
             Utils.Random.RandomRangeInt(-360, 360)
         );
-
+        
         StartCoroutine(EmitParticles());
         _brushData = LiquidBrushManager.GetBrush("0003");
     }

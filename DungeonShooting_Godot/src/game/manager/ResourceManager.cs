@@ -182,6 +182,10 @@ public static class ResourceManager
             {
                 return LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_BirthMark_png);
             }
+            else if (markInfo.SpecialMarkType == SpecialMarkType.OutPoint) //出口标记
+            {
+                return LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_BirthMark_png);
+            }
             else if (markInfo.MarkList != null) //普通标记
             {
                 if (markInfo.MarkList.Count > 1) //多个物体

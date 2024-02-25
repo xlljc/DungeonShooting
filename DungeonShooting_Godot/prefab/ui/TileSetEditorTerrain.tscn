@@ -194,7 +194,7 @@ custom_minimum_size = Vector2(64, 16)
 layout_mode = 1
 offset_top = 80.0
 offset_right = 64.0
-offset_bottom = 96.0
+offset_bottom = 112.0
 mouse_filter = 2
 texture = ExtResource("5_xabgh")
 

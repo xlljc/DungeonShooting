@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using UI.TileSetEditorCombination;
 
@@ -49,36 +51,6 @@ public static class Utils
     public static bool CollisionMaskWithLayer(uint mask, uint layer)
     {
         return (mask & layer) != 0;
-    }
-
-    /// <summary>
-    /// 使用定的 canvasItem 绘制导航区域, 注意, 该函数只能在 draw 函数中调用
-    /// </summary>
-    public static void DrawNavigationPolygon(CanvasItem canvasItem, NavigationPolygonData[] polygonData, float width = 1)
-    {
-        for (var i = 0; i < polygonData.Length; i++)
-        {
-            var item = polygonData[i];
-            var points = item.GetPoints();
-            if (points.Length>= 2)
-            {
-                var array = new Vector2[points.Length + 1];
-                for (var j = 0; j < points.Length; j++)
-                {
-                    array[j] = points[j];
-                }
-                
-                array[array.Length - 1] = points[0];
-                if (item.Type == NavigationPolygonType.In)
-                {
-                    canvasItem.DrawPolyline(points, Colors.Orange, width);
-                }
-                else
-                {
-                    canvasItem.DrawPolyline(points, Colors.Orange, width);
-                }
-            }
-        }
     }
     
     /// <summary>
@@ -369,6 +341,38 @@ public static class Utils
     }
 
     /// <summary>
+    /// 计算Vector2点所占用的区域
+    /// </summary>
+    public static Rect2I CalcRect(IEnumerable<Vector2I> cells)
+    {
+        var count = cells.Count();
+        if (count == 0)
+        {
+            return new Rect2I();
+        }
+        //单位: 像素
+        var canvasXStart = int.MaxValue;
+        var canvasYStart = int.MaxValue;
+        var canvasXEnd = int.MinValue;
+        var canvasYEnd = int.MinValue;
+
+        foreach (var pos in cells)
+        {
+            canvasXStart = Mathf.Min(pos.X, canvasXStart);
+            canvasYStart = Mathf.Min(pos.Y, canvasYStart);
+            canvasXEnd = Mathf.Max(pos.X + 1, canvasXEnd);
+            canvasYEnd = Mathf.Max(pos.Y + 1, canvasYEnd);
+        }
+
+        return new Rect2I(
+            canvasXStart,
+            canvasYStart,
+            canvasXEnd - canvasXStart,
+            canvasYEnd - canvasYStart
+        );
+    }
+    
+    /// <summary>
     /// 计算TileSet Cell所占用的区域
     /// </summary>
     public static Rect2I CalcTileRect(IEnumerable<Vector2I> cells)
@@ -556,5 +560,18 @@ public static class Utils
             }
         }
         return list.ToArray();
+    }
+
+    /// <summary>
+    /// 遍历节点树
+    /// </summary>
+    public static void EachNode(Node node, Action<Node> action)
+    {
+        action(node);
+        var childCount = node.GetChildCount();
+        for (var i = 0; i < childCount; i++)
+        {
+            EachNode(node.GetChild(i), action);
+        }
     }
 }

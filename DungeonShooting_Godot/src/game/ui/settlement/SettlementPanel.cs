@@ -10,7 +10,7 @@ public partial class SettlementPanel : Settlement
     public override void OnCreateUi()
     {
         S_Restart.Instance.Pressed += OnRestartClick;
-        S_ToMenu.Instance.Pressed += OnToMenuClick;
+        S_ToMenu.Instance.Pressed += OnBackClick;
 
         if (GameApplication.Instance.DungeonManager.IsEditorMode) //在编辑器模式下打开的Ui
         {
@@ -28,23 +28,31 @@ public partial class SettlementPanel : Settlement
         }
         else //正常重新开始
         {
-            GameApplication.Instance.DungeonManager.RestartDungeon(GameApplication.Instance.DungeonConfig);
+            UiManager.Open_Loading();
+            GameApplication.Instance.DungeonManager.RestartDungeon(false, GameApplication.Instance.DungeonConfig, () =>
+            {
+                UiManager.Destroy_Loading();
+            });
         }
     }
 
-    //回到主菜单
-    private void OnToMenuClick()
+    //回到上一级
+    private void OnBackClick()
     {
         Destroy();
         if (GameApplication.Instance.DungeonManager.IsEditorMode) //在编辑器模式下打开的Ui
         {
             EditorPlayManager.Exit();
         }
-        else //正常关闭Ui
+        else //正常关闭Ui, 回到大厅
         {
-            GameApplication.Instance.DungeonManager.ExitDungeon(() =>
+            UiManager.Open_Loading();
+            GameApplication.Instance.DungeonManager.ExitDungeon(false, () =>
             {
-                UiManager.Open_Main();
+                GameApplication.Instance.DungeonManager.LoadHall(() =>
+                {
+                    UiManager.Destroy_Loading();
+                });
             });
         }
     }

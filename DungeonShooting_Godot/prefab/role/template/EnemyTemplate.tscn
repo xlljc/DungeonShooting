@@ -21,6 +21,7 @@ radius = 8.06226
 [node name="EnemyTemplate" instance=ExtResource("1_5po38")]
 collision_layer = 16
 collision_mask = 25
+floor_stop_on_slope = false
 
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource("ShaderMaterial_k8mt5")
@@ -35,7 +36,6 @@ enabled = false
 [node name="FirePoint" type="Marker2D" parent="." index="8"]
 
 [node name="NavigationPoint" type="Marker2D" parent="." index="9"]
-position = Vector2(0, -5)
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="NavigationPoint" index="0"]
 path_desired_distance = 3.0

@@ -7,6 +7,11 @@ using System.Collections.Generic;
 public class DungeonConfig
 {
     /// <summary>
+    /// 地牢使用的随机种子
+    /// </summary>
+    public int? RandomSeed = null;
+    
+    /// <summary>
     /// 地牢组名称
     /// </summary>
     public string GroupName;
@@ -54,7 +59,7 @@ public class DungeonConfig
     /// <summary>
     /// 房间最大间隔
     /// </summary>
-    public int RoomMaxInterval = 5;
+    public int RoomMaxInterval = 2;
     
     /// <summary>
     /// 房间横轴最小分散程度

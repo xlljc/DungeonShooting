@@ -102,6 +102,10 @@ public static class PreinstallMarkManager
         {
             return "出生标记";
         }
+        else if (type == SpecialMarkType.OutPoint)
+        {
+            return "出口标记";
+        }
 
         return string.Empty;
     }

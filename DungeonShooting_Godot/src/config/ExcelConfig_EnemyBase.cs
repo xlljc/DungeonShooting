@@ -49,6 +49,13 @@ public static partial class ExcelConfig
         public float Friction;
 
         /// <summary>
+        /// 单次攻击间隔时间, 秒 <br/>
+        /// 注意, 敌人攻击后计算间隔时间会使用当前字段值与武器上的TriggerInterval叠加
+        /// </summary>
+        [JsonInclude]
+        public float AttackInterval;
+
+        /// <summary>
         /// 是否可以拾起武器
         /// </summary>
         [JsonInclude]
@@ -92,6 +99,7 @@ public static partial class ExcelConfig
             inst.MoveSpeed = MoveSpeed;
             inst.Acceleration = Acceleration;
             inst.Friction = Friction;
+            inst.AttackInterval = AttackInterval;
             inst.CanPickUpWeapon = CanPickUpWeapon;
             inst.ViewRange = ViewRange;
             inst.TailAfterViewRange = TailAfterViewRange;

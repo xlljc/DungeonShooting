@@ -21,6 +21,12 @@ public interface IBullet : ICoroutine, IPoolItem
     /// 子弹数据
     /// </summary>
     BulletData BulletData { get; }
+    
+    /// <summary>
+    /// 子弹状态
+    /// </summary>
+    BulletStateEnum State { get; }
+
     /// <summary>
     /// 初始化子弹数据
     /// </summary>

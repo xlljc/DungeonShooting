@@ -201,6 +201,7 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
                 brush.PixelWidth,
                 Mathf.Abs(Mathf.Sin(offset.Angle() - rotation + Mathf.Pi * 0.5f))
             );
+            maxL = Mathf.Max(1, maxL);
             var len = offset.Length();
             if (len > maxL) //距离太大了, 需要补间
             {

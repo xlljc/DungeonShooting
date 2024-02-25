@@ -11,7 +11,7 @@ public partial class World : CanvasModulate, ICoroutine
     /// <summary>
     /// 当前的游戏世界对象
     /// </summary>
-    public static World Current => GameApplication.Instance.World;
+    public static World Current => GameApplication.Instance?.DungeonManager?.CurrWorld;
     
     /// <summary>
     /// //对象根节点
@@ -81,7 +81,6 @@ public partial class World : CanvasModulate, ICoroutine
 
     public override void _Ready()
     {
-        Color = Colors.Black;
         //TileRoot.YSortEnabled = false;
         NormalLayer = GetNode<Node2D>("TileRoot/NormalLayer");
         YSortLayer = GetNode<Node2D>("TileRoot/YSortLayer");
@@ -96,14 +95,6 @@ public partial class World : CanvasModulate, ICoroutine
     {
         //协程更新
         ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, (float)delta);
-    }
-
-    /// <summary>
-    /// 初始化 TileMap 中的层级
-    /// </summary>
-    public void InitLayer()
-    {
-        MapLayerManager.InitMapLayer(TileRoot);
     }
 
     /// <summary>

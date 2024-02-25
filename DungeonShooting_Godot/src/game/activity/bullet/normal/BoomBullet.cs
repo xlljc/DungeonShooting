@@ -21,6 +21,7 @@ public partial class BoomBullet : Bullet
 
     public override void OnCollisionTarget(IHurt o)
     {
+        State = BulletStateEnum.CollisionTarget;
         PlayBoom();
         LogicalFinish();
     }
@@ -30,6 +31,7 @@ public partial class BoomBullet : Bullet
         CurrentBounce++;
         if (CurrentBounce > BulletData.BounceCount) //反弹次数超过限制
         {
+            State = BulletStateEnum.MoveCollision;
             PlayBoom();
             LogicalFinish();
         }

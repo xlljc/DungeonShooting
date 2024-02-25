@@ -102,7 +102,7 @@
     "ContinuousCountRange": [
       3
     ],
-    "TriggerInterval": 2.5,
+    "TriggerInterval": 1.2,
     "StartFiringSpeed": 480,
     "FinalFiringSpeed": 480,
     "FiringSpeedAddSpeed": 0,
@@ -254,7 +254,7 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 3,
+    "TriggerInterval": 1.4,
     "StartFiringSpeed": 120,
     "FinalFiringSpeed": 120,
     "FiringSpeedAddSpeed": 0,
@@ -406,9 +406,9 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 1,
-    "StartFiringSpeed": 300,
-    "FinalFiringSpeed": 300,
+    "TriggerInterval": 0.55,
+    "StartFiringSpeed": 460,
+    "FinalFiringSpeed": 460,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
     "FiringSpeedBackTime": 0,
@@ -557,7 +557,7 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 3,
+    "TriggerInterval": 2,
     "StartFiringSpeed": 180,
     "FinalFiringSpeed": 180,
     "FiringSpeedAddSpeed": 0,
@@ -708,7 +708,7 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 4,
+    "TriggerInterval": 2.2,
     "StartFiringSpeed": 150,
     "FinalFiringSpeed": 150,
     "FiringSpeedAddSpeed": 0,
@@ -860,7 +860,7 @@
     "ContinuousCountRange": [
       5
     ],
-    "TriggerInterval": 3,
+    "TriggerInterval": 1.4,
     "StartFiringSpeed": 700,
     "FinalFiringSpeed": 700,
     "FiringSpeedAddSpeed": 0,
@@ -1012,9 +1012,9 @@
     "ContinuousCountRange": [
       10
     ],
-    "TriggerInterval": 4,
-    "StartFiringSpeed": 200,
-    "FinalFiringSpeed": 200,
+    "TriggerInterval": 2,
+    "StartFiringSpeed": 700,
+    "FinalFiringSpeed": 700,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
     "FiringSpeedBackTime": 0,
@@ -1164,7 +1164,7 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 3,
+    "TriggerInterval": 1.8,
     "StartFiringSpeed": 300,
     "FinalFiringSpeed": 300,
     "FiringSpeedAddSpeed": 0,
@@ -1316,7 +1316,7 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 4,
+    "TriggerInterval": 1.3,
     "StartFiringSpeed": 180,
     "FinalFiringSpeed": 180,
     "FiringSpeedAddSpeed": 0,
@@ -1468,7 +1468,7 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 4,
+    "TriggerInterval": 1.5,
     "StartFiringSpeed": 210,
     "FinalFiringSpeed": 210,
     "FiringSpeedAddSpeed": 0,
@@ -1620,9 +1620,9 @@
     "ContinuousCountRange": [
       5
     ],
-    "TriggerInterval": 3,
-    "StartFiringSpeed": 700,
-    "FinalFiringSpeed": 700,
+    "TriggerInterval": 1.6,
+    "StartFiringSpeed": 350,
+    "FinalFiringSpeed": 350,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
     "FiringSpeedBackTime": 0,
@@ -1772,9 +1772,9 @@
     "ContinuousCountRange": [
       25
     ],
-    "TriggerInterval": 4,
-    "StartFiringSpeed": 500,
-    "FinalFiringSpeed": 500,
+    "TriggerInterval": 3,
+    "StartFiringSpeed": 900,
+    "FinalFiringSpeed": 900,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
     "FiringSpeedBackTime": 0,
@@ -1924,7 +1924,7 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 0.8,
+    "TriggerInterval": 0.45,
     "StartFiringSpeed": 300,
     "FinalFiringSpeed": 300,
     "FiringSpeedAddSpeed": 0,
@@ -1986,7 +1986,7 @@
     "StandbyAmmoCapacity": 80,
     "ShowReloadBar": false,
     "AutoReload": true,
-    "ReloadTime": 0.5,
+    "ReloadTime": 0.01,
     "AloneReload": false,
     "AloneReloadCount": 1,
     "AloneReloadBeginIntervalTime": 0,
@@ -2076,9 +2076,9 @@
     "ContinuousCountRange": [
       1
     ],
-    "TriggerInterval": 0.8,
-    "StartFiringSpeed": 300,
-    "FinalFiringSpeed": 300,
+    "TriggerInterval": 0.5,
+    "StartFiringSpeed": 600,
+    "FinalFiringSpeed": 600,
     "FiringSpeedAddSpeed": 0,
     "FiringSpeedBackSpeed": 0,
     "FiringSpeedBackTime": 0,

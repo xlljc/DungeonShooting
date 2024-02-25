@@ -793,7 +793,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     /// <returns></returns>
     public bool IsInGround()
     {
-        return Master == null && GetParent() == GameApplication.Instance.World.NormalLayer;
+        return Master == null && GetParent() == World.Current.NormalLayer;
     }
 
     /// <summary>
@@ -2131,8 +2131,22 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     /// <summary>
     /// Ai调用, 触发扣动扳机, 并返回攻击状态
     /// </summary>
-    public AiAttackEnum AiTriggerAttackState()
+    public AiAttackEnum AiTriggerAttackState(AiAttackEnum prevState)
     {
+        var chargeFinish = false;
+        if (prevState == AiAttackEnum.AttackCharge) //蓄力中
+        {
+            var enemy = (Enemy)Master;
+            if (!IsChargeFinish())
+            {
+                enemy.Attack();
+                return prevState;
+            }
+
+            chargeFinish = true;
+            enemy.LockingTime = 0;
+        }
+        
         AiAttackEnum flag;
         if (IsTotalAmmoEmpty()) //当前武器弹药打空
         {
@@ -2169,7 +2183,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         {
             flag = AiAttackEnum.AttackInterval;
         }
-        else if (_continuousCount >= 1) //连发中
+        else if (_continuousCount >= 1 && (!chargeFinish || _continuousCount >= 2)) //连发中
         {
             flag = AiAttackEnum.Attack;
         }
@@ -2186,7 +2200,7 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                 {
                     flag = AiAttackEnum.Attack;
                     enemy.Attack();
-                    if (_attackFlag)
+                    if (_attackFlag) //成功触发攻击
                     {
                         enemy.LockingTime = 0;
                     }
@@ -2197,18 +2211,26 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
                     {
                         flag = AiAttackEnum.Attack;
                         enemy.Attack();
-                        if (_attackFlag)
+                        if (_attackFlag) //成功触发攻击
                         {
                             enemy.LockingTime = 0;
                         }
                     }
                     else //单发
                     {
-                        flag = AiAttackEnum.Attack;
-                        enemy.Attack();
-                        if (_attackFlag)
+                        if (Attribute.LooseShoot && Attribute.MinChargeTime > 0) //松发并蓄力攻击
                         {
-                            enemy.LockingTime = 0;
+                            flag = AiAttackEnum.AttackCharge;
+                            enemy.Attack();
+                        }
+                        else
+                        {
+                            flag = AiAttackEnum.Attack;
+                            enemy.Attack();
+                            if (_attackFlag && _attackTimer > 0) //成功触发攻击
+                            {
+                                enemy.LockingTime = 0;
+                            }
                         }
                     }
                 }

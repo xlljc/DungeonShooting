@@ -8,13 +8,19 @@ using Godot;
 /// </summary>
 public class RoomInfo : IDestroy
 {
+    public RoomInfo(int id, DungeonRoomType type)
+    {
+        Id = id;
+        RoomType = type;
+    }
+
     public RoomInfo(int id, DungeonRoomType type, DungeonRoomSplit roomSplit)
     {
         Id = id;
         RoomType = type;
         RoomSplit = roomSplit;
     }
-
+    
     /// <summary>
     /// 房间 id
     /// </summary>
@@ -31,7 +37,7 @@ public class RoomInfo : IDestroy
     public int Layer;
     
     /// <summary>
-    /// 生成该房间使用的配置数据
+    /// 生成该房间使用的配置数据, 可能为 null
     /// </summary>
     public DungeonRoomSplit RoomSplit;
     
@@ -106,7 +112,7 @@ public class RoomInfo : IDestroy
     public Rect2I OuterRect { get; private set; }
     
     /// <summary>
-    /// 画布占用区域
+    /// 画布占用区域, 单位: 像素
     /// </summary>
     public Rect2I CanvasRect { get; private set; }
 
@@ -134,11 +140,6 @@ public class RoomInfo : IDestroy
     /// 房间内的传送点, 单位: 格
     /// </summary>
     public Vector2I Waypoints { get; set; }
-
-    /// <summary>
-    /// 导航网格对象
-    /// </summary>
-    public NavigationRegion2D NavigationRegion { get; set; }
 
     /// <summary>
     /// 在 DungeonGenerator 中是否可以回滚, 如果可以回滚, 那么当前房间就只会有一个 NextRoom
@@ -270,6 +271,10 @@ public class RoomInfo : IDestroy
     /// <returns></returns>
     public Vector2I GetOffsetPosition()
     {
+        if (RoomSplit == null)
+        {
+            return Vector2I.Zero;
+        }
         return RoomSplit.RoomInfo.Position.AsVector2I() * GameConfig.TileCellSize;
     }
     
@@ -457,7 +462,7 @@ public class RoomInfo : IDestroy
     /// </summary>
     public void OnFirstEnter()
     {
-        if (RoomPreinstall.IsRunWave)
+        if (RoomPreinstall == null || RoomPreinstall.IsRunWave)
         {
             return;
         }

@@ -170,6 +170,10 @@ public class RoomPreinstall : IDestroy
                 {
                     
                 }
+                else if (markInfo.SpecialMarkType == SpecialMarkType.OutPoint) //出口标记
+                {
+
+                }
                 else
                 {
                     Debug.LogError("暂未支持的类型: " + markInfo.SpecialMarkType);

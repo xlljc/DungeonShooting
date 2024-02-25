@@ -29,7 +29,7 @@ public class MarkObjectCell : UiCell<MapEditorCreateMark.MarkObject, MarkInfoIte
         //权重
         CellNode.L_VBoxContainer.L_HBoxContainer.L_WeightEdit.Instance.Value = data.Weight;
         
-        if (data.SpecialMarkType == SpecialMarkType.BirthPoint) //出生标记
+        if (data.SpecialMarkType != SpecialMarkType.Normal) //特殊标记
         {
             //物体名称
             CellNode.L_VBoxContainer.L_HBoxContainer.L_NameLabel.Instance.Text = PreinstallMarkManager.GetSpecialName(data.SpecialMarkType);

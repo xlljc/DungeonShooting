@@ -24,6 +24,7 @@ public partial class Bow : Weapon
         _activeArrow.CollisionArea.Monitoring = false;
         _activeArrow.Collision.Disabled = true;
         _activeArrow.Position = Vector2.Zero;
+        _activeArrow.RefreshBulletColor(false);
         ArrowPoint.AddChild(_activeArrow);
     }
 
@@ -31,6 +32,17 @@ public partial class Bow : Weapon
     {
         base.Process(delta);
         _activeArrow.ShadowOffset = ShadowOffset + new Vector2(0, Altitude);
+        _activeArrow.Visible = !IsTotalAmmoEmpty();
+    }
+
+    protected override void OnPickUp(Role master)
+    {
+        _activeArrow.RefreshBulletColor(master.IsEnemyWithPlayer());
+    }
+
+    protected override void OnRemove(Role master)
+    {
+        _activeArrow.RefreshBulletColor(false);
     }
 
     protected override void OnBeginCharge()

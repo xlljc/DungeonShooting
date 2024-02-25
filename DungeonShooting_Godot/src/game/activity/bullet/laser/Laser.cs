@@ -37,6 +37,7 @@ public partial class Laser : Area2D, IBullet
     }
 
     public BulletData BulletData { get; private set; }
+    public BulletStateEnum State { get; protected set; } = BulletStateEnum.Normal;
 
     public bool IsDestroyed { get; private set; }
     
@@ -52,7 +53,7 @@ public partial class Laser : Area2D, IBullet
     {
         InitData(data, attackLayer, LaserDefaultWidth);
     }
-    
+
     public void InitData(BulletData data, uint attackLayer, float width)
     {
         if (!_init)
@@ -137,6 +138,7 @@ public partial class Laser : Area2D, IBullet
         _tween.Chain();
         _tween.TweenCallback(Callable.From(() =>
         {
+            State = BulletStateEnum.MaxDistance;
             _tween = null;
             LogicalFinish();
         }));
@@ -252,6 +254,7 @@ public partial class Laser : Area2D, IBullet
     
     public virtual void OnReclaim()
     {
+        State = BulletStateEnum.Normal;
         if (Particles2D != null)
         {
             foreach (var particles2D in Particles2D)

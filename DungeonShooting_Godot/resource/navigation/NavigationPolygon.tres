@@ -1,0 +1,7 @@
+[gd_resource type="NavigationPolygon" format=3 uid="uid://brpcle7mygiml"]
+
+[resource]
+resource_local_to_scene = true
+source_geometry_mode = 1
+source_geometry_group_name = &"navigation"
+cell_size = 4.0

@@ -126,6 +126,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     /// <summary>
+    /// 下坠逻辑是否执行完成
+    /// </summary>
+    public bool IsFallOver => _isFallOver;
+
+    /// <summary>
     /// 是否正在投抛过程中
     /// </summary>
     public bool IsThrowing => VerticalSpeed != 0 && !_isFallOver;
@@ -200,11 +205,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// 物体材质数据
     /// </summary>
     public ExcelConfig.ActivityMaterial ActivityMaterial { get; private set; }
-    
+
     /// <summary>
     /// 所在的 World 对象
     /// </summary>
-    public World World { get; private set; }
+    public World World { get; set; }
 
     /// <summary>
     /// 是否开启描边
@@ -240,7 +245,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <summary>
     /// 是否是自定义阴影纹理
     /// </summary>
-    public bool IsCustomShadowSprite { get; private set; }
+    public bool IsCustomShadowSprite { get; set; }
 
     /// <summary>
     /// 记录绘制液体的笔刷上一次绘制的位置<br/>
@@ -656,7 +661,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     {
         DefaultLayer = layer;
         var parent = GetParent();
-        var root = GameApplication.Instance.World.GetRoomLayer(layer);
+        var root = World.Current.GetRoomLayer(layer);
         if (parent != root)
         {
             if (parent != null)
@@ -1111,8 +1116,8 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
                     _altitude += VerticalSpeed * delta;
                     _verticalSpeed -= GameConfig.G * ActivityMaterial.GravityScale * delta;
 
-                    //当高度大于16时, 显示在所有物体上, 并且关闭碰撞
-                    if (Altitude >= 16)
+                    //当高度大于32时, 显示在所有物体上, 并且关闭碰撞
+                    if (Altitude >= 32)
                     {
                         AnimatedSprite.ZIndex = 20;
                     }
@@ -1123,7 +1128,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
                     //动态开关碰撞器
                     if (ActivityMaterial.DynamicCollision)
                     {
-                        Collision.Disabled = Altitude >= 16;
+                        Collision.Disabled = Altitude >= 32;
                     }
                 
                     //达到最高点
@@ -1356,8 +1361,10 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         ShadowSprite.GlobalPosition = new Vector2(pos.X + ShadowOffset.X, pos.Y + ShadowOffset.Y + Altitude);
     }
 
-    //计算位置
-    private void CalcThrowAnimatedPosition()
+    /// <summary>
+    /// 计算物体精灵和阴影位置
+    /// </summary>
+    public void CalcThrowAnimatedPosition()
     {
         if (Scale.Y < 0)
         {
@@ -1443,6 +1450,19 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     /// <summary>
+    /// 获取投抛该物体时所产生的数据, 只在 IsFallOver 为 false 时有效
+    /// </summary>
+    public ActivityFallData GetFallData()
+    {
+        if (!IsFallOver && !_fallData.UseOrigin)
+        {
+            return _fallData;
+        }
+
+        return null;
+    }
+    
+    /// <summary>
     /// 触发投抛动作
     /// </summary>
     private void Throw()
@@ -1453,9 +1473,9 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         {
             this.AddToActivityRoot(RoomLayerEnum.YSortLayer);
         }
-        else if (parent != GameApplication.Instance.World.YSortLayer)
+        else if (parent != World.Current.YSortLayer)
         {
-            Reparent(GameApplication.Instance.World.YSortLayer);
+            Reparent(World.Current.YSortLayer);
         }
 
         CalcThrowAnimatedPosition();
@@ -1473,7 +1493,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     private void SetFallCollision()
     {
-        if (_fallData != null && _fallData.UseOrigin)
+        if (_fallData.UseOrigin)
         {
             _fallData.OriginShape = Collision.Shape;
             _fallData.OriginPosition = Collision.Position;
@@ -1507,7 +1527,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// </summary>
     private void RestoreCollision()
     {
-        if (_fallData != null && !_fallData.UseOrigin)
+        if (!_fallData.UseOrigin)
         {
             Collision.Shape = _fallData.OriginShape;
             Collision.Position = _fallData.OriginPosition;
@@ -1532,7 +1552,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     private void ThrowOver()
     {
         var parent = GetParent();
-        var roomLayer = GameApplication.Instance.World.GetRoomLayer(DefaultLayer);
+        var roomLayer = World.Current.GetRoomLayer(DefaultLayer);
         if (parent != roomLayer)
         {
             parent.RemoveChild(this);
@@ -1849,7 +1869,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <summary>
     /// 绑定可销毁对象, 绑定的物体会在当前物体销毁时触发销毁
     /// </summary>
-    public void BindDestroyObject(IDestroy destroy)
+    public void AddDestroyObject(IDestroy destroy)
     {
         if (_destroySet == null)
         {
@@ -1875,7 +1895,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <summary>
     /// 绑定挂载对象, 绑定的物体会在当前物体销毁时触发扔出
     /// </summary>
-    public void BindMountObject(IMountItem target)
+    public void AddMountObject(IMountItem target)
     {
         if (_mountObjects == null)
         {
@@ -1901,6 +1921,27 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         if (_mountObjects.Remove(target))
         {
             target.OnUnmount(this);
+        }
+    }
+
+    /// <summary>
+    /// 设置是否启用碰撞层, 该函数是设置下载状态下原碰撞层
+    /// </summary>
+    public void SetOriginCollisionLayerValue(uint layer, bool vale)
+    {
+        if (vale)
+        {
+            if (!Utils.CollisionMaskWithLayer(_fallData.OriginCollisionLayer, layer))
+            {
+                _fallData.OriginCollisionLayer |= layer;
+            }
+        }
+        else
+        {
+            if (Utils.CollisionMaskWithLayer(_fallData.OriginCollisionLayer, layer))
+            {
+                _fallData.OriginCollisionLayer ^= layer;
+            }
         }
     }
 }

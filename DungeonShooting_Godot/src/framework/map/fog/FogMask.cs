@@ -108,7 +108,7 @@ public partial class FogMask : FogMaskBase
     
     private void HandlerTransition(Vector2I position, Vector2I size, Image image)
     {
-        var tileMap = GameApplication.Instance.World.TileRoot;
+        var tileMap = World.Current.TileRoot;
         var autoConfig = GameApplication.Instance.DungeonManager.AutoTileConfig;
         var wallCoords = autoConfig.TopMask.AutoTileCoords;
         var (x, y) = position;
@@ -241,7 +241,6 @@ public partial class FogMask : FogMaskBase
     {
         return tileMap.GetCellSourceId(MapLayer.AutoFloorLayer, pos) != -1 ||
                tileMap.GetCellSourceId(MapLayer.AutoMiddleLayer, pos) != -1 ||
-               tileMap.GetCellSourceId(MapLayer.AutoTopLayer, pos) != -1 ||
-               tileMap.GetCellSourceId(MapLayer.AutoAisleFloorLayer, pos) != -1;
+               tileMap.GetCellSourceId(MapLayer.AutoTopLayer, pos) != -1;
     }
 }

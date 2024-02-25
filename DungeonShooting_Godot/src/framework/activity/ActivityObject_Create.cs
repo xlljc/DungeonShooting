@@ -9,10 +9,10 @@ public partial class ActivityObject
     /// </summary>
     public static ActivityObject Create(ExcelConfig.ActivityBase config)
     {
-        var world = GameApplication.Instance.World;
+        var world = World.Current;
         if (world == null)
         {
-            throw new Exception("实例化 ActivityObject 前请先调用 'GameApplication.Instance.CreateNewWorld()' 初始化 World 对象");
+            throw new Exception("实例化 ActivityObject 前请先调用 'GameApplication.Instance.DungeonManager.CreateNewWorld()' 初始化 World 对象");
         }
         var instance = ResourceManager.LoadAndInstantiate<ActivityObject>(config.Prefab);
         instance._InitNode(config, world);

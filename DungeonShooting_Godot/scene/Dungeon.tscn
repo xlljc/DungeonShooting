@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bqf2vks5ggnsp"]
 
-[ext_resource type="Script" path="res://src/game/room/World.cs" id="1_kt3mm"]
+[ext_resource type="Script" path="res://src/game/room/Dungeon.cs" id="1_txiyv"]
 
 [sub_resource type="Environment" id="Environment_g06jj"]
 background_mode = 3
@@ -9,8 +9,8 @@ glow_normalized = true
 glow_strength = 1.05
 glow_blend_mode = 1
 
-[node name="World" type="CanvasModulate"]
-script = ExtResource("1_kt3mm")
+[node name="Dungeon" type="CanvasModulate"]
+script = ExtResource("1_txiyv")
 metadata/_edit_vertical_guides_ = []
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]

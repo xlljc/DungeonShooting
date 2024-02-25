@@ -100,7 +100,7 @@ public static class GameConfig
     /// <summary>
     /// 地形掩码纹理大小, 侧方墙壁
     /// </summary>
-    public static readonly Vector2I TerrainBitMiddle = new Vector2I(4, 1);
+    public static readonly Vector2I TerrainBitMiddle = new Vector2I(4, 2);
     /// <summary>
     /// 地形掩码纹理大小, 地板
     /// </summary>

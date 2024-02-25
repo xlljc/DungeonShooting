@@ -78,7 +78,7 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
             S_DelayInput.Instance.Value = data.DelayTime;
         }
 
-        if (_markInfo.SpecialMarkType == SpecialMarkType.BirthPoint) //出生标记
+        if (_markInfo.SpecialMarkType != SpecialMarkType.Normal) //特殊标记
         {
             var markInfoItem = new MarkInfoItem();
             markInfoItem.SpecialMarkType = _markInfo.SpecialMarkType;
@@ -131,6 +131,10 @@ public partial class MapEditorCreateMarkPanel : MapEditorCreateMark
         
         //标记物体数据
         if (data.SpecialMarkType == SpecialMarkType.BirthPoint) //出生标记
+        {
+            
+        }
+        else if (data.SpecialMarkType == SpecialMarkType.OutPoint) //出口标记
         {
             
         }

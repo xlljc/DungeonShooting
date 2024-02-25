@@ -90,48 +90,50 @@ public static class FogMaskHandler
         }
         //Debug.Log("RefreshRoomFog: " + roomInfo.Id);
         var fogMask = roomInfo.RoomFogMask;
-        
-        if (!fogMask.IsExplored) //未探索该区域
+        if (fogMask != null)
         {
-            fogMask.IsExplored = true;
-            fogMask.TransitionAlpha(0, 1);
-            
-            //小地图亮起该房间
-            roomInfo.PreviewSprite.Visible = true;
-
-            //刷新预览区域
-            foreach (var roomInfoDoor in roomInfo.Doors)
+            if (!fogMask.IsExplored) //未探索该区域
             {
-                if (roomInfoDoor.AisleFogMask.IsExplored) //探索过, 执行过道刷新逻辑
+                fogMask.IsExplored = true;
+                fogMask.TransitionAlpha(0, 1);
+            
+                //小地图亮起该房间
+                roomInfo.PreviewSprite.Visible = true;
+
+                //刷新预览区域
+                foreach (var roomInfoDoor in roomInfo.Doors)
                 {
-                    _RefreshAisleFog(roomInfoDoor);
-                }
-                else //未探索
-                {
-                    //显示预览过道
-                    roomInfoDoor.PreviewRoomFogMask.SetActive(false);
-                    roomInfoDoor.PreviewAisleFogMask.SetActive(true);
-                    roomInfoDoor.PreviewAisleFogMask.TransitionAlpha(0, 1);
+                    if (roomInfoDoor.AisleFogMask.IsExplored) //探索过, 执行过道刷新逻辑
+                    {
+                        _RefreshAisleFog(roomInfoDoor);
+                    }
+                    else //未探索
+                    {
+                        //显示预览过道
+                        roomInfoDoor.PreviewRoomFogMask.SetActive(false);
+                        roomInfoDoor.PreviewAisleFogMask.SetActive(true);
+                        roomInfoDoor.PreviewAisleFogMask.TransitionAlpha(0, 1);
+                    }
                 }
             }
-        }
-        else //已经探索过
-        {
-            //变亮
-            fogMask.TransitionAlpha(GameConfig.DarkFogAlpha, 1);
-            
-            foreach (var roomInfoDoor in roomInfo.Doors)
+            else //已经探索过
             {
-                if (roomInfoDoor.AisleFogMask.IsExplored) //探索过, 执行过道刷新逻辑
+                //变亮
+                fogMask.TransitionAlpha(GameConfig.DarkFogAlpha, 1);
+            
+                foreach (var roomInfoDoor in roomInfo.Doors)
                 {
-                    _RefreshAisleFog(roomInfoDoor);
-                }
-                else //未探索
-                {
-                    //显示预览过道
-                    roomInfoDoor.PreviewRoomFogMask.SetActive(false);
-                    roomInfoDoor.PreviewAisleFogMask.SetActive(true);
-                    roomInfoDoor.PreviewAisleFogMask.TransitionAlpha(1);
+                    if (roomInfoDoor.AisleFogMask.IsExplored) //探索过, 执行过道刷新逻辑
+                    {
+                        _RefreshAisleFog(roomInfoDoor);
+                    }
+                    else //未探索
+                    {
+                        //显示预览过道
+                        roomInfoDoor.PreviewRoomFogMask.SetActive(false);
+                        roomInfoDoor.PreviewAisleFogMask.SetActive(true);
+                        roomInfoDoor.PreviewAisleFogMask.TransitionAlpha(1);
+                    }
                 }
             }
         }

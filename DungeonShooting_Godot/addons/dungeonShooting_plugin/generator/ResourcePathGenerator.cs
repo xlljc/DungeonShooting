@@ -45,7 +45,8 @@ public static class ResourcePathGenerator
         "addons",
         ".godot",
         ".vs",
-        "resource/map"
+        "resource/map",
+        "excelTool"
     };
 
     private static string resultStr = "";
