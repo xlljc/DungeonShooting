@@ -782,5 +782,47 @@
     "Prefab": "res://prefab/currency/Gold1.tscn",
     "Icon": "res://resource/sprite/ui/commonIcon/Gold_1.png",
     "ShowInMapEditor": true
+  },
+  {
+    "Id": "item_0012",
+    "Type": 99,
+    "Name": "\u5927\u5385\u6C99\u53D1",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0012.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
+    "Id": "item_0013",
+    "Type": 99,
+    "Name": "\u5927\u5385\u6C99\u53D1",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0013.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
+    "Id": "item_0017",
+    "Type": 99,
+    "Name": "\u5927\u5385\u684C\u5B50",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0017.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
   }
 ]

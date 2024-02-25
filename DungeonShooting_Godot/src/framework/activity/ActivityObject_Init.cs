@@ -288,5 +288,20 @@ public partial class ActivityObject
         /// 简介: 获得1金币
         /// </summary>
         public const string Id_gold_1 = "gold_1";
+        /// <summary>
+        /// 名称: 大厅沙发 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0012 = "item_0012";
+        /// <summary>
+        /// 名称: 大厅沙发 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0013 = "item_0013";
+        /// <summary>
+        /// 名称: 大厅桌子 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0017 = "item_0017";
     }
 }

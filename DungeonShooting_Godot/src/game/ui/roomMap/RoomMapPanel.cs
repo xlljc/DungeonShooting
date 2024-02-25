@@ -41,6 +41,11 @@ public partial class RoomMapPanel : RoomMap
         S_DrawContainer.Instance.Resized += OnDrawContainerResized;
     }
 
+    public override void OnShowUi()
+    {
+        base.OnShowUi();
+    }
+
 
     public override void OnDestroyUi()
     {

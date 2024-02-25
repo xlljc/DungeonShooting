@@ -246,6 +246,7 @@ mouse_right={
 2d_physics/layer_7="onHand"
 2d_physics/layer_8="debris"
 2d_physics/layer_9="throwing"
+2d_physics/layer_10="obstacle"
 
 [mono]
 

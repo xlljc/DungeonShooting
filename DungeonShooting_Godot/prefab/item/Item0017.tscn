@@ -1,0 +1,64 @@
+[gd_scene load_steps=8 format=3 uid="uid://dh4cenmpdj520"]
+
+[ext_resource type="Script" path="res://src/game/activity/item/ObstacleObject.cs" id="1_78dif"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_pybet"]
+[ext_resource type="Texture2D" uid="uid://cel2hojxm4fgj" path="res://resource/sprite/item/hall/item _17.png" id="3_jojl2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wh4b7"]
+resource_local_to_scene = true
+shader = ExtResource("2_pybet")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f7tsa"]
+resource_local_to_scene = true
+shader = ExtResource("2_pybet")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uqva1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_jojl2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kmpvc"]
+size = Vector2(42, 19)
+
+[node name="Item0017" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
+collision_layer = 512
+collision_mask = 0
+script = ExtResource("1_78dif")
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
+
+[node name="ShadowSprite" type="Sprite2D" parent="."]
+z_index = -1
+material = SubResource("ShaderMaterial_wh4b7")
+
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_f7tsa")
+position = Vector2(0, -2)
+sprite_frames = SubResource("SpriteFrames_uqva1")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, 2.5)
+shape = SubResource("RectangleShape2D_kmpvc")

@@ -125,6 +125,14 @@ public partial class ActivityInstance : Node2D
     
     private static string _jsonText;
 
+    /// <summary>
+    /// 清空缓存的json
+    /// </summary>
+    public static void ClearCacheJson()
+    {
+        _jsonText = null;
+    }
+    
     public override void _Ready()
     {
 #if TOOLS

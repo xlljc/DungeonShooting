@@ -35,6 +35,16 @@ public partial class RoomUIPanel : RoomUI
 
         _factory = EventManager.CreateEventFactory();
         _factory.AddEventListener(EventEnum.OnPlayerPickUpProp, OnPlayerPickUpProp);
+
+        //大厅中不显示小地图
+        if (World.Current is Hall)
+        {
+            S_RoomMap.Instance.HideUi();
+        }
+        else
+        {
+            S_RoomMap.Instance.ShowUi();
+        }
     }
 
     public override void OnHideUi()
