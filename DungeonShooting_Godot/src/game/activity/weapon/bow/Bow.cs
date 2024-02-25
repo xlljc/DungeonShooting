@@ -24,6 +24,7 @@ public partial class Bow : Weapon
         _activeArrow.CollisionArea.Monitoring = false;
         _activeArrow.Collision.Disabled = true;
         _activeArrow.Position = Vector2.Zero;
+        _activeArrow.RefreshBulletColor(false);
         ArrowPoint.AddChild(_activeArrow);
     }
 
