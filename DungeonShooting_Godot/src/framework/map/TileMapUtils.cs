@@ -125,9 +125,12 @@ public static class TileMapUtils
 
         //计算区域
         var rect = Utils.CalcRect(autoCellLayerGrid);
-        rect.Position -= new Vector2I(2, 3);
-        rect.Size += new Vector2I(4, 5);
-        
+        if (rect.Size != Vector2I.Zero)
+        {
+            rect.Position -= new Vector2I(2, 3);
+            rect.Size += new Vector2I(4, 5);
+        }
+
         //开始绘制导航网格
         GenerateNavigation(navigationRegion, rect.Position, rect.Size);
 

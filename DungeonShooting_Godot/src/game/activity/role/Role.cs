@@ -1054,9 +1054,14 @@ public abstract partial class Role : ActivityObject
             {
                 weapon.AffiliationArea.RemoveItem(weapon);
             }
+
+            weapon.World = World;
         });
     }
     
+    /// <summary>
+    /// 调整角色的朝向, 使其看向目标点
+    /// </summary>
     public virtual void LookTargetPosition(Vector2 pos)
     {
         LookPosition = pos;

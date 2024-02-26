@@ -60,4 +60,4 @@ custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../Restart")
 theme = ExtResource("2_63mpy")
-text = "回到主菜单"
+text = "回到大厅"

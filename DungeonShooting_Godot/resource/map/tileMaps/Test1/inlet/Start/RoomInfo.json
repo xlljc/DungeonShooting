@@ -1,1 +1,1 @@
-{"Position":{"X":-9,"Y":-7},"Size":{"X":20,"Y":17},"DoorAreaInfos":[{"Direction":3,"Start":64,"End":208},{"Direction":0,"Start":16,"End":144},{"Direction":2,"Start":48,"End":176},{"Direction":1,"Start":16,"End":160}],"GroupName":"Test1","RoomType":2,"RoomName":"Start","Weight":100,"Remark":""}
+{"Position":{"X":-9,"Y":-7},"Size":{"X":20,"Y":17},"DoorAreaInfos":[{"Direction":3,"Start":32,"End":176},{"Direction":2,"Start":16,"End":144}],"GroupName":"Test1","RoomType":2,"RoomName":"Start","Weight":100,"Remark":""}

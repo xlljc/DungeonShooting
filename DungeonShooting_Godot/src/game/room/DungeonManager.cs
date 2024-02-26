@@ -324,6 +324,9 @@ public partial class DungeonManager : Node2D
         Player.SetCurrentPlayer(player);
         affiliation.InsertItem(player);
         player.WeaponPack.PickupItem(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
+        yield return 0;
+        player.Collision.Disabled = false;
+        
         GameApplication.Instance.Cursor.SetGuiMode(false);
         yield return 0;
         
@@ -362,6 +365,7 @@ public partial class DungeonManager : Node2D
             player.AffiliationArea?.RemoveItem(player);
             player.GetParent().RemoveChild(player);
             player.World = null;
+            player.Collision.Disabled = true;
         }
 
         DestroyWorld();
@@ -417,11 +421,15 @@ public partial class DungeonManager : Node2D
                         if (_prevUi != null)
                         {
                             _prevUi.ShowUi();
+                            //尝试关闭加载Ui
+                            UiManager.Destroy_Loading();
                         }
                     }
                     else //正常关闭Ui
                     {
                         UiManager.Open_Main();
+                        //尝试关闭加载Ui
+                        UiManager.Destroy_Loading();
                     }
                     EditorWindowManager.ShowTips("错误", "生成房间尝试次数过多，生成地牢房间失败，请加大房间门连接区域，或者修改地牢生成规则！");
                     yield break;
@@ -483,6 +491,8 @@ public partial class DungeonManager : Node2D
         player.PutDown(RoomLayerEnum.YSortLayer);
         Player.SetCurrentPlayer(player);
         StartRoomInfo.AffiliationArea.InsertItem(player);
+        yield return 0;
+        player.Collision.Disabled = false;
         
         GameApplication.Instance.Cursor.SetGuiMode(false);
         //打开游戏中的ui
@@ -505,7 +515,7 @@ public partial class DungeonManager : Node2D
         yield return 0;
         CurrWorld.Pause = true;
         yield return 0;
-        _dungeonGenerator.EachRoom(DisposeRoomInfo);
+        _dungeonGenerator?.EachRoom(DisposeRoomInfo);
         yield return 0;
         _dungeonTileMap = null;
         AutoTileConfig = null;
@@ -523,6 +533,7 @@ public partial class DungeonManager : Node2D
             player.AffiliationArea?.RemoveItem(player);
             player.GetParent().RemoveChild(player);
             player.World = null;
+            player.Collision.Disabled = true;
         }
 
         DestroyWorld();
@@ -573,29 +584,25 @@ public partial class DungeonManager : Node2D
                 case DoorDirection.E:
                     door = ActivityObject.Create<RoomDoor>(ActivityObject.Ids.Id_other_door_e);
                     door.Position = (doorInfo.OriginPosition + new Vector2(0.5f, 2)) * GameConfig.TileCellSize;
-                    door.ZIndex = MapLayer.AutoTopLayer;
                     break;
                 case DoorDirection.W:
                     door = ActivityObject.Create<RoomDoor>(ActivityObject.Ids.Id_other_door_w);
                     door.Position = (doorInfo.OriginPosition + new Vector2(-0.5f, 2)) * GameConfig.TileCellSize;
-                    door.ZIndex = MapLayer.AutoTopLayer;
                     break;
                 case DoorDirection.S:
                     door = ActivityObject.Create<RoomDoor>(ActivityObject.Ids.Id_other_door_s);
                     door.Position = (doorInfo.OriginPosition + new Vector2(2f, 1.5f)) * GameConfig.TileCellSize;
-                    door.ZIndex = MapLayer.AutoTopLayer;
                     break;
                 case DoorDirection.N:
                     door = ActivityObject.Create<RoomDoor>(ActivityObject.Ids.Id_other_door_n);
                     door.Position = (doorInfo.OriginPosition + new Vector2(2f, -0.5f)) * GameConfig.TileCellSize;
-                    door.ZIndex = MapLayer.AutoMiddleLayer;
                     break;
                 default:
                     return;
             }
             doorInfo.Door = door;
             door.Init(doorInfo);
-            door.PutDown(RoomLayerEnum.NormalLayer, false);
+            door.PutDown(RoomLayerEnum.YSortLayer, false);
         }
     }
 

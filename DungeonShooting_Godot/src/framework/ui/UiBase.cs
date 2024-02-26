@@ -133,6 +133,8 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
             Debug.LogError($"当前Ui: {UiName}已经被销毁!");
             return;
         }
+        
+        Visible = true;
         if (IsOpen)
         {
             return;
@@ -140,7 +142,6 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
 
         _nestedOpen = true;
         IsOpen = true;
-        Visible = true;
         OnShowUi();
         if (OnShowUiEvent != null)
         {
@@ -170,6 +171,8 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
             Debug.LogError($"当前Ui: {UiName}已经被销毁!");
             return;
         }
+
+        Visible = false;
         if (!IsOpen)
         {
             return;
@@ -177,7 +180,6 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
 
         _nestedOpen = false;
         IsOpen = false;
-        Visible = false;
         OnHideUi();
         if (OnHideUiEvent != null)
         {

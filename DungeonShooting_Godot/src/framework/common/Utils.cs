@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using UI.TileSetEditorCombination;
 
@@ -343,6 +345,11 @@ public static class Utils
     /// </summary>
     public static Rect2I CalcRect(IEnumerable<Vector2I> cells)
     {
+        var count = cells.Count();
+        if (count == 0)
+        {
+            return new Rect2I();
+        }
         //单位: 像素
         var canvasXStart = int.MaxValue;
         var canvasYStart = int.MaxValue;
@@ -553,5 +560,18 @@ public static class Utils
             }
         }
         return list.ToArray();
+    }
+
+    /// <summary>
+    /// 遍历节点树
+    /// </summary>
+    public static void EachNode(Node node, Action<Node> action)
+    {
+        action(node);
+        var childCount = node.GetChildCount();
+        for (var i = 0; i < childCount; i++)
+        {
+            EachNode(node.GetChild(i), action);
+        }
     }
 }

@@ -306,6 +306,7 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
         if (ExcelGenerator.ExportExcel())
         {
             ShowTips("提示", "导出Excel表成功！");
+            ActivityInstance.ClearCacheJson();
         }
         else
         {
@@ -318,10 +319,19 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
     /// </summary>
     private void OpenExportExcelFolder()
     {
-        var path = Environment.CurrentDirectory + "\\excel";
-        System.Diagnostics.Process.Start("explorer.exe", path);
+        var path = Environment.CurrentDirectory + "/excel";
+        var osName = OS.GetName();
+        GD.Print("打开excel文件夹: " + path);
+        if (osName == "Windows")
+        {
+            System.Diagnostics.Process.Start("explorer.exe", path);
+        }
+        else
+        {
+            System.Diagnostics.Process.Start("open", path);
+        }
     }
-    
+
     /// <summary>
     /// 在编辑器中打开一个提示窗口
     /// </summary>

@@ -391,7 +391,7 @@ public partial class EditorTileMap : TileMap, IUiNodeScript
 
                 if (CurrLayer.Layer != MapLayer.AutoFloorLayer && (CurrBrushType == TileMapDrawMode.Free || CurrBrushType == TileMapDrawMode.Combination)) //自由绘制 或者 绘制组合
                 {
-                    if (_isLeftPressed) //左键绘制
+                    if (_isLeftPressed && _brushWidth > 0 && _brushHeight > 0) //左键绘制
                     {
                         var w = s.X / GameConfig.TileCellSize;
                         var h = s.Y / GameConfig.TileCellSize;
