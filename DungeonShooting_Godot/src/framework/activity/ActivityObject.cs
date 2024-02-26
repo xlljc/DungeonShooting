@@ -450,7 +450,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
 
         IsShowShadow = true;
-        CalcShadowTransform();
+        CalcShadowTransform(IsInsideTree());
         ShadowSprite.Visible = true;
     }
 
@@ -684,7 +684,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
             {
                 //注意需要延时调用
                 CallDeferred(nameof(ShowShadowSprite));
-                CalcShadowTransform();
+                CalcShadowTransform(false);
             }
         }
         else
@@ -1232,7 +1232,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
             if (_freezeSprite == null || !_freezeSprite.IsFrozen)
             {
                 //计算阴影
-                CalcShadowTransform();
+                CalcShadowTransform(true);
             }
         }
 
@@ -1344,7 +1344,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     /// <summary>
     /// 重新计算物体阴影的位置和旋转信息, 无论是否显示阴影
     /// </summary>
-    public void CalcShadowTransform()
+    public void CalcShadowTransform(bool isInTree)
     {
         //偏移
         if (!IsCustomShadowSprite)
@@ -1357,8 +1357,16 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         //阴影角度
         ShadowSprite.Rotation = 0;
         //阴影位置计算
-        var pos = AnimatedSprite.GlobalPosition;
-        ShadowSprite.GlobalPosition = new Vector2(pos.X + ShadowOffset.X, pos.Y + ShadowOffset.Y + Altitude);
+        if (isInTree)
+        {
+            var pos = AnimatedSprite.GlobalPosition;
+            ShadowSprite.GlobalPosition = new Vector2(pos.X + ShadowOffset.X, pos.Y + ShadowOffset.Y + Altitude);
+        }
+        else
+        {
+            var pos = AnimatedSprite.Position;
+            ShadowSprite.Position = new Vector2(pos.X + ShadowOffset.X, pos.Y + ShadowOffset.Y + Altitude);
+        }
     }
 
     /// <summary>

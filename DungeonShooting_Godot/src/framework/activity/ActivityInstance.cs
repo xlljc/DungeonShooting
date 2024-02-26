@@ -133,6 +133,23 @@ public partial class ActivityInstance : Node2D
     public bool VerticalMotion { get; private set; } = true;
 
     /// <summary>
+    /// 是否启用碰撞器
+    /// </summary>
+    [Export]
+    public bool CollisionEnabled
+    {
+        get => _collisionEnabled;
+        set
+        {
+            _collisionEnabled = value;
+            if (_activityObject != null)
+            {
+                _activityObject.Collision.Disabled = !value;
+            }
+        }
+    }
+    
+    /// <summary>
     /// 编辑器属性, 物体子碰撞器在编辑器中是否可见
     /// </summary>
     [Export]
@@ -157,6 +174,7 @@ public partial class ActivityInstance : Node2D
     private float _altitude;
     private int _spriteZIndex = 0;
     private int _shadowZIndex = -1;
+    private bool _collisionEnabled = true;
 
     private Vector2 _collPos;
     private bool _createFlag = false;
@@ -287,12 +305,14 @@ public partial class ActivityInstance : Node2D
         activityObject.AnimatedSprite.ZIndex = _spriteZIndex;
         activityObject.ShadowSprite.ZIndex = _shadowZIndex;
         activityObject.EnableVerticalMotion = VerticalMotion;
+        activityObject.Collision.Disabled = !_collisionEnabled;
         if (!_isNested)
         {
             activityObject.PutDown(DefaultLayer, _showShadow);
         }
         else
         {
+            activityObject.DefaultLayer = DefaultLayer;
             activityObject.ShowShadowSprite();
         }
 
