@@ -310,6 +310,10 @@ public partial class DungeonManager : Node2D
         roomInfo.LiquidCanvas = liquidCanvas;
         roomInfo.StaticSprite.AddChild(liquidCanvas);
         yield return 0;
+                
+        //打开游戏中的ui
+        UiManager.Open_RoomUI();
+        yield return 0;
         
         //创建玩家
         var player = Player.Current;
@@ -331,8 +335,6 @@ public partial class DungeonManager : Node2D
         yield return 0;
         
         IsInDungeon = true;
-        //打开游戏中的ui
-        UiManager.Open_RoomUI();
 
         if (finish != null)
         {
@@ -473,8 +475,13 @@ public partial class DungeonManager : Node2D
         //地牢加载即将完成
         yield return _dungeonGenerator.EachRoomCoroutine(info => info.OnReady());
         
+        //打开游戏中的ui
+        UiManager.Open_RoomUI();
+        yield return 0;
+        
         //初始房间创建玩家标记
         var playerBirthMark = StartRoomInfo.RoomPreinstall.GetPlayerBirthMark();
+        
         //创建玩家
         var player = Player.Current;
         if (player == null)
@@ -495,8 +502,6 @@ public partial class DungeonManager : Node2D
         player.Collision.Disabled = false;
         
         GameApplication.Instance.Cursor.SetGuiMode(false);
-        //打开游戏中的ui
-        UiManager.Open_RoomUI();
         //派发进入地牢事件
         EventManager.EmitEvent(EventEnum.OnEnterDungeon);
         
