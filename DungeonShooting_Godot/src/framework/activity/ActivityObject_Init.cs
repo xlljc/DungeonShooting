@@ -318,5 +318,15 @@ public partial class ActivityObject
         /// 简介: 
         /// </summary>
         public const string Id_item_0017 = "item_0017";
+        /// <summary>
+        /// 名称: 台灯 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0031 = "item_0031";
+        /// <summary>
+        /// 名称: 卡带盒子 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0057 = "item_0057";
     }
 }

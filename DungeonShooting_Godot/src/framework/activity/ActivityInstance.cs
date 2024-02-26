@@ -9,6 +9,8 @@ using Godot;
 [Tool]
 public partial class ActivityInstance : Node2D
 {
+    private const string GroupName = "Editor";
+    
     /// <summary>
     /// 物体Id
     /// </summary>
@@ -123,6 +125,10 @@ public partial class ActivityInstance : Node2D
     private Vector2 _collPos;
     private bool _createFlag = false;
     
+    //嵌套Instance相关
+    private bool _isNested = false;
+    private ActivityObject _activityInstance;
+    
     private static string _jsonText;
 
     /// <summary>
@@ -195,12 +201,11 @@ public partial class ActivityInstance : Node2D
 #if TOOLS
         if (Engine.IsEditorHint())
         {
-            var children = GetChildren();
-            foreach (var child in children)
-            {
-                child.QueueFree();
-            }
             _dirty = true;
+            if (_activityObject != null)
+            {
+                _activityObject.QueueFree();
+            }
             _activityObject = null;
             _prevId = null;
         }
@@ -218,25 +223,65 @@ public partial class ActivityInstance : Node2D
 #endif
     }
 
-    private void DoCreateObject()
+    private ActivityObject DoCreateObject()
     {
         if (_createFlag)
         {
-            return;
+            return _activityInstance;
         }
 
         _createFlag = true;
         var activityObject = ActivityObject.Create(Id);
-        activityObject.Position = GlobalPosition;
-        activityObject.Scale = GlobalScale;
-        activityObject.Rotation = GlobalRotation;
-        activityObject.Name = Name;
+        if (_isNested)
+        {
+            activityObject.Position = Position;
+            activityObject.Scale = Scale;
+            activityObject.Rotation = Rotation;
+        }
+        else
+        {
+            activityObject.Position = GlobalPosition;
+            activityObject.Scale = GlobalScale;
+            activityObject.Rotation = GlobalRotation;
+        }
+        
         activityObject.Visible = Visible;
         activityObject.ShadowOffset = _showOffset;
         activityObject.Altitude = _altitude;
         activityObject.EnableVerticalMotion = VerticalMotion;
-        activityObject.PutDown(DefaultLayer, _showShadow);
+        if (!_isNested)
+        {
+            activityObject.PutDown(DefaultLayer, _showShadow);
+        }
+
+        var children = GetChildren();
+        foreach (var child in children)
+        {
+            if (!child.IsInGroup(GroupName))
+            {
+                if (child is ActivityInstance o)
+                {
+                    o._isNested = true;
+                    var instance = o.DoCreateObject();
+                    if (instance is IMountItem mountItem)
+                    {
+                        activityObject.AddMountObject(mountItem);
+                    }
+                    else
+                    {
+                        activityObject.AddChild(instance);
+                    }
+                }
+                else
+                {
+                    child.Reparent(activityObject);
+                }
+            }
+        }
+
         QueueFree();
+        _activityInstance = activityObject;
+        return  activityObject;
     }
 
     private void OnChangeActivityId(string id)
@@ -251,7 +296,6 @@ public partial class ActivityInstance : Node2D
 
         if (string.IsNullOrEmpty(id))
         {
-            GD.Print("删除物体");
             ShowErrorSprite();
             return;
         }
@@ -272,7 +316,6 @@ public partial class ActivityInstance : Node2D
                 if (endIndex > -1)
                 {
                     var prefab = _jsonText.Substring(startIndex + s.Length, endIndex - (startIndex + s.Length));
-                    GD.Print("创建物体: " + id);
                     var instance = ResourceManager.LoadAndInstantiate<ActivityObject>(prefab);
                     _activityObject = instance;
                     _collPos = instance.Collision.Position - instance.AnimatedSprite.Position - instance.AnimatedSprite.Offset;
@@ -293,6 +336,7 @@ public partial class ActivityInstance : Node2D
                         }
                     }
                     AddChild(instance);
+                    MoveChild(instance, 0);
                     HideErrorSprite();
                     return;
                 }
@@ -325,8 +369,10 @@ public partial class ActivityInstance : Node2D
         if (_errorSprite == null)
         {
             _errorSprite = new Sprite2D();
+            _errorSprite.AddToGroup(GroupName);
             _errorSprite.Texture = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Error_mini_png);
             AddChild(_errorSprite);
+            MoveChild(_errorSprite, GetChildCount() - 1);
         }
     }
 

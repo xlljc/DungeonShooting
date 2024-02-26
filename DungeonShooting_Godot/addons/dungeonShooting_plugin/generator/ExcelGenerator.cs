@@ -97,6 +97,7 @@ public static class ExcelGenerator
         //dotnet publish excelTool -c Release -r win-x64 -o ./excelTool/publish/win-x64
         //dotnet publish excelTool -c Release -r osx-x64 -o excelTool/publish/osx-x64
         //dotnet publish excelTool -c Release -r osx-x64 --self-contained true -p:PublishSingleFile=true -o excelTool/publish/osx-x64
+        GD.Print("编译命令: " + $"dotnet publish {csProjectPath} -c Release -r {rid} --self-contained true -p:PublishSingleFile=true -o {outputPath}");
         var outLog = new Array();
         var result = OS.Execute("dotnet", new string[]
         {
