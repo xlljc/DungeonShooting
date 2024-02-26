@@ -276,13 +276,21 @@ public partial class ActivityInstance : Node2D
                     var instance = ResourceManager.LoadAndInstantiate<ActivityObject>(prefab);
                     _activityObject = instance;
                     _collPos = instance.Collision.Position - instance.AnimatedSprite.Position - instance.AnimatedSprite.Offset;
-                    Debug.Log("_collPos: " + _collPos);
                     instance.IsCustomShadowSprite = instance.ShadowSprite.Texture != null;
                     instance.Altitude = _altitude;
                     instance.ShadowOffset = _showOffset;
                     if (_showShadow)
                     {
                         instance.ShowShadowSprite();
+                        var shadowSpriteMaterial = instance.ShadowSprite.Material as ShaderMaterial;
+                        if (shadowSpriteMaterial != null)
+                        {
+                            shadowSpriteMaterial.SetShaderParameter(
+                                ShaderParamNames.ShowOutline,
+                                ((ShaderMaterial)instance.AnimatedSprite.Material).GetShaderParameter(ShaderParamNames
+                                    .ShowOutline)
+                            );
+                        }
                     }
                     AddChild(instance);
                     HideErrorSprite();

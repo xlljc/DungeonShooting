@@ -784,9 +784,37 @@
     "ShowInMapEditor": true
   },
   {
+    "Id": "item_0006",
+    "Type": 99,
+    "Name": "\u7535\u89C6\u684C",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0006.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
+    "Id": "item_0008",
+    "Type": 99,
+    "Name": "\u6C99\u53D1\u65C1\u67DC\u5B50",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0008.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
     "Id": "item_0012",
     "Type": 99,
-    "Name": "\u5927\u5385\u6C99\u53D1",
+    "Name": "\u6C99\u53D1\u7AD6",
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -800,7 +828,7 @@
   {
     "Id": "item_0013",
     "Type": 99,
-    "Name": "\u5927\u5385\u6C99\u53D1",
+    "Name": "\u6C99\u53D1\u6A2A\u7740",
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -812,9 +840,23 @@
     "ShowInMapEditor": false
   },
   {
+    "Id": "item_0014",
+    "Type": 99,
+    "Name": "\u61D2\u4EBA\u6C99\u53D1",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0014.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
     "Id": "item_0017",
     "Type": 99,
-    "Name": "\u5927\u5385\u684C\u5B50",
+    "Name": "\u4E2D\u95F4\u684C\u5B50",
     "Quality": 0,
     "Price": 0,
     "Intro": "",
