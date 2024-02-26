@@ -93,6 +93,40 @@ public partial class ActivityInstance : Node2D
     }
 
     /// <summary>
+    /// 动画精灵的z轴索引
+    /// </summary>
+    [Export]
+    public int SpriteZIndex
+    {
+        get => _spriteZIndex;
+        set
+        {
+            _spriteZIndex = value;
+            if (_activityObject != null)
+            {
+                _activityObject.AnimatedSprite.ZIndex = value;
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 阴影z轴索引
+    /// </summary>
+    [Export]
+    public int ShadowZIndex
+    {
+        get => _shadowZIndex;
+        set
+        {
+            _shadowZIndex = value;
+            if (_activityObject != null)
+            {
+                _activityObject.ShadowSprite.ZIndex = value;
+            }
+        }
+    }
+    
+    /// <summary>
     /// 是否启用垂直运动模拟
     /// </summary>
     [Export]
@@ -121,6 +155,8 @@ public partial class ActivityInstance : Node2D
     private bool _showShadow = true;
     private Vector2 _showOffset = new Vector2(0, 2);
     private float _altitude;
+    private int _spriteZIndex = 0;
+    private int _shadowZIndex = -1;
 
     private Vector2 _collPos;
     private bool _createFlag = false;
@@ -248,10 +284,16 @@ public partial class ActivityInstance : Node2D
         activityObject.Visible = Visible;
         activityObject.ShadowOffset = _showOffset;
         activityObject.Altitude = _altitude;
+        activityObject.AnimatedSprite.ZIndex = _spriteZIndex;
+        activityObject.ShadowSprite.ZIndex = _shadowZIndex;
         activityObject.EnableVerticalMotion = VerticalMotion;
         if (!_isNested)
         {
             activityObject.PutDown(DefaultLayer, _showShadow);
+        }
+        else
+        {
+            activityObject.ShowShadowSprite();
         }
 
         var children = GetChildren();
@@ -263,13 +305,14 @@ public partial class ActivityInstance : Node2D
                 {
                     o._isNested = true;
                     var instance = o.DoCreateObject();
+                    activityObject.AddChild(instance);
                     if (instance is IMountItem mountItem)
                     {
                         activityObject.AddMountObject(mountItem);
                     }
-                    else
+                    else if (instance is IDestroy destroy)
                     {
-                        activityObject.AddChild(instance);
+                        activityObject.AddDestroyObject(destroy);
                     }
                 }
                 else

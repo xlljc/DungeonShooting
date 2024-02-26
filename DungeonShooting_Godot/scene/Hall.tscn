@@ -108,6 +108,7 @@ CollisionVisible = false
 position = Vector2(4, -14)
 script = ExtResource("5_lowqi")
 Id = "item_0031"
+ShadowZIndex = 0
 CollisionVisible = false
 
 [node name="Item0013" type="Node2D" parent="ItemRoot" index="3"]
