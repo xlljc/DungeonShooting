@@ -256,6 +256,15 @@ public partial class ActivityInstance : Node2D
         if (Engine.IsEditorHint())
         {
             _dirty = true;
+            
+            var children = GetChildren();
+            foreach (var child in children)
+            {
+                if (child is ActivityObject)
+                {
+                    child.QueueFree();
+                }
+            }
             if (_activityObject != null)
             {
                 _activityObject.QueueFree();

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://c2hynqudkykxl"]
+[gd_scene load_steps=18 format=3 uid="uid://c2hynqudkykxl"]
 
 [ext_resource type="PackedScene" path="res://scene/Dungeon.tscn" id="1_31od0"]
 [ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
@@ -6,7 +6,12 @@
 [ext_resource type="Script" path="res://src/game/hall/DungeonEntrance.cs" id="3_t3my6"]
 [ext_resource type="Script" path="res://src/framework/activity/ActivityInstance.cs" id="5_lowqi"]
 [ext_resource type="TileSet" uid="uid://db76iwmblenk8" path="res://resource/tileset/HallTileset.tres" id="6_xwnih"]
+[ext_resource type="Texture2D" uid="uid://cp6enwpa1p17o" path="res://resource/sprite/item/hall/item _10.png" id="7_30qwa"]
 [ext_resource type="Texture2D" uid="uid://b38x81ind5fk3" path="res://resource/sprite/item/hall/item _05.png" id="7_42rdc"]
+[ext_resource type="Texture2D" uid="uid://d25lkqtbk80yh" path="res://resource/sprite/item/hall/item _18.png" id="8_u3vry"]
+[ext_resource type="Texture2D" uid="uid://w4xe82qf68yv" path="res://resource/sprite/item/hall/item _22.png" id="9_lhdr8"]
+[ext_resource type="Texture2D" uid="uid://1a5b1cjalju1" path="res://resource/sprite/item/hall/item _30.png" id="10_4eqn0"]
+[ext_resource type="Texture2D" uid="uid://ci41ruj125hk2" path="res://resource/sprite/item/hall/item _20.png" id="11_tg3jo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ru8u4"]
 size = Vector2(66, 32)
@@ -89,12 +94,16 @@ ShowOffset = Vector2(2.08165e-12, 2)
 CollisionVisible = false
 
 [node name="Item0006" type="Node2D" parent="ItemRoot" index="1"]
-position = Vector2(854, 428)
+position = Vector2(853, 428)
 script = ExtResource("5_lowqi")
 Id = "item_0006"
 DefaultLayer = 1
 ShowOffset = Vector2(2.08165e-12, 2)
 CollisionVisible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0006" index="1"]
+position = Vector2(-10, -6.5)
+texture = ExtResource("7_30qwa")
 
 [node name="Item0008" type="Node2D" parent="ItemRoot" index="2"]
 position = Vector2(810, 347)
@@ -105,7 +114,7 @@ ShowOffset = Vector2(2.08165e-12, 2)
 CollisionVisible = false
 
 [node name="ActivityInstance" type="Node2D" parent="ItemRoot/Item0008" index="1"]
-position = Vector2(3, -14)
+position = Vector2(2.5, -13.5)
 script = ExtResource("5_lowqi")
 Id = "item_0031"
 ShowOffset = Vector2(2.08165e-12, 1)
@@ -136,7 +145,31 @@ DefaultLayer = 1
 ShowOffset = Vector2(2.08165e-12, 2)
 CollisionVisible = false
 
-[node name="Weapon" type="Node2D" parent="ItemRoot" index="6"]
+[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0017" index="1"]
+position = Vector2(-3.5, -15.5)
+texture = ExtResource("8_u3vry")
+
+[node name="Sprite2D2" type="Sprite2D" parent="ItemRoot/Item0017" index="2"]
+position = Vector2(18.5, -10)
+texture = ExtResource("9_lhdr8")
+
+[node name="Sprite2D3" type="Sprite2D" parent="ItemRoot/Item0017" index="3"]
+position = Vector2(-16, -5.5)
+texture = ExtResource("10_4eqn0")
+
+[node name="Sprite2D4" type="Sprite2D" parent="ItemRoot/Item0017" index="4"]
+position = Vector2(10, -5)
+texture = ExtResource("11_tg3jo")
+
+[node name="Item0057" type="Node2D" parent="ItemRoot" index="6"]
+position = Vector2(901, 423)
+script = ExtResource("5_lowqi")
+Id = "item_0057"
+DefaultLayer = 1
+ShowOffset = Vector2(2.08165e-12, 2)
+CollisionVisible = false
+
+[node name="Weapon" type="Node2D" parent="ItemRoot" index="7"]
 position = Vector2(252, 302)
 script = ExtResource("5_lowqi")
 Id = "weapon0002"
