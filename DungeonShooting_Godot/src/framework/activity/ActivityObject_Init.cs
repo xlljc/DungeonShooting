@@ -289,6 +289,16 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_gold_1 = "gold_1";
         /// <summary>
+        /// 名称: 电脑桌 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0001 = "item_0001";
+        /// <summary>
+        /// 名称:  <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0002 = "item_0002";
+        /// <summary>
         /// 名称: 电视桌 <br/>
         /// 简介: 
         /// </summary>

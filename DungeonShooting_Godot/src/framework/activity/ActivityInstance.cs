@@ -295,15 +295,33 @@ public partial class ActivityInstance : Node2D
 
         _createFlag = true;
         var activityObject = ActivityObject.Create(Id);
+        var half = false;
         if (_isNested)
         {
-            activityObject.Position = Position;
+            if (activityObject.GetCurrentTexture().GetHeight() % 2 != 0)
+            {
+                activityObject.Position = Position + new Vector2(0, 1);
+                half = true;
+            }
+            else
+            {
+                activityObject.Position = Position;
+            }
+
             activityObject.Scale = Scale;
             activityObject.Rotation = Rotation;
         }
         else
         {
-            activityObject.Position = GlobalPosition;
+            if (activityObject.GetCurrentTexture().GetHeight() % 2 != 0)
+            {
+                activityObject.Position = GlobalPosition + new Vector2(0, 1);
+                half = true;
+            }
+            else
+            {
+                activityObject.Position = GlobalPosition;
+            }
             activityObject.Scale = GlobalScale;
             activityObject.Rotation = GlobalRotation;
         }
@@ -347,6 +365,10 @@ public partial class ActivityInstance : Node2D
                 else
                 {
                     child.Reparent(activityObject);
+                    if (!half && child is Node2D node2D)
+                    {
+                        node2D.GlobalPosition -= new Vector2(0, 1);
+                    }
                 }
             }
         }
