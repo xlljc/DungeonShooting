@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c5e11paqgc8y3"]
+[gd_scene load_steps=7 format=3 uid="uid://c5e11paqgc8y3"]
 
 [ext_resource type="Script" path="res://src/game/activity/item/ObstacleObject.cs" id="1_qi3y4"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_u3oiv"]
@@ -39,9 +39,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_kmpvc"]
-size = Vector2(25, 12)
-
 [node name="Item0002" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 512
 collision_mask = 0
@@ -56,9 +53,11 @@ material = SubResource("ShaderMaterial_wh4b7")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_f7tsa")
-position = Vector2(15, -19)
+position = Vector2(15.5, -10)
 sprite_frames = SubResource("SpriteFrames_uqva1")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2(-0.5, 1)
-shape = SubResource("RectangleShape2D_kmpvc")
+position = Vector2(0, 10)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-10, 4, -10, 14, -14, 14, -14, -13, 15, -13, 15, 14, 11, 14, 11, 4)

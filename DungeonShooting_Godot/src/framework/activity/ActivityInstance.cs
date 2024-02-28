@@ -295,33 +295,15 @@ public partial class ActivityInstance : Node2D
 
         _createFlag = true;
         var activityObject = ActivityObject.Create(Id);
-        var half = false;
         if (_isNested)
         {
-            if (activityObject.GetCurrentTexture().GetHeight() % 2 != 0)
-            {
-                activityObject.Position = Position + new Vector2(0, 1);
-                half = true;
-            }
-            else
-            {
-                activityObject.Position = Position;
-            }
-
+            activityObject.Position = Position - new Vector2(0, 1);
             activityObject.Scale = Scale;
             activityObject.Rotation = Rotation;
         }
         else
         {
-            if (activityObject.GetCurrentTexture().GetHeight() % 2 != 0)
-            {
-                activityObject.Position = GlobalPosition + new Vector2(0, 1);
-                half = true;
-            }
-            else
-            {
-                activityObject.Position = GlobalPosition;
-            }
+            activityObject.Position = GlobalPosition + new Vector2(0, 1);
             activityObject.Scale = GlobalScale;
             activityObject.Rotation = GlobalRotation;
         }
@@ -365,9 +347,9 @@ public partial class ActivityInstance : Node2D
                 else
                 {
                     child.Reparent(activityObject);
-                    if (!half && child is Node2D node2D)
+                    if (child is Node2D node2D && activityObject.GetCurrentTexture().GetHeight() % 2 == 0)
                     {
-                        node2D.GlobalPosition -= new Vector2(0, 1);
+                        node2D.Position += new Vector2(0, 1);
                     }
                 }
             }
@@ -416,6 +398,7 @@ public partial class ActivityInstance : Node2D
                     instance.IsCustomShadowSprite = instance.ShadowSprite.Texture != null;
                     instance.Altitude = _altitude;
                     instance.ShadowOffset = _showOffset;
+                    _activityObject.Position = _activityObject.AnimatedSprite.Position;
                     if (_showShadow)
                     {
                         instance.ShowShadowSprite();
