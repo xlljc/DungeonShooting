@@ -952,6 +952,34 @@
     "ShowInMapEditor": false
   },
   {
+    "Id": "item_0036",
+    "Type": 99,
+    "Name": "\u53F0\u7403\u684C",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0036.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
+    "Id": "item_0054",
+    "Type": 99,
+    "Name": "\u8D29\u5356\u673A",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0054.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
     "Id": "item_0057",
     "Type": 99,
     "Name": "\u5361\u5E26\u76D2\u5B50",

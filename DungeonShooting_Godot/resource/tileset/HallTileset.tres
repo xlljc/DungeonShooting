@@ -1,6 +1,7 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://db76iwmblenk8"]
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://db76iwmblenk8"]
 
 [ext_resource type="Texture2D" uid="uid://rqs2gc6ikrcx" path="res://resource/sprite/tile/HallGround.png" id="1_vwr2k"]
+[ext_resource type="Texture2D" uid="uid://b0jsbxekteykb" path="res://resource/sprite/item/hall_b/dimian.png" id="2_01oxu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7e1ow"]
 texture = ExtResource("1_vwr2k")
@@ -134,7 +135,14 @@ texture = ExtResource("1_vwr2k")
 3:5/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 3:5/0/physics_layer_0/angular_velocity = 0.0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wecvb"]
+texture = ExtResource("2_01oxu")
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+
 [resource]
 physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 0
 sources/0 = SubResource("TileSetAtlasSource_7e1ow")
+sources/1 = SubResource("TileSetAtlasSource_wecvb")

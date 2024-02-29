@@ -349,6 +349,16 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_item_0031 = "item_0031";
         /// <summary>
+        /// 名称: 台球桌 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0036 = "item_0036";
+        /// <summary>
+        /// 名称: 贩卖机 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0054 = "item_0054";
+        /// <summary>
         /// 名称: 卡带盒子 <br/>
         /// 简介: 
         /// </summary>
