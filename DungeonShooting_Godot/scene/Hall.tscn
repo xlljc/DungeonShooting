@@ -232,6 +232,48 @@ script = ExtResource("5_lowqi")
 Id = "item_0054"
 DefaultLayer = 1
 
+[node name="Item0007" type="Node2D" parent="ItemRoot" index="15"]
+position = Vector2(79, 230)
+script = ExtResource("5_lowqi")
+Id = "item_0007"
+DefaultLayer = 1
+
+[node name="Item0009" type="Node2D" parent="ItemRoot" index="16"]
+position = Vector2(70, 276)
+script = ExtResource("5_lowqi")
+Id = "item_0009"
+DefaultLayer = 1
+
+[node name="Item0010" type="Node2D" parent="ItemRoot" index="17"]
+position = Vector2(178, 235)
+script = ExtResource("5_lowqi")
+Id = "item_0010"
+DefaultLayer = 1
+
+[node name="Item0011" type="Node2D" parent="ItemRoot" index="18"]
+position = Vector2(33, 291)
+script = ExtResource("5_lowqi")
+Id = "item_0011"
+DefaultLayer = 1
+
+[node name="Item0011_2" type="Node2D" parent="ItemRoot" index="19"]
+position = Vector2(69, 291)
+script = ExtResource("5_lowqi")
+Id = "item_0011"
+DefaultLayer = 1
+
+[node name="Item0011_3" type="Node2D" parent="ItemRoot" index="20"]
+position = Vector2(109, 291)
+script = ExtResource("5_lowqi")
+Id = "item_0011"
+DefaultLayer = 1
+
+[node name="Item0015" type="Node2D" parent="ItemRoot" index="21"]
+position = Vector2(68, 351)
+script = ExtResource("5_lowqi")
+Id = "item_0015"
+DefaultLayer = 1
+
 [node name="Item05" type="Sprite2D" parent="." index="7"]
 z_index = -4
 position = Vector2(859, 383)

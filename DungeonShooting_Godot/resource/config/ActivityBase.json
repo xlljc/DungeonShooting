@@ -868,6 +868,20 @@
     "ShowInMapEditor": false
   },
   {
+    "Id": "item_0007",
+    "Type": 99,
+    "Name": "\u9152\u67DC",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0007.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
     "Id": "item_0008",
     "Type": 99,
     "Name": "\u6C99\u53D1\u65C1\u67DC\u5B50",
@@ -878,6 +892,48 @@
     "IsStatic": true,
     "__Material": "",
     "Prefab": "res://prefab/item/Item0008.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
+    "Id": "item_0009",
+    "Type": 99,
+    "Name": "\u5427\u53F0",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0009.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
+    "Id": "item_0010",
+    "Type": 99,
+    "Name": "\u544A\u793A\u724C",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0010.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
+    "Id": "item_0011",
+    "Type": 99,
+    "Name": "\u7EFF\u6728\u51F3",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0011.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },
@@ -924,6 +980,20 @@
     "ShowInMapEditor": false
   },
   {
+    "Id": "item_0015",
+    "Type": 99,
+    "Name": "\u5DE6\u4E0B\u89D2\u684C\u5B50",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0015.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
     "Id": "item_0017",
     "Type": 99,
     "Name": "\u4E2D\u95F4\u684C\u5B50",
@@ -948,6 +1018,20 @@
     "IsStatic": true,
     "__Material": "",
     "Prefab": "res://prefab/item/Item0031.tscn",
+    "Icon": "",
+    "ShowInMapEditor": false
+  },
+  {
+    "Id": "item_0033",
+    "Type": 99,
+    "Name": "\u5427\u53F0",
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "",
+    "Details": "",
+    "IsStatic": true,
+    "__Material": "",
+    "Prefab": "res://prefab/item/Item0033.tscn",
     "Icon": "",
     "ShowInMapEditor": false
   },
