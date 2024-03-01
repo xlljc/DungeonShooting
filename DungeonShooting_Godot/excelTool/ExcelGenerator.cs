@@ -89,9 +89,13 @@ public static class ExcelGenerator
                 //记录文件
                 foreach (var fileInfo in fileInfos)
                 {
-                    var fileName = Path.GetFileNameWithoutExtension(fileInfo.Name).FirstToUpper();
-                    _excelNames.Add(fileName);
+                    if (fileInfo.Extension == ".xlsx")
+                    {
+                        var fileName = Path.GetFileNameWithoutExtension(fileInfo.Name).FirstToUpper();
+                        _excelNames.Add(fileName);
+                    }
                 }
+
                 //读取配置文件
                 foreach (var fileInfo in fileInfos)
                 {

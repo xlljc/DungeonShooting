@@ -49,8 +49,13 @@ public static class ExcelGenerator
         {
             GD.Print("开始编译导出工具");
             var r = compilerTool(toolDir, rid, toolPath);
+            GD.Print("编译Excel工具返回值: " + r);
             if (r != 0)
             {
+                if (osName == "macOS")
+                {
+                    GD.Print("在Mac上自动编译Excel表失败, 不过您可以使用以上命令手动编译, 在项目根目录打开一个终端, 并执行以上命令");
+                }
                 return false;
             }
         }
@@ -60,8 +65,13 @@ public static class ExcelGenerator
             //删除编译目录
             Directory.Delete(toolPath, true);
             var r = compilerTool(toolDir, rid, toolPath);
+            GD.Print("编译Excel工具返回值: " + r);
             if (r != 0)
             {
+                if (osName == "macOS")
+                {
+                    GD.Print("在Mac上自动编译Excel表失败, 不过您可以使用以上命令手动编译, 在项目根目录打开一个终端, 并执行以上命令");
+                }
                 return false;
             }
         }
@@ -97,6 +107,7 @@ public static class ExcelGenerator
         //dotnet publish excelTool -c Release -r win-x64 -o ./excelTool/publish/win-x64
         //dotnet publish excelTool -c Release -r osx-x64 -o excelTool/publish/osx-x64
         //dotnet publish excelTool -c Release -r osx-x64 --self-contained true -p:PublishSingleFile=true -o excelTool/publish/osx-x64
+        GD.Print("编译命令: " + $"dotnet publish {csProjectPath} -c Release -r {rid} --self-contained true -p:PublishSingleFile=true -o {outputPath}");
         var outLog = new Array();
         var result = OS.Execute("dotnet", new string[]
         {

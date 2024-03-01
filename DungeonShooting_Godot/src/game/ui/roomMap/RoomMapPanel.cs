@@ -41,7 +41,6 @@ public partial class RoomMapPanel : RoomMap
         S_DrawContainer.Instance.Resized += OnDrawContainerResized;
     }
 
-
     public override void OnDestroyUi()
     {
         _factory.RemoveAllEventListener();
@@ -295,8 +294,11 @@ public partial class RoomMapPanel : RoomMap
     private void OnPlayerFirstEnterRoom(object data)
     {
         var roomInfo = (RoomInfo)data;
-        roomInfo.PreviewSprite.Visible = true;
-        
+        if (roomInfo.PreviewSprite != null)
+        {
+            roomInfo.PreviewSprite.Visible = true;
+        }
+
         if (roomInfo.Doors!= null)
         {
             foreach (var roomDoor in roomInfo.Doors)

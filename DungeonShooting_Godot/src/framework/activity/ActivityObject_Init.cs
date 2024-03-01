@@ -288,5 +288,160 @@ public partial class ActivityObject
         /// 简介: 获得1金币
         /// </summary>
         public const string Id_gold_1 = "gold_1";
+        /// <summary>
+        /// 名称: 电脑桌 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0001 = "item_0001";
+        /// <summary>
+        /// 名称:  <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0002 = "item_0002";
+        /// <summary>
+        /// 名称:  <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0003 = "item_0003";
+        /// <summary>
+        /// 名称:  <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0004 = "item_0004";
+        /// <summary>
+        /// 名称:  <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0005 = "item_0005";
+        /// <summary>
+        /// 名称: 电视桌 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0006 = "item_0006";
+        /// <summary>
+        /// 名称: 酒柜 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0007 = "item_0007";
+        /// <summary>
+        /// 名称: 沙发旁柜子 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0008 = "item_0008";
+        /// <summary>
+        /// 名称: 吧台 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0009 = "item_0009";
+        /// <summary>
+        /// 名称: 告示牌 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0010 = "item_0010";
+        /// <summary>
+        /// 名称: 绿木凳 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0011 = "item_0011";
+        /// <summary>
+        /// 名称: 沙发竖 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0012 = "item_0012";
+        /// <summary>
+        /// 名称: 沙发横着 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0013 = "item_0013";
+        /// <summary>
+        /// 名称: 懒人沙发 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0014 = "item_0014";
+        /// <summary>
+        /// 名称: 左下角桌子 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0015 = "item_0015";
+        /// <summary>
+        /// 名称: 左下角短沙发 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0016 = "item_0016";
+        /// <summary>
+        /// 名称: 中间桌子 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0017 = "item_0017";
+        /// <summary>
+        /// 名称: 左下角长沙发 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0018 = "item_0018";
+        /// <summary>
+        /// 名称: 右下角桌子 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0019 = "item_0019";
+        /// <summary>
+        /// 名称: 转椅 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0020 = "item_0020";
+        /// <summary>
+        /// 名称: 右下角长沙发 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0021 = "item_0021";
+        /// <summary>
+        /// 名称: 衣架 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0022 = "item_0022";
+        /// <summary>
+        /// 名称: 绿植 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0023 = "item_0023";
+        /// <summary>
+        /// 名称: 新手教学关卡 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0024 = "item_0024";
+        /// <summary>
+        /// 名称: 茂盛花盆 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0025 = "item_0025";
+        /// <summary>
+        /// 名称: 台灯 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0031 = "item_0031";
+        /// <summary>
+        /// 名称: 吧台 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0033 = "item_0033";
+        /// <summary>
+        /// 名称: 台球桌 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0036 = "item_0036";
+        /// <summary>
+        /// 名称: 贩卖机 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0054 = "item_0054";
+        /// <summary>
+        /// 名称: 长凳子 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0056 = "item_0056";
+        /// <summary>
+        /// 名称: 卡带盒子 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0057 = "item_0057";
     }
 }

@@ -306,6 +306,7 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
         if (ExcelGenerator.ExportExcel())
         {
             ShowTips("提示", "导出Excel表成功！");
+            ActivityInstance.ClearCacheJson();
         }
         else
         {

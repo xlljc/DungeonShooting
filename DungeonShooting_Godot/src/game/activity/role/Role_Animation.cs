@@ -30,7 +30,7 @@ public partial class Role
             MountPoint.Position = p3;
             //重新计算武器阴影位置
             var activeItem = WeaponPack.ActiveItem;
-            activeItem.CalcShadowTransform();
+            activeItem.CalcShadowTransform(true);
             //创建屏幕抖动
             if (Face == FaceDirection.Right)
             {
