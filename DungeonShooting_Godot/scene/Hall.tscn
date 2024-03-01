@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://c2hynqudkykxl"]
+[gd_scene load_steps=42 format=3 uid="uid://c2hynqudkykxl"]
 
 [ext_resource type="PackedScene" path="res://scene/Dungeon.tscn" id="1_31od0"]
 [ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
@@ -16,6 +16,8 @@
 [ext_resource type="Texture2D" uid="uid://dwstu11dix0nq" path="res://resource/sprite/item/hall_b/zhishi.png" id="12_agfji"]
 [ext_resource type="Texture2D" uid="uid://idax7j3m365m" path="res://resource/sprite/item/hall_b/ditan.png" id="13_swsmq"]
 [ext_resource type="Texture2D" uid="uid://d08oi1tvpcd3p" path="res://resource/sprite/item/hall_b/yuguang.png" id="13_unnpl"]
+[ext_resource type="Shader" path="res://resource/material/GodRays.gdshader" id="14_8vfgi"]
+[ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="15_1xqxd"]
 [ext_resource type="Texture2D" uid="uid://iqj44lyknjr2" path="res://resource/sprite/item/hall_a/Slice_04.png" id="15_h7524"]
 [ext_resource type="Texture2D" uid="uid://cwn5vf7flupa1" path="res://resource/sprite/item/hall_a/Slice_41.png" id="16_hx0q7"]
 [ext_resource type="Texture2D" uid="uid://bm8xcx73s83ku" path="res://resource/sprite/item/hall_a/Slice_47.png" id="16_xj0e1"]
@@ -35,7 +37,7 @@
 [ext_resource type="Texture2D" uid="uid://bgrroshvf4iyu" path="res://resource/sprite/item/hall_c/item _23.png" id="30_vfhiv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ru8u4"]
-size = Vector2(66, 32)
+size = Vector2(19, 10)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l0mok"]
 size = Vector2(91, 434)
@@ -48,6 +50,22 @@ size = Vector2(448, 110)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o0n0h"]
 size = Vector2(1023, 110)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i7git"]
+shader = ExtResource("14_8vfgi")
+shader_parameter/angle = 0.25
+shader_parameter/position = 0.2
+shader_parameter/spread = 0.5
+shader_parameter/cutoff = 0.1
+shader_parameter/falloff = 1.0
+shader_parameter/edge_fade = 0.247
+shader_parameter/speed = 4.0
+shader_parameter/ray1_density = 8.0
+shader_parameter/ray2_density = 30.0
+shader_parameter/ray2_intensity = 0.3
+shader_parameter/color = Color(1, 0.9, 0.65, 0.8)
+shader_parameter/hdr = false
+shader_parameter/seed = 5.0
 
 [node name="Hall" node_paths=PackedStringArray("BirthMark", "BgSprite") instance=ExtResource("1_31od0")]
 script = ExtResource("2_43fdu")
@@ -72,14 +90,16 @@ metadata/_edit_group_ = true
 position = Vector2(536, 310)
 
 [node name="DungeonEntrance" type="Area2D" parent="." index="4"]
-z_index = 1
-position = Vector2(537, 209)
+z_index = 15
+position = Vector2(461, 209)
 collision_layer = 0
 collision_mask = 8
 monitorable = false
 script = ExtResource("3_t3my6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DungeonEntrance" index="0"]
+visible = false
+position = Vector2(0.5, 0)
 shape = SubResource("RectangleShape2D_ru8u4")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." index="5"]
@@ -198,7 +218,7 @@ ShowOffset = Vector2(2.08165e-12, 2)
 CollisionVisible = false
 
 [node name="Weapon" type="Node2D" parent="ItemRoot" index="7"]
-position = Vector2(252, 302)
+position = Vector2(251, 306)
 script = ExtResource("5_lowqi")
 Id = "weapon0002"
 CollisionVisible = false
@@ -220,6 +240,12 @@ CollisionVisible = false
 [node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0002" index="1"]
 position = Vector2(32, -2)
 texture = ExtResource("12_agfji")
+
+[node name="Sprite2D2" type="Sprite2D" parent="ItemRoot/Item0002" index="2"]
+material = SubResource("ShaderMaterial_i7git")
+position = Vector2(0, -18)
+scale = Vector2(1, -1)
+texture = ExtResource("15_1xqxd")
 
 [node name="Item0003" type="Node2D" parent="ItemRoot" index="10"]
 position = Vector2(600, 211)
