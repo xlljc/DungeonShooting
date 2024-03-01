@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c2hynqudkykxl"]
+[gd_scene load_steps=23 format=3 uid="uid://c2hynqudkykxl"]
 
 [ext_resource type="PackedScene" path="res://scene/Dungeon.tscn" id="1_31od0"]
 [ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
@@ -15,6 +15,8 @@
 [ext_resource type="Texture2D" uid="uid://dwstu11dix0nq" path="res://resource/sprite/item/hall_b/zhishi.png" id="12_agfji"]
 [ext_resource type="Texture2D" uid="uid://idax7j3m365m" path="res://resource/sprite/item/hall_b/ditan.png" id="13_swsmq"]
 [ext_resource type="Texture2D" uid="uid://d08oi1tvpcd3p" path="res://resource/sprite/item/hall_b/yuguang.png" id="13_unnpl"]
+[ext_resource type="Texture2D" uid="uid://cwn5vf7flupa1" path="res://resource/sprite/item/hall_a/Slice_41.png" id="16_hx0q7"]
+[ext_resource type="Texture2D" uid="uid://4lig7ii34y2l" path="res://resource/sprite/item/hall_a/Slice_55.png" id="17_oq62v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ru8u4"]
 size = Vector2(66, 32)
@@ -300,7 +302,7 @@ Id = "item_0020"
 DefaultLayer = 1
 
 [node name="Item0020_2" type="Node2D" parent="ItemRoot" index="26"]
-position = Vector2(224, 391)
+position = Vector2(225, 391)
 script = ExtResource("5_lowqi")
 Id = "item_0020"
 DefaultLayer = 1
@@ -317,11 +319,51 @@ script = ExtResource("5_lowqi")
 Id = "item_0021"
 DefaultLayer = 1
 
+[node name="Item0022" type="Node2D" parent="ItemRoot" index="29"]
+position = Vector2(25, 355)
+script = ExtResource("5_lowqi")
+Id = "item_0022"
+DefaultLayer = 1
+
+[node name="Item0023" type="Node2D" parent="ItemRoot" index="30"]
+position = Vector2(204, 238)
+script = ExtResource("5_lowqi")
+Id = "item_0023"
+DefaultLayer = 1
+
+[node name="Item0024" type="Node2D" parent="ItemRoot" index="31"]
+position = Vector2(248, 244)
+script = ExtResource("5_lowqi")
+Id = "item_0024"
+
+[node name="Item0025" type="Node2D" parent="ItemRoot" index="32"]
+position = Vector2(854, 206)
+script = ExtResource("5_lowqi")
+Id = "item_0025"
+DefaultLayer = 1
+
+[node name="Item0056" type="Node2D" parent="ItemRoot" index="33"]
+position = Vector2(950, 209)
+script = ExtResource("5_lowqi")
+Id = "item_0056"
+DefaultLayer = 1
+
 [node name="Item05" type="Sprite2D" parent="." index="7"]
 z_index = -4
 position = Vector2(859, 383)
 texture = ExtResource("7_42rdc")
 
 [node name="Ditan" type="Sprite2D" parent="." index="8"]
+z_index = -4
 position = Vector2(537, 237)
 texture = ExtResource("13_swsmq")
+
+[node name="Slice41" type="Sprite2D" parent="." index="9"]
+z_index = -4
+position = Vector2(227, 347)
+texture = ExtResource("16_hx0q7")
+
+[node name="Slice55" type="Sprite2D" parent="." index="10"]
+z_index = -4
+position = Vector2(93, 379)
+texture = ExtResource("17_oq62v")

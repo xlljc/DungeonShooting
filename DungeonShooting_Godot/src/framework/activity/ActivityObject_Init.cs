@@ -394,6 +394,26 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_item_0021 = "item_0021";
         /// <summary>
+        /// 名称: 衣架 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0022 = "item_0022";
+        /// <summary>
+        /// 名称: 绿植 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0023 = "item_0023";
+        /// <summary>
+        /// 名称: 新手教学关卡 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0024 = "item_0024";
+        /// <summary>
+        /// 名称: 茂盛花盆 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0025 = "item_0025";
+        /// <summary>
         /// 名称: 台灯 <br/>
         /// 简介: 
         /// </summary>
@@ -413,6 +433,11 @@ public partial class ActivityObject
         /// 简介: 
         /// </summary>
         public const string Id_item_0054 = "item_0054";
+        /// <summary>
+        /// 名称: 长凳子 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0056 = "item_0056";
         /// <summary>
         /// 名称: 卡带盒子 <br/>
         /// 简介: 
