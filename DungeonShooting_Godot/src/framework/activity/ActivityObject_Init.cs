@@ -364,10 +364,35 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_item_0015 = "item_0015";
         /// <summary>
+        /// 名称: 左下角短沙发 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0016 = "item_0016";
+        /// <summary>
         /// 名称: 中间桌子 <br/>
         /// 简介: 
         /// </summary>
         public const string Id_item_0017 = "item_0017";
+        /// <summary>
+        /// 名称: 左下角长沙发 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0018 = "item_0018";
+        /// <summary>
+        /// 名称: 右下角桌子 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0019 = "item_0019";
+        /// <summary>
+        /// 名称: 转椅 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0020 = "item_0020";
+        /// <summary>
+        /// 名称: 右下角长沙发 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0021 = "item_0021";
         /// <summary>
         /// 名称: 台灯 <br/>
         /// 简介: 
