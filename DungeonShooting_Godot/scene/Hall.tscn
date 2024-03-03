@@ -1,6 +1,6 @@
-[gd_scene load_steps=42 format=3 uid="uid://c2hynqudkykxl"]
+[gd_scene load_steps=43 format=3 uid="uid://c2hynqudkykxl"]
 
-[ext_resource type="PackedScene" path="res://scene/Dungeon.tscn" id="1_31od0"]
+[ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/Dungeon.tscn" id="1_31od0"]
 [ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
 [ext_resource type="Texture2D" uid="uid://b2j5mkqm3uv6w" path="res://resource/sprite/tile/HallBg.png" id="3_0g5wq"]
 [ext_resource type="Script" path="res://src/game/hall/DungeonEntrance.cs" id="3_t3my6"]
@@ -35,6 +35,7 @@
 [ext_resource type="Texture2D" uid="uid://cym4h4qndqmxl" path="res://resource/sprite/item/hall_c/item _16.png" id="28_1l3ls"]
 [ext_resource type="Texture2D" uid="uid://c5aieljuvuhld" path="res://resource/sprite/item/hall_c/item _59.png" id="29_4dx8t"]
 [ext_resource type="Texture2D" uid="uid://bgrroshvf4iyu" path="res://resource/sprite/item/hall_c/item _23.png" id="30_vfhiv"]
+[ext_resource type="Texture2D" uid="uid://du12pb6w1c1n3" path="res://resource/sprite/item/hall_c/item _03.png" id="36_knh8x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ru8u4"]
 size = Vector2(19, 10)
@@ -218,7 +219,7 @@ ShowOffset = Vector2(2.08165e-12, 2)
 CollisionVisible = false
 
 [node name="Weapon" type="Node2D" parent="ItemRoot" index="7"]
-position = Vector2(251, 306)
+position = Vector2(346, 267)
 script = ExtResource("5_lowqi")
 Id = "weapon0002"
 CollisionVisible = false
@@ -292,6 +293,18 @@ position = Vector2(70, 276)
 script = ExtResource("5_lowqi")
 Id = "item_0009"
 DefaultLayer = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0009" index="1"]
+position = Vector2(-24, -10)
+texture = ExtResource("15_h7524")
+
+[node name="Sprite2D2" type="Sprite2D" parent="ItemRoot/Item0009" index="2"]
+position = Vector2(1, -10)
+texture = ExtResource("15_h7524")
+
+[node name="Sprite2D3" type="Sprite2D" parent="ItemRoot/Item0009" index="3"]
+position = Vector2(37, -10)
+texture = ExtResource("15_h7524")
 
 [node name="Item0010" type="Node2D" parent="ItemRoot" index="17"]
 position = Vector2(178, 235)
@@ -406,6 +419,12 @@ script = ExtResource("5_lowqi")
 Id = "item_0056"
 DefaultLayer = 1
 
+[node name="Item0026" type="Node2D" parent="ItemRoot" index="34"]
+position = Vector2(327, 234)
+script = ExtResource("5_lowqi")
+Id = "item_0026"
+DefaultLayer = 1
+
 [node name="Item05" type="Sprite2D" parent="." index="7"]
 z_index = -4
 position = Vector2(859, 383)
@@ -473,3 +492,7 @@ texture = ExtResource("29_4dx8t")
 [node name="Item23" type="Sprite2D" parent="." index="22"]
 position = Vector2(890, 402)
 texture = ExtResource("30_vfhiv")
+
+[node name="Item03" type="Sprite2D" parent="." index="23"]
+position = Vector2(906, 159)
+texture = ExtResource("36_knh8x")

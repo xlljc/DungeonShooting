@@ -414,6 +414,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_item_0025 = "item_0025";
         /// <summary>
+        /// 名称: 告示版 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_item_0026 = "item_0026";
+        /// <summary>
         /// 名称: 台灯 <br/>
         /// 简介: 
         /// </summary>
