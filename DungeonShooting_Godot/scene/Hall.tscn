@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://c2hynqudkykxl"]
+[gd_scene load_steps=44 format=3 uid="uid://c2hynqudkykxl"]
 
 [ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/Dungeon.tscn" id="1_31od0"]
 [ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
@@ -36,6 +36,7 @@
 [ext_resource type="Texture2D" uid="uid://c5aieljuvuhld" path="res://resource/sprite/item/hall_c/item _59.png" id="29_4dx8t"]
 [ext_resource type="Texture2D" uid="uid://bgrroshvf4iyu" path="res://resource/sprite/item/hall_c/item _23.png" id="30_vfhiv"]
 [ext_resource type="Texture2D" uid="uid://du12pb6w1c1n3" path="res://resource/sprite/item/hall_c/item _03.png" id="36_knh8x"]
+[ext_resource type="Texture2D" uid="uid://b7dxbpdj5hdmd" path="res://resource/sprite/item/hall_c/item _01.png" id="37_5rb67"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ru8u4"]
 size = Vector2(19, 10)
@@ -272,7 +273,7 @@ Id = "item_0005"
 DefaultLayer = 1
 
 [node name="Item0036" type="Node2D" parent="ItemRoot" index="13"]
-position = Vector2(941, 313)
+position = Vector2(946, 314)
 script = ExtResource("5_lowqi")
 Id = "item_0036"
 DefaultLayer = 1
@@ -497,3 +498,17 @@ texture = ExtResource("30_vfhiv")
 [node name="Item03" type="Sprite2D" parent="." index="23"]
 position = Vector2(906, 159)
 texture = ExtResource("36_knh8x")
+
+[node name="Item01" type="Sprite2D" parent="." index="24"]
+position = Vector2(888, 332.5)
+scale = Vector2(1.0625, 1.0375)
+texture = ExtResource("37_5rb67")
+
+[node name="Item01" type="Sprite2D" parent="Item01" index="0"]
+position = Vector2(888, 332.5)
+scale = Vector2(1.0625, 1.0375)
+texture = ExtResource("37_5rb67")
+
+[node name="Item06" type="Sprite2D" parent="." index="25"]
+position = Vector2(838, 362)
+texture = ExtResource("7_42rdc")
