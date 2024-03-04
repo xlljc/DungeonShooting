@@ -16,6 +16,8 @@ public partial class RoomUIPanel : RoomUI
     
     private EventFactory _factory;
 
+    private bool _showMap = false;
+
     public override void OnCreateUi()
     {
         _reloadBar = new ReloadBarHandler(L_ReloadBar);
@@ -64,6 +66,8 @@ public partial class RoomUIPanel : RoomUI
         _weaponBar.Process(delta);
         _activePropBar.Process(delta);
         _lifeBar.Process(delta);
+        
+        
     }
 
     //玩家拾起道具, 弹出提示
