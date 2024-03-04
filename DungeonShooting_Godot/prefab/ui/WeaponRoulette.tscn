@@ -1,8 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://dbjpknb3d5gfw"]
+[gd_scene load_steps=7 format=3 uid="uid://dbjpknb3d5gfw"]
 
 [ext_resource type="Script" path="res://src/game/ui/weaponRoulette/WeaponRoulettePanel.cs" id="1_1uvbk"]
 [ext_resource type="Texture2D" uid="uid://e6krxgte01j3" path="res://resource/sprite/ui/roulette/RouletteBg.png" id="2_k6gjh"]
-[ext_resource type="Texture2D" uid="uid://civvcowt2wklr" path="res://resource/sprite/weapon/weapon0001/Weapon0001.png" id="3_f6rvp"]
+[ext_resource type="Script" path="res://src/game/ui/weaponRoulette/WeaponSlot.cs" id="3_8v011"]
+[ext_resource type="Shader" path="res://resource/material/Outline.gdshader" id="4_p348k"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i1wmw"]
+resource_local_to_scene = true
+shader = ExtResource("4_p348k")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_snfa8"]
+radius = 2.0
 
 [node name="WeaponRoulette" type="Control"]
 layout_mode = 3
@@ -37,15 +46,52 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="RouletteBg" type="Sprite2D" parent="Control"]
+position = Vector2(32.5, -27)
 scale = Vector2(4, 4)
 texture = ExtResource("2_k6gjh")
 
-[node name="WeaponSlot" type="Node2D" parent="Control/RouletteBg"]
+[node name="WeaponSlotNode" type="Node2D" parent="Control/RouletteBg"]
+script = ExtResource("3_8v011")
 
-[node name="Sprite" type="Sprite2D" parent="Control/RouletteBg/WeaponSlot"]
-position = Vector2(65, 2.08165e-12)
-texture = ExtResource("3_f6rvp")
+[node name="Control" type="Control" parent="Control/RouletteBg/WeaponSlotNode"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 65.25
+offset_right = 66.25
+offset_bottom = 1.0
 
-[node name="Area2D" type="Area2D" parent="Control/RouletteBg/WeaponSlot"]
+[node name="WeaponIcon" type="Sprite2D" parent="Control/RouletteBg/WeaponSlotNode/Control"]
+material = SubResource("ShaderMaterial_i1wmw")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Control/RouletteBg/WeaponSlot/Area2D"]
+[node name="AmmoLabel" type="Label" parent="Control/RouletteBg/WeaponSlotNode/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -15.25
+offset_top = 4.5
+offset_right = 104.75
+offset_bottom = 44.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.25, 0.25)
+text = "0/0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SlotAreaNode" type="Area2D" parent="Control/RouletteBg/WeaponSlotNode"]
+collision_layer = 0
+collision_mask = 8192
+monitorable = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Control/RouletteBg/WeaponSlotNode/SlotAreaNode"]
+
+[node name="MouseArea" type="Area2D" parent="."]
+collision_layer = 8192
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseArea"]
+shape = SubResource("CircleShape2D_snfa8")
