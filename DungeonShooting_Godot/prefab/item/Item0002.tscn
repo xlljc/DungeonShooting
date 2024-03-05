@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" path="res://src/game/activity/item/ObstacleObject.cs" id="1_qi3y4"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_u3oiv"]
-[ext_resource type="Texture2D" uid="uid://dl15qkga1kc82" path="res://resource/sprite/item/hall_b/fuhuo.png" id="3_6b42f"]
+[ext_resource type="Texture2D" uid="uid://dl15qkga1kc82" path="res://resource/sprite/item/hall_b/item-12.png" id="3_6b42f"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wh4b7"]
 resource_local_to_scene = true

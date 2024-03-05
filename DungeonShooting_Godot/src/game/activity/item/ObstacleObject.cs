@@ -7,7 +7,7 @@ using Godot;
 [Tool]
 public partial class ObstacleObject : ActivityObject, IHurt
 {
-    public virtual void Hurt(ActivityObject target, int damage, float angle)
-    {
-    }
+	public virtual void Hurt(ActivityObject target, int damage, float angle)
+	{
+	}
 }
