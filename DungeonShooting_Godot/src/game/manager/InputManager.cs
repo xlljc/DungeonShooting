@@ -105,5 +105,6 @@ public static class InputManager
         ExchangeProp = Input.IsActionJustPressed(InputAction.ExchangeProp);
         Map = Input.IsActionPressed(InputAction.Map);
         Menu = Input.IsActionJustPressed(InputAction.Menu);
+        Roulette = Input.IsActionPressed(InputAction.Roulette);
     }
 }

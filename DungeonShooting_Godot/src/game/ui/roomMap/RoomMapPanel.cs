@@ -41,7 +41,6 @@ public partial class RoomMapPanel : RoomMap
         S_DrawContainer.Instance.Resized += OnDrawContainerResized;
     }
 
-
     public override void OnDestroyUi()
     {
         _factory.RemoveAllEventListener();
@@ -65,17 +64,12 @@ public partial class RoomMapPanel : RoomMap
             {
                 if (UiManager.GetUiInstanceCount(UiManager.UiNames.PauseMenu) == 0)
                 {
-                    World.Current.Pause = true;
-                    _pressMapFlag = true;
-                    _isMagnifyMap = true;
-                    MagnifyMap();
+                    ExpandMap();
                 }
             }
             else if (!InputManager.Map && _isMagnifyMap) //还原小地图
             {
-                ResetMap();
-                _isMagnifyMap = false;
-                World.Current.Pause = false;
+                ShrinkMap();
             }
         }
         
@@ -176,6 +170,27 @@ public partial class RoomMapPanel : RoomMap
         }
     }
 
+    /// <summary>
+    /// 执行展开地图
+    /// </summary>
+    public void ExpandMap()
+    {
+        World.Current.Pause = true;
+        _pressMapFlag = true;
+        _isMagnifyMap = true;
+        MagnifyMap();
+    }
+    
+    /// <summary>
+    /// 执行收起地图
+    /// </summary>
+    public void ShrinkMap()
+    {
+        ResetMap();
+        _isMagnifyMap = false;
+        World.Current.Pause = false;
+    }
+    
     private void OnDrawContainerResized()
     {
         S_Mark.Instance.Position = S_DrawContainer.Instance.Size / 2;
@@ -295,8 +310,11 @@ public partial class RoomMapPanel : RoomMap
     private void OnPlayerFirstEnterRoom(object data)
     {
         var roomInfo = (RoomInfo)data;
-        roomInfo.PreviewSprite.Visible = true;
-        
+        if (roomInfo.PreviewSprite != null)
+        {
+            roomInfo.PreviewSprite.Visible = true;
+        }
+
         if (roomInfo.Doors!= null)
         {
             foreach (var roomDoor in roomInfo.Doors)

@@ -9,6 +9,8 @@ using Godot;
 [Tool]
 public partial class ActivityInstance : Node2D
 {
+    private const string GroupName = "Editor";
+    
     /// <summary>
     /// 物体Id
     /// </summary>
@@ -91,11 +93,62 @@ public partial class ActivityInstance : Node2D
     }
 
     /// <summary>
+    /// 动画精灵的z轴索引
+    /// </summary>
+    [Export]
+    public int SpriteZIndex
+    {
+        get => _spriteZIndex;
+        set
+        {
+            _spriteZIndex = value;
+            if (_activityObject != null)
+            {
+                _activityObject.AnimatedSprite.ZIndex = value;
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 阴影z轴索引
+    /// </summary>
+    [Export]
+    public int ShadowZIndex
+    {
+        get => _shadowZIndex;
+        set
+        {
+            _shadowZIndex = value;
+            if (_activityObject != null)
+            {
+                _activityObject.ShadowSprite.ZIndex = value;
+            }
+        }
+    }
+    
+    /// <summary>
     /// 是否启用垂直运动模拟
     /// </summary>
     [Export]
     public bool VerticalMotion { get; private set; } = true;
 
+    /// <summary>
+    /// 是否启用碰撞器
+    /// </summary>
+    [Export]
+    public bool CollisionEnabled
+    {
+        get => _collisionEnabled;
+        set
+        {
+            _collisionEnabled = value;
+            if (_activityObject != null)
+            {
+                _activityObject.Collision.Disabled = !value;
+            }
+        }
+    }
+    
     /// <summary>
     /// 编辑器属性, 物体子碰撞器在编辑器中是否可见
     /// </summary>
@@ -119,12 +172,27 @@ public partial class ActivityInstance : Node2D
     private bool _showShadow = true;
     private Vector2 _showOffset = new Vector2(0, 2);
     private float _altitude;
+    private int _spriteZIndex = 0;
+    private int _shadowZIndex = -1;
+    private bool _collisionEnabled = true;
 
     private Vector2 _collPos;
     private bool _createFlag = false;
     
+    //嵌套Instance相关
+    private bool _isNested = false;
+    private ActivityObject _activityInstance;
+    
     private static string _jsonText;
 
+    /// <summary>
+    /// 清空缓存的json
+    /// </summary>
+    public static void ClearCacheJson()
+    {
+        _jsonText = null;
+    }
+    
     public override void _Ready()
     {
 #if TOOLS
@@ -187,12 +255,20 @@ public partial class ActivityInstance : Node2D
 #if TOOLS
         if (Engine.IsEditorHint())
         {
+            _dirty = true;
+            
             var children = GetChildren();
             foreach (var child in children)
             {
-                child.QueueFree();
+                if (child is ActivityObject)
+                {
+                    child.QueueFree();
+                }
             }
-            _dirty = true;
+            if (_activityObject != null)
+            {
+                _activityObject.QueueFree();
+            }
             _activityObject = null;
             _prevId = null;
         }
@@ -210,25 +286,78 @@ public partial class ActivityInstance : Node2D
 #endif
     }
 
-    private void DoCreateObject()
+    private ActivityObject DoCreateObject()
     {
         if (_createFlag)
         {
-            return;
+            return _activityInstance;
         }
 
         _createFlag = true;
         var activityObject = ActivityObject.Create(Id);
-        activityObject.Position = GlobalPosition;
-        activityObject.Scale = GlobalScale;
-        activityObject.Rotation = GlobalRotation;
-        activityObject.Name = Name;
+        if (_isNested)
+        {
+            activityObject.Position = Position - new Vector2(0, 1);
+            activityObject.Scale = Scale;
+            activityObject.Rotation = Rotation;
+        }
+        else
+        {
+            activityObject.Position = GlobalPosition + new Vector2(0, 1);
+            activityObject.Scale = GlobalScale;
+            activityObject.Rotation = GlobalRotation;
+        }
+        
         activityObject.Visible = Visible;
         activityObject.ShadowOffset = _showOffset;
         activityObject.Altitude = _altitude;
+        activityObject.AnimatedSprite.ZIndex = _spriteZIndex;
+        activityObject.ShadowSprite.ZIndex = _shadowZIndex;
         activityObject.EnableVerticalMotion = VerticalMotion;
-        activityObject.PutDown(DefaultLayer, _showShadow);
+        activityObject.Collision.Disabled = !_collisionEnabled;
+        if (!_isNested)
+        {
+            activityObject.PutDown(DefaultLayer, _showShadow);
+        }
+        else
+        {
+            activityObject.DefaultLayer = DefaultLayer;
+            activityObject.ShowShadowSprite();
+        }
+
+        var children = GetChildren();
+        foreach (var child in children)
+        {
+            if (!child.IsInGroup(GroupName))
+            {
+                if (child is ActivityInstance o)
+                {
+                    o._isNested = true;
+                    var instance = o.DoCreateObject();
+                    activityObject.AddChild(instance);
+                    if (instance is IMountItem mountItem)
+                    {
+                        activityObject.AddMountObject(mountItem);
+                    }
+                    else if (instance is IDestroy destroy)
+                    {
+                        activityObject.AddDestroyObject(destroy);
+                    }
+                }
+                else
+                {
+                    child.Reparent(activityObject);
+                    if (child is Node2D node2D && activityObject.GetCurrentTexture().GetHeight() % 2 == 0)
+                    {
+                        node2D.Position += new Vector2(0, 1);
+                    }
+                }
+            }
+        }
+
         QueueFree();
+        _activityInstance = activityObject;
+        return  activityObject;
     }
 
     private void OnChangeActivityId(string id)
@@ -243,7 +372,6 @@ public partial class ActivityInstance : Node2D
 
         if (string.IsNullOrEmpty(id))
         {
-            GD.Print("删除物体");
             ShowErrorSprite();
             return;
         }
@@ -264,19 +392,28 @@ public partial class ActivityInstance : Node2D
                 if (endIndex > -1)
                 {
                     var prefab = _jsonText.Substring(startIndex + s.Length, endIndex - (startIndex + s.Length));
-                    GD.Print("创建物体: " + id);
                     var instance = ResourceManager.LoadAndInstantiate<ActivityObject>(prefab);
                     _activityObject = instance;
                     _collPos = instance.Collision.Position - instance.AnimatedSprite.Position - instance.AnimatedSprite.Offset;
-                    Debug.Log("_collPos: " + _collPos);
                     instance.IsCustomShadowSprite = instance.ShadowSprite.Texture != null;
                     instance.Altitude = _altitude;
                     instance.ShadowOffset = _showOffset;
+                    _activityObject.Position = _activityObject.AnimatedSprite.Position;
                     if (_showShadow)
                     {
                         instance.ShowShadowSprite();
+                        var shadowSpriteMaterial = instance.ShadowSprite.Material as ShaderMaterial;
+                        if (shadowSpriteMaterial != null)
+                        {
+                            shadowSpriteMaterial.SetShaderParameter(
+                                ShaderParamNames.ShowOutline,
+                                ((ShaderMaterial)instance.AnimatedSprite.Material).GetShaderParameter(ShaderParamNames
+                                    .ShowOutline)
+                            );
+                        }
                     }
                     AddChild(instance);
+                    MoveChild(instance, 0);
                     HideErrorSprite();
                     return;
                 }
@@ -309,8 +446,10 @@ public partial class ActivityInstance : Node2D
         if (_errorSprite == null)
         {
             _errorSprite = new Sprite2D();
+            _errorSprite.AddToGroup(GroupName);
             _errorSprite.Texture = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_Error_mini_png);
             AddChild(_errorSprite);
+            MoveChild(_errorSprite, GetChildCount() - 1);
         }
     }
 

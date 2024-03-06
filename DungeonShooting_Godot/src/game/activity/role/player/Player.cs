@@ -207,7 +207,11 @@ public partial class Player : Role
             }
         }
 
-        if (InputManager.UseActiveProp) //使用道具
+        if (InputManager.Roulette) //打开武器轮盘
+        {
+            //UiManager.Open_WeaponRoulette();
+        }
+        else if (InputManager.UseActiveProp) //使用道具
         {
             UseActiveProp();
         }

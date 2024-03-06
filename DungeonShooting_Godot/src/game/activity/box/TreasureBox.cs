@@ -4,7 +4,7 @@
 /// 宝箱
 /// </summary>
 [Tool]
-public partial class TreasureBox : ActivityObject, IHurt
+public partial class TreasureBox : ObstacleObject
 {
     public bool IsOpen { get; private set; }
 
@@ -35,7 +35,7 @@ public partial class TreasureBox : ActivityObject, IHurt
         weapon.Throw(Position, 2, 95, new Vector2(0, 11), 0);
     }
 
-    public void Hurt(ActivityObject target, int damage, float angle)
+    public override void Hurt(ActivityObject target, int damage, float angle)
     {
         PlayHitAnimation();
     }
