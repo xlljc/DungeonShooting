@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bvpmtfupny8iu"]
+[gd_scene load_steps=23 format=3 uid="uid://bvpmtfupny8iu"]
 
 [ext_resource type="Script" path="res://src/game/ui/roomUI/RoomUIPanel.cs" id="1_tfcrp"]
 [ext_resource type="Texture2D" uid="uid://b67i86mtqrn32" path="res://resource/sprite/ui/roomUI/icon_bullet.png" id="2_ruc0p"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://dwysndc5ffski" path="res://resource/sprite/ui/roomUI/ChargeProgressBar.png" id="13_6w7qi"]
 [ext_resource type="Texture2D" uid="uid://ck0w7at3oat5" path="res://resource/sprite/ui/roomUI/ChargeProgress.png" id="13_vuglj"]
 [ext_resource type="PackedScene" uid="uid://bmj3p25gwpqpn" path="res://prefab/ui/RoomMap.tscn" id="16_rp3sg"]
+[ext_resource type="PackedScene" uid="uid://dbjpknb3d5gfw" path="res://prefab/ui/WeaponRoulette.tscn" id="17_ydc4r"]
 
 [sub_resource type="Gradient" id="1"]
 colors = PackedColorArray(0.4, 0.498039, 1, 1, 0.4, 0.498039, 1, 0.313726)
@@ -363,6 +364,10 @@ scale = Vector2(0.25, 0.25)
 text = "30/90"
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="WeaponRoulette" parent="." instance=ExtResource("17_ydc4r")]
+layout_mode = 1
+metadata/_edit_lock_ = true
 
 [node name="RoomMap" parent="." instance=ExtResource("16_rp3sg")]
 layout_mode = 1

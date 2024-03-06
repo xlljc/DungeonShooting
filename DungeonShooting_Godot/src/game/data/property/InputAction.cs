@@ -35,4 +35,5 @@ public static class InputAction
     public static readonly StringName RemoveProp = "removeProp";
     public static readonly StringName Map = "map";
     public static readonly StringName Menu = "menu";
+    public static readonly StringName Roulette = "roulette";
 }

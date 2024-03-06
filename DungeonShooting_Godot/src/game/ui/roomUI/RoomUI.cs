@@ -45,6 +45,19 @@ public abstract partial class RoomUI : UiBase
     private Control _L_Control;
 
     /// <summary>
+    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.WeaponRoulette.WeaponRoulettePanel"/>, 节点路径: RoomUI.WeaponRoulette
+    /// </summary>
+    public WeaponRoulette L_WeaponRoulette
+    {
+        get
+        {
+            if (_L_WeaponRoulette == null) _L_WeaponRoulette = new WeaponRoulette((RoomUIPanel)this, GetNode<UI.WeaponRoulette.WeaponRoulettePanel>("WeaponRoulette"));
+            return _L_WeaponRoulette;
+        }
+    }
+    private WeaponRoulette _L_WeaponRoulette;
+
+    /// <summary>
     /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="UI.RoomMap.RoomMapPanel"/>, 节点路径: RoomUI.RoomMap
     /// </summary>
     public RoomMap L_RoomMap
@@ -79,9 +92,14 @@ public abstract partial class RoomUI : UiBase
     {
 
         var inst1 = this;
-        RecordNestedUi(inst1.L_RoomMap.Instance, null, UiManager.RecordType.Open);
-        inst1.L_RoomMap.Instance.OnCreateUi();
-        inst1.L_RoomMap.Instance.OnInitNestedUi();
+        RecordNestedUi(inst1.L_WeaponRoulette.Instance, null, UiManager.RecordType.Open);
+        inst1.L_WeaponRoulette.Instance.OnCreateUi();
+        inst1.L_WeaponRoulette.Instance.OnInitNestedUi();
+
+        var inst2 = this;
+        RecordNestedUi(inst2.L_RoomMap.Instance, null, UiManager.RecordType.Open);
+        inst2.L_RoomMap.Instance.OnCreateUi();
+        inst2.L_RoomMap.Instance.OnInitNestedUi();
 
     }
 
@@ -641,6 +659,22 @@ public abstract partial class RoomUI : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="UI.WeaponRoulette.WeaponRoulettePanel"/>, 路径: RoomUI.WeaponRoulette
+    /// </summary>
+    public class WeaponRoulette : UiNode<RoomUIPanel, UI.WeaponRoulette.WeaponRoulettePanel, WeaponRoulette>
+    {
+        public WeaponRoulette(RoomUIPanel uiPanel, UI.WeaponRoulette.WeaponRoulettePanel node) : base(uiPanel, node) {  }
+        public override WeaponRoulette Clone()
+        {
+            var uiNode = new WeaponRoulette(UiPanel, (UI.WeaponRoulette.WeaponRoulettePanel)Instance.Duplicate());
+            UiPanel.RecordNestedUi(uiNode.Instance, this, UiManager.RecordType.Open);
+            uiNode.Instance.OnCreateUi();
+            uiNode.Instance.OnInitNestedUi();
+            return uiNode;
+        }
+    }
+
+    /// <summary>
     /// 类型: <see cref="UI.RoomMap.RoomMapPanel"/>, 路径: RoomUI.RoomMap
     /// </summary>
     public class RoomMap : UiNode<RoomUIPanel, UI.RoomMap.RoomMapPanel, RoomMap>
@@ -800,6 +834,11 @@ public abstract partial class RoomUI : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: RoomUI.Control
     /// </summary>
     public Control S_Control => L_Control;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="UI.WeaponRoulette.WeaponRoulettePanel"/>, 节点路径: RoomUI.WeaponRoulette
+    /// </summary>
+    public WeaponRoulette S_WeaponRoulette => L_WeaponRoulette;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="UI.RoomMap.RoomMapPanel"/>, 节点路径: RoomUI.RoomMap
