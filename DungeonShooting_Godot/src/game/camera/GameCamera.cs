@@ -87,7 +87,7 @@ public partial class GameCamera : Camera2D
         _Shake(newDelta);
         
         var world = World.Current;
-        if (world != null && !world.Pause && _followTarget != null)
+        if (world != null && _followTarget != null)
         {
             var mousePosition = InputManager.CursorPosition;
             var targetPosition = _followTarget.GlobalPosition;

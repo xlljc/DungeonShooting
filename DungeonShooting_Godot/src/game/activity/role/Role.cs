@@ -1145,6 +1145,17 @@ public abstract partial class Role : ActivityObject
     }
 
     /// <summary>
+    /// 切换到指定索引到武器
+    /// </summary>
+    public void ExchangeWeaponByIndex(int index)
+    {
+        if (WeaponPack.ActiveIndex != index)
+        {
+            WeaponPack.ExchangeByIndex(index);
+        }
+    }
+
+    /// <summary>
     /// 扔掉当前使用的武器, 切换到上一个武器
     /// </summary>
     public void ThrowWeapon()

@@ -5,6 +5,8 @@ namespace UI.WeaponRoulette;
 public partial class WeaponSlot : Node2D, IUiNodeScript
 {
     private WeaponRoulette.WeaponSlotNode _node;
+    private Weapon _weapon;
+    
     public void SetUiNode(IUiNode uiNode)
     {
         _node = (WeaponRoulette.WeaponSlotNode)uiNode;
@@ -15,9 +17,20 @@ public partial class WeaponSlot : Node2D, IUiNodeScript
     public void OnDestroy()
     {
     }
+
+    public void SetWeapon(Weapon weapon)
+    {
+        _weapon = weapon;
+    }
+
+    public void ClearWeapon()
+    {
+        _weapon = null;
+    }
     
     private void OnAreaEntered(Area2D other)
     {
+        _node.UiPanel.ActiveWeapon = _weapon;
         _node.Instance.Scale = new Vector2(1.1f, 1.1f);
         _node.L_Control.L_WeaponIcon.Instance.Material.SetShaderMaterialParameter(ShaderParamNames.OutlineColor, Colors.White);
     }
