@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://c2hynqudkykxl"]
+[gd_scene load_steps=57 format=3 uid="uid://c2hynqudkykxl"]
 
 [ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/Dungeon.tscn" id="1_31od0"]
 [ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
@@ -19,10 +19,8 @@
 [ext_resource type="Shader" path="res://resource/material/GodRays.gdshader" id="14_8vfgi"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="15_1xqxd"]
 [ext_resource type="Texture2D" uid="uid://iqj44lyknjr2" path="res://resource/sprite/item/hall_a/Slice_04.png" id="15_h7524"]
-[ext_resource type="Texture2D" uid="uid://cwn5vf7flupa1" path="res://resource/sprite/item/hall_a/Slice_41.png" id="16_hx0q7"]
 [ext_resource type="Texture2D" uid="uid://bm8xcx73s83ku" path="res://resource/sprite/item/hall_a/Slice_47.png" id="16_xj0e1"]
 [ext_resource type="Texture2D" uid="uid://cj550yof2jm8u" path="res://resource/sprite/item/hall_a/Slice_13.png" id="17_gwwce"]
-[ext_resource type="Texture2D" uid="uid://4lig7ii34y2l" path="res://resource/sprite/item/hall_a/Slice_55.png" id="17_oq62v"]
 [ext_resource type="Texture2D" uid="uid://4fht0i1igi65" path="res://resource/sprite/item/hall_c/item _21.png" id="18_sqk27"]
 [ext_resource type="Texture2D" uid="uid://b4d5qwui0onqy" path="res://resource/sprite/item/hall_c/item _25.png" id="19_v74e7"]
 [ext_resource type="Texture2D" uid="uid://celqblbytv02h" path="res://resource/sprite/item/hall_c/item _28.png" id="20_gxw54"]
@@ -45,10 +43,13 @@
 [ext_resource type="Texture2D" uid="uid://dlm2sgko33lw3" path="res://resource/sprite/item/hall_b/item-09.png" id="43_x1gko"]
 [ext_resource type="Texture2D" uid="uid://c4vlhjoxvba76" path="res://resource/sprite/item/hall_b/item-14.png" id="44_yhrf0"]
 [ext_resource type="Texture2D" uid="uid://dno1yrrch8e2g" path="res://resource/sprite/item/hall_b/item-15.png" id="45_7i1j7"]
-[ext_resource type="Texture2D" uid="uid://dlmu1hqikqwc3" path="res://resource/sprite/item/hall_b/item-16.png" id="46_0y03a"]
 [ext_resource type="Texture2D" uid="uid://pkmc2lhvnejo" path="res://resource/sprite/item/hall_b/item-17.png" id="47_mf13m"]
 [ext_resource type="Texture2D" uid="uid://n28j32tve2e0" path="res://resource/sprite/item/hall_b/item-20.png" id="48_2erjm"]
 [ext_resource type="Texture2D" uid="uid://w3uubg6lwsjl" path="res://resource/sprite/item/hall_b/item-21.png" id="49_j5ytr"]
+[ext_resource type="Texture2D" uid="uid://ms8v1g1nhqv3" path="res://resource/sprite/item/hall_c/item _07.png" id="49_yocgq"]
+[ext_resource type="Texture2D" uid="uid://dlhp210kvxqsw" path="res://resource/sprite/item/hall_c/item _08.png" id="50_do7ne"]
+[ext_resource type="Texture2D" uid="uid://dim1k57cc7w53" path="res://resource/sprite/item/hall_c/item _06.png" id="51_h0bj1"]
+[ext_resource type="Texture2D" uid="uid://rrxkyras3kdw" path="res://resource/sprite/item/hall_c/item _12.png" id="52_1n1p3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ru8u4"]
 size = Vector2(19, 10)
@@ -193,7 +194,7 @@ position = Vector2(18, -2)
 texture = ExtResource("8_61dkg")
 
 [node name="Item0014" type="Node2D" parent="ItemRoot" index="4"]
-position = Vector2(918, 362)
+position = Vector2(993, 403)
 script = ExtResource("5_lowqi")
 Id = "item_0014"
 DefaultLayer = 1
@@ -433,140 +434,148 @@ script = ExtResource("5_lowqi")
 Id = "item_0026"
 DefaultLayer = 1
 
-[node name="Item05" type="Sprite2D" parent="." index="7"]
-z_index = -4
-position = Vector2(859, 383)
-texture = ExtResource("7_42rdc")
-
-[node name="Ditan" type="Sprite2D" parent="." index="8"]
+[node name="Ditan" type="Sprite2D" parent="." index="7"]
 z_index = -4
 position = Vector2(537, 237)
 texture = ExtResource("13_swsmq")
 
-[node name="Slice41" type="Sprite2D" parent="." index="9"]
-z_index = -4
-position = Vector2(99, 371)
-texture = ExtResource("16_hx0q7")
-
-[node name="Slice55" type="Sprite2D" parent="." index="10"]
-z_index = -4
-position = Vector2(161, 409)
-texture = ExtResource("17_oq62v")
-
-[node name="Item21" type="Sprite2D" parent="." index="11"]
+[node name="Item21" type="Sprite2D" parent="." index="8"]
 position = Vector2(880, 426)
 texture = ExtResource("18_sqk27")
 
-[node name="Item25" type="Sprite2D" parent="." index="12"]
+[node name="Item25" type="Sprite2D" parent="." index="9"]
 position = Vector2(888, 368)
 texture = ExtResource("19_v74e7")
 
-[node name="Item28" type="Sprite2D" parent="." index="13"]
+[node name="Item28" type="Sprite2D" parent="." index="10"]
 position = Vector2(881, 382)
 texture = ExtResource("20_gxw54")
 
-[node name="Item24" type="Sprite2D" parent="." index="14"]
+[node name="Item24" type="Sprite2D" parent="." index="11"]
 position = Vector2(897, 386)
 texture = ExtResource("21_svc76")
 
-[node name="Item27" type="Sprite2D" parent="." index="15"]
+[node name="Item27" type="Sprite2D" parent="." index="12"]
 position = Vector2(908, 393)
 texture = ExtResource("22_7bbkr")
 
-[node name="Item29" type="Sprite2D" parent="." index="16"]
+[node name="Item29" type="Sprite2D" parent="." index="13"]
 position = Vector2(892, 346)
 texture = ExtResource("23_kydek")
 
-[node name="Item32" type="Sprite2D" parent="." index="17"]
+[node name="Item32" type="Sprite2D" parent="." index="14"]
 position = Vector2(819, 393)
 texture = ExtResource("25_fsrqa")
 
-[node name="Item19" type="Sprite2D" parent="." index="18"]
+[node name="Item19" type="Sprite2D" parent="." index="15"]
 position = Vector2(918, 427)
 texture = ExtResource("26_bae0v")
 
-[node name="Item15" type="Sprite2D" parent="." index="19"]
+[node name="Item15" type="Sprite2D" parent="." index="16"]
 position = Vector2(807, 413)
 texture = ExtResource("27_gaatx")
 
-[node name="Item16" type="Sprite2D" parent="." index="20"]
+[node name="Item16" type="Sprite2D" parent="." index="17"]
 position = Vector2(808, 425)
 texture = ExtResource("28_1l3ls")
 
-[node name="Item59" type="Sprite2D" parent="." index="21"]
+[node name="Item59" type="Sprite2D" parent="." index="18"]
 position = Vector2(793, 414)
 texture = ExtResource("29_4dx8t")
 
-[node name="Item23" type="Sprite2D" parent="." index="22"]
+[node name="Item23" type="Sprite2D" parent="." index="19"]
 position = Vector2(890, 402)
 texture = ExtResource("30_vfhiv")
 
-[node name="Item03" type="Sprite2D" parent="." index="23"]
+[node name="Item03" type="Sprite2D" parent="." index="20"]
 position = Vector2(906, 159)
 texture = ExtResource("36_knh8x")
 
-[node name="Item-27" type="Sprite2D" parent="." index="24"]
+[node name="Item-27" type="Sprite2D" parent="." index="21"]
 z_index = -2
 position = Vector2(512, 104)
 texture = ExtResource("38_141o6")
 
-[node name="Item-11" type="Sprite2D" parent="." index="25"]
+[node name="Item-11" type="Sprite2D" parent="." index="22"]
 z_index = -3
 position = Vector2(429, 75)
 scale = Vector2(1.73958, 1.73958)
 texture = ExtResource("39_w3n1m")
 
-[node name="Item-03" type="Sprite2D" parent="." index="26"]
+[node name="Item-03" type="Sprite2D" parent="." index="23"]
 z_as_relative = false
 position = Vector2(481, 71)
 scale = Vector2(4, 4)
 texture = ExtResource("40_nfi5j")
 
-[node name="Item-19" type="Sprite2D" parent="." index="27"]
+[node name="Item-19" type="Sprite2D" parent="." index="24"]
 position = Vector2(534, 113)
 texture = ExtResource("41_dhny5")
 
-[node name="Item-08" type="Sprite2D" parent="." index="28"]
+[node name="Item-08" type="Sprite2D" parent="." index="25"]
 position = Vector2(727, 224)
 texture = ExtResource("41_w8uos")
 
-[node name="Item01" type="Sprite2D" parent="." index="29"]
+[node name="Item01" type="Sprite2D" parent="." index="26"]
 z_index = -1
-position = Vector2(880, 328)
+position = Vector2(879, 329)
 texture = ExtResource("37_5rb67")
 
-[node name="Item-09" type="Sprite2D" parent="." index="30"]
-position = Vector2(752, 275)
+[node name="Item-09" type="Sprite2D" parent="." index="27"]
+z_index = -1
+position = Vector2(752, 271)
 texture = ExtResource("43_x1gko")
 
-[node name="Item-14" type="Sprite2D" parent="." index="31"]
-position = Vector2(752, 307)
+[node name="Item-14" type="Sprite2D" parent="." index="28"]
+position = Vector2(730, 307)
 texture = ExtResource("44_yhrf0")
 
-[node name="Item-15" type="Sprite2D" parent="." index="32"]
+[node name="Item-15" type="Sprite2D" parent="." index="29"]
 position = Vector2(429, 198)
 texture = ExtResource("45_7i1j7")
 
-[node name="Item-16" type="Sprite2D" parent="." index="33"]
-position = Vector2(240, 299)
-texture = ExtResource("46_0y03a")
-
-[node name="Item-17" type="Sprite2D" parent="." index="34"]
+[node name="Item-17" type="Sprite2D" parent="." index="30"]
 position = Vector2(606, 231)
 texture = ExtResource("47_mf13m")
 
-[node name="Item-20" type="Sprite2D" parent="." index="35"]
+[node name="Item-20" type="Sprite2D" parent="." index="31"]
 position = Vector2(679, 207)
 texture = ExtResource("48_2erjm")
 
-[node name="Item-21" type="Sprite2D" parent="." index="36"]
+[node name="Item-21" type="Sprite2D" parent="." index="32"]
 position = Vector2(305, 334)
 texture = ExtResource("49_j5ytr")
 
-[node name="Item-22" type="Sprite2D" parent="." index="37"]
+[node name="Item-22" type="Sprite2D" parent="." index="33"]
 position = Vector2(320, 334)
 texture = ExtResource("49_j5ytr")
 
-[node name="Item-23" type="Sprite2D" parent="." index="38"]
+[node name="Item-23" type="Sprite2D" parent="." index="34"]
 position = Vector2(336, 334)
 texture = ExtResource("49_j5ytr")
+
+[node name="Item06" type="Sprite2D" parent="." index="35"]
+z_index = -1
+position = Vector2(851, 378)
+texture = ExtResource("7_42rdc")
+
+[node name="Item07" type="Sprite2D" parent="." index="36"]
+position = Vector2(915, 405)
+texture = ExtResource("49_yocgq")
+
+[node name="Item08" type="Sprite2D" parent="." index="37"]
+position = Vector2(766, 434)
+texture = ExtResource("50_do7ne")
+
+[node name="Item09" type="Sprite2D" parent="." index="38"]
+position = Vector2(766, 412)
+texture = ExtResource("50_do7ne")
+
+[node name="Item10" type="Sprite2D" parent="." index="39"]
+position = Vector2(1001, 436)
+texture = ExtResource("51_h0bj1")
+
+[node name="Item12" type="Sprite2D" parent="." index="40"]
+position = Vector2(921, 373)
+texture = ExtResource("52_1n1p3")
+flip_h = true
