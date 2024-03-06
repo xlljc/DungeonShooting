@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-[gd_scene load_steps=57 format=3 uid="uid://c2hynqudkykxl"]
-=======
-[gd_scene load_steps=43 format=3 uid="uid://c2hynqudkykxl"]
->>>>>>> 0727519cabbf411b3e96caf76cf3acbb497e200e
+[gd_scene load_steps=56 format=3 uid="uid://c2hynqudkykxl"]
 
 [ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/Dungeon.tscn" id="1_31od0"]
 [ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
