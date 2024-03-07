@@ -21,6 +21,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1uvbk")
+metadata/_edit_vertical_guides_ = [960.0]
 
 [node name="Bg" type="ColorRect" parent="."]
 layout_mode = 1
@@ -46,7 +47,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="RouletteBg" type="Sprite2D" parent="Control"]
-position = Vector2(32.5, -27)
 scale = Vector2(4, 4)
 texture = ExtResource("2_k6gjh")
 
@@ -87,6 +87,56 @@ collision_mask = 8192
 monitorable = false
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Control/RouletteBg/WeaponSlotNode/SlotAreaNode"]
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+layout_mode = 0
+offset_left = -383.0
+offset_top = -480.0
+offset_right = 385.0
+offset_bottom = -424.0
+color = Color(0.184314, 0.184314, 0.184314, 0.784314)
+
+[node name="Label" type="Label" parent="Control/ColorRect"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.5
+offset_top = -20.0
+offset_right = 162.5
+offset_bottom = 20.0
+grow_vertical = 2
+text = "按Q上一页"
+
+[node name="Label2" type="Label" parent="Control/ColorRect"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -162.5
+offset_top = -20.0
+offset_right = -10.5
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "按E下一页"
+
+[node name="PageLabel" type="Label" parent="Control/ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.5
+offset_top = -20.0
+offset_right = 4.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "1/1"
 
 [node name="MouseArea" type="Area2D" parent="."]
 collision_layer = 8192

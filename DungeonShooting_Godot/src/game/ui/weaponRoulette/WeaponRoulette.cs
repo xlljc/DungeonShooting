@@ -206,6 +206,81 @@ public abstract partial class WeaponRoulette : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: WeaponRoulette.Control.ColorRect.Label
+    /// </summary>
+    public class Label : UiNode<WeaponRoulettePanel, Godot.Label, Label>
+    {
+        public Label(WeaponRoulettePanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: WeaponRoulette.Control.ColorRect.Label2
+    /// </summary>
+    public class Label2 : UiNode<WeaponRoulettePanel, Godot.Label, Label2>
+    {
+        public Label2(WeaponRoulettePanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label2 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Label"/>, 路径: WeaponRoulette.Control.ColorRect.PageLabel
+    /// </summary>
+    public class PageLabel : UiNode<WeaponRoulettePanel, Godot.Label, PageLabel>
+    {
+        public PageLabel(WeaponRoulettePanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override PageLabel Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.ColorRect"/>, 路径: WeaponRoulette.Control.ColorRect
+    /// </summary>
+    public class ColorRect : UiNode<WeaponRoulettePanel, Godot.ColorRect, ColorRect>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: WeaponRoulette.Control.Label
+        /// </summary>
+        public Label L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label(UiPanel, Instance.GetNode<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label _L_Label;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: WeaponRoulette.Control.Label2
+        /// </summary>
+        public Label2 L_Label2
+        {
+            get
+            {
+                if (_L_Label2 == null) _L_Label2 = new Label2(UiPanel, Instance.GetNode<Godot.Label>("Label2"));
+                return _L_Label2;
+            }
+        }
+        private Label2 _L_Label2;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: WeaponRoulette.Control.PageLabel
+        /// </summary>
+        public PageLabel L_PageLabel
+        {
+            get
+            {
+                if (_L_PageLabel == null) _L_PageLabel = new PageLabel(UiPanel, Instance.GetNode<Godot.Label>("PageLabel"));
+                return _L_PageLabel;
+            }
+        }
+        private PageLabel _L_PageLabel;
+
+        public ColorRect(WeaponRoulettePanel uiPanel, Godot.ColorRect node) : base(uiPanel, node) {  }
+        public override ColorRect Clone() => new (UiPanel, (Godot.ColorRect)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.Control"/>, 路径: WeaponRoulette.Control
     /// </summary>
     public class Control : UiNode<WeaponRoulettePanel, Godot.Control, Control>
@@ -222,6 +297,19 @@ public abstract partial class WeaponRoulette : UiBase
             }
         }
         private RouletteBg _L_RouletteBg;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: WeaponRoulette.ColorRect
+        /// </summary>
+        public ColorRect L_ColorRect
+        {
+            get
+            {
+                if (_L_ColorRect == null) _L_ColorRect = new ColorRect(UiPanel, Instance.GetNode<Godot.ColorRect>("ColorRect"));
+                return _L_ColorRect;
+            }
+        }
+        private ColorRect _L_ColorRect;
 
         public Control(WeaponRoulettePanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
         public override Control Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
@@ -293,6 +381,26 @@ public abstract partial class WeaponRoulette : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: WeaponRoulette.Control.RouletteBg
     /// </summary>
     public RouletteBg S_RouletteBg => L_Control.L_RouletteBg;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: WeaponRoulette.Control.ColorRect.Label
+    /// </summary>
+    public Label S_Label => L_Control.L_ColorRect.L_Label;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: WeaponRoulette.Control.ColorRect.Label2
+    /// </summary>
+    public Label2 S_Label2 => L_Control.L_ColorRect.L_Label2;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: WeaponRoulette.Control.ColorRect.PageLabel
+    /// </summary>
+    public PageLabel S_PageLabel => L_Control.L_ColorRect.L_PageLabel;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: WeaponRoulette.Control.ColorRect
+    /// </summary>
+    public ColorRect S_ColorRect => L_Control.L_ColorRect;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.CollisionShape2D"/>, 节点路径: WeaponRoulette.MouseArea.CollisionShape2D
