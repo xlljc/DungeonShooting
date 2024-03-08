@@ -73,6 +73,8 @@ public partial class Player : Role
         //InitSubLine();
         
         _brushData2 = new BrushImageData(ExcelConfig.LiquidMaterial_Map["0001"]);
+        
+        WeaponPack.SetCapacity(10);
     }
 
     private void DebugSet()
