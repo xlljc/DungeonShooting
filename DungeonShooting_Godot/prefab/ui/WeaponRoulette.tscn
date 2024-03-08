@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dbjpknb3d5gfw"]
+[gd_scene load_steps=8 format=3 uid="uid://dbjpknb3d5gfw"]
 
 [ext_resource type="Script" path="res://src/game/ui/weaponRoulette/WeaponRoulettePanel.cs" id="1_1uvbk"]
 [ext_resource type="Texture2D" uid="uid://e6krxgte01j3" path="res://resource/sprite/ui/roulette/RouletteBg.png" id="2_k6gjh"]
 [ext_resource type="Script" path="res://src/game/ui/weaponRoulette/WeaponSlot.cs" id="3_8v011"]
 [ext_resource type="Shader" path="res://resource/material/Outline.gdshader" id="4_p348k"]
+[ext_resource type="Texture2D" uid="uid://dmm8jw06bhffh" path="res://resource/sprite/ui/commonIcon/Lock.png" id="6_7mog3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i1wmw"]
 resource_local_to_scene = true
@@ -21,7 +22,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1uvbk")
-metadata/_edit_vertical_guides_ = [960.0]
+metadata/_edit_vertical_guides_ = [960.0, 1220.0]
 
 [node name="Bg" type="ColorRect" parent="."]
 layout_mode = 1
@@ -53,33 +54,51 @@ texture = ExtResource("2_k6gjh")
 [node name="WeaponSlotNode" type="Node2D" parent="Control/RouletteBg"]
 script = ExtResource("3_8v011")
 
-[node name="Control" type="Control" parent="Control/RouletteBg/WeaponSlotNode"]
+[node name="SlotUi" type="Control" parent="Control/RouletteBg/WeaponSlotNode"]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 65.25
 offset_right = 66.25
 offset_bottom = 1.0
 
-[node name="WeaponIcon" type="Sprite2D" parent="Control/RouletteBg/WeaponSlotNode/Control"]
-material = SubResource("ShaderMaterial_i1wmw")
-
-[node name="AmmoLabel" type="Label" parent="Control/RouletteBg/WeaponSlotNode/Control"]
+[node name="WeaponUi" type="Control" parent="Control/RouletteBg/WeaponSlotNode/SlotUi"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -15.25
-offset_top = 4.5
-offset_right = 104.75
-offset_bottom = 44.5
+offset_left = -0.5
+offset_top = -0.5
+offset_right = 0.5
+offset_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WeaponIcon" type="Sprite2D" parent="Control/RouletteBg/WeaponSlotNode/SlotUi/WeaponUi"]
+material = SubResource("ShaderMaterial_i1wmw")
+
+[node name="AmmoLabel" type="Label" parent="Control/RouletteBg/WeaponSlotNode/SlotUi/WeaponUi"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -15.375
+offset_top = 8.5
+offset_right = 104.625
+offset_bottom = 48.5
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.25, 0.25)
 text = "0/0"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="LockSprite" type="Sprite2D" parent="Control/RouletteBg/WeaponSlotNode/SlotUi"]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("6_7mog3")
 
 [node name="SlotAreaNode" type="Area2D" parent="Control/RouletteBg/WeaponSlotNode"]
 collision_layer = 0

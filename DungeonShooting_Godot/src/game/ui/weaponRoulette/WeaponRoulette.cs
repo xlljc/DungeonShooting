@@ -65,7 +65,7 @@ public abstract partial class WeaponRoulette : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.Control.WeaponIcon
+    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.SlotUi.WeaponUi.WeaponIcon
     /// </summary>
     public class WeaponIcon : UiNode<WeaponRoulettePanel, Godot.Sprite2D, WeaponIcon>
     {
@@ -74,7 +74,7 @@ public abstract partial class WeaponRoulette : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Label"/>, 路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.Control.AmmoLabel
+    /// 类型: <see cref="Godot.Label"/>, 路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.SlotUi.WeaponUi.AmmoLabel
     /// </summary>
     public class AmmoLabel : UiNode<WeaponRoulettePanel, Godot.Label, AmmoLabel>
     {
@@ -83,12 +83,12 @@ public abstract partial class WeaponRoulette : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Control"/>, 路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.Control
+    /// 类型: <see cref="Godot.Control"/>, 路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.SlotUi.WeaponUi
     /// </summary>
-    public class Control_1 : UiNode<WeaponRoulettePanel, Godot.Control, Control_1>
+    public class WeaponUi : UiNode<WeaponRoulettePanel, Godot.Control, WeaponUi>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.WeaponIcon
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.SlotUi.WeaponIcon
         /// </summary>
         public WeaponIcon L_WeaponIcon
         {
@@ -101,7 +101,7 @@ public abstract partial class WeaponRoulette : UiBase
         private WeaponIcon _L_WeaponIcon;
 
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.AmmoLabel
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.SlotUi.AmmoLabel
         /// </summary>
         public AmmoLabel L_AmmoLabel
         {
@@ -113,8 +113,52 @@ public abstract partial class WeaponRoulette : UiBase
         }
         private AmmoLabel _L_AmmoLabel;
 
-        public Control_1(WeaponRoulettePanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
-        public override Control_1 Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+        public WeaponUi(WeaponRoulettePanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override WeaponUi Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.SlotUi.LockSprite
+    /// </summary>
+    public class LockSprite : UiNode<WeaponRoulettePanel, Godot.Sprite2D, LockSprite>
+    {
+        public LockSprite(WeaponRoulettePanel uiPanel, Godot.Sprite2D node) : base(uiPanel, node) {  }
+        public override LockSprite Clone() => new (UiPanel, (Godot.Sprite2D)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Control"/>, 路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.SlotUi
+    /// </summary>
+    public class SlotUi : UiNode<WeaponRoulettePanel, Godot.Control, SlotUi>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.WeaponUi
+        /// </summary>
+        public WeaponUi L_WeaponUi
+        {
+            get
+            {
+                if (_L_WeaponUi == null) _L_WeaponUi = new WeaponUi(UiPanel, Instance.GetNode<Godot.Control>("WeaponUi"));
+                return _L_WeaponUi;
+            }
+        }
+        private WeaponUi _L_WeaponUi;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.LockSprite
+        /// </summary>
+        public LockSprite L_LockSprite
+        {
+            get
+            {
+                if (_L_LockSprite == null) _L_LockSprite = new LockSprite(UiPanel, Instance.GetNode<Godot.Sprite2D>("LockSprite"));
+                return _L_LockSprite;
+            }
+        }
+        private LockSprite _L_LockSprite;
+
+        public SlotUi(WeaponRoulettePanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override SlotUi Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
     }
 
     /// <summary>
@@ -154,17 +198,17 @@ public abstract partial class WeaponRoulette : UiBase
     public class WeaponSlotNode : UiNode<WeaponRoulettePanel, UI.WeaponRoulette.WeaponSlot, WeaponSlotNode>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: WeaponRoulette.Control.RouletteBg.Control
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: WeaponRoulette.Control.RouletteBg.SlotUi
         /// </summary>
-        public Control_1 L_Control
+        public SlotUi L_SlotUi
         {
             get
             {
-                if (_L_Control == null) _L_Control = new Control_1(UiPanel, Instance.GetNode<Godot.Control>("Control"));
-                return _L_Control;
+                if (_L_SlotUi == null) _L_SlotUi = new SlotUi(UiPanel, Instance.GetNode<Godot.Control>("SlotUi"));
+                return _L_SlotUi;
             }
         }
-        private Control_1 _L_Control;
+        private SlotUi _L_SlotUi;
 
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Area2D"/>, 节点路径: WeaponRoulette.Control.RouletteBg.SlotAreaNode
@@ -353,14 +397,29 @@ public abstract partial class WeaponRoulette : UiBase
     public Bg S_Bg => L_Bg;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.Control.WeaponIcon
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.SlotUi.WeaponUi.WeaponIcon
     /// </summary>
-    public WeaponIcon S_WeaponIcon => L_Control.L_RouletteBg.L_WeaponSlotNode.L_Control.L_WeaponIcon;
+    public WeaponIcon S_WeaponIcon => L_Control.L_RouletteBg.L_WeaponSlotNode.L_SlotUi.L_WeaponUi.L_WeaponIcon;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.Control.AmmoLabel
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.SlotUi.WeaponUi.AmmoLabel
     /// </summary>
-    public AmmoLabel S_AmmoLabel => L_Control.L_RouletteBg.L_WeaponSlotNode.L_Control.L_AmmoLabel;
+    public AmmoLabel S_AmmoLabel => L_Control.L_RouletteBg.L_WeaponSlotNode.L_SlotUi.L_WeaponUi.L_AmmoLabel;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.SlotUi.WeaponUi
+    /// </summary>
+    public WeaponUi S_WeaponUi => L_Control.L_RouletteBg.L_WeaponSlotNode.L_SlotUi.L_WeaponUi;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.SlotUi.LockSprite
+    /// </summary>
+    public LockSprite S_LockSprite => L_Control.L_RouletteBg.L_WeaponSlotNode.L_SlotUi.L_LockSprite;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.SlotUi
+    /// </summary>
+    public SlotUi S_SlotUi => L_Control.L_RouletteBg.L_WeaponSlotNode.L_SlotUi;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.CollisionPolygon2D"/>, 节点路径: WeaponRoulette.Control.RouletteBg.WeaponSlotNode.SlotAreaNode.CollisionPolygon2D
@@ -401,6 +460,11 @@ public abstract partial class WeaponRoulette : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: WeaponRoulette.Control.ColorRect
     /// </summary>
     public ColorRect S_ColorRect => L_Control.L_ColorRect;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: WeaponRoulette.Control
+    /// </summary>
+    public Control S_Control => L_Control;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.CollisionShape2D"/>, 节点路径: WeaponRoulette.MouseArea.CollisionShape2D

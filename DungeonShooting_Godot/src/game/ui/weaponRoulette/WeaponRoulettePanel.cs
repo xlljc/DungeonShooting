@@ -43,8 +43,9 @@ public partial class WeaponRoulettePanel : WeaponRoulette
             var sectorPolygon = Utils.CreateSectorPolygon(0, 100, 360f / SlotCount, 4);
             collisionPolygon2D.Polygon = sectorPolygon;
             clone.Instance.RotationDegrees = angle;
-            clone.L_Control.Instance.RotationDegrees = -angle;
-            clone.L_Control.L_WeaponIcon.Instance.Material = (Material)S_WeaponSlotNode.L_Control.L_WeaponIcon.Instance.Material.Duplicate();
+            clone.L_SlotUi.Instance.RotationDegrees = -angle;
+            clone.L_SlotUi.L_WeaponUi.L_WeaponIcon.Instance.Material =
+                (Material)S_WeaponSlotNode.L_SlotUi.L_WeaponUi.L_WeaponIcon.Instance.Material.Duplicate();
             _slotNodes.Add(clone);
         }
         
@@ -200,7 +201,7 @@ public partial class WeaponRoulettePanel : WeaponRoulette
         {
             foreach (var slotNode in _slotNodes)
             {
-                slotNode.L_Control.Instance.Visible = false;
+                slotNode.L_SlotUi.Instance.Visible = false;
             }
 
             return;
@@ -210,28 +211,34 @@ public partial class WeaponRoulettePanel : WeaponRoulette
         for (var i = 0; i < _slotNodes.Count; i++)
         {
             var slotNode = _slotNodes[i];
-            slotNode.L_Control.Instance.Visible = true;
+            slotNode.L_SlotUi.Instance.Visible = true;
+            slotNode.L_SlotUi.L_LockSprite.Instance.Visible = false;
+            
             var weaponIndex = i + _pageIndex * SlotCount;
             if (weapons.Length > weaponIndex)
             {
                 var weapon = weapons[weaponIndex];
-                if (weapon != null)
+                if (weapon != null) //有武器
                 {
-                    slotNode.L_Control.Instance.Visible = true;
-                    slotNode.L_Control.L_WeaponIcon.Instance.Texture = weapon.GetDefaultTexture();
-                    slotNode.L_Control.L_AmmoLabel.Instance.Text = 
+                    slotNode.L_SlotUi.L_WeaponUi.Instance.Visible = true;
+                    slotNode.L_SlotUi.L_WeaponUi.L_WeaponIcon.Instance.Texture = weapon.GetDefaultTexture();
+                    slotNode.L_SlotUi.L_WeaponUi.L_AmmoLabel.Instance.Text = 
                         (weapon.CurrAmmo + weapon.ResidueAmmo).ToString() + "/" + weapon.Attribute.MaxAmmoCapacity;
                     slotNode.Instance.SetWeapon(weapon);
+                    slotNode.L_SlotAreaNode.Instance.Monitoring = true;
                 }
-                else
+                else //已经解锁，但是没有武器
                 {
-                    slotNode.L_Control.Instance.Visible = false;
+                    slotNode.L_SlotUi.L_WeaponUi.Instance.Visible = false;
+                    slotNode.L_SlotAreaNode.Instance.Monitoring = false;
                     slotNode.Instance.ClearWeapon();
                 }
             }
-            else
+            else //未解锁
             {
-                slotNode.L_Control.Instance.Visible = false;
+                slotNode.L_SlotUi.L_LockSprite.Instance.Visible = true;
+                slotNode.L_SlotUi.L_WeaponUi.Instance.Visible = false;
+                slotNode.L_SlotAreaNode.Instance.Monitoring = false;
                 slotNode.Instance.ClearWeapon();
             }
         }

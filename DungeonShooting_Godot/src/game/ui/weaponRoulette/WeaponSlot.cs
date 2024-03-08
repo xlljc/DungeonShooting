@@ -32,12 +32,12 @@ public partial class WeaponSlot : Node2D, IUiNodeScript
     {
         _node.UiPanel.ActiveWeapon = _weapon;
         _node.Instance.Scale = new Vector2(1.1f, 1.1f);
-        _node.L_Control.L_WeaponIcon.Instance.Material.SetShaderMaterialParameter(ShaderParamNames.OutlineColor, Colors.White);
+        _node.L_SlotUi.L_WeaponUi.L_WeaponIcon.Instance.Material.SetShaderMaterialParameter(ShaderParamNames.OutlineColor, Colors.White);
     }
     
     private void OnAreaExited(Area2D other)
     {
         _node.Instance.Scale = Vector2.One;
-        _node.L_Control.L_WeaponIcon.Instance.Material.SetShaderMaterialParameter(ShaderParamNames.OutlineColor, Colors.Black);
+        _node.L_SlotUi.L_WeaponUi.L_WeaponIcon.Instance.Material.SetShaderMaterialParameter(ShaderParamNames.OutlineColor, Colors.Black);
     }
 }
