@@ -88,7 +88,7 @@ layer_0/tile_data = PackedInt32Array(917505, 1, 0, 983041, 1, 0, 1048577, 1, 0, 
 metadata/_edit_group_ = true
 
 [node name="BirthMark" type="Marker2D" parent="." index="3"]
-position = Vector2(536, 310)
+position = Vector2(533, 223)
 
 [node name="DungeonEntrance" type="Area2D" parent="." index="4"]
 z_index = 15
@@ -393,6 +393,24 @@ DefaultLayer = 1
 position = Vector2(346, 238)
 script = ExtResource("5_lowqi")
 Id = "item_0026"
+DefaultLayer = 1
+
+[node name="Weapon0002" type="Node2D" parent="ItemRoot" index="34"]
+position = Vector2(436, 242)
+script = ExtResource("5_lowqi")
+Id = "weapon0002"
+DefaultLayer = 1
+
+[node name="Weapon0003" type="Node2D" parent="ItemRoot" index="35"]
+position = Vector2(489, 255)
+script = ExtResource("5_lowqi")
+Id = "weapon0003"
+DefaultLayer = 1
+
+[node name="Weapon0004" type="Node2D" parent="ItemRoot" index="36"]
+position = Vector2(543, 261)
+script = ExtResource("5_lowqi")
+Id = "weapon0004"
 DefaultLayer = 1
 
 [node name="Node2D" type="Node2D" parent="." index="6"]

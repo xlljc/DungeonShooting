@@ -37,6 +37,11 @@ public partial class WeaponSlot : Node2D, IUiNodeScript
     
     private void OnAreaExited(Area2D other)
     {
+        if (_node.UiPanel.ActiveWeapon == _weapon)
+        {
+            _node.UiPanel.ActiveWeapon = null;
+        }
+
         _node.Instance.Scale = Vector2.One;
         _node.L_SlotUi.L_WeaponUi.L_WeaponIcon.Instance.Material.SetShaderMaterialParameter(ShaderParamNames.OutlineColor, Colors.Black);
     }
