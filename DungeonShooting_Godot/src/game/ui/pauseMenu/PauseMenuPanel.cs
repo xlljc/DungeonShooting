@@ -8,6 +8,8 @@ public partial class PauseMenuPanel : PauseMenu
     public override void OnCreateUi()
     {
         S_Continue.Instance.Pressed += OnContinueClick;
+        S_Setting.Instance.Pressed += OnSettingClick;
+        S_Encyclopedia.Instance.Pressed += OnEncyclopediaClick;
         S_Restart.Instance.Pressed += OnRestartClick;
         S_Exit.Instance.Pressed += OnExitClick;
         
@@ -39,6 +41,18 @@ public partial class PauseMenuPanel : PauseMenu
         World.Current.Pause = false;
         GameApplication.Instance.Cursor.SetGuiMode(false);
         Destroy();
+    }
+
+    //设置
+    private void OnSettingClick()
+    {
+        OpenNextUi(UiManager.UiNames.Setting);
+    }
+
+    //图鉴
+    private void OnEncyclopediaClick()
+    {
+        OpenNextUi(UiManager.UiNames.Encyclopedia);
     }
 
     //重新开始

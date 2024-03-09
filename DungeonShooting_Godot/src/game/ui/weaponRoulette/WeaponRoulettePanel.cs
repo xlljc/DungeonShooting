@@ -31,7 +31,7 @@ public partial class WeaponRoulettePanel : WeaponRoulette
     
     public override void OnCreateUi()
     {
-        L_Control.Instance.Visible = false;
+        S_Root.Instance.Visible = false;
         S_Bg.Instance.Visible = false;
 
         //创建武器插槽
@@ -84,31 +84,46 @@ public partial class WeaponRoulettePanel : WeaponRoulette
         {
             S_MouseArea.Instance.GlobalPosition = GetGlobalMousePosition();
 
-            if (_maxPageIndex > 0)
+            //扔掉武器
+            if (ActiveWeapon != null && InputManager.MeleeAttack)
             {
-                if (InputManager.ExchangeWeapon) //上一页
+                ActiveWeapon.Master.ThrowWeapon(ActiveWeapon.PackageIndex);
+                ActiveWeapon = null;
+                RefreshWeapon();
+            }
+            else
+            {
+                //上一页/下一页
+                if (_maxPageIndex > 0)
                 {
-                    _pageIndex--;
-                    if (_pageIndex < 0)
+                    if (InputManager.ExchangeWeapon) //上一页
                     {
-                        _pageIndex = _maxPageIndex;
-                    }
+                        _pageIndex--;
+                        if (_pageIndex < 0)
+                        {
+                            _pageIndex = _maxPageIndex;
+                        }
                     
-                    RefreshPageLabel();
-                    RefreshWeapon();
-                }
-                else if (InputManager.Interactive) //下一页
-                {
-                    _pageIndex++;
-                    if (_pageIndex > _maxPageIndex)
+                        RefreshPageLabel();
+                        RefreshWeapon();
+                    }
+                    else if (InputManager.Interactive) //下一页
                     {
-                        _pageIndex = 0;
-                    }
+                        _pageIndex++;
+                        if (_pageIndex > _maxPageIndex)
+                        {
+                            _pageIndex = 0;
+                        }
                     
-                    RefreshPageLabel();
-                    RefreshWeapon();
+                        RefreshPageLabel();
+                        RefreshWeapon();
+                    }
                 }
             }
+
+            
+            //扔掉武器提示
+            S_DownBar.Instance.Visible = ActiveWeapon != null;
         }
         else
         {
@@ -123,7 +138,7 @@ public partial class WeaponRoulettePanel : WeaponRoulette
         _pressRouletteFlag = true;
         _isMagnifyRoulette = true;
         
-        L_Control.Instance.Visible = true;
+        S_Root.Instance.Visible = true;
         S_Bg.Instance.Visible = true;
         SetEnableSectorCollision(true);
         RefreshSlotPage();
@@ -134,7 +149,7 @@ public partial class WeaponRoulettePanel : WeaponRoulette
     //关闭轮盘
     private void ShrinkRoulette()
     {
-        L_Control.Instance.Visible = false;
+        S_Root.Instance.Visible = false;
         S_Bg.Instance.Visible = false;
         
         _isMagnifyRoulette = false;
@@ -185,7 +200,7 @@ public partial class WeaponRoulettePanel : WeaponRoulette
             }
         }
         _maxPageIndex = Mathf.CeilToInt((lastIndex + 1f) / SlotCount) - 1;
-        S_ColorRect.Instance.Visible = _maxPageIndex > 0;
+        S_UpBar.Instance.Visible = _maxPageIndex > 0;
         
         if (_pageIndex > _maxPageIndex)
         {

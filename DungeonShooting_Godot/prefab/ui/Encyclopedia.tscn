@@ -1,0 +1,134 @@
+[gd_scene load_steps=6 format=3 uid="uid://b2xq02i3vxct"]
+
+[ext_resource type="Script" path="res://src/game/ui/encyclopedia/EncyclopediaPanel.cs" id="1_hd86y"]
+[ext_resource type="Texture2D" uid="uid://blfvsup876agh" path="res://resource/sprite/ui/commonIcon/Search.png" id="2_3ln1u"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_o1xl7"]
+[ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="4_gtlqd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gm0bl"]
+resource_local_to_scene = true
+shader = ExtResource("3_o1xl7")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[node name="Encyclopedia" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_hd86y")
+
+[node name="Panel2" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 75.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Panel2/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel2/MarginContainer/VBoxContainer2/MarginContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LineEdit" type="LineEdit" parent="Panel2/MarginContainer/VBoxContainer2/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(500, 44)
+layout_mode = 2
+size_flags_vertical = 4
+placeholder_text = "搜索名称"
+
+[node name="Search" type="Button" parent="Panel2/MarginContainer/VBoxContainer2/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(44, 44)
+layout_mode = 2
+size_flags_vertical = 4
+icon = ExtResource("2_3ln1u")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel2/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 75.0
+
+[node name="ObjectButton" type="Button" parent="Panel2/MarginContainer/VBoxContainer2/ScrollContainer"]
+custom_minimum_size = Vector2(124, 160)
+layout_mode = 2
+
+[node name="PreviewImage" type="TextureRect" parent="Panel2/MarginContainer/VBoxContainer2/ScrollContainer/ObjectButton"]
+material = SubResource("ShaderMaterial_gm0bl")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -38.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 2
+stretch_mode = 5
+
+[node name="ObjectName" type="Label" parent="Panel2/MarginContainer/VBoxContainer2/ScrollContainer/ObjectButton"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -43.0
+offset_right = 124.0
+offset_bottom = 43.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.5, 0.5)
+text = "武器"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Select" type="NinePatchRect" parent="Panel2/MarginContainer/VBoxContainer2/ScrollContainer/ObjectButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_gtlqd")
+region_rect = Rect2(0, 0, 36, 36)
+patch_margin_left = 8
+patch_margin_top = 8
+patch_margin_right = 8
+patch_margin_bottom = 8
