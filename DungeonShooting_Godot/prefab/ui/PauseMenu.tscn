@@ -8,6 +8,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_ef73i")
 Layer = 2
 
@@ -49,6 +51,22 @@ focus_neighbor_top = NodePath("../Exit")
 focus_neighbor_bottom = NodePath("../Setting")
 theme = ExtResource("2_x1py5")
 text = "重新开始"
+
+[node name="Encyclopedia" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+focus_neighbor_top = NodePath("../Exit")
+focus_neighbor_bottom = NodePath("../Setting")
+theme = ExtResource("2_x1py5")
+text = "图鉴"
+
+[node name="Setting" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+focus_neighbor_top = NodePath("../Exit")
+focus_neighbor_bottom = NodePath("../Setting")
+theme = ExtResource("2_x1py5")
+text = "设置"
 
 [node name="Exit" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 50)

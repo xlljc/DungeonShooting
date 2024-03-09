@@ -319,15 +319,17 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
     /// </summary>
     private void OpenExportExcelFolder()
     {
-        var path = Environment.CurrentDirectory + "/excel";
         var osName = OS.GetName();
-        GD.Print("打开excel文件夹: " + path);
         if (osName == "Windows")
         {
+            var path = Environment.CurrentDirectory + "\\excel";
+            GD.Print("打开excel文件夹: " + path);
             System.Diagnostics.Process.Start("explorer.exe", path);
         }
         else
         {
+            var path = Environment.CurrentDirectory + "/excel";
+            GD.Print("打开excel文件夹: " + path);
             System.Diagnostics.Process.Start("open", path);
         }
     }

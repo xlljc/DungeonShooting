@@ -22,7 +22,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1uvbk")
-metadata/_edit_vertical_guides_ = [960.0, 1220.0]
 
 [node name="Bg" type="ColorRect" parent="."]
 layout_mode = 1
