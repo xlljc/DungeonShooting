@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections;
 using Godot;
 
 /// <summary>
@@ -50,6 +51,13 @@ public abstract class UiCell<TUiCellNode, T> : IUiCell, IData<T> where TUiCellNo
     {
     }
 
+    /// <summary>
+    /// 当前cell被分配值时调用，该函数为协程函数，当仅在 Grid 中调研 SetDataListCoroutine() 函数时才会被调用
+    /// </summary>
+    public virtual IEnumerator OnSetDataCoroutine(T data)
+    {
+        yield break;
+    }
 
     public virtual void Process(float delta)
     {
@@ -126,12 +134,20 @@ public abstract class UiCell<TUiCellNode, T> : IUiCell, IData<T> where TUiCellNo
     }
     
     /// <summary>
-    /// 设置当前 Cell 的值, 该函数由 UiGrid 调用
+    /// 更新当前 Cell 的值, 该函数由 UiGrid 调用
+    /// </summary>
+    public void UpdateData(T data)
+    {
+        Data = data;
+        OnSetData(data);
+    }
+
+    /// <summary>
+    /// 设置当前 Cell 的值, 该函数由 UiGrid 调用，该函数为协程函数
     /// </summary>
     public void SetData(T data)
     {
         Data = data;
-        OnSetData(data);
     }
 
     /// <summary>

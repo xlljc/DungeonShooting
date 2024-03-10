@@ -46,7 +46,7 @@ material = SubResource("ShaderMaterial_o5ytq")
 
 [node name="AnimatedSprite" parent="." index="1"]
 material = SubResource("ShaderMaterial_rtliw")
-position = Vector2(10, 1)
+position = Vector2(10, 0)
 sprite_frames = ExtResource("4_uymcs")
 
 [node name="ShellPoint" parent="AnimatedSprite" index="0"]

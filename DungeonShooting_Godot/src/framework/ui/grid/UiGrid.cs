@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Godot;
 
@@ -342,7 +343,22 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
         for (var i = 0; i < _cellList.Count; i++)
         {
             var data = array[i];
-            _cellList[i].SetData(data);
+            _cellList[i].UpdateData(data);
+        }
+    }
+    
+    /// <summary>
+    /// 设置当前网格组件中的所有 Cell 数据, 该函数为协程函数，可用于分帧处理大量数据
+    /// </summary>
+    public IEnumerator SetDataListCoroutine(ICollection<TData> array)
+    {
+        RemoveAll();
+        foreach (var data in array)
+        {
+            var cell = GetCellInstance();
+            GridContainer.AddChild(cell.CellNode.GetUiInstance());
+            cell.SetData(data);
+            yield return cell.OnSetDataCoroutine(data);
         }
     }
 
@@ -353,7 +369,7 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
     {
         var cell = GetCellInstance();
         GridContainer.AddChild(cell.CellNode.GetUiInstance());
-        cell.SetData(data);
+        cell.UpdateData(data);
         if (select)
         {
             SelectIndex = Count - 1;
@@ -368,7 +384,7 @@ public class UiGrid<TUiCellNode, TData> : IUiGrid where TUiCellNode : IUiCellNod
         var uiCell = GetCell(index);
         if (uiCell != null)
         {
-            uiCell.SetData(data);
+            uiCell.UpdateData(data);
         }
     }
 

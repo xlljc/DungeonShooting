@@ -65,7 +65,7 @@ public partial class TileSelected : VBoxContainer, IUiNodeScript
             var uiCell = Grid.Find(c => c.Data.CombinationInfo.Id == data.CombinationInfo.Id);
             if (uiCell != null)
             {
-                uiCell.SetData(data);
+                uiCell.UpdateData(data);
             }
             EventManager.EmitEvent(EventEnum.OnTileSetDirty);
         }
