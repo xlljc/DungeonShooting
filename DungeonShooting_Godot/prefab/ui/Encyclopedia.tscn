@@ -1,13 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://b2xq02i3vxct"]
+[gd_scene load_steps=9 format=3 uid="uid://b2xq02i3vxct"]
 
 [ext_resource type="Script" path="res://src/game/ui/encyclopedia/EncyclopediaPanel.cs" id="1_hd86y"]
 [ext_resource type="Texture2D" uid="uid://c0st2iiql8igg" path="res://resource/sprite/ui/encyclopedia/TitleBg.png" id="3_gdtik"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_o1xl7"]
 [ext_resource type="Texture2D" uid="uid://brevrlfdtllmk" path="res://resource/sprite/ui/encyclopedia/Select.png" id="5_f0anf"]
 [ext_resource type="Texture2D" uid="uid://cu5y32wfai4pn" path="res://resource/sprite/ui/encyclopedia/Item.png" id="5_niceh"]
-[ext_resource type="Texture2D" uid="uid://5adiy3ycqyxw" path="res://resource/sprite/ui/GUI.png" id="5_qcyvs"]
-[ext_resource type="Texture2D" uid="uid://civvcowt2wklr" path="res://resource/sprite/weapon/weapon0001/Weapon0001.png" id="6_536pn"]
 [ext_resource type="Texture2D" uid="uid://conjg6fw6670x" path="res://resource/sprite/ui/encyclopedia/Panel.png" id="7_hfdat"]
+[ext_resource type="Material" uid="uid://j8t31iuumvhr" path="res://resource/material/Outline.tres" id="7_yd5ks"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gm0bl"]
 resource_local_to_scene = true
@@ -26,11 +25,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1440.0
-offset_bottom = -810.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(4, 4)
 script = ExtResource("1_hd86y")
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -48,24 +44,26 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 3.0
-offset_top = 12.0
+offset_top = 54.0
 offset_right = -3.0
 offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("5_qcyvs")
-region_rect = Rect2(2, 35, 44, 43)
-patch_margin_left = 30
-patch_margin_top = 29
-patch_margin_right = 30
-patch_margin_bottom = 30
+texture = ExtResource("7_hfdat")
+region_rect = Rect2(0, 0, 128, 128)
+patch_margin_left = 56
+patch_margin_top = 56
+patch_margin_right = 56
+patch_margin_bottom = 56
 
 [node name="TextureRect" type="TextureRect" parent="NinePatchRect"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = -10.25
-offset_bottom = 11.75
+offset_left = -3.0
+offset_top = -35.0
+offset_right = -3.0
+offset_bottom = 69.0
 grow_horizontal = 2
 texture = ExtResource("3_gdtik")
 stretch_mode = 3
@@ -75,12 +73,12 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -3.25
-offset_bottom = -1.25
+offset_top = -3.0
+offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 48
 text = "图鉴"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -92,10 +90,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
 
 [node name="HBoxContainer" type="HBoxContainer" parent="NinePatchRect/MarginContainer"]
 layout_mode = 2
@@ -103,26 +101,27 @@ layout_mode = 2
 [node name="VBoxContainer2" type="VBoxContainer" parent="NinePatchRect/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.0
+size_flags_stretch_ratio = 3.0
 
 [node name="NinePatchRect" type="NinePatchRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 size_flags_vertical = 3
 texture = ExtResource("7_hfdat")
-patch_margin_left = 14
-patch_margin_top = 14
-patch_margin_right = 14
-patch_margin_bottom = 14
+region_rect = Rect2(0, 0, 128, 128)
+patch_margin_left = 56
+patch_margin_top = 56
+patch_margin_right = 56
+patch_margin_bottom = 56
 
 [node name="ScrollContainer" type="ScrollContainer" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/NinePatchRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 7.0
-offset_top = 7.0
-offset_right = -7.0
-offset_bottom = -7.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -130,7 +129,7 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 75.0
 
 [node name="ObjectButton" type="TextureButton" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/NinePatchRect/ScrollContainer"]
-custom_minimum_size = Vector2(50, 30)
+custom_minimum_size = Vector2(200, 120)
 layout_mode = 2
 
 [node name="Bg" type="NinePatchRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/NinePatchRect/ScrollContainer/ObjectButton"]
@@ -141,10 +140,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("5_niceh")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
+region_rect = Rect2(0, 0, 56, 56)
+patch_margin_left = 24
+patch_margin_top = 24
+patch_margin_right = 24
+patch_margin_bottom = 24
 
 [node name="PreviewImage" type="TextureRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/NinePatchRect/ScrollContainer/ObjectButton"]
 material = SubResource("ShaderMaterial_gm0bl")
@@ -152,8 +152,11 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -150.0
+offset_bottom = -90.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(4, 4)
 mouse_filter = 2
 stretch_mode = 3
 
@@ -165,43 +168,69 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("5_f0anf")
-region_rect = Rect2(0, 0, 4, 4)
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
+region_rect = Rect2(0, 0, 16, 16)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="NinePatchRect/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(452, 2.08165e-12)
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="NinePatchRect" type="NinePatchRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer3"]
 layout_mode = 2
 size_flags_vertical = 3
 texture = ExtResource("7_hfdat")
-patch_margin_left = 14
-patch_margin_top = 14
-patch_margin_right = 14
-patch_margin_bottom = 14
+patch_margin_left = 56
+patch_margin_top = 56
+patch_margin_right = 56
+patch_margin_bottom = 56
 
 [node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer3/NinePatchRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 7.0
-offset_top = 7.0
-offset_right = -7.0
-offset_bottom = -7.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 16
 
-[node name="TextureRect" type="TextureRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer3/NinePatchRect/VBoxContainer"]
+[node name="Label" type="Label" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer3/NinePatchRect/VBoxContainer"]
 layout_mode = 2
+text = "名称"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer3/NinePatchRect/VBoxContainer"]
+custom_minimum_size = Vector2(396, 320)
+layout_mode = 2
+texture = ExtResource("7_hfdat")
+patch_margin_left = 56
+patch_margin_top = 56
+patch_margin_right = 56
+patch_margin_bottom = 56
+
+[node name="TextureRect" type="TextureRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer3/NinePatchRect/VBoxContainer/NinePatchRect"]
+material = ExtResource("7_yd5ks")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -4.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
-texture = ExtResource("6_536pn")
 stretch_mode = 3
 
-[node name="Gui" type="Sprite2D" parent="."]
-position = Vector2(-108.25, 158.25)
-texture = ExtResource("5_qcyvs")
+[node name="RichTextLabel" type="RichTextLabel" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer3/NinePatchRect/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "文本描述"

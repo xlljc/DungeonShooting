@@ -31,19 +31,6 @@ public abstract partial class Encyclopedia : UiBase
     }
     private NinePatchRect _L_NinePatchRect;
 
-    /// <summary>
-    /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: Encyclopedia.Gui
-    /// </summary>
-    public Gui L_Gui
-    {
-        get
-        {
-            if (_L_Gui == null) _L_Gui = new Gui((EncyclopediaPanel)this, GetNode<Godot.Sprite2D>("Gui"));
-            return _L_Gui;
-        }
-    }
-    private Gui _L_Gui;
-
 
     public Encyclopedia() : base(nameof(Encyclopedia))
     {
@@ -236,7 +223,16 @@ public abstract partial class Encyclopedia : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.TextureRect
+    /// 类型: <see cref="Godot.Label"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.Label
+    /// </summary>
+    public class Label_1 : UiNode<EncyclopediaPanel, Godot.Label, Label_1>
+    {
+        public Label_1(EncyclopediaPanel uiPanel, Godot.Label node) : base(uiPanel, node) {  }
+        public override Label_1 Clone() => new (UiPanel, (Godot.Label)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.NinePatchRect.TextureRect
     /// </summary>
     public class TextureRect_1 : UiNode<EncyclopediaPanel, Godot.TextureRect, TextureRect_1>
     {
@@ -245,12 +241,12 @@ public abstract partial class Encyclopedia : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.NinePatchRect
     /// </summary>
-    public class VBoxContainer : UiNode<EncyclopediaPanel, Godot.VBoxContainer, VBoxContainer>
+    public class NinePatchRect_3 : UiNode<EncyclopediaPanel, Godot.NinePatchRect, NinePatchRect_3>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.TextureRect
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.TextureRect
         /// </summary>
         public TextureRect_1 L_TextureRect
         {
@@ -261,6 +257,63 @@ public abstract partial class Encyclopedia : UiBase
             }
         }
         private TextureRect_1 _L_TextureRect;
+
+        public NinePatchRect_3(EncyclopediaPanel uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
+        public override NinePatchRect_3 Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.RichTextLabel"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.RichTextLabel
+    /// </summary>
+    public class RichTextLabel : UiNode<EncyclopediaPanel, Godot.RichTextLabel, RichTextLabel>
+    {
+        public RichTextLabel(EncyclopediaPanel uiPanel, Godot.RichTextLabel node) : base(uiPanel, node) {  }
+        public override RichTextLabel Clone() => new (UiPanel, (Godot.RichTextLabel)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer
+    /// </summary>
+    public class VBoxContainer : UiNode<EncyclopediaPanel, Godot.VBoxContainer, VBoxContainer>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.Label
+        /// </summary>
+        public Label_1 L_Label
+        {
+            get
+            {
+                if (_L_Label == null) _L_Label = new Label_1(UiPanel, Instance.GetNode<Godot.Label>("Label"));
+                return _L_Label;
+            }
+        }
+        private Label_1 _L_Label;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.NinePatchRect
+        /// </summary>
+        public NinePatchRect_3 L_NinePatchRect
+        {
+            get
+            {
+                if (_L_NinePatchRect == null) _L_NinePatchRect = new NinePatchRect_3(UiPanel, Instance.GetNode<Godot.NinePatchRect>("NinePatchRect"));
+                return _L_NinePatchRect;
+            }
+        }
+        private NinePatchRect_3 _L_NinePatchRect;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.RichTextLabel"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.RichTextLabel
+        /// </summary>
+        public RichTextLabel L_RichTextLabel
+        {
+            get
+            {
+                if (_L_RichTextLabel == null) _L_RichTextLabel = new RichTextLabel(UiPanel, Instance.GetNode<Godot.RichTextLabel>("RichTextLabel"));
+                return _L_RichTextLabel;
+            }
+        }
+        private RichTextLabel _L_RichTextLabel;
 
         public VBoxContainer(EncyclopediaPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
         public override VBoxContainer Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
@@ -402,25 +455,11 @@ public abstract partial class Encyclopedia : UiBase
         public override NinePatchRect Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
     }
 
-    /// <summary>
-    /// 类型: <see cref="Godot.Sprite2D"/>, 路径: Encyclopedia.Gui
-    /// </summary>
-    public class Gui : UiNode<EncyclopediaPanel, Godot.Sprite2D, Gui>
-    {
-        public Gui(EncyclopediaPanel uiPanel, Godot.Sprite2D node) : base(uiPanel, node) {  }
-        public override Gui Clone() => new (UiPanel, (Godot.Sprite2D)Instance.Duplicate());
-    }
-
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.ColorRect"/>, 节点路径: Encyclopedia.ColorRect
     /// </summary>
     public ColorRect S_ColorRect => L_ColorRect;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: Encyclopedia.NinePatchRect.TextureRect.Label
-    /// </summary>
-    public Label S_Label => L_NinePatchRect.L_TextureRect.L_Label;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.NinePatchRect.ScrollContainer.ObjectButton.Bg
@@ -453,6 +492,11 @@ public abstract partial class Encyclopedia : UiBase
     public VBoxContainer2 S_VBoxContainer2 => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer2;
 
     /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.RichTextLabel"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.RichTextLabel
+    /// </summary>
+    public RichTextLabel S_RichTextLabel => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer3.L_NinePatchRect.L_VBoxContainer.L_RichTextLabel;
+
+    /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer
     /// </summary>
     public VBoxContainer S_VBoxContainer => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer3.L_NinePatchRect.L_VBoxContainer;
@@ -471,10 +515,5 @@ public abstract partial class Encyclopedia : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer
     /// </summary>
     public MarginContainer S_MarginContainer => L_NinePatchRect.L_MarginContainer;
-
-    /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Sprite2D"/>, 节点路径: Encyclopedia.Gui
-    /// </summary>
-    public Gui S_Gui => L_Gui;
 
 }
