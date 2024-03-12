@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://b2xq02i3vxct"]
+[gd_scene load_steps=11 format=3 uid="uid://b2xq02i3vxct"]
 
 [ext_resource type="Script" path="res://src/game/ui/encyclopedia/EncyclopediaPanel.cs" id="1_hd86y"]
 [ext_resource type="Texture2D" uid="uid://c0st2iiql8igg" path="res://resource/sprite/ui/encyclopedia/TitleBg.png" id="3_gdtik"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_o1xl7"]
 [ext_resource type="Texture2D" uid="uid://dahib4qcevboo" path="res://resource/sprite/ui/encyclopedia/Panel2.png" id="4_21546"]
+[ext_resource type="Texture2D" uid="uid://jb73i5q1dv2a" path="res://resource/sprite/ui/encyclopedia/Tab.png" id="4_nm64b"]
 [ext_resource type="Texture2D" uid="uid://brevrlfdtllmk" path="res://resource/sprite/ui/encyclopedia/Select.png" id="5_f0anf"]
 [ext_resource type="Texture2D" uid="uid://cu5y32wfai4pn" path="res://resource/sprite/ui/encyclopedia/Item.png" id="5_niceh"]
 [ext_resource type="Texture2D" uid="uid://conjg6fw6670x" path="res://resource/sprite/ui/encyclopedia/Panel.png" id="7_hfdat"]
@@ -103,6 +104,59 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
+theme_override_constants/separation = 0
+
+[node name="Control" type="Control" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(2.08165e-12, 48)
+layout_mode = 2
+
+[node name="TabButton" type="TextureButton" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -52.0
+offset_right = 80.0
+offset_bottom = 4.0
+grow_vertical = 0
+texture_normal = ExtResource("4_nm64b")
+
+[node name="TabButton2" type="TextureButton" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 80.0
+offset_top = -52.0
+offset_right = 144.0
+offset_bottom = 4.0
+grow_vertical = 0
+texture_normal = ExtResource("4_nm64b")
+
+[node name="TabButton3" type="TextureButton" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 144.0
+offset_top = -52.0
+offset_right = 208.0
+offset_bottom = 4.0
+grow_vertical = 0
+texture_normal = ExtResource("4_nm64b")
+
+[node name="TabButton4" type="TextureButton" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 208.0
+offset_top = -52.0
+offset_right = 272.0
+offset_bottom = 4.0
+grow_vertical = 0
+texture_normal = ExtResource("4_nm64b")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2

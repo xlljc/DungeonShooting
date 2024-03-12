@@ -82,6 +82,103 @@ public abstract partial class Encyclopedia : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.Control.TabButton
+    /// </summary>
+    public class TabButton : UiNode<EncyclopediaPanel, Godot.TextureButton, TabButton>
+    {
+        public TabButton(EncyclopediaPanel uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public override TabButton Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.Control.TabButton2
+    /// </summary>
+    public class TabButton2 : UiNode<EncyclopediaPanel, Godot.TextureButton, TabButton2>
+    {
+        public TabButton2(EncyclopediaPanel uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public override TabButton2 Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.Control.TabButton3
+    /// </summary>
+    public class TabButton3 : UiNode<EncyclopediaPanel, Godot.TextureButton, TabButton3>
+    {
+        public TabButton3(EncyclopediaPanel uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public override TabButton3 Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.Control.TabButton4
+    /// </summary>
+    public class TabButton4 : UiNode<EncyclopediaPanel, Godot.TextureButton, TabButton4>
+    {
+        public TabButton4(EncyclopediaPanel uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public override TabButton4 Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+    }
+
+    /// <summary>
+    /// 类型: <see cref="Godot.Control"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.Control
+    /// </summary>
+    public class Control : UiNode<EncyclopediaPanel, Godot.Control, Control>
+    {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.TabButton
+        /// </summary>
+        public TabButton L_TabButton
+        {
+            get
+            {
+                if (_L_TabButton == null) _L_TabButton = new TabButton(UiPanel, Instance.GetNode<Godot.TextureButton>("TabButton"));
+                return _L_TabButton;
+            }
+        }
+        private TabButton _L_TabButton;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.TabButton2
+        /// </summary>
+        public TabButton2 L_TabButton2
+        {
+            get
+            {
+                if (_L_TabButton2 == null) _L_TabButton2 = new TabButton2(UiPanel, Instance.GetNode<Godot.TextureButton>("TabButton2"));
+                return _L_TabButton2;
+            }
+        }
+        private TabButton2 _L_TabButton2;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.TabButton3
+        /// </summary>
+        public TabButton3 L_TabButton3
+        {
+            get
+            {
+                if (_L_TabButton3 == null) _L_TabButton3 = new TabButton3(UiPanel, Instance.GetNode<Godot.TextureButton>("TabButton3"));
+                return _L_TabButton3;
+            }
+        }
+        private TabButton3 _L_TabButton3;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.TabButton4
+        /// </summary>
+        public TabButton4 L_TabButton4
+        {
+            get
+            {
+                if (_L_TabButton4 == null) _L_TabButton4 = new TabButton4(UiPanel, Instance.GetNode<Godot.TextureButton>("TabButton4"));
+                return _L_TabButton4;
+            }
+        }
+        private TabButton4 _L_TabButton4;
+
+        public Control(EncyclopediaPanel uiPanel, Godot.Control node) : base(uiPanel, node) {  }
+        public override Control Clone() => new (UiPanel, (Godot.Control)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.NinePatchRect.ScrollContainer.ObjectButton.Bg
     /// </summary>
     public class Bg : UiNode<EncyclopediaPanel, Godot.NinePatchRect, Bg>
@@ -205,6 +302,19 @@ public abstract partial class Encyclopedia : UiBase
     /// </summary>
     public class VBoxContainer2 : UiNode<EncyclopediaPanel, Godot.VBoxContainer, VBoxContainer2>
     {
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Control"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.Control
+        /// </summary>
+        public Control L_Control
+        {
+            get
+            {
+                if (_L_Control == null) _L_Control = new Control(UiPanel, Instance.GetNode<Godot.Control>("Control"));
+                return _L_Control;
+            }
+        }
+        private Control _L_Control;
+
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.NinePatchRect
         /// </summary>
@@ -470,6 +580,31 @@ public abstract partial class Encyclopedia : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: Encyclopedia.NinePatchRect.TextureRect
     /// </summary>
     public TextureRect S_TextureRect => L_NinePatchRect.L_TextureRect;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.Control.TabButton
+    /// </summary>
+    public TabButton S_TabButton => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer2.L_Control.L_TabButton;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.Control.TabButton2
+    /// </summary>
+    public TabButton2 S_TabButton2 => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer2.L_Control.L_TabButton2;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.Control.TabButton3
+    /// </summary>
+    public TabButton3 S_TabButton3 => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer2.L_Control.L_TabButton3;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.Control.TabButton4
+    /// </summary>
+    public TabButton4 S_TabButton4 => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer2.L_Control.L_TabButton4;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Control"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.Control
+    /// </summary>
+    public Control S_Control => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer2.L_Control;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.NinePatchRect"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer2.NinePatchRect.ScrollContainer.ObjectButton.Bg
