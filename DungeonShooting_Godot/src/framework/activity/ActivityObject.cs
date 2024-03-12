@@ -628,6 +628,20 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     /// <summary>
+    /// 添加组件时调用
+    /// </summary>
+    public virtual void OnAddComponent(Component component)
+    {
+    }
+
+    /// <summary>
+    /// 移除组件时调用
+    /// </summary>
+    public virtual void OnRemoveComponent(Component component)
+    {
+    }
+
+    /// <summary>
     /// 返回当物体 CollisionLayer 是否能与 mask 层碰撞
     /// </summary>
     public bool CollisionWithMask(uint mask)
@@ -773,6 +787,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         component.Master = this;
         component.Ready();
         component.OnEnable();
+        OnAddComponent(component);
         return component;
     }
 
@@ -794,6 +809,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         component.Master = this;
         component.Ready();
         component.OnEnable();
+        OnAddComponent(component);
         return component;
     }
 
@@ -811,6 +827,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         if (_updatingComp)
         {
             _changeComponents.Add(new KeyValuePair<Component, bool>(component, false));
+            OnRemoveComponent(component);
             component.Destroy();
         }
         else
@@ -820,6 +837,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
                 if (_components[i].Value == component)
                 {
                     _components.RemoveAt(i);
+                    OnRemoveComponent(component);
                     component.Destroy();
                     return;
                 }
