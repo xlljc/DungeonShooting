@@ -34,4 +34,17 @@ public partial class EncyclopediaPanel : Encyclopedia
         );
     }
 
+    /// <summary>
+    /// 设置选中的物体
+    /// </summary>
+    public void SelectItem(ExcelConfig.ActivityBase config)
+    {
+        if (config != null)
+        {
+            S_ItemName.Instance.Text = config.Name;
+            S_ItemTexture.Instance.Texture = ResourceManager.LoadTexture2D(config.Icon);
+            S_ItemDes.Instance.Text = config.Details;
+        }
+    }
+
 }

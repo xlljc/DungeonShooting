@@ -19,6 +19,7 @@ public class ItemCell : UiCell<Encyclopedia.ObjectButton, ExcelConfig.ActivityBa
     public override void OnSelect()
     {
         CellNode.L_Select.Instance.Visible = true;
+        CellNode.UiPanel.SelectItem(Data);
     }
     
     public override void OnUnSelect()
