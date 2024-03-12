@@ -81,23 +81,6 @@ public abstract partial class UiBase : Control, IDestroy, ICoroutine
         UiManager.RecordUi(this, UiManager.RecordType.Open);
     }
 
-    public sealed override void _Ready()
-    {
-        if (Math.Abs(Scale.X - 1f) > 0.001f)
-        {
-            Resized += OnResizeUi;
-        }
-    }
-
-    private void OnResizeUi()
-    {
-        if (ParentUi == null)
-        {
-            var viewportSize = GameApplication.Instance.ViewportSize;
-            Size = viewportSize;
-        }
-    }
-
     /// <summary>
     /// 创建当前ui时调用
     /// </summary>
