@@ -10,10 +10,20 @@ public class ItemCell : UiCell<Encyclopedia.ObjectButton, ExcelConfig.ActivityBa
         CellNode.L_Select.Instance.Visible = false;
     }
 
+    public override void OnSetData(ExcelConfig.ActivityBase data)
+    {
+        CellNode.L_PreviewImage.Instance.Texture = ResourceManager.LoadTexture2D(data.Icon);
+    }
+
     public override IEnumerator OnSetDataCoroutine(ExcelConfig.ActivityBase data)
     {
         CellNode.L_PreviewImage.Instance.Texture = ResourceManager.LoadTexture2D(data.Icon);
         yield break;
+    }
+
+    public override void OnDisable()
+    {
+        CellNode.L_PreviewImage.Instance.Texture = null;
     }
 
     public override void OnSelect()

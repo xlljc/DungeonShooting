@@ -289,7 +289,7 @@ public abstract partial class Encyclopedia : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.Label"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.ItemName
+    /// 类型: <see cref="Godot.Label"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.ItemInfoBg.ItemName
     /// </summary>
     public class ItemName : UiNode<EncyclopediaPanel, Godot.Label, ItemName>
     {
@@ -298,7 +298,7 @@ public abstract partial class Encyclopedia : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.TextureRect"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.NinePatchRect.ItemTexture
+    /// 类型: <see cref="Godot.TextureRect"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.ItemInfoBg.NinePatchRect.ItemTexture
     /// </summary>
     public class ItemTexture : UiNode<EncyclopediaPanel, Godot.TextureRect, ItemTexture>
     {
@@ -307,12 +307,12 @@ public abstract partial class Encyclopedia : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.NinePatchRect
+    /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.ItemInfoBg.NinePatchRect
     /// </summary>
     public class NinePatchRect_3 : UiNode<EncyclopediaPanel, Godot.NinePatchRect, NinePatchRect_3>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.ItemTexture
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.ItemInfoBg.ItemTexture
         /// </summary>
         public ItemTexture L_ItemTexture
         {
@@ -329,7 +329,7 @@ public abstract partial class Encyclopedia : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.RichTextLabel"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.ItemDes
+    /// 类型: <see cref="Godot.RichTextLabel"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.ItemInfoBg.ItemDes
     /// </summary>
     public class ItemDes : UiNode<EncyclopediaPanel, Godot.RichTextLabel, ItemDes>
     {
@@ -338,9 +338,9 @@ public abstract partial class Encyclopedia : UiBase
     }
 
     /// <summary>
-    /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer
+    /// 类型: <see cref="Godot.VBoxContainer"/>, 路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.ItemInfoBg
     /// </summary>
-    public class VBoxContainer : UiNode<EncyclopediaPanel, Godot.VBoxContainer, VBoxContainer>
+    public class ItemInfoBg : UiNode<EncyclopediaPanel, Godot.VBoxContainer, ItemInfoBg>
     {
         /// <summary>
         /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.Label"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.ItemName
@@ -381,8 +381,8 @@ public abstract partial class Encyclopedia : UiBase
         }
         private ItemDes _L_ItemDes;
 
-        public VBoxContainer(EncyclopediaPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
-        public override VBoxContainer Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
+        public ItemInfoBg(EncyclopediaPanel uiPanel, Godot.VBoxContainer node) : base(uiPanel, node) {  }
+        public override ItemInfoBg Clone() => new (UiPanel, (Godot.VBoxContainer)Instance.Duplicate());
     }
 
     /// <summary>
@@ -391,17 +391,17 @@ public abstract partial class Encyclopedia : UiBase
     public class NinePatchRect_2 : UiNode<EncyclopediaPanel, Godot.NinePatchRect, NinePatchRect_2>
     {
         /// <summary>
-        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.VBoxContainer
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.ItemInfoBg
         /// </summary>
-        public VBoxContainer L_VBoxContainer
+        public ItemInfoBg L_ItemInfoBg
         {
             get
             {
-                if (_L_VBoxContainer == null) _L_VBoxContainer = new VBoxContainer(UiPanel, Instance.GetNode<Godot.VBoxContainer>("VBoxContainer"));
-                return _L_VBoxContainer;
+                if (_L_ItemInfoBg == null) _L_ItemInfoBg = new ItemInfoBg(UiPanel, Instance.GetNode<Godot.VBoxContainer>("ItemInfoBg"));
+                return _L_ItemInfoBg;
             }
         }
-        private VBoxContainer _L_VBoxContainer;
+        private ItemInfoBg _L_ItemInfoBg;
 
         public NinePatchRect_2(EncyclopediaPanel uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
         public override NinePatchRect_2 Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
@@ -487,6 +487,15 @@ public abstract partial class Encyclopedia : UiBase
     }
 
     /// <summary>
+    /// 类型: <see cref="Godot.TextureButton"/>, 路径: Encyclopedia.NinePatchRect.CloseButton
+    /// </summary>
+    public class CloseButton : UiNode<EncyclopediaPanel, Godot.TextureButton, CloseButton>
+    {
+        public CloseButton(EncyclopediaPanel uiPanel, Godot.TextureButton node) : base(uiPanel, node) {  }
+        public override CloseButton Clone() => new (UiPanel, (Godot.TextureButton)Instance.Duplicate());
+    }
+
+    /// <summary>
     /// 类型: <see cref="Godot.NinePatchRect"/>, 路径: Encyclopedia.NinePatchRect
     /// </summary>
     public class NinePatchRect : UiNode<EncyclopediaPanel, Godot.NinePatchRect, NinePatchRect>
@@ -516,6 +525,19 @@ public abstract partial class Encyclopedia : UiBase
             }
         }
         private MarginContainer _L_MarginContainer;
+
+        /// <summary>
+        /// 使用 Instance 属性获取当前节点实例对象, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: Encyclopedia.CloseButton
+        /// </summary>
+        public CloseButton L_CloseButton
+        {
+            get
+            {
+                if (_L_CloseButton == null) _L_CloseButton = new CloseButton(UiPanel, Instance.GetNode<Godot.TextureButton>("CloseButton"));
+                return _L_CloseButton;
+            }
+        }
+        private CloseButton _L_CloseButton;
 
         public NinePatchRect(EncyclopediaPanel uiPanel, Godot.NinePatchRect node) : base(uiPanel, node) {  }
         public override NinePatchRect Clone() => new (UiPanel, (Godot.NinePatchRect)Instance.Duplicate());
@@ -583,24 +605,24 @@ public abstract partial class Encyclopedia : UiBase
     public VBoxContainer2 S_VBoxContainer2 => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer2;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.ItemName
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.Label"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.ItemInfoBg.ItemName
     /// </summary>
-    public ItemName S_ItemName => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer3.L_NinePatchRect.L_VBoxContainer.L_ItemName;
+    public ItemName S_ItemName => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer3.L_NinePatchRect.L_ItemInfoBg.L_ItemName;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.NinePatchRect.ItemTexture
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureRect"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.ItemInfoBg.NinePatchRect.ItemTexture
     /// </summary>
-    public ItemTexture S_ItemTexture => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer3.L_NinePatchRect.L_VBoxContainer.L_NinePatchRect.L_ItemTexture;
+    public ItemTexture S_ItemTexture => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer3.L_NinePatchRect.L_ItemInfoBg.L_NinePatchRect.L_ItemTexture;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.RichTextLabel"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer.ItemDes
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.RichTextLabel"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.ItemInfoBg.ItemDes
     /// </summary>
-    public ItemDes S_ItemDes => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer3.L_NinePatchRect.L_VBoxContainer.L_ItemDes;
+    public ItemDes S_ItemDes => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer3.L_NinePatchRect.L_ItemInfoBg.L_ItemDes;
 
     /// <summary>
-    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.VBoxContainer
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3.NinePatchRect.ItemInfoBg
     /// </summary>
-    public VBoxContainer S_VBoxContainer => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer3.L_NinePatchRect.L_VBoxContainer;
+    public ItemInfoBg S_ItemInfoBg => L_NinePatchRect.L_MarginContainer.L_HBoxContainer.L_VBoxContainer3.L_NinePatchRect.L_ItemInfoBg;
 
     /// <summary>
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.VBoxContainer"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer.HBoxContainer.VBoxContainer3
@@ -616,5 +638,10 @@ public abstract partial class Encyclopedia : UiBase
     /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.MarginContainer"/>, 节点路径: Encyclopedia.NinePatchRect.MarginContainer
     /// </summary>
     public MarginContainer S_MarginContainer => L_NinePatchRect.L_MarginContainer;
+
+    /// <summary>
+    /// 场景中唯一名称的节点, 节点类型: <see cref="Godot.TextureButton"/>, 节点路径: Encyclopedia.NinePatchRect.CloseButton
+    /// </summary>
+    public CloseButton S_CloseButton => L_NinePatchRect.L_CloseButton;
 
 }

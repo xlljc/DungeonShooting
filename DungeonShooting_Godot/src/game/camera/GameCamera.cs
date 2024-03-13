@@ -67,8 +67,9 @@ public partial class GameCamera : Camera2D
 	private Vector2 _camPos;
 	private Vector2 _shakeOffset = Vector2.Zero;
 	
-	public ShaderMaterial _offsetShader;
-
+	private ShaderMaterial _offsetShader;
+	private int lockIndex = 0;
+	
 	public GameCamera()
 	{
 		Main = this;
@@ -87,7 +88,7 @@ public partial class GameCamera : Camera2D
 		_Shake(newDelta);
 		
 		var world = World.Current;
-		if (world != null && _followTarget != null)
+		if (world != null && _followTarget != null && lockIndex <= 0)
 		{
 			var mousePosition = InputManager.CursorPosition;
 			var targetPosition = _followTarget.GlobalPosition;
@@ -190,6 +191,22 @@ public partial class GameCamera : Camera2D
 		
 	}
 
+	/// <summary>
+	/// 锁住相机视角移动
+	/// </summary>
+	public void LockCamera()
+	{
+		lockIndex++;
+	}
+
+	/// <summary>
+	/// 解锁相机视角移动
+	/// </summary>
+	public void UnLockCamera()
+	{
+		lockIndex--;
+	}
+	
 	//抖动调用
 	private void _Shake(float delta)
 	{

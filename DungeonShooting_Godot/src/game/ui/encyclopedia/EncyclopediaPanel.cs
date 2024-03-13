@@ -10,10 +10,12 @@ public partial class EncyclopediaPanel : Encyclopedia
     private UiGrid<TabButton, TabData> _tab;
     //item网格
     private UiGrid<ObjectButton, ExcelConfig.ActivityBase> _grid;
-    private long _id;
+    //private long _id;
 
     public override void OnCreateUi()
     {
+        S_CloseButton.Instance.Pressed += OnCloseClick;
+        
         _tab = CreateUiGrid<TabButton, TabData, TabCell>(S_TabButton);
         _tab.SetColumns(10);
         _tab.SetCellOffset(new Vector2I(0, 0));
@@ -29,9 +31,27 @@ public partial class EncyclopediaPanel : Encyclopedia
         _tab.SelectIndex = 0;
     }
 
+    public override void OnShowUi()
+    {
+        GameCamera.Main.LockCamera();
+    }
+    
+    public override void OnHideUi()
+    {
+        GameCamera.Main.UnLockCamera();
+    }
+
     public override void OnDestroyUi()
     {
         
+    }
+    
+    public override void Process(float delta)
+    {
+        if (Input.IsActionJustPressed("ui_cancel"))
+        {
+            OnCloseClick();
+        }
     }
     
     /// <summary>
@@ -39,13 +59,15 @@ public partial class EncyclopediaPanel : Encyclopedia
     /// </summary>
     public void SelectTab(ActivityType type)
     {
-        StopCoroutine(_id);
-        _id = StartCoroutine(
-            _grid.SetDataListCoroutine(
-                ExcelConfig.ActivityBase_List.Where(data => data.Type == type).ToArray()
-            )
+        // StopCoroutine(_id);
+        // _id = StartCoroutine(
+        //     _grid.SetDataListCoroutine(
+        //         ExcelConfig.ActivityBase_List.Where(data => data.Type == type).ToArray()
+        //     )
+        // );
+        _grid.SetDataList(
+            ExcelConfig.ActivityBase_List.Where(data => data.Type == type).ToArray()
         );
-
         SelectItem(null);
     }
 
@@ -56,6 +78,7 @@ public partial class EncyclopediaPanel : Encyclopedia
     {
         if (config != null)
         {
+            S_ItemInfoBg.Instance.Visible = true;
             S_ItemName.Instance.Text = config.Name;
             S_ItemTexture.Instance.Texture = ResourceManager.LoadTexture2D(config.Icon);
             S_ItemDes.Instance.Text = config.Intro;
@@ -63,9 +86,22 @@ public partial class EncyclopediaPanel : Encyclopedia
         }
         else
         {
+            S_ItemInfoBg.Instance.Visible = false;
             S_ItemName.Instance.Text = null;
             S_ItemTexture.Instance.Texture = null;
             S_ItemDes.Instance.Text = null;
+        }
+    }
+
+    private void OnCloseClick()
+    {
+        if (PrevUi != null)
+        {
+            OpenPrevUi();
+        }
+        else
+        {
+            Destroy();
         }
     }
 
