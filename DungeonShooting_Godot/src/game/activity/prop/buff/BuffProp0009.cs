@@ -5,7 +5,7 @@ using Godot;
 /// 高速子弹	子弹速度和射程提升25%
 /// </summary>
 [Tool]
-public partial class BuffProp0009 : BuffProp
+public partial class BuffProp0009 : BuffActivity
 {
     public override void OnPickUpItem()
     {

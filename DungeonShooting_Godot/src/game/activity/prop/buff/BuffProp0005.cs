@@ -5,7 +5,7 @@ using Godot;
 /// 提升伤害buff, 子弹伤害提升20%
 /// </summary>
 [Tool]
-public partial class BuffProp0005 : BuffProp
+public partial class BuffProp0005 : BuffActivity
 {
     public override void OnPickUpItem()
     {

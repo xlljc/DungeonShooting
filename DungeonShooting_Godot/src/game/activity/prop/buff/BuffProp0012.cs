@@ -5,7 +5,7 @@ using Godot;
 /// 穿透子弹 子弹穿透+1
 /// </summary>
 [Tool]
-public partial class BuffProp0012 : BuffProp
+public partial class BuffProp0012 : BuffActivity
 {
     public override void OnPickUpItem()
     {

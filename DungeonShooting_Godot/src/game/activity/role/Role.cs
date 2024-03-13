@@ -54,7 +54,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 携带的被动道具列表
     /// </summary>
-    public List<BuffProp> BuffPropPack { get; } = new List<BuffProp>();
+    public List<BuffActivity> BuffPropPack { get; } = new List<BuffActivity>();
 
     /// <summary>
     /// 携带的主动道具包裹
@@ -452,14 +452,14 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 当拾起某个被动道具时调用
     /// </summary>
-    protected virtual void OnPickUpBuffProp(BuffProp buffProp)
+    protected virtual void OnPickUpBuffProp(BuffActivity buffActivity)
     {
     }
 
     /// <summary>
     /// 当移除某个被动道具时调用
     /// </summary>
-    protected virtual void OnRemoveBuffProp(BuffProp buffProp)
+    protected virtual void OnRemoveBuffProp(BuffActivity buffActivity)
     {
     }
     
@@ -716,28 +716,28 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 拾起被动道具, 返回是否成功拾起
     /// </summary>
-    /// <param name="buffProp">被动道具对象</param>
-    public bool PickUpBuffProp(BuffProp buffProp)
+    /// <param name="buffActivity">被动道具对象</param>
+    public bool PickUpBuffProp(BuffActivity buffActivity)
     {
-        if (BuffPropPack.Contains(buffProp))
+        if (BuffPropPack.Contains(buffActivity))
         {
             Debug.LogError("被动道具已经在背包中了!");
             return false;
         }
-        BuffPropPack.Add(buffProp);
-        buffProp.Master = this;
-        OnPickUpBuffProp(buffProp);
-        buffProp.OnPickUpItem();
+        BuffPropPack.Add(buffActivity);
+        buffActivity.Master = this;
+        OnPickUpBuffProp(buffActivity);
+        buffActivity.OnPickUpItem();
         return true;
     }
 
     /// <summary>
     /// 扔掉指定的被动道具
     /// </summary>
-    /// <param name="buffProp"></param>
-    public void ThrowBuffProp(BuffProp buffProp)
+    /// <param name="buffActivity"></param>
+    public void ThrowBuffProp(BuffActivity buffActivity)
     {
-        var index = BuffPropPack.IndexOf(buffProp);
+        var index = BuffPropPack.IndexOf(buffActivity);
         if (index < 0)
         {
             Debug.LogError("当前道具不在角色背包中!");

@@ -364,14 +364,14 @@ public partial class Player : Role
         EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, activeProp);
     }
 
-    protected override void OnPickUpBuffProp(BuffProp buffProp)
+    protected override void OnPickUpBuffProp(BuffActivity buffActivity)
     {
-        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, buffProp);
+        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, buffActivity);
     }
 
-    protected override void OnRemoveBuffProp(BuffProp buffProp)
+    protected override void OnRemoveBuffProp(BuffActivity buffActivity)
     {
-        EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, buffProp);
+        EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, buffActivity);
     }
 
     /// <summary>

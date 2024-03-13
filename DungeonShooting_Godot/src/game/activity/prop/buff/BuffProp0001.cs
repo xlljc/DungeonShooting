@@ -5,7 +5,7 @@ using Godot;
 /// 移速 buff, 移速 + 3
 /// </summary>
 [Tool]
-public partial class BuffProp0001 : BuffProp
+public partial class BuffProp0001 : BuffActivity
 {
     public override void OnPickUpItem()
     {

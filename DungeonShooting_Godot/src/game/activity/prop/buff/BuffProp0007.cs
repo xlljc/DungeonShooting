@@ -5,7 +5,7 @@ using Godot;
 /// 受伤时有15%概率抵消伤害
 /// </summary>
 [Tool]
-public partial class BuffProp0007 : BuffProp
+public partial class BuffProp0007 : BuffActivity
 {
     public override void OnPickUpItem()
     {

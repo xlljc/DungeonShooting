@@ -5,7 +5,7 @@ using Godot;
 /// 分裂子弹	子弹数量翻倍, 但是精准度, 击退和伤害降低
 /// </summary>
 [Tool]
-public partial class BuffProp0010 : BuffProp
+public partial class BuffProp0010 : BuffActivity
 {
     public override void OnPickUpItem()
     {

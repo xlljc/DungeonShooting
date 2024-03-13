@@ -5,7 +5,7 @@ using Godot;
 /// 弹射子弹 子弹反弹次数 +2
 /// </summary>
 [Tool]
-public partial class BuffProp0011 : BuffProp
+public partial class BuffProp0011 : BuffActivity
 {
     public override void OnPickUpItem()
     {

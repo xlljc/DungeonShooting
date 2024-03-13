@@ -5,7 +5,7 @@ using Godot;
 /// 延长无敌时间buff, 受伤后无敌时间 + 2s
 /// </summary>
 [Tool]
-public partial class BuffProp0006 : BuffProp
+public partial class BuffProp0006 : BuffActivity
 {
     public override void OnPickUpItem()
     {

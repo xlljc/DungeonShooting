@@ -4,7 +4,7 @@
 /// 道具背包 道具容量+1
 /// </summary>
 [Tool]
-public partial class BuffProp0014 : BuffProp
+public partial class BuffProp0014 : BuffActivity
 {
     public override void OnPickUpItem()
     {

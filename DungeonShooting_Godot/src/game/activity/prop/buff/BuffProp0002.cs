@@ -5,7 +5,7 @@ using Godot;
 /// 血量上限buff, 心之容器 + 1
 /// </summary>
 [Tool]
-public partial class BuffProp0002 : BuffProp
+public partial class BuffProp0002 : BuffActivity
 {
     public override void OnPickUpItem()
     {
