@@ -2,7 +2,7 @@
 /// <summary>
 /// 移速 buff
 /// </summary>
-[Buff("MoveSpeed", "移速 buff, 参数 1 为移动速度值")]
+[Buff("MoveSpeed", "移速 buff, 参数‘1’为移动速度值")]
 public class Buff_MoveSpeed : BuffFragment
 {
     private float _moveSpeed;
