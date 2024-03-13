@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 /// 主动使用道具
 /// </summary>
-public abstract partial class ActiveProp : Prop, IPackageItem<Role>
+public abstract partial class ActivePropActivity : PropActivity, IPackageItem<Role>
 {
     public int PackageIndex { get; set; }
     

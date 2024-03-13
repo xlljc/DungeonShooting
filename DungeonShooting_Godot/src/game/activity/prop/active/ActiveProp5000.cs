@@ -5,7 +5,7 @@ using Godot;
 /// 医药箱, 使用后恢复一颗红心
 /// </summary>
 [Tool]
-public partial class ActiveProp5000 : ActiveProp
+public partial class ActiveProp5000 : ActivePropActivity
 {
     public override void OnInit()
     {

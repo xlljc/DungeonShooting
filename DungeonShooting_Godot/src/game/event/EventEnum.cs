@@ -59,11 +59,11 @@ public enum EventEnum
     /// </summary>
     OnPlayerRemoveWeapon,
     /// <summary>
-    /// 玩家拾起道具, 参数为<see cref="Prop"/>
+    /// 玩家拾起道具, 参数为<see cref="PropActivity"/>
     /// </summary>
     OnPlayerPickUpProp,
     /// <summary>
-    /// 玩家丢弃道具, 参数为<see cref="Prop"/>
+    /// 玩家丢弃道具, 参数为<see cref="PropActivity"/>
     /// </summary>
     OnPlayerRemoveProp,
     

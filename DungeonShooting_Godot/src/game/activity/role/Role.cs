@@ -59,7 +59,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 携带的主动道具包裹
     /// </summary>
-    public Package<ActiveProp, Role> ActivePropsPack { get; private set; }
+    public Package<ActivePropActivity, Role> ActivePropsPack { get; private set; }
     
     /// <summary>
     /// 互动碰撞区域
@@ -431,21 +431,21 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 当拾起某个主动道具时调用
     /// </summary>
-    protected virtual void OnPickUpActiveProp(ActiveProp activeProp)
+    protected virtual void OnPickUpActiveProp(ActivePropActivity activePropActivity)
     {
     }
 
     /// <summary>
     /// 当移除某个主动道具时调用
     /// </summary>
-    protected virtual void OnRemoveActiveProp(ActiveProp activeProp)
+    protected virtual void OnRemoveActiveProp(ActivePropActivity activePropActivity)
     {
     }
     
     /// <summary>
     /// 当切换到某个主动道具时调用
     /// </summary>
-    protected virtual void OnExchangeActiveProp(ActiveProp activeProp)
+    protected virtual void OnExchangeActiveProp(ActivePropActivity activePropActivity)
     {
     }
     
@@ -466,7 +466,7 @@ public abstract partial class Role : ActivityObject
     public override void OnInit()
     {
         RoleState = OnCreateRoleState();
-        ActivePropsPack = AddComponent<Package<ActiveProp, Role>>();
+        ActivePropsPack = AddComponent<Package<ActivePropActivity, Role>>();
         ActivePropsPack.SetCapacity(RoleState.CanPickUpWeapon ? 1 : 0);
         
         _startScale = Scale;
@@ -617,7 +617,7 @@ public abstract partial class Role : ActivityObject
         var props = ActivePropsPack.ItemSlot;
         if (props.Length > 0)
         {
-            props = (ActiveProp[])props.Clone();
+            props = (ActivePropActivity[])props.Clone();
             foreach (var prop in props)
             {
                 if (prop != null && !prop.IsDestroyed)
@@ -673,15 +673,15 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 拾起主动道具, 返回是否成功拾起, 如果不想立刻切换到该道具, exchange 请传 false
     /// </summary>
-    /// <param name="activeProp">主动道具对象</param>
+    /// <param name="activePropActivity">主动道具对象</param>
     /// <param name="exchange">是否立即切换到该道具, 默认 true </param>
-    public bool PickUpActiveProp(ActiveProp activeProp, bool exchange = true)
+    public bool PickUpActiveProp(ActivePropActivity activePropActivity, bool exchange = true)
     {
-        if (ActivePropsPack.PickupItem(activeProp, exchange) != -1)
+        if (ActivePropsPack.PickupItem(activePropActivity, exchange) != -1)
         {
             //从可互动队列中移除
-            InteractiveItemList.Remove(activeProp);
-            OnPickUpActiveProp(activeProp);
+            InteractiveItemList.Remove(activePropActivity);
+            OnPickUpActiveProp(activePropActivity);
             return true;
         }
 

@@ -73,7 +73,7 @@ public partial class RoomUIPanel : RoomUI
     //玩家拾起道具, 弹出提示
     private void OnPlayerPickUpProp(object propObj)
     {
-        var prop = (Prop)propObj;
+        var prop = (PropActivity)propObj;
         var message = $"{prop.ActivityBase.Name}\n{prop.ActivityBase.Intro}";
         BottomTipsPanel.ShowTips(prop.GetDefaultTexture(), message);
     }

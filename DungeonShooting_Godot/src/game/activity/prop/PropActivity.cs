@@ -4,7 +4,7 @@ using Godot;
 /// <summary>
 /// 道具基类
 /// </summary>
-public abstract partial class Prop : ActivityObject
+public abstract partial class PropActivity : ActivityObject
 {
     /// <summary>
     /// 道具所属角色

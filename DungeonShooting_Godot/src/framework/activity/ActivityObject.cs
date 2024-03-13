@@ -1951,7 +1951,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     /// <summary>
-    /// 设置是否启用碰撞层, 该函数是设置下载状态下原碰撞层
+    /// 设置是否启用碰撞层, 该函数是设置下坠状态下原碰撞层
     /// </summary>
     public void SetOriginCollisionLayerValue(uint layer, bool vale)
     {

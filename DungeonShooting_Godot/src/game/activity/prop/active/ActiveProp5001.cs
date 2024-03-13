@@ -5,7 +5,7 @@ using Godot;
 /// 弹药箱, 使用后补全当前武器备用弹药
 /// </summary>
 [Tool]
-public partial class ActiveProp5001 : ActiveProp
+public partial class ActiveProp5001 : ActivePropActivity
 {
     public override void OnInit()
     {
