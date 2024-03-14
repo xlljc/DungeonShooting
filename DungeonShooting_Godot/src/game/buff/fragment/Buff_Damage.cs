@@ -1,9 +1,6 @@
 
 using Godot;
 
-/// <summary>
-/// 提升伤害buff
-/// </summary>
 [Buff("Damage", "提升伤害buff, 参数‘1’为伤害增加类型: 1:具体伤害, 2:百分比伤害(小数), 参数‘2’为增益伤害值")]
 public class Buff_Damage : BuffFragment
 {

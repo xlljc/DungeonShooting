@@ -1,7 +1,4 @@
 
-/// <summary>
-/// 延长无敌时间buff
-/// </summary>
 [Buff("WoundedInvincibleTime", "延长无敌时间buff, 参数‘1’为延长时间, 单位秒")]
 public class Buff_WoundedInvincibleTime : BuffFragment
 {

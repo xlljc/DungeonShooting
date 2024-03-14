@@ -1,7 +1,4 @@
 
-/// <summary>
-/// 护盾恢复时间buff
-/// </summary>
 [Buff("ShieldRecoveryTime", "单格护盾恢复时间, 参数‘1’单位: 秒")]
 public class Buff_ShieldRecoveryTime : BuffFragment
 {

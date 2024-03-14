@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Godot;
 using Environment = System.Environment;
@@ -57,6 +59,8 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
         container.L_HBoxContainer3.L_Button.Instance.Pressed += OnCreateUI;
         //重新生成UiManagerMethods.cs代码
         container.L_HBoxContainer5.L_Button.Instance.Pressed += GenerateUiManagerMethods;
+        //生成buff属性表
+        container.L_HBoxContainer6.L_Button.Instance.Pressed += GenerateBuffAttrTable;
         //导出excel表
         container.L_HBoxContainer7.L_Button.Instance.Pressed += ExportExcel;
         //打开excel表文件夹
@@ -78,6 +82,7 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
         container.L_HBoxContainer4.L_Button.Instance.Pressed -= OnGenerateCurrentUiCode;
         container.L_HBoxContainer3.L_Button.Instance.Pressed -= OnCreateUI;
         container.L_HBoxContainer5.L_Button.Instance.Pressed -= GenerateUiManagerMethods;
+        container.L_HBoxContainer6.L_Button.Instance.Pressed -= GenerateBuffAttrTable;
         container.L_HBoxContainer7.L_Button.Instance.Pressed -= ExportExcel;
         container.L_HBoxContainer8.L_Button.Instance.Pressed -= OpenExportExcelFolder;
     }
@@ -296,6 +301,30 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
         {
             ShowTips("错误", "生成UiManagerMethods.cs代码执行失败! 前往控制台查看错误日志!");
         }
+    }
+
+    /// <summary>
+    /// 生成Buff属性表
+    /// </summary>
+    private void GenerateBuffAttrTable()
+    {
+        var str = "";
+        var types = GetType().Assembly.GetTypes();
+        //包含[BuffAttribute]特性
+        var enumerable = types.Where(type => type.IsClass && !type.IsAbstract && type.IsAssignableTo(typeof(BuffFragment)));
+        foreach (var type in enumerable)
+        {
+            var attribute = (BuffAttribute)type.GetCustomAttribute(typeof(BuffAttribute), false);
+            if (attribute != null)
+            {
+                //var baeMethod = typeof(BuffFragment).GetMethod(nameof(BuffFragment.InitParam), BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly, new Type[] { typeof(float) });
+                //var methodInfo = type.GetMethod(nameof(BuffFragment.InitParam), BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly, new Type[] { typeof(float) });
+                //str += $"{attribute.BuffName}: {methodInfo != baeMethod}, {baeMethod != null}\n";
+                str += $"{attribute.BuffName}: {attribute.Description}\n";
+            }
+        }
+        GD.Print("-------------------------------------------");
+        GD.Print(str);
     }
     
     /// <summary>

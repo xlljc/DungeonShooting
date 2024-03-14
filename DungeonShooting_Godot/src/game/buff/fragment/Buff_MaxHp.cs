@@ -1,9 +1,6 @@
 
 using System.Collections.Generic;
 
-/// <summary>
-/// 血量上限 buff
-/// </summary>
 [Buff("MaxHp", "血量上限 buff, 参数‘1’为血量上限值")]
 public class Buff_MaxHp : BuffFragment
 {

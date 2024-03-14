@@ -88,6 +88,18 @@ text = "重新生成UiManagerMethods.cs代码"
 layout_mode = 2
 text = "运行"
 
+[node name="HBoxContainer6" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "生成Buff属性表"
+
+[node name="Button" type="Button" parent="ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "运行"
+
 [node name="HBoxContainer7" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 5
