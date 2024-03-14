@@ -1,0 +1,37 @@
+[
+  {
+    "Id": "0001",
+    "Remark": "\u978B\u5B50",
+    "__Activity": "prop0001",
+    "IsActivity": false,
+    "Buff": {
+      "MoveSpeed": [
+        30
+      ]
+    }
+  },
+  {
+    "Id": "0010",
+    "Remark": "\u5206\u88C2\u5B50\u5F39",
+    "__Activity": "prop0010",
+    "IsActivity": false,
+    "Buff": {
+      "BulletCount": [
+        2,
+        1
+      ],
+      "BulletDeviationAngle": [
+        -8,
+        8
+      ],
+      "Damage": [
+        2,
+        -0.35
+      ],
+      "BulletRepel": [
+        2,
+        -0.35
+      ]
+    }
+  }
+]

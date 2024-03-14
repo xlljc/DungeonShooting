@@ -1,8 +1,8 @@
 [
   {
     "Id": "role0001",
-    "Type": 3,
     "Name": "\u73A9\u5BB6",
+    "Type": 3,
     "Quality": 0,
     "Price": 0,
     "Intro": "\u73A9\u5BB6",
@@ -15,8 +15,8 @@
   },
   {
     "Id": "enemy0001",
-    "Type": 4,
     "Name": "\u654C\u4EBA",
+    "Type": 4,
     "Quality": 0,
     "Price": 0,
     "Intro": "\u654C\u4EBA",
@@ -29,8 +29,8 @@
   },
   {
     "Id": "enemy0002",
-    "Type": 4,
     "Name": "\u654C\u4EBA2",
+    "Type": 4,
     "Quality": 0,
     "Price": 0,
     "Intro": "\u654C\u4EBA2",
@@ -43,8 +43,8 @@
   },
   {
     "Id": "weapon0001",
-    "Type": 5,
     "Name": "\u6B65\u67AA",
+    "Type": 5,
     "Quality": 3,
     "Price": 0,
     "Intro": "",
@@ -57,8 +57,8 @@
   },
   {
     "Id": "weapon0002",
-    "Type": 5,
     "Name": "\u9730\u5F39\u67AA",
+    "Type": 5,
     "Quality": 3,
     "Price": 0,
     "Intro": "",
@@ -71,8 +71,8 @@
   },
   {
     "Id": "weapon0003",
-    "Type": 5,
     "Name": "\u624B\u67AA",
+    "Type": 5,
     "Quality": 2,
     "Price": 0,
     "Intro": "",
@@ -85,8 +85,8 @@
   },
   {
     "Id": "weapon0004",
-    "Type": 5,
     "Name": "\u5200",
+    "Type": 5,
     "Quality": 4,
     "Price": 0,
     "Intro": "",
@@ -99,8 +99,8 @@
   },
   {
     "Id": "weapon0005",
-    "Type": 5,
     "Name": "\u72D9\u51FB\u67AA",
+    "Type": 5,
     "Quality": 4,
     "Price": 0,
     "Intro": "",
@@ -113,8 +113,8 @@
   },
   {
     "Id": "weapon0006",
-    "Type": 5,
     "Name": "\u51B2\u950B\u67AA",
+    "Type": 5,
     "Quality": 2,
     "Price": 0,
     "Intro": "",
@@ -127,8 +127,8 @@
   },
   {
     "Id": "weapon0007",
-    "Type": 5,
     "Name": "\u6C64\u59C6\u900A\u51B2\u950B\u67AA",
+    "Type": 5,
     "Quality": 4,
     "Price": 0,
     "Intro": "",
@@ -141,8 +141,8 @@
   },
   {
     "Id": "weapon0008",
-    "Type": 5,
     "Name": "\u6FC0\u5149\u624B\u67AA",
+    "Type": 5,
     "Quality": 3,
     "Price": 0,
     "Intro": "",
@@ -155,8 +155,8 @@
   },
   {
     "Id": "weapon0009",
-    "Type": 5,
     "Name": "\u69B4\u5F39\u53D1\u5C04\u5668",
+    "Type": 5,
     "Quality": 4,
     "Price": 0,
     "Intro": "",
@@ -169,8 +169,8 @@
   },
   {
     "Id": "weapon0010",
-    "Type": 5,
     "Name": "M1\u578B\u70ED\u80FD\u72D9\u51FB\u67AA",
+    "Type": 5,
     "Quality": 5,
     "Price": 0,
     "Intro": "",
@@ -183,8 +183,8 @@
   },
   {
     "Id": "weapon0011",
-    "Type": 5,
     "Name": "weapon0011",
+    "Type": 5,
     "Quality": 5,
     "Price": 0,
     "Intro": "",
@@ -197,8 +197,8 @@
   },
   {
     "Id": "weapon0013",
-    "Type": 5,
     "Name": "P90",
+    "Type": 5,
     "Quality": 4,
     "Price": 0,
     "Intro": "",
@@ -211,8 +211,8 @@
   },
   {
     "Id": "weapon0014",
-    "Type": 5,
     "Name": "\u5DE6\u8F6E",
+    "Type": 5,
     "Quality": 2,
     "Price": 0,
     "Intro": "",
@@ -225,8 +225,8 @@
   },
   {
     "Id": "weapon0016",
-    "Type": 5,
     "Name": "\u6728\u8D28\u77ED\u5F13",
+    "Type": 5,
     "Quality": 2,
     "Price": 0,
     "Intro": "",
@@ -239,8 +239,8 @@
   },
   {
     "Id": "bullet0001",
-    "Type": 6,
     "Name": "",
+    "Type": 6,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -253,8 +253,8 @@
   },
   {
     "Id": "bullet0002",
-    "Type": 6,
     "Name": "",
+    "Type": 6,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -267,8 +267,8 @@
   },
   {
     "Id": "bullet0003",
-    "Type": 6,
     "Name": "",
+    "Type": 6,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -281,8 +281,8 @@
   },
   {
     "Id": "bullet0004",
-    "Type": 6,
     "Name": "\u69B4\u5F39\u70AE",
+    "Type": 6,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -295,8 +295,8 @@
   },
   {
     "Id": "bullet0005",
-    "Type": 6,
     "Name": "\u629B\u7269\u7EBF\u7C98\u6DB2\u5B50\u5F39",
+    "Type": 6,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -309,8 +309,8 @@
   },
   {
     "Id": "bullet0006",
-    "Type": 6,
     "Name": "\u62D6\u5C3E\u5B50\u5F39",
+    "Type": 6,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -323,8 +323,8 @@
   },
   {
     "Id": "bullet0007",
-    "Type": 6,
     "Name": "",
+    "Type": 6,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -337,8 +337,8 @@
   },
   {
     "Id": "bullet0008",
-    "Type": 6,
     "Name": "",
+    "Type": 6,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -351,8 +351,8 @@
   },
   {
     "Id": "bullet0009",
-    "Type": 6,
     "Name": "\u5F13\u7BAD",
+    "Type": 6,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -365,8 +365,8 @@
   },
   {
     "Id": "shell0001",
-    "Type": 7,
     "Name": "",
+    "Type": 7,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -379,8 +379,8 @@
   },
   {
     "Id": "shell0002",
-    "Type": 7,
     "Name": "",
+    "Type": 7,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -393,8 +393,8 @@
   },
   {
     "Id": "shell0003",
-    "Type": 7,
     "Name": "",
+    "Type": 7,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -407,8 +407,8 @@
   },
   {
     "Id": "shell0004",
-    "Type": 7,
     "Name": "",
+    "Type": 7,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -421,8 +421,8 @@
   },
   {
     "Id": "enemy_dead0001",
-    "Type": 8,
     "Name": "",
+    "Type": 8,
     "Quality": 0,
     "Price": 0,
     "Intro": "\u654C\u4EBA1\u6B7B\u4EA1\u788E\u7247",
@@ -435,8 +435,8 @@
   },
   {
     "Id": "enemy_dead0002",
-    "Type": 8,
     "Name": "",
+    "Type": 8,
     "Quality": 0,
     "Price": 0,
     "Intro": "\u654C\u4EBA2\u6B7B\u4EA1",
@@ -449,22 +449,22 @@
   },
   {
     "Id": "prop0001",
-    "Type": 9,
     "Name": "\u978B\u5B50",
+    "Type": 9,
     "Quality": 4,
     "Price": 0,
     "Intro": "\u63D0\u9AD8\u79FB\u52A8\u901F\u5EA6",
-    "Details": "",
+    "Details": "\u63D0\u9AD8\u89D2\u8272\u7684\u57FA\u7840\u79FB\u52A8\u901F\u5EA6",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0001.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0001.png",
     "ShowInMapEditor": true
   },
   {
     "Id": "prop0002",
-    "Type": 9,
     "Name": "\u5FC3\u4E4B\u5BB9\u5668",
+    "Type": 9,
     "Quality": 3,
     "Price": 0,
     "Intro": "\u63D0\u9AD8\u8840\u91CF\u4E0A\u9650",
@@ -477,8 +477,8 @@
   },
   {
     "Id": "prop0003",
-    "Type": 9,
     "Name": "\u62A4\u76FE",
+    "Type": 9,
     "Quality": 3,
     "Price": 0,
     "Intro": "\u53EF\u4EE5\u62B5\u6321\u5B50\u5F39\uFF0C\u968F\u65F6\u95F4\u63A8\u79FB\u81EA\u52A8\u6062\u590D",
@@ -491,8 +491,8 @@
   },
   {
     "Id": "prop0004",
-    "Type": 9,
     "Name": "\u62A4\u76FE\u8BA1\u65F6\u5668",
+    "Type": 9,
     "Quality": 4,
     "Price": 0,
     "Intro": "\u63D0\u9AD8\u62A4\u76FE\u6062\u590D\u901F\u5EA6",
@@ -505,8 +505,8 @@
   },
   {
     "Id": "prop0005",
-    "Type": 9,
     "Name": "\u6740\u4F24\u5F39",
+    "Type": 9,
     "Quality": 4,
     "Price": 0,
     "Intro": "\u63D0\u9AD8\u5B50\u5F39\u4F24\u5BB3",
@@ -519,8 +519,8 @@
   },
   {
     "Id": "prop0006",
-    "Type": 9,
     "Name": "\u7EA2\u5B9D\u77F3\u6212\u6307",
+    "Type": 9,
     "Quality": 4,
     "Price": 0,
     "Intro": "\u53D7\u4F24\u540E\u5EF6\u957F\u65E0\u654C\u65F6\u95F4",
@@ -533,8 +533,8 @@
   },
   {
     "Id": "prop0007",
-    "Type": 9,
     "Name": "\u5907\u7528\u62A4\u76FE",
+    "Type": 9,
     "Quality": 3,
     "Price": 0,
     "Intro": "\u53D7\u4F24\u65F6\u6709\u4E00\u5B9A\u6982\u7387\u62B5\u6D88\u4F24\u5BB3",
@@ -547,8 +547,8 @@
   },
   {
     "Id": "prop0008",
-    "Type": 9,
     "Name": "\u773C\u955C",
+    "Type": 9,
     "Quality": 3,
     "Price": 0,
     "Intro": "\u63D0\u9AD8\u6B66\u5668\u7CBE\u51C6\u5EA6",
@@ -561,8 +561,8 @@
   },
   {
     "Id": "prop0009",
-    "Type": 9,
     "Name": "\u9AD8\u901F\u5B50\u5F39",
+    "Type": 9,
     "Quality": 3,
     "Price": 0,
     "Intro": "\u63D0\u9AD8\u5B50\u5F39\u901F\u5EA6\u548C\u5C04\u7A0B",
@@ -575,8 +575,8 @@
   },
   {
     "Id": "prop0010",
-    "Type": 9,
     "Name": "\u5206\u88C2\u5B50\u5F39",
+    "Type": 9,
     "Quality": 4,
     "Price": 0,
     "Intro": "\u5B50\u5F39\u6570\u91CF\u7FFB\u500D, \u4F46\u662F\u7CBE\u51C6\u5EA6, \u51FB\u9000\u548C\u4F24\u5BB3\u964D\u4F4E",
@@ -589,8 +589,8 @@
   },
   {
     "Id": "prop0011",
-    "Type": 9,
     "Name": "\u5F39\u5C04\u5B50\u5F39",
+    "Type": 9,
     "Quality": 4,
     "Price": 0,
     "Intro": "\u5B50\u5F39\u53CD\u5F39\u6B21\u6570\u002B2",
@@ -603,8 +603,8 @@
   },
   {
     "Id": "prop0012",
-    "Type": 9,
     "Name": "\u7A7F\u900F\u5B50\u5F39",
+    "Type": 9,
     "Quality": 4,
     "Price": 0,
     "Intro": "\u5B50\u5F39\u7A7F\u900F\u002B1",
@@ -617,8 +617,8 @@
   },
   {
     "Id": "prop0013",
-    "Type": 9,
     "Name": "\u6B66\u5668\u80CC\u5305",
+    "Type": 9,
     "Quality": 2,
     "Price": 0,
     "Intro": "\u6B66\u5668\u5BB9\u91CF\u002B1",
@@ -631,8 +631,8 @@
   },
   {
     "Id": "prop0014",
-    "Type": 9,
     "Name": "\u9053\u5177\u80CC\u5305",
+    "Type": 9,
     "Quality": 2,
     "Price": 0,
     "Intro": "\u9053\u5177\u5BB9\u91CF\u002B1",
@@ -645,8 +645,8 @@
   },
   {
     "Id": "prop5000",
-    "Type": 9,
     "Name": "\u533B\u836F\u7BB1",
+    "Type": 9,
     "Quality": 1,
     "Price": 0,
     "Intro": "\u4F7F\u7528\u540E\u56DE\u590D\u4E00\u9897\u7EA2\u5FC3",
@@ -659,8 +659,8 @@
   },
   {
     "Id": "prop5001",
-    "Type": 9,
     "Name": "\u5F39\u836F\u7BB1",
+    "Type": 9,
     "Quality": 1,
     "Price": 0,
     "Intro": "\u4F7F\u7528\u540E\u8865\u5145\u5F53\u524D\u6B66\u5668\u5907\u7528\u5F39\u836F",
@@ -673,8 +673,8 @@
   },
   {
     "Id": "treasure_box0001",
-    "Type": 10,
     "Name": "\u6728\u8D28\u5B9D\u7BB1",
+    "Type": 10,
     "Quality": 0,
     "Price": 0,
     "Intro": "\u6728\u8D28\u5B9D\u7BB1",
@@ -687,8 +687,8 @@
   },
   {
     "Id": "other_door_e",
-    "Type": 99,
     "Name": "",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u4E1C\u4FA7)",
@@ -701,8 +701,8 @@
   },
   {
     "Id": "other_door_w",
-    "Type": 99,
     "Name": "",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u897F\u4FA7)",
@@ -715,8 +715,8 @@
   },
   {
     "Id": "other_door_s",
-    "Type": 99,
     "Name": "",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u5357\u4FA7)",
@@ -729,8 +729,8 @@
   },
   {
     "Id": "other_door_n",
-    "Type": 99,
     "Name": "",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "\u5730\u7262\u623F\u95F4\u7684\u95E8(\u5317\u4FA7)",
@@ -743,8 +743,8 @@
   },
   {
     "Id": "gold_10",
-    "Type": 99,
     "Name": "\u91D1\u5E01",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "\u83B7\u5F9710\u91D1\u5E01",
@@ -757,8 +757,8 @@
   },
   {
     "Id": "gold_5",
-    "Type": 99,
     "Name": "\u94F6\u5E01",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "\u83B7\u5F975\u91D1\u5E01",
@@ -771,8 +771,8 @@
   },
   {
     "Id": "gold_1",
-    "Type": 99,
     "Name": "\u94DC\u5E01",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "\u83B7\u5F971\u91D1\u5E01",
@@ -785,8 +785,8 @@
   },
   {
     "Id": "item_0001",
-    "Type": 99,
     "Name": "\u7535\u8111\u684C",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -799,8 +799,8 @@
   },
   {
     "Id": "item_0002",
-    "Type": 99,
     "Name": "",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -813,8 +813,8 @@
   },
   {
     "Id": "item_0003",
-    "Type": 99,
     "Name": "",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -827,8 +827,8 @@
   },
   {
     "Id": "item_0004",
-    "Type": 99,
     "Name": "",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -841,8 +841,8 @@
   },
   {
     "Id": "item_0005",
-    "Type": 99,
     "Name": "",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -855,8 +855,8 @@
   },
   {
     "Id": "item_0006",
-    "Type": 99,
     "Name": "\u7535\u89C6\u684C",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -869,8 +869,8 @@
   },
   {
     "Id": "item_0007",
-    "Type": 99,
     "Name": "\u9152\u67DC",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -883,8 +883,8 @@
   },
   {
     "Id": "item_0008",
-    "Type": 99,
     "Name": "\u6C99\u53D1\u65C1\u67DC\u5B50",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -897,8 +897,8 @@
   },
   {
     "Id": "item_0009",
-    "Type": 99,
     "Name": "\u5427\u53F0",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -911,8 +911,8 @@
   },
   {
     "Id": "item_0010",
-    "Type": 99,
     "Name": "\u544A\u793A\u724C",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -925,8 +925,8 @@
   },
   {
     "Id": "item_0011",
-    "Type": 99,
     "Name": "\u7EFF\u6728\u51F3",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -939,8 +939,8 @@
   },
   {
     "Id": "item_0012",
-    "Type": 99,
     "Name": "\u6C99\u53D1\u7AD6",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -953,8 +953,8 @@
   },
   {
     "Id": "item_0013",
-    "Type": 99,
     "Name": "\u6C99\u53D1\u6A2A\u7740",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -967,8 +967,8 @@
   },
   {
     "Id": "item_0014",
-    "Type": 99,
     "Name": "\u61D2\u4EBA\u6C99\u53D1",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -981,8 +981,8 @@
   },
   {
     "Id": "item_0015",
-    "Type": 99,
     "Name": "\u5DE6\u4E0B\u89D2\u684C\u5B50",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -995,8 +995,8 @@
   },
   {
     "Id": "item_0016",
-    "Type": 99,
     "Name": "\u5DE6\u4E0B\u89D2\u77ED\u6C99\u53D1",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1009,8 +1009,8 @@
   },
   {
     "Id": "item_0017",
-    "Type": 99,
     "Name": "\u4E2D\u95F4\u684C\u5B50",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1023,8 +1023,8 @@
   },
   {
     "Id": "item_0018",
-    "Type": 99,
     "Name": "\u5DE6\u4E0B\u89D2\u957F\u6C99\u53D1",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1037,8 +1037,8 @@
   },
   {
     "Id": "item_0019",
-    "Type": 99,
     "Name": "\u53F3\u4E0B\u89D2\u684C\u5B50",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1051,8 +1051,8 @@
   },
   {
     "Id": "item_0020",
-    "Type": 99,
     "Name": "\u8F6C\u6905",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1065,8 +1065,8 @@
   },
   {
     "Id": "item_0021",
-    "Type": 99,
     "Name": "\u53F3\u4E0B\u89D2\u957F\u6C99\u53D1",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1079,8 +1079,8 @@
   },
   {
     "Id": "item_0022",
-    "Type": 99,
     "Name": "\u8863\u67B6",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1093,8 +1093,8 @@
   },
   {
     "Id": "item_0023",
-    "Type": 99,
     "Name": "\u7EFF\u690D",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1107,8 +1107,8 @@
   },
   {
     "Id": "item_0024",
-    "Type": 99,
     "Name": "\u65B0\u624B\u6559\u5B66\u5173\u5361",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1121,8 +1121,8 @@
   },
   {
     "Id": "item_0025",
-    "Type": 99,
     "Name": "\u8302\u76DB\u82B1\u76C6",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1135,8 +1135,8 @@
   },
   {
     "Id": "item_0026",
-    "Type": 99,
     "Name": "\u544A\u793A\u7248",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1149,8 +1149,8 @@
   },
   {
     "Id": "item_0031",
-    "Type": 99,
     "Name": "\u53F0\u706F",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1163,8 +1163,8 @@
   },
   {
     "Id": "item_0033",
-    "Type": 99,
     "Name": "\u5427\u53F0",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1177,8 +1177,8 @@
   },
   {
     "Id": "item_0036",
-    "Type": 99,
     "Name": "\u53F0\u7403\u684C",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1191,8 +1191,8 @@
   },
   {
     "Id": "item_0054",
-    "Type": 99,
     "Name": "\u8D29\u5356\u673A",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1205,8 +1205,8 @@
   },
   {
     "Id": "item_0056",
-    "Type": 99,
     "Name": "\u957F\u51F3\u5B50",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",
@@ -1219,8 +1219,8 @@
   },
   {
     "Id": "item_0057",
-    "Type": 99,
     "Name": "\u5361\u5E26\u76D2\u5B50",
+    "Type": 99,
     "Quality": 0,
     "Price": 0,
     "Intro": "",

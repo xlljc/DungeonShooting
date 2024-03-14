@@ -15,6 +15,12 @@ public static partial class ExcelConfig
         public string Id;
 
         /// <summary>
+        /// 物体名称
+        /// </summary>
+        [JsonInclude]
+        public string Name;
+
+        /// <summary>
         /// Test(测试对象): 2 <br/>
         /// Role(角色): 3 <br/>
         /// Enemy(敌人): 4 <br/>
@@ -28,12 +34,6 @@ public static partial class ExcelConfig
         /// </summary>
         [JsonInclude]
         public ActivityType Type;
-
-        /// <summary>
-        /// 物体名称
-        /// </summary>
-        [JsonInclude]
-        public string Name;
 
         /// <summary>
         /// 物体品质, 用于武器和道具 <br/>
@@ -106,8 +106,8 @@ public static partial class ExcelConfig
         {
             var inst = new ActivityBase();
             inst.Id = Id;
-            inst.Type = Type;
             inst.Name = Name;
+            inst.Type = Type;
             inst.Quality = Quality;
             inst.Price = Price;
             inst.Intro = Intro;

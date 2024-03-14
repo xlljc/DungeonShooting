@@ -13,13 +13,13 @@ public class Buff_MoveSpeed : BuffFragment
     {
         Role.RoleState.MoveSpeed += _moveSpeed;
         Role.RoleState.Acceleration += _moveSpeed * 1.4f;
-        Role.RoleState.Friction += _moveSpeed;
+        Role.RoleState.Friction += _moveSpeed * 10;
     }
 
     public override void OnRemoveItem()
     {
         Role.RoleState.MoveSpeed -= _moveSpeed;
         Role.RoleState.Acceleration -= _moveSpeed * 1.4f;
-        Role.RoleState.Friction -= _moveSpeed;
+        Role.RoleState.Friction -= _moveSpeed * 10;
     }
 }

@@ -308,23 +308,14 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
     /// </summary>
     private void GenerateBuffAttrTable()
     {
-        var str = "";
-        var types = GetType().Assembly.GetTypes();
-        //包含[BuffAttribute]特性
-        var enumerable = types.Where(type => type.IsClass && !type.IsAbstract && type.IsAssignableTo(typeof(BuffFragment)));
-        foreach (var type in enumerable)
+        if (BuffGenerator.Generate())
         {
-            var attribute = (BuffAttribute)type.GetCustomAttribute(typeof(BuffAttribute), false);
-            if (attribute != null)
-            {
-                //var baeMethod = typeof(BuffFragment).GetMethod(nameof(BuffFragment.InitParam), BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly, new Type[] { typeof(float) });
-                //var methodInfo = type.GetMethod(nameof(BuffFragment.InitParam), BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly, new Type[] { typeof(float) });
-                //str += $"{attribute.BuffName}: {methodInfo != baeMethod}, {baeMethod != null}\n";
-                str += $"{attribute.BuffName}: {attribute.Description}\n";
-            }
+            ShowTips("提示", "Buff属性表生成完成!");
         }
-        GD.Print("-------------------------------------------");
-        GD.Print(str);
+        else
+        {
+            ShowTips("错误", "uff属性表生成失败! 前往控制台查看错误日志!");
+        }
     }
     
     /// <summary>

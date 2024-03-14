@@ -1,7 +1,10 @@
 
 using Godot;
 
-[Buff("Damage", "提升伤害buff, 参数‘1’为伤害增加类型: 1:具体伤害, 2:百分比伤害(小数), 参数‘2’为增益伤害值")]
+[Buff("Damage", 
+    "提升伤害buff, " +
+    "参数‘1’为伤害增加类型: 1:具体伤害, 2:百分比伤害(小数), " +
+    "参数‘2’为增益伤害值")]
 public class Buff_Damage : BuffFragment
 {
     private int _type;
@@ -44,6 +47,13 @@ public class Buff_Damage : BuffFragment
     
     private void CalcDamage2(int originDamage, RefValue<int> refValue)
     {
-        refValue.Value += Mathf.CeilToInt(originDamage * _value);
+        if (_value > 0)
+        {
+            refValue.Value += Mathf.CeilToInt(originDamage * _value);
+        }
+        else
+        {
+            refValue.Value = Mathf.Max(1, refValue.Value - Mathf.FloorToInt(refValue.Value * _value));
+        }
     }
 }

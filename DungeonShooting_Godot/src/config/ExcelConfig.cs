@@ -8,13 +8,22 @@ namespace Config;
 public static partial class ExcelConfig
 {
     /// <summary>
-    /// ActivityBase.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
+    /// Sound.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
     /// </summary>
-    public static List<ActivityBase> ActivityBase_List { get; private set; }
+    public static List<Sound> Sound_List { get; private set; }
     /// <summary>
-    /// ActivityBase.xlsx表数据集合, 里 Map 形式存储, key 为 Id
+    /// Sound.xlsx表数据集合, 里 Map 形式存储, key 为 Id
     /// </summary>
-    public static Dictionary<string, ActivityBase> ActivityBase_Map { get; private set; }
+    public static Dictionary<string, Sound> Sound_Map { get; private set; }
+
+    /// <summary>
+    /// WeaponBase.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
+    /// </summary>
+    public static List<WeaponBase> WeaponBase_List { get; private set; }
+    /// <summary>
+    /// WeaponBase.xlsx表数据集合, 里 Map 形式存储, key 为 Id
+    /// </summary>
+    public static Dictionary<string, WeaponBase> WeaponBase_Map { get; private set; }
 
     /// <summary>
     /// ActivityMaterial.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
@@ -35,6 +44,15 @@ public static partial class ExcelConfig
     public static Dictionary<string, AiAttackAttr> AiAttackAttr_Map { get; private set; }
 
     /// <summary>
+    /// BuffBase.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
+    /// </summary>
+    public static List<BuffBase> BuffBase_List { get; private set; }
+    /// <summary>
+    /// BuffBase.xlsx表数据集合, 里 Map 形式存储, key 为 Id
+    /// </summary>
+    public static Dictionary<string, BuffBase> BuffBase_Map { get; private set; }
+
+    /// <summary>
     /// BulletBase.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
     /// </summary>
     public static List<BulletBase> BulletBase_List { get; private set; }
@@ -53,6 +71,15 @@ public static partial class ExcelConfig
     public static Dictionary<string, EnemyBase> EnemyBase_Map { get; private set; }
 
     /// <summary>
+    /// ActivityBase.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
+    /// </summary>
+    public static List<ActivityBase> ActivityBase_List { get; private set; }
+    /// <summary>
+    /// ActivityBase.xlsx表数据集合, 里 Map 形式存储, key 为 Id
+    /// </summary>
+    public static Dictionary<string, ActivityBase> ActivityBase_Map { get; private set; }
+
+    /// <summary>
     /// LiquidMaterial.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
     /// </summary>
     public static List<LiquidMaterial> LiquidMaterial_List { get; private set; }
@@ -60,24 +87,6 @@ public static partial class ExcelConfig
     /// LiquidMaterial.xlsx表数据集合, 里 Map 形式存储, key 为 Id
     /// </summary>
     public static Dictionary<string, LiquidMaterial> LiquidMaterial_Map { get; private set; }
-
-    /// <summary>
-    /// Sound.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
-    /// </summary>
-    public static List<Sound> Sound_List { get; private set; }
-    /// <summary>
-    /// Sound.xlsx表数据集合, 里 Map 形式存储, key 为 Id
-    /// </summary>
-    public static Dictionary<string, Sound> Sound_Map { get; private set; }
-
-    /// <summary>
-    /// WeaponBase.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
-    /// </summary>
-    public static List<WeaponBase> WeaponBase_List { get; private set; }
-    /// <summary>
-    /// WeaponBase.xlsx表数据集合, 里 Map 形式存储, key 为 Id
-    /// </summary>
-    public static Dictionary<string, WeaponBase> WeaponBase_Map { get; private set; }
 
 
     private static bool _init = false;
@@ -89,35 +98,55 @@ public static partial class ExcelConfig
         if (_init) return;
         _init = true;
 
-        _InitActivityBaseConfig();
-        _InitActivityMaterialConfig();
-        _InitAiAttackAttrConfig();
-        _InitBulletBaseConfig();
-        _InitEnemyBaseConfig();
-        _InitLiquidMaterialConfig();
         _InitSoundConfig();
         _InitWeaponBaseConfig();
+        _InitActivityMaterialConfig();
+        _InitAiAttackAttrConfig();
+        _InitBuffBaseConfig();
+        _InitBulletBaseConfig();
+        _InitEnemyBaseConfig();
+        _InitActivityBaseConfig();
+        _InitLiquidMaterialConfig();
 
-        _InitActivityBaseRef();
-        _InitEnemyBaseRef();
         _InitWeaponBaseRef();
+        _InitBuffBaseRef();
+        _InitEnemyBaseRef();
+        _InitActivityBaseRef();
     }
-    private static void _InitActivityBaseConfig()
+    private static void _InitSoundConfig()
     {
         try
         {
-            var text = _ReadConfigAsText("res://resource/config/ActivityBase.json");
-            ActivityBase_List = new List<ActivityBase>(JsonSerializer.Deserialize<List<Ref_ActivityBase>>(text));
-            ActivityBase_Map = new Dictionary<string, ActivityBase>();
-            foreach (var item in ActivityBase_List)
+            var text = _ReadConfigAsText("res://resource/config/Sound.json");
+            Sound_List = JsonSerializer.Deserialize<List<Sound>>(text);
+            Sound_Map = new Dictionary<string, Sound>();
+            foreach (var item in Sound_List)
             {
-                ActivityBase_Map.Add(item.Id, item);
+                Sound_Map.Add(item.Id, item);
             }
         }
         catch (Exception e)
         {
             GD.PrintErr(e.ToString());
-            throw new Exception("初始化表'ActivityBase'失败!");
+            throw new Exception("初始化表'Sound'失败!");
+        }
+    }
+    private static void _InitWeaponBaseConfig()
+    {
+        try
+        {
+            var text = _ReadConfigAsText("res://resource/config/WeaponBase.json");
+            WeaponBase_List = new List<WeaponBase>(JsonSerializer.Deserialize<List<Ref_WeaponBase>>(text));
+            WeaponBase_Map = new Dictionary<string, WeaponBase>();
+            foreach (var item in WeaponBase_List)
+            {
+                WeaponBase_Map.Add(item.Id, item);
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr(e.ToString());
+            throw new Exception("初始化表'WeaponBase'失败!");
         }
     }
     private static void _InitActivityMaterialConfig()
@@ -156,6 +185,24 @@ public static partial class ExcelConfig
             throw new Exception("初始化表'AiAttackAttr'失败!");
         }
     }
+    private static void _InitBuffBaseConfig()
+    {
+        try
+        {
+            var text = _ReadConfigAsText("res://resource/config/BuffBase.json");
+            BuffBase_List = new List<BuffBase>(JsonSerializer.Deserialize<List<Ref_BuffBase>>(text));
+            BuffBase_Map = new Dictionary<string, BuffBase>();
+            foreach (var item in BuffBase_List)
+            {
+                BuffBase_Map.Add(item.Id, item);
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr(e.ToString());
+            throw new Exception("初始化表'BuffBase'失败!");
+        }
+    }
     private static void _InitBulletBaseConfig()
     {
         try
@@ -192,6 +239,24 @@ public static partial class ExcelConfig
             throw new Exception("初始化表'EnemyBase'失败!");
         }
     }
+    private static void _InitActivityBaseConfig()
+    {
+        try
+        {
+            var text = _ReadConfigAsText("res://resource/config/ActivityBase.json");
+            ActivityBase_List = new List<ActivityBase>(JsonSerializer.Deserialize<List<Ref_ActivityBase>>(text));
+            ActivityBase_Map = new Dictionary<string, ActivityBase>();
+            foreach (var item in ActivityBase_List)
+            {
+                ActivityBase_Map.Add(item.Id, item);
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr(e.ToString());
+            throw new Exception("初始化表'ActivityBase'失败!");
+        }
+    }
     private static void _InitLiquidMaterialConfig()
     {
         try
@@ -210,81 +275,7 @@ public static partial class ExcelConfig
             throw new Exception("初始化表'LiquidMaterial'失败!");
         }
     }
-    private static void _InitSoundConfig()
-    {
-        try
-        {
-            var text = _ReadConfigAsText("res://resource/config/Sound.json");
-            Sound_List = JsonSerializer.Deserialize<List<Sound>>(text);
-            Sound_Map = new Dictionary<string, Sound>();
-            foreach (var item in Sound_List)
-            {
-                Sound_Map.Add(item.Id, item);
-            }
-        }
-        catch (Exception e)
-        {
-            GD.PrintErr(e.ToString());
-            throw new Exception("初始化表'Sound'失败!");
-        }
-    }
-    private static void _InitWeaponBaseConfig()
-    {
-        try
-        {
-            var text = _ReadConfigAsText("res://resource/config/WeaponBase.json");
-            WeaponBase_List = new List<WeaponBase>(JsonSerializer.Deserialize<List<Ref_WeaponBase>>(text));
-            WeaponBase_Map = new Dictionary<string, WeaponBase>();
-            foreach (var item in WeaponBase_List)
-            {
-                WeaponBase_Map.Add(item.Id, item);
-            }
-        }
-        catch (Exception e)
-        {
-            GD.PrintErr(e.ToString());
-            throw new Exception("初始化表'WeaponBase'失败!");
-        }
-    }
 
-    private static void _InitActivityBaseRef()
-    {
-        foreach (Ref_ActivityBase item in ActivityBase_List)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(item.__Material))
-                {
-                    item.Material = ActivityMaterial_Map[item.__Material];
-                }
-
-            }
-            catch (Exception e)
-            {
-                GD.PrintErr(e.ToString());
-                throw new Exception("初始化'ActivityBase'引用其他表数据失败, 当前行id: " + item.Id);
-            }
-        }
-    }
-    private static void _InitEnemyBaseRef()
-    {
-        foreach (Ref_EnemyBase item in EnemyBase_List)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(item.__Activity))
-                {
-                    item.Activity = ActivityBase_Map[item.__Activity];
-                }
-
-            }
-            catch (Exception e)
-            {
-                GD.PrintErr(e.ToString());
-                throw new Exception("初始化'EnemyBase'引用其他表数据失败, 当前行id: " + item.Id);
-            }
-        }
-    }
     private static void _InitWeaponBaseRef()
     {
         foreach (Ref_WeaponBase item in WeaponBase_List)
@@ -350,6 +341,63 @@ public static partial class ExcelConfig
             {
                 GD.PrintErr(e.ToString());
                 throw new Exception("初始化'WeaponBase'引用其他表数据失败, 当前行id: " + item.Id);
+            }
+        }
+    }
+    private static void _InitBuffBaseRef()
+    {
+        foreach (Ref_BuffBase item in BuffBase_List)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(item.__Activity))
+                {
+                    item.Activity = ActivityBase_Map[item.__Activity];
+                }
+
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr(e.ToString());
+                throw new Exception("初始化'BuffBase'引用其他表数据失败, 当前行id: " + item.Id);
+            }
+        }
+    }
+    private static void _InitEnemyBaseRef()
+    {
+        foreach (Ref_EnemyBase item in EnemyBase_List)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(item.__Activity))
+                {
+                    item.Activity = ActivityBase_Map[item.__Activity];
+                }
+
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr(e.ToString());
+                throw new Exception("初始化'EnemyBase'引用其他表数据失败, 当前行id: " + item.Id);
+            }
+        }
+    }
+    private static void _InitActivityBaseRef()
+    {
+        foreach (Ref_ActivityBase item in ActivityBase_List)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(item.__Material))
+                {
+                    item.Material = ActivityMaterial_Map[item.__Material];
+                }
+
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr(e.ToString());
+                throw new Exception("初始化'ActivityBase'引用其他表数据失败, 当前行id: " + item.Id);
             }
         }
     }

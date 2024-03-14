@@ -1,5 +1,8 @@
 
-[Buff("BulletSpeed", "子弹速度 buff, 参数‘1’为射速增加类型: 1:具体射速, 2:百分比射速(小数), 参数‘2’为子弹增加的射速值")]
+[Buff("BulletSpeed", 
+    "子弹速度 buff, " +
+    "参数‘1’为射速增加类型: 1:具体射速, 2:百分比射速(小数), " +
+    "参数‘2’为子弹增加的射速值")]
 public class Buff_BulletSpeed : BuffFragment
 {
     private int _type;
