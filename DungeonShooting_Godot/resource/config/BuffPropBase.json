@@ -3,7 +3,6 @@
     "Id": "0001",
     "Remark": "\u978B\u5B50",
     "__Activity": "prop0001",
-    "IsActivity": false,
     "Buff": {
       "MoveSpeed": [
         30
@@ -14,7 +13,6 @@
     "Id": "0002",
     "Remark": "\u5FC3\u4E4B\u5BB9\u5668",
     "__Activity": "prop0002",
-    "IsActivity": false,
     "Buff": {
       "MaxHp": [
         2
@@ -25,7 +23,6 @@
     "Id": "0003",
     "Remark": "\u62A4\u76FE",
     "__Activity": "prop0003",
-    "IsActivity": false,
     "Buff": {
       "MaxShield": [
         1
@@ -36,7 +33,6 @@
     "Id": "0004",
     "Remark": "\u62A4\u76FE\u8BA1\u65F6\u5668",
     "__Activity": "prop0004",
-    "IsActivity": false,
     "Buff": {
       "ShieldRecoveryTime": [
         2.5
@@ -47,7 +43,6 @@
     "Id": "0005",
     "Remark": "\u6740\u4F24\u5F39",
     "__Activity": "prop0005",
-    "IsActivity": false,
     "Buff": {
       "Damage": [
         2,
@@ -59,7 +54,6 @@
     "Id": "0006",
     "Remark": "\u7EA2\u5B9D\u77F3\u6212\u6307",
     "__Activity": "prop0006",
-    "IsActivity": false,
     "Buff": {
       "WoundedInvincibleTime": [
         2
@@ -70,7 +64,6 @@
     "Id": "0007",
     "Remark": "\u5907\u7528\u62A4\u76FE",
     "__Activity": "prop0007",
-    "IsActivity": false,
     "Buff": {
       "OffsetInjury": [
         0.15
@@ -81,7 +74,6 @@
     "Id": "0008",
     "Remark": "\u773C\u955C",
     "__Activity": "prop0008",
-    "IsActivity": false,
     "Buff": {
       "Scattering": [
         0.5
@@ -92,7 +84,6 @@
     "Id": "0009",
     "Remark": "\u9AD8\u901F\u5B50\u5F39",
     "__Activity": "prop0009",
-    "IsActivity": false,
     "Buff": {
       "BulletSpeed": [
         2,
@@ -108,7 +99,6 @@
     "Id": "0010",
     "Remark": "\u5206\u88C2\u5B50\u5F39",
     "__Activity": "prop0010",
-    "IsActivity": false,
     "Buff": {
       "BulletCount": [
         2,
@@ -136,7 +126,6 @@
     "Id": "0011",
     "Remark": "\u5F39\u5C04\u5B50\u5F39",
     "__Activity": "prop0011",
-    "IsActivity": false,
     "Buff": {
       "BulletBounceCount": [
         2
@@ -147,7 +136,6 @@
     "Id": "0012",
     "Remark": "\u7A7F\u900F\u5B50\u5F39",
     "__Activity": "prop0012",
-    "IsActivity": false,
     "Buff": {
       "BulletPenetration": [
         1
@@ -158,7 +146,6 @@
     "Id": "0013",
     "Remark": "\u6B66\u5668\u80CC\u5305",
     "__Activity": "prop0013",
-    "IsActivity": false,
     "Buff": {
       "WeaponCapacity": [
         1
@@ -169,7 +156,6 @@
     "Id": "0014",
     "Remark": "\u9053\u5177\u80CC\u5305",
     "__Activity": "prop0014",
-    "IsActivity": false,
     "Buff": {
       "ActivePropsCapacity": [
         1

@@ -5,7 +5,7 @@ namespace Config;
 
 public static partial class ExcelConfig
 {
-    public class PropBase
+    public class BuffPropBase
     {
         /// <summary>
         /// Buff Id
@@ -25,12 +25,6 @@ public static partial class ExcelConfig
         public ActivityBase Activity;
 
         /// <summary>
-        /// 是否是主动道具, 默认false
-        /// </summary>
-        [JsonInclude]
-        public bool IsActivity;
-
-        /// <summary>
         /// 被动Buff效果 <br/>
         /// 也就是当前buff道具所有挂载的被动属性集合, 具体属性名称请参阅buff属性表 <br/>
         /// key为buff属性名称 <br/>
@@ -42,18 +36,17 @@ public static partial class ExcelConfig
         /// <summary>
         /// 返回浅拷贝出的新对象
         /// </summary>
-        public PropBase Clone()
+        public BuffPropBase Clone()
         {
-            var inst = new PropBase();
+            var inst = new BuffPropBase();
             inst.Id = Id;
             inst.Remark = Remark;
             inst.Activity = Activity;
-            inst.IsActivity = IsActivity;
             inst.Buff = Buff;
             return inst;
         }
     }
-    private class Ref_PropBase : PropBase
+    private class Ref_BuffPropBase : BuffPropBase
     {
         [JsonInclude]
         public string __Activity;

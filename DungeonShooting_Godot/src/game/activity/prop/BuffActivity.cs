@@ -175,8 +175,8 @@ public partial class BuffActivity : PropActivity
     
     
     private static bool _init = false;
-    private static Dictionary<string, ExcelConfig.PropBase> _buffAttributeMap =
-        new Dictionary<string, ExcelConfig.PropBase>();
+    private static Dictionary<string, ExcelConfig.BuffPropBase> _buffAttributeMap =
+        new Dictionary<string, ExcelConfig.BuffPropBase>();
 
     /// <summary>
     /// 初始化 buff 属性数据
@@ -189,7 +189,7 @@ public partial class BuffActivity : PropActivity
         }
 
         _init = true;
-        foreach (var buffAttr in ExcelConfig.PropBase_List)
+        foreach (var buffAttr in ExcelConfig.BuffPropBase_List)
         {
             if (buffAttr.Activity != null)
             {
@@ -204,7 +204,7 @@ public partial class BuffActivity : PropActivity
     /// <summary>
     /// 根据 ActivityBase.Id 获取对应 buff 的属性数据
     /// </summary>
-    public static ExcelConfig.PropBase GetBuffAttribute(string itemId)
+    public static ExcelConfig.BuffPropBase GetBuffAttribute(string itemId)
     {
         if (itemId == null)
         {
