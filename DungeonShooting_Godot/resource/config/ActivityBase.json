@@ -583,7 +583,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0010.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0010.png",
     "ShowInMapEditor": true
   },

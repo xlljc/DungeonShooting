@@ -31,6 +31,10 @@
       "BulletRepel": [
         2,
         -0.35
+      ],
+      "RandomBulletSpeed": [
+        -0.05,
+        0.05
       ]
     }
   }

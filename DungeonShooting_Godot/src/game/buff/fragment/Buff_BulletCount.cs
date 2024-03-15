@@ -1,7 +1,10 @@
 
 using Godot;
 
-[Buff("BulletCount", "子弹数量 buff, 参数‘1’为子弹数量添加类型, 1: 具体数量, 2:百分比(小数), 参数‘2’为增加子弹的数量")]
+[Buff("BulletCount", 
+    "子弹数量 buff, " +
+    "参数‘1’为子弹数量添加类型, 1: 具体数量, 2:百分比(小数), " +
+    "参数‘2’为增加子弹的数量")]
 public class Buff_BulletCount : BuffFragment
 {
     private int _type;
@@ -9,8 +12,8 @@ public class Buff_BulletCount : BuffFragment
 
     public override void InitParam(float arg1, float arg2)
     {
-        _type = (int)arg2;
-        _value = (int)arg1;
+        _type = (int)arg1;
+        _value = (int)arg2;
     }
     
     public override void OnPickUpItem()

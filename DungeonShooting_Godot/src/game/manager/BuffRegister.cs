@@ -28,6 +28,7 @@ public class BuffRegister
         BuffInfos.Add("MaxShield", new BuffInfo("MaxShield", null, new List<int>() { 1 }, typeof(Buff_MaxShield)));
         BuffInfos.Add("MoveSpeed", new BuffInfo("MoveSpeed", null, new List<int>() { 1 }, typeof(Buff_MoveSpeed)));
         BuffInfos.Add("OffsetInjury", new BuffInfo("OffsetInjury", null, new List<int>() { 1 }, typeof(Buff_OffsetInjury)));
+        BuffInfos.Add("RandomBulletSpeed", new BuffInfo("RandomBulletSpeed", null, new List<int>() { 2 }, typeof(Buff_RandomBulletSpeed)));
         BuffInfos.Add("Scattering", new BuffInfo("Scattering", null, new List<int>() { 1 }, typeof(Buff_Scattering)));
         BuffInfos.Add("ShieldRecoveryTime", new BuffInfo("ShieldRecoveryTime", null, new List<int>() { 1 }, typeof(Buff_ShieldRecoveryTime)));
         BuffInfos.Add("WeaponCapacity", new BuffInfo("WeaponCapacity", null, new List<int>() { 1 }, typeof(Buff_WeaponCapacity)));
