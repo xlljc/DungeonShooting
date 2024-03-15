@@ -5,7 +5,7 @@ namespace Config;
 
 public static partial class ExcelConfig
 {
-    public class BuffBase
+    public class PropBase
     {
         /// <summary>
         /// Buff Id
@@ -42,9 +42,9 @@ public static partial class ExcelConfig
         /// <summary>
         /// 返回浅拷贝出的新对象
         /// </summary>
-        public BuffBase Clone()
+        public PropBase Clone()
         {
-            var inst = new BuffBase();
+            var inst = new PropBase();
             inst.Id = Id;
             inst.Remark = Remark;
             inst.Activity = Activity;
@@ -53,7 +53,7 @@ public static partial class ExcelConfig
             return inst;
         }
     }
-    private class Ref_BuffBase : BuffBase
+    private class Ref_PropBase : PropBase
     {
         [JsonInclude]
         public string __Activity;
