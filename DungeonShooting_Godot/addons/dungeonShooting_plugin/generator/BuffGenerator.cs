@@ -19,6 +19,7 @@ public static class BuffGenerator
     {
         try
         {
+            var str = "";
             var buffInfos = new Dictionary<string, BuffInfo>();
             var types = typeof(BuffGenerator).Assembly.GetTypes();
             //包含[BuffAttribute]特性
@@ -35,6 +36,7 @@ public static class BuffGenerator
                         return false;
                     }
                     var buffInfo = new BuffInfo(attribute.BuffName, attribute.Description, type);
+                    str += $"{buffInfo.Name}: {buffInfo.Description}\n";
                     buffInfos.Add(attribute.BuffName, buffInfo);
                     //判断重写参数情况
                     //1参数
@@ -78,6 +80,8 @@ public static class BuffGenerator
             }
             
             GenerateCode(buffInfos);
+            GD.Print("-----------------------------");
+            GD.Print(str);
         }
         catch (Exception e)
         {

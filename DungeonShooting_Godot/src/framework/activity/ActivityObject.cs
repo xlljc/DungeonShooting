@@ -477,7 +477,14 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         else
         {
             SpriteFrames spriteFrames = AnimatedSprite.SpriteFrames;
-            spriteFrames.SetFrame("default", 0, texture);
+            if (spriteFrames.GetFrameCount("default") > 0)
+            {
+                spriteFrames.SetFrame("default", 0, texture);
+            }
+            else
+            {
+                spriteFrames.AddFrame("default", texture);
+            }
         }
     
         AnimatedSprite.Play("default");

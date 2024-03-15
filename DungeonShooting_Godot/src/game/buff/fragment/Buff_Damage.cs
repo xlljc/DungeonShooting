@@ -53,7 +53,7 @@ public class Buff_Damage : BuffFragment
         }
         else
         {
-            refValue.Value = Mathf.Max(1, refValue.Value - Mathf.FloorToInt(refValue.Value * _value));
+            refValue.Value = Mathf.Max(1, refValue.Value + Mathf.FloorToInt(refValue.Value * _value));
         }
     }
 }

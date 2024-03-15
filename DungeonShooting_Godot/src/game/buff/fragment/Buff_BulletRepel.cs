@@ -3,8 +3,8 @@ using Godot;
 
 [Buff("BulletRepel", 
     "子弹击退 buff, " +
-    "参数‘1’为击退增加类型: 1:具体击退值, " +
-    "2:百分比击退值(小数), 参数‘2’为子弹增加的击退值")]
+    "参数‘1’为击退增加类型: 1:具体击退值, 2:百分比击退值(小数), " +
+    "参数‘2’为子弹增加的击退值")]
 public class Buff_BulletRepel : BuffFragment
 {
     private int _type;
@@ -61,7 +61,7 @@ public class Buff_BulletRepel : BuffFragment
         }
         else
         {
-            repel.Value = Mathf.Max(0, repel.Value - Mathf.FloorToInt(repel.Value * _value));
+            repel.Value = Mathf.Max(0, repel.Value + Mathf.FloorToInt(repel.Value * _value));
         }
     }
 }

@@ -1,4 +1,6 @@
 
+using Godot;
+
 [Buff("Scattering", "提高武器精准度buff, 参数‘1’为提升的精准度百分比值(小数)")]
 public class Buff_Scattering : BuffFragment
 {
@@ -23,11 +25,11 @@ public class Buff_Scattering : BuffFragment
 
     private void CalcStartScatteringEvent(float originValue, RefValue<float> refValue)
     {
-        refValue.Value -= refValue.Value * _value;
+        refValue.Value = Mathf.Max(0, refValue.Value - refValue.Value * _value);
     }
     
     private void CalcFinalScatteringEvent(float originValue, RefValue<float> refValue)
     {
-        refValue.Value -= refValue.Value * _value;
+        refValue.Value = Mathf.Max(0, refValue.Value - refValue.Value * _value);
     }
 }

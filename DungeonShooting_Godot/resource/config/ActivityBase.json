@@ -471,7 +471,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0002.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0002.png",
     "ShowInMapEditor": true
   },
@@ -485,7 +485,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0003.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0003.png",
     "ShowInMapEditor": true
   },
@@ -499,7 +499,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0004.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0004.png",
     "ShowInMapEditor": true
   },
@@ -513,7 +513,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0005.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0005.png",
     "ShowInMapEditor": true
   },
@@ -527,7 +527,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0006.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0006.png",
     "ShowInMapEditor": true
   },
@@ -541,7 +541,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0007.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0007.png",
     "ShowInMapEditor": true
   },
@@ -555,7 +555,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0008.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0008.png",
     "ShowInMapEditor": true
   },
@@ -569,7 +569,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0009.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0009.png",
     "ShowInMapEditor": true
   },
@@ -597,7 +597,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0011.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0011.png",
     "ShowInMapEditor": true
   },
@@ -611,7 +611,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0012.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0012.png",
     "ShowInMapEditor": true
   },
@@ -625,7 +625,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0013.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0013.png",
     "ShowInMapEditor": true
   },
@@ -639,7 +639,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/buff/BuffProp0014.tscn",
+    "Prefab": "res://prefab/prop/BuffActivity.tscn",
     "Icon": "res://resource/sprite/prop/buff/BuffProp0014.png",
     "ShowInMapEditor": true
   },
