@@ -8,7 +8,7 @@ using Godot;
 /// 通用被动道具实体类
 /// </summary>
 [Tool]
-public partial class BuffActivity : PropActivity
+public partial class BuffProp : PropActivity
 {
     //被动属性
     private readonly List<BuffFragment> _buffFragment = new List<BuffFragment>();

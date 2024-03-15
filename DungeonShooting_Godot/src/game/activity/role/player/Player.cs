@@ -354,24 +354,24 @@ public partial class Player : Role
         UiManager.Open_Settlement();
     }
 
-    protected override void OnPickUpActiveProp(ActivePropActivity activePropActivity)
+    protected override void OnPickUpActiveProp(ActiveProp activeProp)
     {
-        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, activePropActivity);
+        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, activeProp);
     }
 
-    protected override void OnRemoveActiveProp(ActivePropActivity activePropActivity)
+    protected override void OnRemoveActiveProp(ActiveProp activeProp)
     {
-        EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, activePropActivity);
+        EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, activeProp);
     }
 
-    protected override void OnPickUpBuffProp(BuffActivity buffActivity)
+    protected override void OnPickUpBuffProp(BuffProp buffProp)
     {
-        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, buffActivity);
+        EventManager.EmitEvent(EventEnum.OnPlayerPickUpProp, buffProp);
     }
 
-    protected override void OnRemoveBuffProp(BuffActivity buffActivity)
+    protected override void OnRemoveBuffProp(BuffProp buffProp)
     {
-        EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, buffActivity);
+        EventManager.EmitEvent(EventEnum.OnPlayerRemoveProp, buffProp);
     }
 
     /// <summary>

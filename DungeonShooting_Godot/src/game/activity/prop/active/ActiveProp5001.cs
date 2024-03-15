@@ -5,12 +5,11 @@ using Godot;
 /// 弹药箱, 使用后补全当前武器备用弹药
 /// </summary>
 [Tool]
-public partial class ActiveProp5001 : ActivePropActivity
+public partial class ActiveProp5001 : ActiveProp
 {
     public override void OnInit()
     {
         base.OnInit();
-        Superposition = true;
         AutoDestroy = true;
         MaxCount = 10;
     }

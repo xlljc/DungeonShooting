@@ -101,7 +101,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		//初始化敌人数据
 		Enemy.InitEnemyAttribute();
 		//初始化buff数据
-		BuffActivity.InitBuffAttribute();
+		BuffProp.InitBuffAttribute();
 		
 		DungeonConfig = new DungeonConfig();
 		DungeonConfig.GroupName = "Test1";

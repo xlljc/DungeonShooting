@@ -5,14 +5,13 @@ using Godot;
 /// 医药箱, 使用后恢复一颗红心
 /// </summary>
 [Tool]
-public partial class ActiveProp5000 : ActivePropActivity
+public partial class ActiveProp5000 : ActiveProp
 {
     public override void OnInit()
     {
         base.OnInit();
         AutoDestroy = true;
         MaxCount = 10;
-        Superposition = true;
     }
 
     public override bool OnCheckUse()

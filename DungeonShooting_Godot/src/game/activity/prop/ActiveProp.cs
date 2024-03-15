@@ -1,17 +1,14 @@
 
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
 /// 主动使用道具
 /// </summary>
-public abstract partial class ActivePropActivity : PropActivity, IPackageItem<Role>
+[Tool]
+public partial class ActiveProp : PropActivity, IPackageItem<Role>
 {
     public int PackageIndex { get; set; }
-    
-    /// <summary>
-    /// 道具是否可以叠加
-    /// </summary>
-    public bool Superposition { get; set; } = false;
     
     /// <summary>
     /// 道具可使用次数
@@ -92,16 +89,22 @@ public abstract partial class ActivePropActivity : PropActivity, IPackageItem<Ro
 
     //冷却计时器
     private float _cooldownTimer = 0;
-    
+
     /// <summary>
     /// 当检测是否可以使用时调用
     /// </summary>
-    public abstract bool OnCheckUse();
+    public virtual bool OnCheckUse()
+    {
+        return true;
+    }
 
     /// <summary>
     /// 当道具被使用时调用, 函数返回值为消耗数量
     /// </summary>
-    protected abstract int OnUse();
+    protected virtual int OnUse()
+    {
+        return 1;
+    }
 
     /// <summary>
     /// 道具数量改变时调用
@@ -251,7 +254,7 @@ public abstract partial class ActivePropActivity : PropActivity, IPackageItem<Ro
             else
             {
                 //处理同类型道具
-                if (Superposition && item.Count < item.MaxCount) //允许叠加
+                if (item.Count < item.MaxCount) //允许叠加
                 {
                     if (item.Count + Count > item.MaxCount)
                     {
@@ -292,7 +295,7 @@ public abstract partial class ActivePropActivity : PropActivity, IPackageItem<Ro
             }
 
             //处理同类型道具
-            if (Superposition && item.Count < item.MaxCount) //允许叠加
+            if (item.Count < item.MaxCount) //允许叠加
             {
                 return new CheckInteractiveResult(this, true, CheckInteractiveResult.InteractiveType.Bullet);
             }

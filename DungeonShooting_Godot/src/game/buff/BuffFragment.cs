@@ -4,7 +4,7 @@ using System;
 /// <summary>
 /// 被动属性逻辑基类
 /// </summary>
-public abstract partial class BuffFragment : Component<BuffActivity>
+public abstract class BuffFragment : Component<BuffProp>
 {
     /// <summary>
     /// 所属角色对象

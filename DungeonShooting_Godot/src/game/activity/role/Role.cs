@@ -54,12 +54,12 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 携带的被动道具列表
     /// </summary>
-    public List<BuffActivity> BuffPropPack { get; } = new List<BuffActivity>();
+    public List<BuffProp> BuffPropPack { get; } = new List<BuffProp>();
 
     /// <summary>
     /// 携带的主动道具包裹
     /// </summary>
-    public Package<ActivePropActivity, Role> ActivePropsPack { get; private set; }
+    public Package<ActiveProp, Role> ActivePropsPack { get; private set; }
     
     /// <summary>
     /// 互动碰撞区域
@@ -431,42 +431,42 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 当拾起某个主动道具时调用
     /// </summary>
-    protected virtual void OnPickUpActiveProp(ActivePropActivity activePropActivity)
+    protected virtual void OnPickUpActiveProp(ActiveProp activeProp)
     {
     }
 
     /// <summary>
     /// 当移除某个主动道具时调用
     /// </summary>
-    protected virtual void OnRemoveActiveProp(ActivePropActivity activePropActivity)
+    protected virtual void OnRemoveActiveProp(ActiveProp activeProp)
     {
     }
     
     /// <summary>
     /// 当切换到某个主动道具时调用
     /// </summary>
-    protected virtual void OnExchangeActiveProp(ActivePropActivity activePropActivity)
+    protected virtual void OnExchangeActiveProp(ActiveProp activeProp)
     {
     }
     
     /// <summary>
     /// 当拾起某个被动道具时调用
     /// </summary>
-    protected virtual void OnPickUpBuffProp(BuffActivity buffActivity)
+    protected virtual void OnPickUpBuffProp(BuffProp buffProp)
     {
     }
 
     /// <summary>
     /// 当移除某个被动道具时调用
     /// </summary>
-    protected virtual void OnRemoveBuffProp(BuffActivity buffActivity)
+    protected virtual void OnRemoveBuffProp(BuffProp buffProp)
     {
     }
     
     public override void OnInit()
     {
         RoleState = OnCreateRoleState();
-        ActivePropsPack = AddComponent<Package<ActivePropActivity, Role>>();
+        ActivePropsPack = AddComponent<Package<ActiveProp, Role>>();
         ActivePropsPack.SetCapacity(RoleState.CanPickUpWeapon ? 1 : 0);
         
         _startScale = Scale;
@@ -617,7 +617,7 @@ public abstract partial class Role : ActivityObject
         var props = ActivePropsPack.ItemSlot;
         if (props.Length > 0)
         {
-            props = (ActivePropActivity[])props.Clone();
+            props = (ActiveProp[])props.Clone();
             foreach (var prop in props)
             {
                 if (prop != null && !prop.IsDestroyed)
@@ -673,15 +673,15 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 拾起主动道具, 返回是否成功拾起, 如果不想立刻切换到该道具, exchange 请传 false
     /// </summary>
-    /// <param name="activePropActivity">主动道具对象</param>
+    /// <param name="activeProp">主动道具对象</param>
     /// <param name="exchange">是否立即切换到该道具, 默认 true </param>
-    public bool PickUpActiveProp(ActivePropActivity activePropActivity, bool exchange = true)
+    public bool PickUpActiveProp(ActiveProp activeProp, bool exchange = true)
     {
-        if (ActivePropsPack.PickupItem(activePropActivity, exchange) != -1)
+        if (ActivePropsPack.PickupItem(activeProp, exchange) != -1)
         {
             //从可互动队列中移除
-            InteractiveItemList.Remove(activePropActivity);
-            OnPickUpActiveProp(activePropActivity);
+            InteractiveItemList.Remove(activeProp);
+            OnPickUpActiveProp(activeProp);
             return true;
         }
 
@@ -716,28 +716,28 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 拾起被动道具, 返回是否成功拾起
     /// </summary>
-    /// <param name="buffActivity">被动道具对象</param>
-    public bool PickUpBuffProp(BuffActivity buffActivity)
+    /// <param name="buffProp">被动道具对象</param>
+    public bool PickUpBuffProp(BuffProp buffProp)
     {
-        if (BuffPropPack.Contains(buffActivity))
+        if (BuffPropPack.Contains(buffProp))
         {
             Debug.LogError("被动道具已经在背包中了!");
             return false;
         }
-        BuffPropPack.Add(buffActivity);
-        buffActivity.Master = this;
-        OnPickUpBuffProp(buffActivity);
-        buffActivity.OnPickUpItem();
+        BuffPropPack.Add(buffProp);
+        buffProp.Master = this;
+        OnPickUpBuffProp(buffProp);
+        buffProp.OnPickUpItem();
         return true;
     }
 
     /// <summary>
     /// 扔掉指定的被动道具
     /// </summary>
-    /// <param name="buffActivity"></param>
-    public void ThrowBuffProp(BuffActivity buffActivity)
+    /// <param name="buffProp"></param>
+    public void ThrowBuffProp(BuffProp buffProp)
     {
-        var index = BuffPropPack.IndexOf(buffActivity);
+        var index = BuffPropPack.IndexOf(buffProp);
         if (index < 0)
         {
             Debug.LogError("当前道具不在角色背包中!");

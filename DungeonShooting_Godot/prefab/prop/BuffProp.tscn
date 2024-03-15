@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://dfpic4nubu7cf"]
 
-[ext_resource type="Script" path="res://src/game/activity/prop/BuffActivity.cs" id="1_3ya6n"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_p5e2l"]
+[ext_resource type="Script" path="res://src/game/activity/prop/BuffProp.cs" id="1_nlcp6"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_imicp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mrkt4"]
 resource_local_to_scene = true
-shader = ExtResource("2_p5e2l")
+shader = ExtResource("2_imicp")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
 shader_parameter/modulate = Color(1, 1, 1, 1)
@@ -17,7 +17,7 @@ shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b6ii6"]
 resource_local_to_scene = true
-shader = ExtResource("2_p5e2l")
+shader = ExtResource("2_imicp")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
 shader_parameter/modulate = Color(1, 1, 1, 1)
@@ -33,9 +33,9 @@ resource_local_to_scene = true
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cpqup"]
 size = Vector2(12, 10)
 
-[node name="BuffActivity" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
+[node name="BuffProp" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 4
-script = ExtResource("1_3ya6n")
+script = ExtResource("1_nlcp6")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")
