@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Config;
@@ -9,6 +10,13 @@ using Godot;
 /// </summary>
 public abstract partial class Role : ActivityObject
 {
+    /// <summary>
+    /// 当前角色对其他角色造成伤害时对回调
+    /// 参数1为目标角色
+    /// 参数2为造成对伤害值
+    /// </summary>
+    public event Action<Role, int> OnDamageEvent;
+    
     /// <summary>
     /// 是否是 Ai
     /// </summary>
@@ -839,7 +847,16 @@ public abstract partial class Role : ActivityObject
             // GameApplication.Instance.Node3D.GetRoot().AddChild(blood);
         }
         OnHit(target, damage, angle, !flag);
-
+        
+        if (target is Role targetRole && !targetRole.IsDestroyed)
+        {
+            //造成伤害回调
+            if (targetRole.OnDamageEvent != null)
+            {
+                targetRole.OnDamageEvent(this, damage);
+            }
+        }
+        
         //受伤特效
         PlayHitAnimation();
         
@@ -851,6 +868,8 @@ public abstract partial class Role : ActivityObject
             {
                 IsDie = true;
                 OnDie();
+                //死亡事件
+                World.OnRoleDie(this);
             }
         }
     }
