@@ -1,11 +1,11 @@
 
 using Godot;
 
-[BuffFragment("Damage", 
-    "提升伤害buff, " +
+[BuffFragment("BulletDamage", 
+    "提升子弹伤害buff, " +
     "参数‘1’为伤害增加类型: 1:具体伤害, 2:百分比伤害(小数), " +
     "参数‘2’为增益伤害值")]
-public class Buff_Damage : BuffFragment
+public class Buff_BulletDamage : BuffFragment
 {
     private int _type;
     private float _value;
@@ -42,11 +42,19 @@ public class Buff_Damage : BuffFragment
 
     private void CalcDamage1(int originDamage, RefValue<int> refValue)
     {
+        if (Role.WeaponPack.ActiveItem != null && Role.WeaponPack.ActiveItem.Attribute.IsMelee)
+        {
+            return;
+        }
         refValue.Value += Mathf.CeilToInt(_value);
     }
     
     private void CalcDamage2(int originDamage, RefValue<int> refValue)
     {
+        if (Role.WeaponPack.ActiveItem != null && Role.WeaponPack.ActiveItem.Attribute.IsMelee)
+        {
+            return;
+        }
         if (_value > 0)
         {
             refValue.Value += Mathf.CeilToInt(originDamage * _value);

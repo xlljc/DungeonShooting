@@ -44,7 +44,7 @@
     "Remark": "\u6740\u4F24\u5F39",
     "__Activity": "prop0005",
     "Buff": {
-      "Damage": [
+      "BulletDamage": [
         2,
         0.2
       ]
@@ -108,7 +108,7 @@
         -8,
         8
       ],
-      "Damage": [
+      "BulletDamage": [
         2,
         -0.35
       ],
