@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dfpic4nubu7cf"]
+[gd_scene load_steps=6 format=3 uid="uid://dfpic4nubu7cf"]
 
 [ext_resource type="Script" path="res://src/game/activity/prop/BuffProp.cs" id="1_nlcp6"]
 [ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_imicp"]
@@ -27,9 +27,6 @@ shader_parameter/outline_rainbow = false
 shader_parameter/outline_use_blend = true
 shader_parameter/grey = 0.0
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_y5dlc"]
-resource_local_to_scene = true
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cpqup"]
 size = Vector2(12, 10)
 
@@ -46,7 +43,6 @@ material = SubResource("ShaderMaterial_mrkt4")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_b6ii6")
-sprite_frames = SubResource("SpriteFrames_y5dlc")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_cpqup")

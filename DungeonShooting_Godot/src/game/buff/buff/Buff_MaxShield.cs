@@ -1,7 +1,7 @@
 
 using System.Collections.Generic;
 
-[Buff("MaxShield", "护盾上限buff, 参数‘1’为护盾上限")]
+[BuffFragment("MaxShield", "护盾上限buff, 参数‘1’为护盾上限")]
 public class Buff_MaxShield : BuffFragment
 {
     private List<ulong> _cacheId = new List<ulong>();

@@ -1,5 +1,5 @@
 
-[Buff("BulletDeviationAngle", 
+[BuffFragment("BulletDeviationAngle", 
     "子弹偏移角度 buff, " +
     "参数‘1’为增加子弹偏移角度下限, " +
     "参数‘2’为增加子弹偏移角度上限, 单位角度制, 会从上限和下限随机抽取值")]

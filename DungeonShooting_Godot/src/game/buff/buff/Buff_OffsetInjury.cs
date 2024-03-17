@@ -1,5 +1,5 @@
 
-[Buff("OffsetInjury", "受伤时有概率抵消伤害的buff, 参数‘1’为抵消伤害概率百分比(小数)")]
+[BuffFragment("OffsetInjury", "受伤时有概率抵消伤害的buff, 参数‘1’为抵消伤害概率百分比(小数)")]
 public class Buff_OffsetInjury : BuffFragment
 {
     private float _value;

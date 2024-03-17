@@ -1,21 +1,22 @@
+
 using System;
 
 [AttributeUsage(AttributeTargets.Class)]
-public class BuffAttribute : Attribute
+public class ConditionFragmentAttribute : Attribute
 {
     /// <summary>
-    /// Buff属性名称
+    /// 条件名称
     /// </summary>
-    public string BuffName { get; set; }
+    public string ConditionName { get; set; }
     
     /// <summary>
     /// 描述
     /// </summary>
     public string Description { get; set; }
     
-    public BuffAttribute(string buffName, string description)
+    public ConditionFragmentAttribute(string conditionName, string description)
     {
-        BuffName = buffName;
+        ConditionName = conditionName;
         Description = description;
     }
 }

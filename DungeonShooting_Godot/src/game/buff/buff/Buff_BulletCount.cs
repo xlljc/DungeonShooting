@@ -1,7 +1,7 @@
 
 using Godot;
 
-[Buff("BulletCount", 
+[BuffFragment("BulletCount", 
     "子弹数量 buff, " +
     "参数‘1’为子弹数量添加类型, 1: 具体数量, 2:百分比(小数), " +
     "参数‘2’为增加子弹的数量")]

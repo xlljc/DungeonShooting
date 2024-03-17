@@ -1,5 +1,7 @@
 
+using System;
 using System.Collections.Generic;
+using Config;
 using Godot;
 
 /// <summary>
@@ -8,6 +10,11 @@ using Godot;
 [Tool]
 public partial class ActiveProp : PropActivity, IPackageItem<Role>
 {
+    /// <summary>
+    /// 配置数据
+    /// </summary>
+    public ExcelConfig.ActivePropBase Attribute { get; private set; }
+    
     public int PackageIndex { get; set; }
     
     /// <summary>
@@ -52,17 +59,7 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
     }
 
     private int _maxCount = 1;
-
-    /// <summary>
-    /// 使用一次后的冷却时间, 单位: 秒
-    /// </summary>
-    public float CooldownTime { get; set; } = 2f;
     
-    /// <summary>
-    /// 当道具使用完后是否自动销毁
-    /// </summary>
-    public bool AutoDestroy { get; set; } = false;
-
     /// <summary>
     /// 道具充能进度, 必须要充能完成才能使用, 值范围: 0 - 1
     /// </summary>
@@ -89,21 +86,192 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
 
     //冷却计时器
     private float _cooldownTimer = 0;
+    
+    //被动属性
+    private readonly List<BuffFragment> _buffFragment = new List<BuffFragment>();
+    //条件
+    private readonly List<ConditionFragment> _conditionFragment = new List<ConditionFragment>();
+    //效果
+    private readonly List<EffectFragment> _effectFragment = new List<EffectFragment>();
+
+    public override void OnInit()
+    {
+        base.OnInit();
+        var buffAttribute = GetActiveAttribute(ActivityBase.Id);
+        Attribute = buffAttribute;
+        
+        //初始化buff属性
+        if (buffAttribute.Buff != null)
+        {
+            foreach (var keyValuePair in buffAttribute.Buff)
+            {
+                var buffInfo = PropFragmentRegister.BuffFragmentInfos[keyValuePair.Key];
+                var item = keyValuePair.Value;
+                switch (item.Length)
+                {
+                    case 0:
+                    {
+                        var buff = (BuffFragment)AddComponent(buffInfo.Type);
+                        _buffFragment.Add(buff);
+                    }
+                        break;
+                    case 1:
+                    {
+                        var buff = (BuffFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0]);
+                        _buffFragment.Add(buff);
+                    }
+                        break;
+                    case 2:
+                    {
+                        var buff = (BuffFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1]);
+                        _buffFragment.Add(buff);
+                    }
+                        break;
+                    case 3:
+                    {
+                        var buff = (BuffFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1], item[2]);
+                        _buffFragment.Add(buff);
+                    }
+                        break;
+                    case 4:
+                    {
+                        var buff = (BuffFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1], item[2], item[3]);
+                        _buffFragment.Add(buff);
+                    }
+                        break;
+                }
+            }
+        }
+
+        //初始化条件属性
+        if (buffAttribute.Condition != null)
+        {
+            foreach (var keyValuePair in buffAttribute.Condition)
+            {
+                var buffInfo = PropFragmentRegister.ConditionFragmentInfos[keyValuePair.Key];
+                var item = keyValuePair.Value;
+                switch (item.Length)
+                {
+                    case 0:
+                    {
+                        var buff = (ConditionFragment)AddComponent(buffInfo.Type);
+                        _conditionFragment.Add(buff);
+                    }
+                        break;
+                    case 1:
+                    {
+                        var buff = (ConditionFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0]);
+                        _conditionFragment.Add(buff);
+                    }
+                        break;
+                    case 2:
+                    {
+                        var buff = (ConditionFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1]);
+                        _conditionFragment.Add(buff);
+                    }
+                        break;
+                    case 3:
+                    {
+                        var buff = (ConditionFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1], item[2]);
+                        _conditionFragment.Add(buff);
+                    }
+                        break;
+                    case 4:
+                    {
+                        var buff = (ConditionFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1], item[2], item[3]);
+                        _conditionFragment.Add(buff);
+                    }
+                        break;
+                }
+            }
+        }
+
+        //初始化效果属性
+        if (buffAttribute.Effect != null)
+        {
+            foreach (var keyValuePair in buffAttribute.Effect)
+            {
+                var buffInfo = PropFragmentRegister.EffectFragmentInfos[keyValuePair.Key];
+                var item = keyValuePair.Value;
+                switch (item.Length)
+                {
+                    case 0:
+                    {
+                        var buff = (EffectFragment)AddComponent(buffInfo.Type);
+                        _effectFragment.Add(buff);
+                    }
+                        break;
+                    case 1:
+                    {
+                        var buff = (EffectFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0]);
+                        _effectFragment.Add(buff);
+                    }
+                        break;
+                    case 2:
+                    {
+                        var buff = (EffectFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1]);
+                        _effectFragment.Add(buff);
+                    }
+                        break;
+                    case 3:
+                    {
+                        var buff = (EffectFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1], item[2]);
+                        _effectFragment.Add(buff);
+                    }
+                        break;
+                    case 4:
+                    {
+                        var buff = (EffectFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1], item[2], item[3]);
+                        _effectFragment.Add(buff);
+                    }
+                        break;
+                }
+            }
+        }
+
+        //显示纹理
+        if (!string.IsNullOrEmpty(ActivityBase.Icon))
+        {
+            SetDefaultTexture(ResourceManager.LoadTexture2D(ActivityBase.Icon));
+        }
+
+        MaxCount = (int)Attribute.MaxCount;
+    }
 
     /// <summary>
     /// 当检测是否可以使用时调用
     /// </summary>
     public virtual bool OnCheckUse()
     {
+        foreach (var fragment in _conditionFragment)
+        {
+            if (!fragment.OnCheckUse()) return false;
+        }
+
         return true;
     }
 
     /// <summary>
-    /// 当道具被使用时调用, 函数返回值为消耗数量
+    /// 当道具被使用时调用
     /// </summary>
-    protected virtual int OnUse()
+    protected virtual void OnUse()
     {
-        return 1;
+        foreach (var fragment in _effectFragment)
+        {
+            fragment.OnUse();
+        }
     }
 
     /// <summary>
@@ -173,7 +341,7 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
     //检测是否达到自动销毁的条件
     private bool CheckAutoDestroy()
     {
-        if (Count == 0 && AutoDestroy) //用光了, 自动销毁
+        if (Count == 0 && Attribute.IsConsumables) //用光了, 自动销毁
         {
             if (Master != null)
             {
@@ -205,14 +373,14 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         }
         if (CheckUse()) //可以使用道具
         {
-            var num = OnUse();
-            if (num != 0)
+            OnUse();
+            if (Attribute.IsConsumables)
             {
-                Count -= num;
+                Count -= 1;
             }
 
             //冷却计时器
-            _cooldownTimer = CooldownTime;
+            _cooldownTimer = Attribute.CooldownTime;
         }
     }
 
@@ -226,7 +394,7 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
             return 1;
         }
 
-        return (CooldownTime - _cooldownTimer) / CooldownTime;
+        return (Attribute.CooldownTime - _cooldownTimer) / Attribute.CooldownTime;
     }
 
     public override void Interactive(ActivityObject master)
@@ -309,10 +477,18 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
 
     public override void OnPickUpItem()
     {
+        foreach (var buffFragment in _buffFragment)
+        {
+            buffFragment.OnPickUpItem();
+        }
     }
 
     public override void OnRemoveItem()
     {
+        foreach (var buffFragment in _buffFragment)
+        {
+            buffFragment.OnRemoveItem();
+        }
     }
 
     public virtual void OnActiveItem()
@@ -326,5 +502,120 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
     public virtual void OnOverflowItem()
     {
         Master.ThrowActiveProp(PackageIndex);
+    }
+    
+    
+    /// <summary>
+    /// 添加被动属性
+    /// </summary>
+    public void AddBuffFragment<T>() where T : BuffFragment, new()
+    {
+        var fragment = AddComponent<T>();
+        _buffFragment.Add(fragment);
+        if (Master != null)
+        {
+            fragment.OnPickUpItem();
+        }
+    }
+    
+    /// <summary>
+    /// 添加被动属性
+    /// </summary>
+    public void AddBuffFragment<T>(float arg1) where T : BuffFragment, new()
+    {
+        var fragment = AddComponent<T>();
+        _buffFragment.Add(fragment);
+        fragment.InitParam(arg1);
+        if (Master != null)
+        {
+            fragment.OnPickUpItem();
+        }
+    }
+    
+    /// <summary>
+    /// 添加被动属性
+    /// </summary>
+    public void AddBuffFragment<T>(float arg1, float arg2) where T : BuffFragment, new()
+    {
+        var fragment = AddComponent<T>();
+        _buffFragment.Add(fragment);
+        fragment.InitParam(arg1, arg2);
+        if (Master != null)
+        {
+            fragment.OnPickUpItem();
+        }
+    }
+    
+    /// <summary>
+    /// 添加被动属性
+    /// </summary>
+    public void AddBuffFragment<T>(float arg1, float arg2, float arg3) where T : BuffFragment, new()
+    {
+        var fragment = AddComponent<T>();
+        _buffFragment.Add(fragment);
+        fragment.InitParam(arg1, arg2, arg3);
+        if (Master != null)
+        {
+            fragment.OnPickUpItem();
+        }
+    }
+    
+    /// <summary>
+    /// 添加被动属性
+    /// </summary>
+    public void AddBuffFragment<T>(float arg1, float arg2, float arg3, float arg4) where T : BuffFragment, new()
+    {
+        var fragment = AddComponent<T>();
+        _buffFragment.Add(fragment);
+        fragment.InitParam(arg1, arg2, arg3, arg4);
+        if (Master != null)
+        {
+            fragment.OnPickUpItem();
+        }
+    }
+    
+    
+    private static bool _init = false;
+    private static Dictionary<string, ExcelConfig.ActivePropBase> _activeAttributeMap =
+        new Dictionary<string, ExcelConfig.ActivePropBase>();
+
+    /// <summary>
+    /// 初始化主动道具属性数据
+    /// </summary>
+    public static void InitActiveAttribute()
+    {
+        if (_init)
+        {
+            return;
+        }
+
+        _init = true;
+        foreach (var buffAttr in ExcelConfig.ActivePropBase_List)
+        {
+            if (buffAttr.Activity != null)
+            {
+                if (!_activeAttributeMap.TryAdd(buffAttr.Activity.Id, buffAttr))
+                {
+                    Debug.LogError("发现重复注册的主动道具属性: " + buffAttr.Id);
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 根据 ActivityBase.Id 获取对应主动道具的属性数据
+    /// </summary>
+    public static ExcelConfig.ActivePropBase GetActiveAttribute(string itemId)
+    {
+        if (itemId == null)
+        {
+            return null;
+        }
+        if (_activeAttributeMap.TryGetValue(itemId, out var attr))
+        {
+            return attr;
+        }
+
+        throw new Exception($"主动道具'{itemId}'没有在 ActivePropBase 表中配置属性数据!");
     }
 }

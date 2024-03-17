@@ -1,5 +1,5 @@
 
-[Buff("BulletBounceCount", "子弹弹射数量 buff, 参数‘1’为增加的弹射次数")]
+[BuffFragment("BulletBounceCount", "子弹弹射数量 buff, 参数‘1’为增加的弹射次数")]
 public class Buff_BulletBounceCount : BuffFragment
 {
     private int _value;
