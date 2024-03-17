@@ -653,7 +653,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/active/ActiveProp5000.tscn",
+    "Prefab": "res://prefab/prop/ActiveProp.tscn",
     "Icon": "res://resource/sprite/prop/active/ActiveProp5000.png",
     "ShowInMapEditor": true
   },
@@ -667,7 +667,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/prop/active/ActiveProp5001.tscn",
+    "Prefab": "res://prefab/prop/ActiveProp.tscn",
     "Icon": "res://resource/sprite/prop/active/ActiveProp5001.png",
     "ShowInMapEditor": true
   },

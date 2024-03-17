@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "Id": "0001",
+    "Remark": "\u533B\u836F\u7BB1",
+    "__Activity": "prop5000",
+    "Buff": null,
+    "Condition": {
+      "HpFull": [
+        0
+      ]
+    },
+    "Effect": {
+      "Hp": [
+        2
+      ]
+    },
+    "CooldownTime": 0,
+    "IsConsumables": true,
+    "MaxCount": 10
+  },
+  {
+    "Id": "0002",
+    "Remark": "\u5F39\u836F\u7BB1",
+    "__Activity": "prop5001",
+    "Buff": null,
+    "Condition": {
+      "AmmoFull": [
+        0
+      ]
+    },
+    "Effect": {
+      "TotalAmmo": []
+    },
+    "CooldownTime": 0,
+    "IsConsumables": true,
+    "MaxCount": 10
+  }
+]

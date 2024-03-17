@@ -10,6 +10,11 @@ using Godot;
 [Tool]
 public partial class BuffProp : PropActivity
 {
+    /// <summary>
+    /// 配置数据
+    /// </summary>
+    public ExcelConfig.BuffPropBase Attribute { get; private set; }
+    
     //被动属性
     private readonly List<BuffFragment> _buffFragment = new List<BuffFragment>();
 
@@ -17,12 +22,13 @@ public partial class BuffProp : PropActivity
     {
         base.OnInit();
         var buffAttribute = GetBuffAttribute(ActivityBase.Id);
-        if (buffAttribute != null)
+        Attribute = buffAttribute;
+        //初始化buff属性
+        if (buffAttribute.Buff != null)
         {
-            //初始化buff属性
             foreach (var keyValuePair in buffAttribute.Buff)
             {
-                var buffInfo = BuffRegister.BuffInfos[keyValuePair.Key];
+                var buffInfo = PropFragmentRegister.BuffFragmentInfos[keyValuePair.Key];
                 var item = keyValuePair.Value;
                 switch (item.Length)
                 {
@@ -62,11 +68,12 @@ public partial class BuffProp : PropActivity
                         break;
                 }
             }
-            //显示纹理
-            if (!string.IsNullOrEmpty(ActivityBase.Icon))
-            {
-                SetDefaultTexture(ResourceManager.LoadTexture2D(ActivityBase.Icon));
-            }
+        }
+
+        //显示纹理
+        if (!string.IsNullOrEmpty(ActivityBase.Icon))
+        {
+            SetDefaultTexture(ResourceManager.LoadTexture2D(ActivityBase.Icon));
         }
     }
 
@@ -215,6 +222,6 @@ public partial class BuffProp : PropActivity
             return attr;
         }
 
-        throw new Exception($"buff'{itemId}'没有在 BuffBase 表中配置属性数据!");
+        throw new Exception($"buff'{itemId}'没有在 BuffPropBase 表中配置属性数据!");
     }
 }

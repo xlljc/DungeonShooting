@@ -34,13 +34,36 @@ public static partial class ExcelConfig
         public Dictionary<string, float[]> Buff;
 
         /// <summary>
-        /// 使用完成后是否自动销毁
+        /// 道具使用条件 <br/>
+        /// 参数配置方式与buff字段相同 <br/>
+        /// 性名称请参阅condition属性表
         /// </summary>
         [JsonInclude]
-        public bool AutoDestroy;
+        public Dictionary<string, float[]> Condition;
 
         /// <summary>
-        /// 最大叠加次数
+        /// 道具使用效果 <br/>
+        /// 参数配置方式与buff字段相同 <br/>
+        /// 性名称请参阅effect属性表
+        /// </summary>
+        [JsonInclude]
+        public Dictionary<string, float[]> Effect;
+
+        /// <summary>
+        /// 使用一次后的冷却时间 <br/>
+        /// 单位: 秒
+        /// </summary>
+        [JsonInclude]
+        public float CooldownTime;
+
+        /// <summary>
+        /// 是否是消耗品, 如果为true, 则每次使用都会消耗叠加数量
+        /// </summary>
+        [JsonInclude]
+        public bool IsConsumables;
+
+        /// <summary>
+        /// 最大叠加次数, 仅当IsConsumables为true时有效
         /// </summary>
         [JsonInclude]
         public uint MaxCount;
@@ -55,7 +78,10 @@ public static partial class ExcelConfig
             inst.Remark = Remark;
             inst.Activity = Activity;
             inst.Buff = Buff;
-            inst.AutoDestroy = AutoDestroy;
+            inst.Condition = Condition;
+            inst.Effect = Effect;
+            inst.CooldownTime = CooldownTime;
+            inst.IsConsumables = IsConsumables;
             inst.MaxCount = MaxCount;
             return inst;
         }

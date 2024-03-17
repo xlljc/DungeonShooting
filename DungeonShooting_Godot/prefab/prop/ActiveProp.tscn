@@ -1,12 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://crwflnrd6so2i"]
+[gd_scene load_steps=6 format=3 uid="uid://drjkrimgii1u0"]
 
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_f18nu"]
-[ext_resource type="Script" path="res://src/game/activity/prop/active/ActiveProp5000.cs" id="1_nkhdg"]
-[ext_resource type="SpriteFrames" uid="uid://cvosq47nbdnus" path="res://resource/spriteFrames/prop/active/ActiveProp5000.tres" id="3_4xrrj"]
+[ext_resource type="Script" path="res://src/game/activity/prop/ActiveProp.cs" id="1_n541c"]
+[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_75di4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mrkt4"]
 resource_local_to_scene = true
-shader = ExtResource("1_f18nu")
+shader = ExtResource("2_75di4")
 shader_parameter/blend = Color(0, 0, 0, 0.470588)
 shader_parameter/schedule = 1.0
 shader_parameter/modulate = Color(1, 1, 1, 1)
@@ -18,7 +17,7 @@ shader_parameter/grey = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_b6ii6"]
 resource_local_to_scene = true
-shader = ExtResource("1_f18nu")
+shader = ExtResource("2_75di4")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
 shader_parameter/modulate = Color(1, 1, 1, 1)
@@ -31,9 +30,9 @@ shader_parameter/grey = 0.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cpqup"]
 size = Vector2(12, 10)
 
-[node name="ActiveProp5000" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
+[node name="ActiveProp" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 4
-script = ExtResource("1_nkhdg")
+script = ExtResource("1_n541c")
 ShadowSprite = NodePath("ShadowSprite")
 AnimatedSprite = NodePath("AnimatedSprite")
 Collision = NodePath("Collision")
@@ -44,7 +43,6 @@ material = SubResource("ShaderMaterial_mrkt4")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_b6ii6")
-sprite_frames = ExtResource("3_4xrrj")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_cpqup")

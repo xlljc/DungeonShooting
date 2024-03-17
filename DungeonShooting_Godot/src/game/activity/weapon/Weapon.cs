@@ -45,6 +45,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     /// 剩余弹药量(备用弹药)
     /// </summary>
     public int ResidueAmmo { get; private set; }
+    
+    /// <summary>
+    /// 总弹药量(备用弹药 + 当前弹夹弹药)
+    /// </summary>
+    public int TotalAmmon => CurrAmmo + ResidueAmmo;
 
     /// <summary>
     /// 武器管的开火点

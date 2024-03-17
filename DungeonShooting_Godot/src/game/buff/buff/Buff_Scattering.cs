@@ -1,7 +1,7 @@
 
 using Godot;
 
-[Buff("Scattering", "提高武器精准度buff, 参数‘1’为提升的精准度百分比值(小数)")]
+[BuffFragment("Scattering", "提高武器精准度buff, 参数‘1’为提升的精准度百分比值(小数)")]
 public class Buff_Scattering : BuffFragment
 {
     private float _value;

@@ -1,7 +1,7 @@
 
 using Godot;
 
-[Buff("BulletRepel", 
+[BuffFragment("BulletRepel", 
     "子弹击退 buff, " +
     "参数‘1’为击退增加类型: 1:具体击退值, 2:百分比击退值(小数), " +
     "参数‘2’为子弹增加的击退值")]
