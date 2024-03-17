@@ -249,6 +249,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_prop5001 = "prop5001";
         /// <summary>
+        /// 名称: 猪猪存钱罐 <br/>
+        /// 简介: 
+        /// </summary>
+        public const string Id_prop5002 = "prop5002";
+        /// <summary>
         /// 名称: 木质宝箱 <br/>
         /// 简介: 木质宝箱
         /// </summary>

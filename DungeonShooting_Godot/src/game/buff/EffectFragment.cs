@@ -8,4 +8,12 @@ public abstract class EffectFragment : PropFragment
     /// 使用道具的回调
     /// </summary>
     public abstract void OnUse();
+    
+    public override void OnPickUpItem()
+    {
+    }
+
+    public override void OnRemoveItem()
+    {
+    }
 }

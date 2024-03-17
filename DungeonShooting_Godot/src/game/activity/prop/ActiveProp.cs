@@ -481,6 +481,16 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         {
             buffFragment.OnPickUpItem();
         }
+
+        foreach (var conditionFragment in _conditionFragment)
+        {
+            conditionFragment.OnPickUpItem();
+        }
+        
+        foreach (var effectFragment in _effectFragment)
+        {
+            effectFragment.OnPickUpItem();
+        }
     }
 
     public override void OnRemoveItem()
@@ -488,6 +498,16 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         foreach (var buffFragment in _buffFragment)
         {
             buffFragment.OnRemoveItem();
+        }
+
+        foreach (var conditionFragment in _conditionFragment)
+        {
+            conditionFragment.OnRemoveItem();
+        }
+        
+        foreach (var effectFragment in _effectFragment)
+        {
+            effectFragment.OnRemoveItem();
         }
     }
 

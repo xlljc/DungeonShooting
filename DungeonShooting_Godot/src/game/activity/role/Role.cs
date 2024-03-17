@@ -1296,7 +1296,7 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void AddGold(int goldCount)
     {
-        RoleState.Gold += goldCount;
+        RoleState.Gold += RoleState.CalcGetGold(goldCount);
         //播放音效
         SoundManager.PlaySoundByConfig(ExcelConfig.Sound_Map["gold"], Position, this);
     }

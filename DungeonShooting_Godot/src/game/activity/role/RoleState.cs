@@ -226,4 +226,20 @@ public class RoleState
 
         return distance;
     }
+
+    /// <summary>
+    /// 计算获取的金币
+    /// </summary>
+    public event Action<int, RefValue<int>> CalcGetGoldEvent;
+    public int CalcGetGold(int gold)
+    {
+        if (CalcGetGoldEvent != null)
+        {
+            var result = new RefValue<int>(gold);
+            CalcGetGoldEvent(gold, result);
+            return result.Value;
+        }
+
+        return gold;
+    }
 }

@@ -34,5 +34,20 @@
     "CooldownTime": 0,
     "IsConsumables": true,
     "MaxCount": 10
+  },
+  {
+    "Id": "0003",
+    "Remark": "\u732A\u732A\u5B58\u94B1\u7F50",
+    "__Activity": "prop5002",
+    "Buff": null,
+    "Condition": null,
+    "Effect": {
+      "PiggyBank": [
+        2
+      ]
+    },
+    "CooldownTime": 0,
+    "IsConsumables": true,
+    "MaxCount": 1
   }
 ]

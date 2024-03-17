@@ -672,6 +672,20 @@
     "ShowInMapEditor": true
   },
   {
+    "Id": "prop5002",
+    "Name": "\u732A\u732A\u5B58\u94B1\u7F50",
+    "Type": 9,
+    "Quality": 1,
+    "Price": 0,
+    "Intro": "",
+    "Details": "\u62FE\u8D77\u8BE5\u9053\u5177\u540E\u73A9\u5BB6\u6361\u5230\u7684\u6240\u6709\u91D1\u5E01\u5C06\u4F1A\u88AB\u5B58\u5165\u5230\u5B58\u94B1\u7F50\u4E2D, \u4F7F\u7528\u8BE5\u9053\u5177, \u4F1A\u6467\u6BC1\u5B58\u94B1\u7F50, \u5E76\u8FD4\u56DE\u53CC\u500D\u7684\u91D1\u5E01,",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/prop/ActiveProp.tscn",
+    "Icon": "res://resource/sprite/prop/active/ActiveProp5002.png",
+    "ShowInMapEditor": true
+  },
+  {
     "Id": "treasure_box0001",
     "Name": "\u6728\u8D28\u5B9D\u7BB1",
     "Type": 10,
