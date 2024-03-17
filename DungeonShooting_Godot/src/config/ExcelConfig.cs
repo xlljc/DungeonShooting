@@ -8,6 +8,15 @@ namespace Config;
 public static partial class ExcelConfig
 {
     /// <summary>
+    /// BuffPropBase.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
+    /// </summary>
+    public static List<BuffPropBase> BuffPropBase_List { get; private set; }
+    /// <summary>
+    /// BuffPropBase.xlsx表数据集合, 里 Map 形式存储, key 为 Id
+    /// </summary>
+    public static Dictionary<string, BuffPropBase> BuffPropBase_Map { get; private set; }
+
+    /// <summary>
     /// Sound.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
     /// </summary>
     public static List<Sound> Sound_List { get; private set; }
@@ -53,6 +62,15 @@ public static partial class ExcelConfig
     public static Dictionary<string, BulletBase> BulletBase_Map { get; private set; }
 
     /// <summary>
+    /// ActivePropBase.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
+    /// </summary>
+    public static List<ActivePropBase> ActivePropBase_List { get; private set; }
+    /// <summary>
+    /// ActivePropBase.xlsx表数据集合, 里 Map 形式存储, key 为 Id
+    /// </summary>
+    public static Dictionary<string, ActivePropBase> ActivePropBase_Map { get; private set; }
+
+    /// <summary>
     /// EnemyBase.xlsx表数据集合, 以 List 形式存储, 数据顺序与 Excel 表相同
     /// </summary>
     public static List<EnemyBase> EnemyBase_List { get; private set; }
@@ -89,18 +107,40 @@ public static partial class ExcelConfig
         if (_init) return;
         _init = true;
 
+        _InitBuffPropBaseConfig();
         _InitSoundConfig();
         _InitWeaponBaseConfig();
         _InitActivityMaterialConfig();
         _InitAiAttackAttrConfig();
         _InitBulletBaseConfig();
+        _InitActivePropBaseConfig();
         _InitEnemyBaseConfig();
         _InitActivityBaseConfig();
         _InitLiquidMaterialConfig();
 
+        _InitBuffPropBaseRef();
         _InitWeaponBaseRef();
+        _InitActivePropBaseRef();
         _InitEnemyBaseRef();
         _InitActivityBaseRef();
+    }
+    private static void _InitBuffPropBaseConfig()
+    {
+        try
+        {
+            var text = _ReadConfigAsText("res://resource/config/BuffPropBase.json");
+            BuffPropBase_List = new List<BuffPropBase>(JsonSerializer.Deserialize<List<Ref_BuffPropBase>>(text));
+            BuffPropBase_Map = new Dictionary<string, BuffPropBase>();
+            foreach (var item in BuffPropBase_List)
+            {
+                BuffPropBase_Map.Add(item.Id, item);
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr(e.ToString());
+            throw new Exception("初始化表'BuffPropBase'失败!");
+        }
     }
     private static void _InitSoundConfig()
     {
@@ -192,6 +232,24 @@ public static partial class ExcelConfig
             throw new Exception("初始化表'BulletBase'失败!");
         }
     }
+    private static void _InitActivePropBaseConfig()
+    {
+        try
+        {
+            var text = _ReadConfigAsText("res://resource/config/ActivePropBase.json");
+            ActivePropBase_List = new List<ActivePropBase>(JsonSerializer.Deserialize<List<Ref_ActivePropBase>>(text));
+            ActivePropBase_Map = new Dictionary<string, ActivePropBase>();
+            foreach (var item in ActivePropBase_List)
+            {
+                ActivePropBase_Map.Add(item.Id, item);
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr(e.ToString());
+            throw new Exception("初始化表'ActivePropBase'失败!");
+        }
+    }
     private static void _InitEnemyBaseConfig()
     {
         try
@@ -247,6 +305,25 @@ public static partial class ExcelConfig
         }
     }
 
+    private static void _InitBuffPropBaseRef()
+    {
+        foreach (Ref_BuffPropBase item in BuffPropBase_List)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(item.__Activity))
+                {
+                    item.Activity = ActivityBase_Map[item.__Activity];
+                }
+
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr(e.ToString());
+                throw new Exception("初始化'BuffPropBase'引用其他表数据失败, 当前行id: " + item.Id);
+            }
+        }
+    }
     private static void _InitWeaponBaseRef()
     {
         foreach (Ref_WeaponBase item in WeaponBase_List)
@@ -312,6 +389,25 @@ public static partial class ExcelConfig
             {
                 GD.PrintErr(e.ToString());
                 throw new Exception("初始化'WeaponBase'引用其他表数据失败, 当前行id: " + item.Id);
+            }
+        }
+    }
+    private static void _InitActivePropBaseRef()
+    {
+        foreach (Ref_ActivePropBase item in ActivePropBase_List)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(item.__Activity))
+                {
+                    item.Activity = ActivityBase_Map[item.__Activity];
+                }
+
+            }
+            catch (Exception e)
+            {
+                GD.PrintErr(e.ToString());
+                throw new Exception("初始化'ActivePropBase'引用其他表数据失败, 当前行id: " + item.Id);
             }
         }
     }

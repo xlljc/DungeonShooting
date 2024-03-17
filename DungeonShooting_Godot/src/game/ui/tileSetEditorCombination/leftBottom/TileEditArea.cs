@@ -81,7 +81,7 @@ public partial class TileEditArea : EditorGridBg
             if (uiCell != null && !uiCell.Data)
             {
                 _useMask.Add(cell);
-                uiCell.SetData(true);
+                uiCell.UpdateData(true);
                 
                 EventManager.EmitEvent(EventEnum.OnSelectCombinationCell, cell);
             }
@@ -100,7 +100,7 @@ public partial class TileEditArea : EditorGridBg
             if (uiCell != null && uiCell.Data)
             {
                 _useMask.Remove(cell);
-                uiCell.SetData(false);
+                uiCell.UpdateData(false);
                 
                 EventManager.EmitEvent(EventEnum.OnRemoveCombinationCell, cell);
             }
@@ -119,7 +119,7 @@ public partial class TileEditArea : EditorGridBg
             var uiCell = _maskGrid.GetCell(i);
             if (uiCell.Data)
             {
-                uiCell.SetData(false);
+                uiCell.UpdateData(false);
             }
         }
         

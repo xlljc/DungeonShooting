@@ -157,10 +157,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("5_f4thw")
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
 
 [node name="TerrainName" type="Label" parent="VBoxContainer/Panel/MarginContainer/Tab2/ScrollContainer/TerrainItem"]
 layout_mode = 1
@@ -260,10 +260,10 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("5_f4thw")
 region_rect = Rect2(0, 0, 36, 36)
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
 
 [node name="MaskBg" type="ColorRect" parent="."]
 layout_mode = 1

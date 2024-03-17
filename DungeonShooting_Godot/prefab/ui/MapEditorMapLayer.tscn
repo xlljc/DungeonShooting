@@ -54,10 +54,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_k8b5h")
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
+region_rect = Rect2(0, 0, 36, 36)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
 
 [node name="VisibleButton" type="TextureButton" parent="VBoxContainer/ScrollContainer/LayerButton"]
 layout_mode = 1

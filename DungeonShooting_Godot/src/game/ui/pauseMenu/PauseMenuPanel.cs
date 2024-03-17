@@ -26,6 +26,16 @@ public partial class PauseMenuPanel : PauseMenu
             S_Restart.Instance.Visible = false;
         }
     }
+    
+    public override void OnShowUi()
+    {
+        GameCamera.Main.LockCamera();
+    }
+    
+    public override void OnHideUi()
+    {
+        GameCamera.Main.UnLockCamera();
+    }
 
     public override void Process(float delta)
     {

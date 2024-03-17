@@ -477,7 +477,14 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         else
         {
             SpriteFrames spriteFrames = AnimatedSprite.SpriteFrames;
-            spriteFrames.SetFrame("default", 0, texture);
+            if (spriteFrames.GetFrameCount("default") > 0)
+            {
+                spriteFrames.SetFrame("default", 0, texture);
+            }
+            else
+            {
+                spriteFrames.AddFrame("default", texture);
+            }
         }
     
         AnimatedSprite.Play("default");
@@ -628,6 +635,20 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     /// <summary>
+    /// 添加组件时调用
+    /// </summary>
+    public virtual void OnAddComponent(Component component)
+    {
+    }
+
+    /// <summary>
+    /// 移除组件时调用
+    /// </summary>
+    public virtual void OnRemoveComponent(Component component)
+    {
+    }
+
+    /// <summary>
     /// 返回当物体 CollisionLayer 是否能与 mask 层碰撞
     /// </summary>
     public bool CollisionWithMask(uint mask)
@@ -773,6 +794,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         component.Master = this;
         component.Ready();
         component.OnEnable();
+        OnAddComponent(component);
         return component;
     }
 
@@ -794,6 +816,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         component.Master = this;
         component.Ready();
         component.OnEnable();
+        OnAddComponent(component);
         return component;
     }
 
@@ -811,6 +834,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         if (_updatingComp)
         {
             _changeComponents.Add(new KeyValuePair<Component, bool>(component, false));
+            OnRemoveComponent(component);
             component.Destroy();
         }
         else
@@ -820,6 +844,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
                 if (_components[i].Value == component)
                 {
                     _components.RemoveAt(i);
+                    OnRemoveComponent(component);
                     component.Destroy();
                     return;
                 }
@@ -1933,7 +1958,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     /// <summary>
-    /// 设置是否启用碰撞层, 该函数是设置下载状态下原碰撞层
+    /// 设置是否启用碰撞层, 该函数是设置下坠状态下原碰撞层
     /// </summary>
     public void SetOriginCollisionLayerValue(uint layer, bool vale)
     {

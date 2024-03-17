@@ -343,9 +343,9 @@ public static class Utils
     /// <summary>
     /// 计算Vector2点所占用的区域
     /// </summary>
-    public static Rect2I CalcRect(IEnumerable<Vector2I> cells)
+    public static Rect2I CalcRect(ICollection<Vector2I> cells)
     {
-        var count = cells.Count();
+        var count = cells.Count;
         if (count == 0)
         {
             return new Rect2I();

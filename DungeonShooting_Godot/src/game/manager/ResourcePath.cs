@@ -299,6 +299,14 @@ public class ResourcePath
     public const string resource_sprite_ui_sursors_CursorCenter_png = "res://resource/sprite/ui/sursors/CursorCenter.png";
     public const string resource_sprite_ui_sursors_Cursors_png = "res://resource/sprite/ui/sursors/Cursors.png";
     public const string resource_sprite_ui_sursors_Cursors_Ui_png = "res://resource/sprite/ui/sursors/Cursors_Ui.png";
+    public const string resource_sprite_ui_encyclopedia_TitleBg_png = "res://resource/sprite/ui/encyclopedia/TitleBg.png";
+    public const string resource_sprite_ui_encyclopedia_Panel2_png = "res://resource/sprite/ui/encyclopedia/Panel2.png";
+    public const string resource_sprite_ui_encyclopedia_Tab_png = "res://resource/sprite/ui/encyclopedia/Tab.png";
+    public const string resource_sprite_ui_encyclopedia_Panel_png = "res://resource/sprite/ui/encyclopedia/Panel.png";
+    public const string resource_sprite_ui_encyclopedia_Item_png = "res://resource/sprite/ui/encyclopedia/Item.png";
+    public const string resource_sprite_ui_encyclopedia_TabSelect_png = "res://resource/sprite/ui/encyclopedia/TabSelect.png";
+    public const string resource_sprite_ui_encyclopedia_Select_png = "res://resource/sprite/ui/encyclopedia/Select.png";
+    public const string resource_sprite_ui_encyclopedia_TabIcon1_png = "res://resource/sprite/ui/encyclopedia/TabIcon1.png";
     public const string resource_sprite_ui_mapEditorTools_DoorDragButton_png = "res://resource/sprite/ui/mapEditorTools/DoorDragButton.png";
     public const string resource_sprite_ui_mapEditorTools_DoorDragButton_hover_png = "res://resource/sprite/ui/mapEditorTools/DoorDragButton_hover.png";
     public const string resource_sprite_ui_mapEditorTools_DoorDragButton_down_png = "res://resource/sprite/ui/mapEditorTools/DoorDragButton_down.png";

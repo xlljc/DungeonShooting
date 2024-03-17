@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,6 +76,11 @@ public partial class World : CanvasModulate, ICoroutine
     /// 随机对象池
     /// </summary>
     public RandomPool RandomPool { get; private set; }
+
+    /// <summary>
+    /// 角色死亡事件
+    /// </summary>
+    public event Action<Role> OnRoleDieEvent; 
     
     private bool _pause = false;
     private List<CoroutineData> _coroutineList;
@@ -165,5 +171,16 @@ public partial class World : CanvasModulate, ICoroutine
     {
         Random = random;
         RandomPool = new  RandomPool(this);
+    }
+
+    /// <summary>
+    /// 角色死亡
+    /// </summary>
+    public void OnRoleDie(Role role)
+    {
+        if (OnRoleDieEvent != null)
+        {
+            OnRoleDieEvent(role);
+        }
     }
 }

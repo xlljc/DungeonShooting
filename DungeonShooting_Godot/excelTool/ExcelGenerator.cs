@@ -20,6 +20,7 @@ public static class ExcelGenerator
         public string TypeStr;
         public string TypeName;
         public CollectionsType CollectionsType;
+        public bool AutoParentheses = false;
         
         public bool IsRefExcel;
         public string RefTypeStr;
@@ -392,7 +393,15 @@ public static class ExcelGenerator
                 MappingData mappingData;
                 try
                 {
+                    var autoParentheses = false;
+                    if (typeString.EndsWith('*'))
+                    {
+                        autoParentheses = true;
+                        typeString = typeString.TrimEnd('*');
+                    }
+
                     mappingData = ConvertToType(typeString.Replace(" ", ""));
+                    mappingData.AutoParentheses = autoParentheses;
                 }
                 catch (Exception e)
                 {
@@ -545,6 +554,17 @@ public static class ExcelGenerator
                                 }
                                 else
                                 {
+                                    if (mappingData.AutoParentheses)
+                                    {
+                                        if (mappingData.CollectionsType == CollectionsType.Array)
+                                        {
+                                            cellStringValue = "[" + cellStringValue.TrimEnd(',') + "]";
+                                        }
+                                        if (mappingData.CollectionsType == CollectionsType.Map)
+                                        {
+                                            cellStringValue = "{" + cellStringValue.TrimEnd(',') + "}";
+                                        }
+                                    }
                                     data.Add(field, JsonSerializer.Deserialize(cellStringValue, excelData.ColumnType[fieldName]));
                                 }
                             }
