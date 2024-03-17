@@ -470,7 +470,7 @@ position = Vector2(-158, -161)
 texture = ExtResource("43_x1gko")
 
 [node name="Item-14" type="Sprite2D" parent="Node2D" index="18"]
-position = Vector2(-209, -117)
+position = Vector2(-209, -120)
 texture = ExtResource("44_yhrf0")
 
 [node name="Item-15" type="Sprite2D" parent="Node2D" index="19"]
@@ -482,7 +482,7 @@ position = Vector2(-201, -206)
 texture = ExtResource("47_mf13m")
 
 [node name="Item-20" type="Sprite2D" parent="Node2D" index="21"]
-position = Vector2(-39, 27)
+position = Vector2(135, -140)
 texture = ExtResource("48_2erjm")
 
 [node name="Item-21" type="Sprite2D" parent="Node2D" index="22"]
