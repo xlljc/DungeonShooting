@@ -66,7 +66,7 @@ public partial class Bow : Weapon
 
     protected override void OnFire()
     {
-        if (Master.IsPlayer())
+        if (TriggerRole != null && TriggerRole.IsPlayer())
         {
             //创建抖动
             GameCamera.Main.DirectionalShake(Vector2.Right.Rotated(GlobalRotation) * Attribute.CameraShake);

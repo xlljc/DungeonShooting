@@ -677,12 +677,26 @@
     "Type": 9,
     "Quality": 1,
     "Price": 0,
-    "Intro": "",
-    "Details": "\u62FE\u8D77\u8BE5\u9053\u5177\u540E\u73A9\u5BB6\u6361\u5230\u7684\u6240\u6709\u91D1\u5E01\u5C06\u4F1A\u88AB\u5B58\u5165\u5230\u5B58\u94B1\u7F50\u4E2D, \u4F7F\u7528\u8BE5\u9053\u5177, \u4F1A\u6467\u6BC1\u5B58\u94B1\u7F50, \u5E76\u8FD4\u56DE\u53CC\u500D\u7684\u91D1\u5E01,",
+    "Intro": "\u62FE\u8D77\u8BE5\u9053\u5177\u540E\u73A9\u5BB6\u6361\u5230\u7684\u6240\u6709\u91D1\u5E01\u5C06\u4F1A\u88AB\u5B58\u5165\u5230\u5B58\u94B1\u7F50\u4E2D, \u4F7F\u7528\u8BE5\u9053\u5177, \u4F1A\u6467\u6BC1\u5B58\u94B1\u7F50, \u5E76\u8FD4\u56DE\u53CC\u500D\u7684\u91D1\u5E01",
+    "Details": "",
     "IsStatic": false,
     "__Material": "",
     "Prefab": "res://prefab/prop/ActiveProp.tscn",
     "Icon": "res://resource/sprite/prop/active/ActiveProp5002.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "prop5003",
+    "Name": "\u7EA2\u5916\u9065\u63A7\u5668",
+    "Type": 9,
+    "Quality": 1,
+    "Price": 0,
+    "Intro": "\u4F7F\u7528\u540E\u4F1A\u89E6\u53D1\u9644\u8FD1\u5730\u4E0A\u7684\u6B66\u5668\u5F00\u706B",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/prop/ActiveProp.tscn",
+    "Icon": "res://resource/sprite/prop/active/ActiveProp5003.png",
     "ShowInMapEditor": true
   },
   {

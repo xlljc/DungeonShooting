@@ -93,6 +93,8 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
     private readonly List<ConditionFragment> _conditionFragment = new List<ConditionFragment>();
     //效果
     private readonly List<EffectFragment> _effectFragment = new List<EffectFragment>();
+    //充能
+    private readonly List<ChargeFragment> _chargeFragment = new List<ChargeFragment>();
 
     public override void OnInit()
     {
@@ -241,6 +243,53 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
             }
         }
 
+        //初始化道具冷却属性数据
+        if (!buffAttribute.IsConsumables && buffAttribute.Charge != null)
+        {
+            foreach (var keyValuePair in buffAttribute.Charge)
+            {
+                var buffInfo = PropFragmentRegister.ChargeFragmentInfos[keyValuePair.Key];
+                var item = keyValuePair.Value;
+                switch (item.Length)
+                {
+                    case 0:
+                    {
+                        var buff = (ChargeFragment)AddComponent(buffInfo.Type);
+                        _chargeFragment.Add(buff);
+                    }
+                        break;
+                    case 1:
+                    {
+                        var buff = (ChargeFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0]);
+                        _chargeFragment.Add(buff);
+                    }
+                        break;
+                    case 2:
+                    {
+                        var buff = (ChargeFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1]);
+                        _chargeFragment.Add(buff);
+                    }
+                        break;
+                    case 3:
+                    {
+                        var buff = (ChargeFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1], item[2]);
+                        _chargeFragment.Add(buff);
+                    }
+                        break;
+                    case 4:
+                    {
+                        var buff = (ChargeFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1], item[2], item[3]);
+                        _chargeFragment.Add(buff);
+                    }
+                        break;
+                }
+            }
+        }
+        
         //显示纹理
         if (!string.IsNullOrEmpty(ActivityBase.Icon))
         {
@@ -274,6 +323,11 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
     protected virtual void OnUse()
     {
         foreach (var fragment in _effectFragment)
+        {
+            fragment.OnUse();
+        }
+
+        foreach (var fragment in _chargeFragment)
         {
             fragment.OnUse();
         }
@@ -486,6 +540,11 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         {
             effectFragment.OnPickUpItem();
         }
+        
+        foreach (var chargeFragment in _chargeFragment)
+        {
+            chargeFragment.OnPickUpItem();
+        }
     }
 
     public override void OnRemoveItem()
@@ -503,6 +562,11 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         foreach (var effectFragment in _effectFragment)
         {
             effectFragment.OnRemoveItem();
+        }
+        
+        foreach (var chargeFragment in _chargeFragment)
+        {
+            chargeFragment.OnRemoveItem();
         }
     }
 

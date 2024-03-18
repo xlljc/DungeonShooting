@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://bb7xvumnivsho"]
+
+[ext_resource type="Script" path="res://src/game/buffComp/active/Prop5003Area.cs" id="1_nxrjx"]
+
+[sub_resource type="Gradient" id="Gradient_41obf"]
+colors = PackedColorArray(1, 0, 0, 0.392157, 1, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ih8qw"]
+gradient = SubResource("Gradient_41obf")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.827839, 0.291819)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1llif"]
+radius = 15.0333
+
+[node name="Prop5003Area" type="Area2D" node_paths=PackedStringArray("CircleSprite", "Collision")]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+script = ExtResource("1_nxrjx")
+CircleSprite = NodePath("Circle")
+Collision = NodePath("CollisionShape2D")
+
+[node name="Circle" type="Sprite2D" parent="."]
+texture = SubResource("GradientTexture2D_ih8qw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1llif")

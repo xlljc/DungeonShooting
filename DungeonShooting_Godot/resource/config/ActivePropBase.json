@@ -14,7 +14,9 @@
         2
       ]
     },
-    "CooldownTime": 0,
+    "Charge": null,
+    "Duration": 0,
+    "CooldownTime": 2,
     "IsConsumables": true,
     "MaxCount": 10
   },
@@ -31,7 +33,9 @@
     "Effect": {
       "TotalAmmo": []
     },
-    "CooldownTime": 0,
+    "Charge": null,
+    "Duration": 0,
+    "CooldownTime": 2,
     "IsConsumables": true,
     "MaxCount": 10
   },
@@ -46,8 +50,29 @@
         2
       ]
     },
+    "Charge": null,
+    "Duration": 0,
     "CooldownTime": 0,
     "IsConsumables": true,
+    "MaxCount": 1
+  },
+  {
+    "Id": "0004",
+    "Remark": "\u7EA2\u5916\u9065\u63A7\u5668",
+    "__Activity": "prop5003",
+    "Buff": null,
+    "Condition": null,
+    "Effect": {
+      "AreaTrigger": []
+    },
+    "Charge": {
+      "Hurt": [
+        100
+      ]
+    },
+    "Duration": 0,
+    "CooldownTime": 0,
+    "IsConsumables": false,
     "MaxCount": 1
   }
 ]

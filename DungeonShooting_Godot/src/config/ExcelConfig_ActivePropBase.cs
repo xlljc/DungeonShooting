@@ -50,6 +50,23 @@ public static partial class ExcelConfig
         public Dictionary<string, float[]> Effect;
 
         /// <summary>
+        /// 道具充能效果 <br/>
+        /// 参数配置方式与buff字段相同 <br/>
+        /// 性名称请参阅charge属性表 <br/>
+        /// 注意: 仅当'IsConsumables'为false是生效
+        /// </summary>
+        [JsonInclude]
+        public Dictionary<string, float[]> Charge;
+
+        /// <summary>
+        /// 使用道具的效果持续时间 <br/>
+        /// 单位: 秒 <br/>
+        /// 注意: 该持续时间与具体道具属性片段无关, 仅用于程序计算何时可以开始冷却道具
+        /// </summary>
+        [JsonInclude]
+        public float Duration;
+
+        /// <summary>
         /// 使用一次后的冷却时间 <br/>
         /// 单位: 秒
         /// </summary>
@@ -63,7 +80,7 @@ public static partial class ExcelConfig
         public bool IsConsumables;
 
         /// <summary>
-        /// 最大叠加次数, 仅当IsConsumables为true时有效
+        /// 最大叠加次数, 仅当'IsConsumables'为true时有效
         /// </summary>
         [JsonInclude]
         public uint MaxCount;
@@ -80,6 +97,8 @@ public static partial class ExcelConfig
             inst.Buff = Buff;
             inst.Condition = Condition;
             inst.Effect = Effect;
+            inst.Charge = Charge;
+            inst.Duration = Duration;
             inst.CooldownTime = CooldownTime;
             inst.IsConsumables = IsConsumables;
             inst.MaxCount = MaxCount;

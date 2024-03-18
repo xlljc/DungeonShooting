@@ -14,7 +14,7 @@ public class PropFragmentRegister
     public static Dictionary<string, PropFragmentInfo> BuffFragmentInfos { get; private set; }
     
     /// <summary>
-    /// 所有主动道具条件数据
+    /// 所有主动道具使用条件数据
     /// </summary>
     public static Dictionary<string, PropFragmentInfo> ConditionFragmentInfos { get; private set; }
     
@@ -22,6 +22,11 @@ public class PropFragmentRegister
     /// 所有主动道具效果数据
     /// </summary>
     public static Dictionary<string, PropFragmentInfo> EffectFragmentInfos { get; private set; }
+    
+    /// <summary>
+    /// 所有主动道具充能条件数据
+    /// </summary>
+    public static Dictionary<string, PropFragmentInfo> ChargeFragmentInfos { get; private set; }
 
     /// <summary>
     /// 初始化 buff
@@ -31,6 +36,7 @@ public class PropFragmentRegister
         BuffFragmentInfos = new Dictionary<string, PropFragmentInfo>();
         ConditionFragmentInfos = new Dictionary<string, PropFragmentInfo>();
         EffectFragmentInfos = new Dictionary<string, PropFragmentInfo>();
+        ChargeFragmentInfos = new Dictionary<string, PropFragmentInfo>();
 
         var types = typeof(PropFragmentRegister).Assembly.GetTypes();
         //包含[BuffAttribute]特性
@@ -85,6 +91,24 @@ public class PropFragmentRegister
 
                 var effectInfo = new PropFragmentInfo(attribute.EffectName, attribute.Description, type);
                 EffectFragmentInfos.Add(attribute.EffectName, effectInfo);
+            }
+        }
+        //包含[ChargeAttribute]特性
+        var charges = types.Where(type =>
+            type.IsClass && !type.IsAbstract && type.IsAssignableTo(typeof(ChargeFragment)));
+        foreach (var type in charges)
+        {
+            var attribute = (ChargeFragmentAttribute)type.GetCustomAttribute(typeof(ChargeFragmentAttribute), false);
+            if (attribute != null)
+            {
+                if (ChargeFragmentInfos.ContainsKey(attribute.ChargeName))
+                {
+                    GD.PrintErr($"Charge '{attribute.ChargeName}' 重名!");
+                    continue;
+                }
+
+                var chargeInfo = new PropFragmentInfo(attribute.ChargeName, attribute.Description, type);
+                ChargeFragmentInfos.Add(attribute.ChargeName, chargeInfo);
             }
         }
     }
