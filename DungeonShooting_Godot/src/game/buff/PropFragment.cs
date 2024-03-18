@@ -10,14 +10,22 @@ public abstract class PropFragment : Component<PropActivity>
     public Role Role => Master?.Master;
     
     /// <summary>
-    /// 当道具被拾起时调用 (在 Master 赋值之后调用)
+    /// 当道具被拾起时调用 (在 Role 赋值之后调用)
     /// </summary>
     public abstract void OnPickUpItem();
 
     /// <summary>
-    /// 当道具被移除时调用 (在 Master 置为 null 之前调用)
+    /// 当道具被移除时调用 (在 Role 置为 null 之前调用)
     /// </summary>
     public abstract void OnRemoveItem();
+
+    /// <summary>
+    /// 返回道具是否在背包中
+    /// </summary>
+    public bool IsInPackage()
+    {
+        return Master != null;
+    }
     
     /// <summary>
     /// 初始化被动属性参数

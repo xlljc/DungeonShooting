@@ -27,13 +27,6 @@ public abstract partial class PropActivity : ActivityObject
     }
 
     /// <summary>
-    /// 如果道具放入了角色背包中, 则每帧调用
-    /// </summary>
-    public virtual void PackProcess(float delta)
-    {
-    }
-
-    /// <summary>
     /// 触发扔掉道具效果, 并不会管道具是否在道具背包中
     /// </summary>
     /// <param name="master">触发扔掉该道具的的角色</param>

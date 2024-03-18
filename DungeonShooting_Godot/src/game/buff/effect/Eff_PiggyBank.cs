@@ -13,9 +13,13 @@ public class Eff_PiggyBank : EffectFragment
         _value = arg1;
     }
 
+    public override bool OnCheckUse()
+    {
+        return _currValue > 0;
+    }
+
     public override void OnUse()
     {
-        Debug.Log("存入了: " + _currValue);
         var goldList = Utils.GetGoldList(Mathf.FloorToInt(_currValue * _value));
         foreach (var id in goldList)
         {
@@ -27,6 +31,8 @@ public class Eff_PiggyBank : EffectFragment
                 0
             );
         }
+
+        _currValue = 0;
     }
 
     public override void OnPickUpItem()

@@ -1043,42 +1043,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
 #endif
         var newDelta = (float)delta;
-        if (EnableCustomBehavior)
-        {
-            Process(newDelta);
-        }
+        UpdateProcess(newDelta);
         
         //更新组件
-        if (_components.Count > 0)
-        {
-            _updatingComp = true;
-            if (EnableCustomBehavior) //启用所有组件
-            {
-                for (int i = 0; i < _components.Count; i++)
-                {
-                    if (IsDestroyed) return;
-                    var temp = _components[i].Value;
-                    if (temp != null && temp.Enable)
-                    {
-                        temp.Process(newDelta);
-                    }
-                }
-            }
-            else //只更新 MoveController 组件
-            {
-                if (MoveController.Enable)
-                {
-                    MoveController.Process(newDelta);
-                }
-            }
-            _updatingComp = false;
-            
-            if (_changeComponents.Count > 0)
-            {
-                RefreshComponent();
-            }
-        }
-
+        UpdateComponentProcess(newDelta);
+        
         // 更新下坠处理逻辑
         UpdateFall(newDelta);
 
@@ -1109,7 +1078,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
         
         //协程更新
-        ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
+        UpdateCoroutine(newDelta);
         
         //调试绘制
         if (IsDebug)
@@ -1118,6 +1087,110 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
     }
 
+    /// <summary>
+    /// 触发调用 Process() 函数
+    /// </summary>
+    public void UpdateProcess(float delta)
+    {
+        if (EnableCustomBehavior)
+        {
+            Process(delta);
+        }
+    }
+
+    /// <summary>
+    /// 触发调用 PhysicsProcess() 函数
+    /// </summary>
+    public void UpdatePhysicsProcess(float delta)
+    {
+        if (EnableCustomBehavior)
+        {
+            PhysicsProcess(delta);
+        }
+    }
+
+    /// <summary>
+    /// 更新组件
+    /// </summary>
+    public void UpdateComponentProcess(float delta)
+    {
+        //更新组件
+        if (_components.Count > 0)
+        {
+            _updatingComp = true;
+            if (EnableCustomBehavior) //启用所有组件
+            {
+                for (int i = 0; i < _components.Count; i++)
+                {
+                    if (IsDestroyed) return;
+                    var temp = _components[i].Value;
+                    if (temp != null && temp.Enable)
+                    {
+                        temp.Process(delta);
+                    }
+                }
+            }
+            else //只更新 MoveController 组件
+            {
+                if (MoveController.Enable)
+                {
+                    MoveController.Process(delta);
+                }
+            }
+            _updatingComp = false;
+            
+            if (_changeComponents.Count > 0)
+            {
+                RefreshComponent();
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// 物理帧更新组件
+    /// </summary>
+    public void UpdateComponentPhysicsProcess(float delta)
+    {
+        if (_components.Count > 0)
+        {
+            _updatingComp = true;
+            if (EnableCustomBehavior) //启用所有组件
+            {
+                for (int i = 0; i < _components.Count; i++)
+                {
+                    if (IsDestroyed) return;
+                    var temp = _components[i].Value;
+                    if (temp != null && temp.Enable)
+                    {
+                        temp.PhysicsProcess(delta);
+                    }
+                }
+            }
+            else //只更新 MoveController 组件
+            {
+                if (MoveController.Enable)
+                {
+                    MoveController.PhysicsProcess(delta);
+                }
+            }
+            _updatingComp = false;
+
+            if (_changeComponents.Count > 0)
+            {
+                RefreshComponent();
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 更新协程
+    /// </summary>
+    public void UpdateCoroutine(float delta)
+    {
+        ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, delta);
+    }
+    
     /// <summary>
     /// 更新下坠处理逻辑
     /// </summary>
@@ -1275,41 +1348,10 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
 #endif
         var newDelta = (float)delta;
-        if (EnableCustomBehavior)
-        {
-            PhysicsProcess(newDelta);
-        }
+        UpdatePhysicsProcess(newDelta);
         
         //更新组件
-        if (_components.Count > 0)
-        {
-            _updatingComp = true;
-            if (EnableCustomBehavior) //启用所有组件
-            {
-                for (int i = 0; i < _components.Count; i++)
-                {
-                    if (IsDestroyed) return;
-                    var temp = _components[i].Value;
-                    if (temp != null && temp.Enable)
-                    {
-                        temp.PhysicsProcess(newDelta);
-                    }
-                }
-            }
-            else //只更新 MoveController 组件
-            {
-                if (MoveController.Enable)
-                {
-                    MoveController.PhysicsProcess(newDelta);
-                }
-            }
-            _updatingComp = false;
-
-            if (_changeComponents.Count > 0)
-            {
-                RefreshComponent();
-            }
-        }
+        UpdateComponentPhysicsProcess(newDelta);
     }
 
     //更新新增/移除的组件

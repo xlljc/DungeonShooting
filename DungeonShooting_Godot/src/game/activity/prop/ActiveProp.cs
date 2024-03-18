@@ -259,6 +259,11 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         {
             if (!fragment.OnCheckUse()) return false;
         }
+        
+        foreach (var fragment in _effectFragment)
+        {
+            if (!fragment.OnCheckUse()) return false;
+        }
 
         return true;
     }
@@ -304,16 +309,6 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
 
     protected override void Process(float delta)
     {
-        RunUpdate(delta);
-    }
-
-    public override void PackProcess(float delta)
-    {
-        RunUpdate(delta);
-    }
-
-    private void RunUpdate(float delta)
-    {
         if (CheckAutoDestroy())
         {
             return;
@@ -337,7 +332,7 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
             ChargeProgress += AutoChargeSpeed * delta;
         }
     }
-
+    
     //检测是否达到自动销毁的条件
     private bool CheckAutoDestroy()
     {
