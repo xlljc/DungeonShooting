@@ -161,6 +161,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     
     //--------------------------------------------------------------------------------------------
 
+    //触发板机是是否计算弹药消耗
+    private bool _triggerCalcAmmon = true;
+    
     //用于记录是否有角色操作过这把武器
     private bool _triggerRoleFlag = false;
     
@@ -254,6 +257,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     
     //抖动计时器
     private float _shakeTimer = 0;
+
+    //换弹完成后播放的动画
+    private string _reloadNextAnimation;
     
     // ----------------------------------------------
     private uint _tempLayer;
@@ -802,10 +808,30 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     }
 
     /// <summary>
+    /// 清除触发角色开火标记数据
+    /// </summary>
+    public void ClearTriggerRole()
+    {
+        _triggerRoleFlag = false;
+        if (Master == null)
+        {
+            if (Reloading)
+            {
+                _reloadNextAnimation = AnimatorNames.Floodlight;
+            }
+            else
+            {
+                AnimationPlayer.Play(AnimatorNames.Floodlight);
+            }
+        }
+    }
+
+    /// <summary>
     /// 扳机函数, 调用即视为按下扳机
     /// </summary>
     /// <param name="triggerRole">按下扳机的角色, 如果传 null, 则视为走火</param>
-    public void Trigger(Role triggerRole)
+    /// <param name="calcAmmo">是否计算弹药消耗</param>
+    public void Trigger(Role triggerRole, bool calcAmmo = true)
     {
         //不能触发扳机
         if (!NoMasterCanTrigger && Master == null) return;
@@ -815,7 +841,12 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
 
         //更新武器属性信息
         _triggerFlag = true;
+        if (!_triggerRoleFlag && AnimationPlayer.CurrentAnimation == AnimatorNames.Floodlight)
+        {
+            AnimationPlayer.Play(AnimatorNames.Reset);
+        }
         _triggerRoleFlag = true;
+        _triggerCalcAmmon = calcAmmo;
         if (triggerRole != null)
         {
             TriggerRole = triggerRole;
@@ -1098,18 +1129,27 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         _reloadShellFlag = false;
 
         //减子弹数量
-        if (_playerWeaponAttribute != _weaponAttribute) //Ai使用该武器, 有一定概率不消耗弹药
+        if (_triggerCalcAmmon)
+        {
+            if (_playerWeaponAttribute != _weaponAttribute) //Ai使用该武器, 有一定概率不消耗弹药
+            {
+                var count = UseAmmoCount();
+                CurrAmmo -= count;
+                if (Utils.Random.RandomRangeFloat(0, 1) >= _weaponAttribute.AiAttackAttr.AmmoConsumptionProbability) //不消耗弹药
+                {
+                    ResidueAmmo += count;
+                }
+            }
+            else
+            {
+                CurrAmmo -= UseAmmoCount();
+            }
+        }
+        else //不消耗弹药
         {
             var count = UseAmmoCount();
             CurrAmmo -= count;
-            if (Utils.Random.RandomRangeFloat(0, 1) >= _weaponAttribute.AiAttackAttr.AmmoConsumptionProbability) //不消耗弹药
-            {
-                ResidueAmmo += count;
-            }
-        }
-        else
-        {
-            CurrAmmo -= UseAmmoCount();
+            ResidueAmmo += count;
         }
 
         if (CurrAmmo == 0)
@@ -1195,9 +1235,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         }
         else //在地上
         {
-            var v = Utils.Random.RandomConfigRange(Attribute.BacklashRange) * 5;
+            var v = Utils.Random.RandomConfigRange(Attribute.BacklashRange) * 15;
             var externalForce = MoveController.AddForce(new Vector2(-v, 0).Rotated(Rotation));
-            externalForce.RotationSpeed = -Mathf.DegToRad(40);
+            externalForce.RotationSpeed = -Mathf.DegToRad(50);
             externalForce.RotationResistance = Mathf.DegToRad(80);
         }
 
@@ -1584,6 +1624,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     private void ReloadFinishHandler()
     {
         // Debug.Log("装弹完成.");
+        if (_reloadNextAnimation != null)
+        {
+            AnimationPlayer.Play(_reloadNextAnimation);
+            _reloadNextAnimation = null;
+        }
         OnReloadFinish();
     }
 

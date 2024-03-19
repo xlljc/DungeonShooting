@@ -249,6 +249,16 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_prop5001 = "prop5001";
         /// <summary>
+        /// 名称: 猪猪存钱罐 <br/>
+        /// 简介: 拾起该道具后玩家捡到的所有金币将会被存入到存钱罐中, 使用该道具, 会摧毁存钱罐, 并返回双倍的金币
+        /// </summary>
+        public const string Id_prop5002 = "prop5002";
+        /// <summary>
+        /// 名称: 红外遥控器 <br/>
+        /// 简介: 使用后会触发附近地上的武器开火
+        /// </summary>
+        public const string Id_prop5003 = "prop5003";
+        /// <summary>
         /// 名称: 木质宝箱 <br/>
         /// 简介: 木质宝箱
         /// </summary>

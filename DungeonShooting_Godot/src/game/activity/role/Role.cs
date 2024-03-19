@@ -611,12 +611,15 @@ public abstract partial class Role : ActivityObject
         //被动道具更新
         if (BuffPropPack.Count > 0)
         {
-            var buffProps = BuffPropPack.ToArray();
-            foreach (var prop in buffProps)
+            var buffProps = BuffPropPack;
+            for (var i = 0; i < buffProps.Count; i++)
             {
-                if (!prop.IsDestroyed)
+                var prop = buffProps[i];
+                if (!prop.IsDestroyed && prop.Master != null)
                 {
-                    prop.PackProcess(delta);
+                    prop.UpdateProcess(delta);
+                    prop.UpdateComponentProcess(delta);
+                    prop.UpdateCoroutine(delta);
                 }
             }
         }
@@ -625,12 +628,14 @@ public abstract partial class Role : ActivityObject
         var props = ActivePropsPack.ItemSlot;
         if (props.Length > 0)
         {
-            props = (ActiveProp[])props.Clone();
-            foreach (var prop in props)
+            for (var i = 0; i < props.Length; i++)
             {
-                if (prop != null && !prop.IsDestroyed)
+                var prop = props[i];
+                if (prop != null && !prop.IsDestroyed && prop.Master != null)
                 {
-                    prop.PackProcess(delta);
+                    prop.UpdateProcess(delta);
+                    prop.UpdateComponentProcess(delta);
+                    prop.UpdateCoroutine(delta);
                 }
             }
         }
@@ -644,7 +649,40 @@ public abstract partial class Role : ActivityObject
             TipRoot.Scale = new Vector2(-1, 1);
         }
     }
-    
+
+    protected override void PhysicsProcess(float delta)
+    {
+        //被动道具更新
+        if (BuffPropPack.Count > 0)
+        {
+            var buffProps = BuffPropPack;
+            for (var i = 0; i < buffProps.Count; i++)
+            {
+                var prop = buffProps[i];
+                if (!prop.IsDestroyed && prop.Master != null)
+                {
+                    prop.UpdatePhysicsProcess(delta);
+                    prop.UpdateComponentPhysicsProcess(delta);
+                }
+            }
+        }
+        
+        //主动道具调用更新
+        var props = ActivePropsPack.ItemSlot;
+        if (props.Length > 0)
+        {
+            for (var i = 0; i < props.Length; i++)
+            {
+                var prop = props[i];
+                if (prop != null && !prop.IsDestroyed && prop.Master != null)
+                {
+                    prop.UpdatePhysicsProcess(delta);
+                    prop.UpdateComponentPhysicsProcess(delta);
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// 初始化瞄准辅助线
     /// </summary>
@@ -687,6 +725,7 @@ public abstract partial class Role : ActivityObject
     {
         if (ActivePropsPack.PickupItem(activeProp, exchange) != -1)
         {
+            activeProp.MoveController.Enable = false;
             //从可互动队列中移除
             InteractiveItemList.Remove(activeProp);
             OnPickUpActiveProp(activeProp);
@@ -715,6 +754,7 @@ public abstract partial class Role : ActivityObject
             return;
         }
 
+        activeProp.MoveController.Enable = true;
         ActivePropsPack.RemoveItem(index);
         OnRemoveActiveProp(activeProp);
         //播放抛出效果
@@ -1296,7 +1336,7 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void AddGold(int goldCount)
     {
-        RoleState.Gold += goldCount;
+        RoleState.Gold += RoleState.CalcGetGold(goldCount);
         //播放音效
         SoundManager.PlaySoundByConfig(ExcelConfig.Sound_Map["gold"], Position, this);
     }

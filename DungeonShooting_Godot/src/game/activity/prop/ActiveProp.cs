@@ -84,8 +84,20 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
     /// </summary>
     public float AutoChargeSpeed { get; set; }
 
+    /// <summary>
+    /// 是否正使用中
+    /// </summary>
+    public bool IsUsing => _durationTimer > 0;
+
+    /// <summary>
+    /// 道具使用时间进度 (0 - 1)
+    /// </summary>
+    public float UsingProgress => 1 - _durationTimer / Attribute.Duration;
+
     //冷却计时器
     private float _cooldownTimer = 0;
+    //持续时间计时器
+    private float _durationTimer = 0;
     
     //被动属性
     private readonly List<BuffFragment> _buffFragment = new List<BuffFragment>();
@@ -93,6 +105,8 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
     private readonly List<ConditionFragment> _conditionFragment = new List<ConditionFragment>();
     //效果
     private readonly List<EffectFragment> _effectFragment = new List<EffectFragment>();
+    //充能
+    private readonly List<ChargeFragment> _chargeFragment = new List<ChargeFragment>();
 
     public override void OnInit()
     {
@@ -241,6 +255,53 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
             }
         }
 
+        //初始化道具冷却属性数据
+        if (!buffAttribute.IsConsumables && buffAttribute.Charge != null)
+        {
+            foreach (var keyValuePair in buffAttribute.Charge)
+            {
+                var buffInfo = PropFragmentRegister.ChargeFragmentInfos[keyValuePair.Key];
+                var item = keyValuePair.Value;
+                switch (item.Length)
+                {
+                    case 0:
+                    {
+                        var buff = (ChargeFragment)AddComponent(buffInfo.Type);
+                        _chargeFragment.Add(buff);
+                    }
+                        break;
+                    case 1:
+                    {
+                        var buff = (ChargeFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0]);
+                        _chargeFragment.Add(buff);
+                    }
+                        break;
+                    case 2:
+                    {
+                        var buff = (ChargeFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1]);
+                        _chargeFragment.Add(buff);
+                    }
+                        break;
+                    case 3:
+                    {
+                        var buff = (ChargeFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1], item[2]);
+                        _chargeFragment.Add(buff);
+                    }
+                        break;
+                    case 4:
+                    {
+                        var buff = (ChargeFragment)AddComponent(buffInfo.Type);
+                        buff.InitParam(item[0], item[1], item[2], item[3]);
+                        _chargeFragment.Add(buff);
+                    }
+                        break;
+                }
+            }
+        }
+        
         //显示纹理
         if (!string.IsNullOrEmpty(ActivityBase.Icon))
         {
@@ -259,6 +320,11 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         {
             if (!fragment.OnCheckUse()) return false;
         }
+        
+        foreach (var fragment in _effectFragment)
+        {
+            if (!fragment.OnCheckUse()) return false;
+        }
 
         return true;
     }
@@ -272,6 +338,19 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         {
             fragment.OnUse();
         }
+
+        foreach (var fragment in _chargeFragment)
+        {
+            fragment.OnUse();
+        }
+        
+    }
+
+    /// <summary>
+    /// 道具使用持续时间完成时调用
+    /// </summary>
+    protected virtual void OnUsingFinish()
+    {
     }
 
     /// <summary>
@@ -304,22 +383,27 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
 
     protected override void Process(float delta)
     {
-        RunUpdate(delta);
-    }
-
-    public override void PackProcess(float delta)
-    {
-        RunUpdate(delta);
-    }
-
-    private void RunUpdate(float delta)
-    {
         if (CheckAutoDestroy())
         {
             return;
         }
+
+        //持续时间
+        if (_durationTimer > 0)
+        {
+            _durationTimer -= delta;
+            
+            //持续时间完成
+            if (_durationTimer <= 0)
+            {
+                _durationTimer = 0;
+                //冷却计时器
+                _cooldownTimer = Attribute.CooldownTime;
+                UsingFinish();
+            }
+        }
         //冷却
-        if (_cooldownTimer > 0)
+        else if (_cooldownTimer > 0)
         {
             _cooldownTimer -= delta;
 
@@ -337,7 +421,7 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
             ChargeProgress += AutoChargeSpeed * delta;
         }
     }
-
+    
     //检测是否达到自动销毁的条件
     private bool CheckAutoDestroy()
     {
@@ -367,7 +451,7 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
     /// </summary>
     public void Use()
     {
-        if (Master == null)
+        if (Master == null || IsUsing)
         {
             return;
         }
@@ -379,8 +463,16 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
                 Count -= 1;
             }
 
-            //冷却计时器
-            _cooldownTimer = Attribute.CooldownTime;
+            if (Attribute.Duration > 0) //持续时间
+            {
+                _durationTimer = Attribute.Duration;
+            }
+            else
+            {
+                //冷却计时器
+                _cooldownTimer = Attribute.CooldownTime;
+                UsingFinish();
+            }
         }
     }
 
@@ -481,6 +573,21 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         {
             buffFragment.OnPickUpItem();
         }
+
+        foreach (var conditionFragment in _conditionFragment)
+        {
+            conditionFragment.OnPickUpItem();
+        }
+        
+        foreach (var effectFragment in _effectFragment)
+        {
+            effectFragment.OnPickUpItem();
+        }
+        
+        foreach (var chargeFragment in _chargeFragment)
+        {
+            chargeFragment.OnPickUpItem();
+        }
     }
 
     public override void OnRemoveItem()
@@ -488,6 +595,21 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         foreach (var buffFragment in _buffFragment)
         {
             buffFragment.OnRemoveItem();
+        }
+
+        foreach (var conditionFragment in _conditionFragment)
+        {
+            conditionFragment.OnRemoveItem();
+        }
+        
+        foreach (var effectFragment in _effectFragment)
+        {
+            effectFragment.OnRemoveItem();
+        }
+        
+        foreach (var chargeFragment in _chargeFragment)
+        {
+            chargeFragment.OnRemoveItem();
         }
     }
 
@@ -571,6 +693,22 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         if (Master != null)
         {
             fragment.OnPickUpItem();
+        }
+    }
+
+    //持续时间完成
+    private void UsingFinish()
+    {
+        OnUsingFinish();
+        
+        foreach (var effectFragment in _effectFragment)
+        {
+            effectFragment.OnUsingFinish();
+        }
+        
+        foreach (var chargeFragment in _chargeFragment)
+        {
+            chargeFragment.OnUsingFinish();
         }
     }
     
