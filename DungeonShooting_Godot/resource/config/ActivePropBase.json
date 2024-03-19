@@ -63,14 +63,16 @@
     "Buff": null,
     "Condition": null,
     "Effect": {
-      "AreaTrigger": []
+      "AreaTrigger": [
+        200
+      ]
     },
     "Charge": {
       "Hurt": [
-        100
+        250
       ]
     },
-    "Duration": 0,
+    "Duration": 6,
     "CooldownTime": 0,
     "IsConsumables": false,
     "MaxCount": 1

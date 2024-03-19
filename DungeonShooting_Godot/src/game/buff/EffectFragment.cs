@@ -21,6 +21,13 @@ public abstract class EffectFragment : PropFragment
     /// 使用道具的回调
     /// </summary>
     public abstract void OnUse();
+
+    /// <summary>
+    /// 道具持续时间完成时调用
+    /// </summary>
+    public virtual void OnUsingFinish()
+    {
+    }
     
     public override void OnPickUpItem()
     {

@@ -84,8 +84,20 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
     /// </summary>
     public float AutoChargeSpeed { get; set; }
 
+    /// <summary>
+    /// 是否正使用中
+    /// </summary>
+    public bool IsUsing => _durationTimer > 0;
+
+    /// <summary>
+    /// 道具使用时间进度 (0 - 1)
+    /// </summary>
+    public float UsingProgress => 1 - _durationTimer / Attribute.Duration;
+
     //冷却计时器
     private float _cooldownTimer = 0;
+    //持续时间计时器
+    private float _durationTimer = 0;
     
     //被动属性
     private readonly List<BuffFragment> _buffFragment = new List<BuffFragment>();
@@ -331,6 +343,14 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         {
             fragment.OnUse();
         }
+        
+    }
+
+    /// <summary>
+    /// 道具使用持续时间完成时调用
+    /// </summary>
+    protected virtual void OnUsingFinish()
+    {
     }
 
     /// <summary>
@@ -367,8 +387,23 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         {
             return;
         }
+
+        //持续时间
+        if (_durationTimer > 0)
+        {
+            _durationTimer -= delta;
+            
+            //持续时间完成
+            if (_durationTimer <= 0)
+            {
+                _durationTimer = 0;
+                //冷却计时器
+                _cooldownTimer = Attribute.CooldownTime;
+                UsingFinish();
+            }
+        }
         //冷却
-        if (_cooldownTimer > 0)
+        else if (_cooldownTimer > 0)
         {
             _cooldownTimer -= delta;
 
@@ -416,7 +451,7 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
     /// </summary>
     public void Use()
     {
-        if (Master == null)
+        if (Master == null || IsUsing)
         {
             return;
         }
@@ -428,8 +463,16 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
                 Count -= 1;
             }
 
-            //冷却计时器
-            _cooldownTimer = Attribute.CooldownTime;
+            if (Attribute.Duration > 0) //持续时间
+            {
+                _durationTimer = Attribute.Duration;
+            }
+            else
+            {
+                //冷却计时器
+                _cooldownTimer = Attribute.CooldownTime;
+                UsingFinish();
+            }
         }
     }
 
@@ -650,6 +693,22 @@ public partial class ActiveProp : PropActivity, IPackageItem<Role>
         if (Master != null)
         {
             fragment.OnPickUpItem();
+        }
+    }
+
+    //持续时间完成
+    private void UsingFinish()
+    {
+        OnUsingFinish();
+        
+        foreach (var effectFragment in _effectFragment)
+        {
+            effectFragment.OnUsingFinish();
+        }
+        
+        foreach (var chargeFragment in _chargeFragment)
+        {
+            chargeFragment.OnUsingFinish();
         }
     }
     

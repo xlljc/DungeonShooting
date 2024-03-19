@@ -12,6 +12,19 @@ public class Cha_Hurt : ChargeFragment
 
     public override void OnUse()
     {
+        
+    }
+
+    public override void Process(float delta)
+    {
+        if (Master.IsUsing)
+        {
+            Master.ChargeProgress = 1 - Master.UsingProgress;
+        }
+    }
+
+    public override void OnUsingFinish()
+    {
         Master.ChargeProgress = 0;
     }
 
@@ -27,6 +40,10 @@ public class Cha_Hurt : ChargeFragment
 
     private void OnDamageEvent(Role role, int value)
     {
+        if (Master.IsUsing)
+        {
+            return;
+        }
         Master.ChargeProgress += 1f / _value * value;
     }
 }

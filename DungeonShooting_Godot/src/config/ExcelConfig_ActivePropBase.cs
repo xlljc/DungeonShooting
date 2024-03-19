@@ -60,8 +60,7 @@ public static partial class ExcelConfig
 
         /// <summary>
         /// 使用道具的效果持续时间 <br/>
-        /// 单位: 秒 <br/>
-        /// 注意: 该持续时间与具体道具属性片段无关, 仅用于程序计算何时可以开始冷却道具
+        /// 单位: 秒
         /// </summary>
         [JsonInclude]
         public float Duration;

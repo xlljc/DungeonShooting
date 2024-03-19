@@ -22,30 +22,30 @@ public partial class Prop5003Area : Area2D
 
     public void PlayEffect(int startRadius, int endRadius, float time)
     {
-        var _tween = CreateTween();
-        _tween.SetParallel();
-        _tween.TweenCallback(Callable.From(() =>
+        var tween = CreateTween();
+        tween.SetParallel();
+        tween.TweenCallback(Callable.From(() =>
         {
             SetEnable(true);
             Modulate = Colors.White;
         }));
-        _tween.Chain();
+        tween.Chain();
         
-        _tween.TweenMethod(Callable.From<int>(SetRadius), startRadius, endRadius * 0.75f, time * 0.2f);
-        _tween.Chain();
+        tween.TweenMethod(Callable.From<int>(SetRadius), startRadius, endRadius * 0.75f, time * 0.2f);
+        tween.Chain();
 
-        _tween.TweenInterval(time * 0.55f);
-        _tween.Chain();
+        tween.TweenInterval(time * 0.55f);
+        tween.Chain();
         
-        _tween.TweenMethod(Callable.From<int>(SetRadius), endRadius * 0.75f, endRadius, time * 0.25f);
-        _tween.TweenProperty(this, "modulate", new Color(1, 1, 1, 0), time * 0.25f);
-        _tween.Chain();
+        tween.TweenMethod(Callable.From<int>(SetRadius), endRadius * 0.75f, endRadius, time * 0.25f);
+        tween.TweenProperty(this, "modulate", new Color(1, 1, 1, 0), time * 0.25f);
+        tween.Chain();
         
-        _tween.TweenCallback(Callable.From(() =>
+        tween.TweenCallback(Callable.From(() =>
         {
             SetEnable(false);
         }));
-        _tween.Play();
+        tween.Play();
     }
 
     private void SetRadius(int radius)

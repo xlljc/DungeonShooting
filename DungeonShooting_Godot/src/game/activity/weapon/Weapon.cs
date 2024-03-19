@@ -257,6 +257,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     
     //抖动计时器
     private float _shakeTimer = 0;
+
+    //换弹完成后播放的动画
+    private string _reloadNextAnimation;
     
     // ----------------------------------------------
     private uint _tempLayer;
@@ -805,6 +808,25 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     }
 
     /// <summary>
+    /// 清除触发角色开火标记数据
+    /// </summary>
+    public void ClearTriggerRole()
+    {
+        _triggerRoleFlag = false;
+        if (Master == null)
+        {
+            if (Reloading)
+            {
+                _reloadNextAnimation = AnimatorNames.Floodlight;
+            }
+            else
+            {
+                AnimationPlayer.Play(AnimatorNames.Floodlight);
+            }
+        }
+    }
+
+    /// <summary>
     /// 扳机函数, 调用即视为按下扳机
     /// </summary>
     /// <param name="triggerRole">按下扳机的角色, 如果传 null, 则视为走火</param>
@@ -819,6 +841,10 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
 
         //更新武器属性信息
         _triggerFlag = true;
+        if (!_triggerRoleFlag && AnimationPlayer.CurrentAnimation == AnimatorNames.Floodlight)
+        {
+            AnimationPlayer.Play(AnimatorNames.Reset);
+        }
         _triggerRoleFlag = true;
         _triggerCalcAmmon = calcAmmo;
         if (triggerRole != null)
@@ -1598,6 +1624,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     private void ReloadFinishHandler()
     {
         // Debug.Log("装弹完成.");
+        if (_reloadNextAnimation != null)
+        {
+            AnimationPlayer.Play(_reloadNextAnimation);
+            _reloadNextAnimation = null;
+        }
         OnReloadFinish();
     }
 

@@ -14,6 +14,13 @@ public abstract class ChargeFragment : PropFragment
     /// </summary>
     public abstract void OnUse();
     
+    /// <summary>
+    /// 道具持续时间完成时调用
+    /// </summary>
+    public virtual void OnUsingFinish()
+    {
+    }
+    
     public override void OnPickUpItem()
     {
     }
