@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://c2hynqudkykxl"]
+[gd_scene load_steps=51 format=3 uid="uid://c2hynqudkykxl"]
 
 [ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/Dungeon.tscn" id="1_31od0"]
 [ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
@@ -33,7 +33,6 @@
 [ext_resource type="Texture2D" uid="uid://cym4h4qndqmxl" path="res://resource/sprite/item/hall_c/item _16.png" id="28_1l3ls"]
 [ext_resource type="Texture2D" uid="uid://c5aieljuvuhld" path="res://resource/sprite/item/hall_c/item _59.png" id="29_4dx8t"]
 [ext_resource type="Texture2D" uid="uid://bgrroshvf4iyu" path="res://resource/sprite/item/hall_c/item _23.png" id="30_vfhiv"]
-[ext_resource type="Texture2D" uid="uid://du12pb6w1c1n3" path="res://resource/sprite/item/hall_c/item _03.png" id="36_knh8x"]
 [ext_resource type="Texture2D" uid="uid://b7dxbpdj5hdmd" path="res://resource/sprite/item/hall_c/item _01.png" id="37_5rb67"]
 [ext_resource type="Texture2D" uid="uid://d0x15i73kve07" path="res://resource/sprite/item/hall_b/item-11.png" id="39_w3n1m"]
 [ext_resource type="Texture2D" uid="uid://wee0md0xyftl" path="res://resource/sprite/item/hall_b/item-19.png" id="41_dhny5"]
@@ -116,26 +115,27 @@ ShowOffset = Vector2(2.08165e-12, 2)
 CollisionVisible = false
 
 [node name="Item0006" type="Node2D" parent="ItemRoot" index="1"]
-position = Vector2(867, 405)
+z_index = -1
+position = Vector2(841, 484)
 script = ExtResource("5_lowqi")
 Id = "item_0006"
 DefaultLayer = 1
 ShowOffset = Vector2(2.08165e-12, 2)
 CollisionVisible = false
 
-[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0006" index="0"]
-position = Vector2(-10, -3)
+[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0006" index="1"]
+position = Vector2(-11, -3)
 texture = ExtResource("7_30qwa")
 
 [node name="Item0008" type="Node2D" parent="ItemRoot" index="2"]
-position = Vector2(774, 328)
+position = Vector2(747, 440)
 script = ExtResource("5_lowqi")
 Id = "item_0008"
 DefaultLayer = 1
 ShowOffset = Vector2(2.08165e-12, 2)
 CollisionVisible = false
 
-[node name="ActivityInstance" type="Node2D" parent="ItemRoot/Item0008" index="0"]
+[node name="ActivityInstance" type="Node2D" parent="ItemRoot/Item0008" index="1"]
 position = Vector2(2.5, -12)
 script = ExtResource("5_lowqi")
 Id = "item_0031"
@@ -144,43 +144,43 @@ ShadowZIndex = 0
 CollisionVisible = false
 
 [node name="Item0013" type="Node2D" parent="ItemRoot" index="3"]
-position = Vector2(849, 298)
+position = Vector2(801, 347)
 script = ExtResource("5_lowqi")
 Id = "item_0013"
 DefaultLayer = 1
 ShowOffset = Vector2(2.08165e-12, 2)
 CollisionVisible = false
 
-[node name="Item26" type="Sprite2D" parent="ItemRoot/Item0013" index="0"]
+[node name="Item26" type="Sprite2D" parent="ItemRoot/Item0013" index="1"]
 position = Vector2(18, -2)
 texture = ExtResource("8_61dkg")
 
 [node name="Item0017" type="Node2D" parent="ItemRoot" index="4"]
-position = Vector2(847, 355)
+position = Vector2(837, 415)
 script = ExtResource("5_lowqi")
 Id = "item_0017"
 DefaultLayer = 1
 ShowOffset = Vector2(2.08165e-12, 2)
 CollisionVisible = false
 
-[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0017" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0017" index="1"]
 position = Vector2(-2, -13)
 texture = ExtResource("8_u3vry")
 
-[node name="Sprite2D2" type="Sprite2D" parent="ItemRoot/Item0017" index="1"]
+[node name="Sprite2D2" type="Sprite2D" parent="ItemRoot/Item0017" index="2"]
 position = Vector2(18, -11)
 texture = ExtResource("9_lhdr8")
 
-[node name="Sprite2D3" type="Sprite2D" parent="ItemRoot/Item0017" index="2"]
+[node name="Sprite2D3" type="Sprite2D" parent="ItemRoot/Item0017" index="3"]
 position = Vector2(-16, -2)
 texture = ExtResource("10_4eqn0")
 
-[node name="Sprite2D4" type="Sprite2D" parent="ItemRoot/Item0017" index="3"]
+[node name="Sprite2D4" type="Sprite2D" parent="ItemRoot/Item0017" index="4"]
 position = Vector2(10, -1)
 texture = ExtResource("11_tg3jo")
 
 [node name="Item0057" type="Node2D" parent="ItemRoot" index="5"]
-position = Vector2(909, 418)
+position = Vector2(885, 486)
 script = ExtResource("5_lowqi")
 Id = "item_0057"
 DefaultLayer = 1
@@ -201,11 +201,11 @@ Id = "item_0002"
 DefaultLayer = 1
 CollisionVisible = false
 
-[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0002" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0002" index="1"]
 position = Vector2(32, -2)
 texture = ExtResource("12_agfji")
 
-[node name="Sprite2D2" type="Sprite2D" parent="ItemRoot/Item0002" index="1"]
+[node name="Sprite2D2" type="Sprite2D" parent="ItemRoot/Item0002" index="2"]
 material = SubResource("ShaderMaterial_i7git")
 position = Vector2(0, -15)
 scale = Vector2(1, -1)
@@ -223,7 +223,7 @@ script = ExtResource("5_lowqi")
 Id = "item_0004"
 DefaultLayer = 1
 
-[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0004" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0004" index="1"]
 position = Vector2(0, -17)
 texture = ExtResource("13_unnpl")
 
@@ -234,7 +234,7 @@ Id = "item_0005"
 DefaultLayer = 1
 
 [node name="Item0036" type="Node2D" parent="ItemRoot" index="11"]
-position = Vector2(959, 353)
+position = Vector2(944, 347)
 scale = Vector2(1.04988, 0.889278)
 script = ExtResource("5_lowqi")
 Id = "item_0036"
@@ -258,15 +258,15 @@ script = ExtResource("5_lowqi")
 Id = "item_0009"
 DefaultLayer = 1
 
-[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0009" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0009" index="1"]
 position = Vector2(-24, -10)
 texture = ExtResource("15_h7524")
 
-[node name="Sprite2D2" type="Sprite2D" parent="ItemRoot/Item0009" index="1"]
+[node name="Sprite2D2" type="Sprite2D" parent="ItemRoot/Item0009" index="2"]
 position = Vector2(1, -10)
 texture = ExtResource("15_h7524")
 
-[node name="Sprite2D3" type="Sprite2D" parent="ItemRoot/Item0009" index="2"]
+[node name="Sprite2D3" type="Sprite2D" parent="ItemRoot/Item0009" index="3"]
 position = Vector2(37, -10)
 texture = ExtResource("15_h7524")
 
@@ -295,17 +295,18 @@ Id = "item_0011"
 DefaultLayer = 1
 
 [node name="Item0015" type="Node2D" parent="ItemRoot" index="19"]
-position = Vector2(103, 476)
+position = Vector2(107, 334)
 script = ExtResource("5_lowqi")
 Id = "item_0015"
 DefaultLayer = 1
 
-[node name="Slice04" type="Sprite2D" parent="ItemRoot/Item0015" index="0"]
+[node name="Slice04" type="Sprite2D" parent="ItemRoot/Item0015" index="1"]
 position = Vector2(16, -9)
 texture = ExtResource("15_h7524")
 
 [node name="Item0016" type="Node2D" parent="ItemRoot" index="20"]
-position = Vector2(167, 406)
+position = Vector2(168, 400)
+scale = Vector2(-1, 1)
 script = ExtResource("5_lowqi")
 Id = "item_0016"
 DefaultLayer = 1
@@ -322,28 +323,28 @@ script = ExtResource("5_lowqi")
 Id = "item_0019"
 DefaultLayer = 1
 
-[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0019" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0019" index="1"]
 position = Vector2(-23, -7)
 texture = ExtResource("16_xj0e1")
 
-[node name="Sprite2D2" type="Sprite2D" parent="ItemRoot/Item0019" index="1"]
+[node name="Sprite2D2" type="Sprite2D" parent="ItemRoot/Item0019" index="2"]
 position = Vector2(24, -8)
 texture = ExtResource("17_gwwce")
 
 [node name="Item0020_1" type="Node2D" parent="ItemRoot" index="23"]
-position = Vector2(141, 476)
+position = Vector2(145, 334)
 script = ExtResource("5_lowqi")
 Id = "item_0020"
 DefaultLayer = 1
 
 [node name="Item0020_2" type="Node2D" parent="ItemRoot" index="24"]
-position = Vector2(122, 498)
+position = Vector2(126, 356)
 script = ExtResource("5_lowqi")
 Id = "item_0020"
 DefaultLayer = 1
 
 [node name="Item0020_3" type="Node2D" parent="ItemRoot" index="25"]
-position = Vector2(90, 499)
+position = Vector2(94, 357)
 script = ExtResource("5_lowqi")
 Id = "item_0020"
 DefaultLayer = 1
@@ -393,27 +394,28 @@ DefaultLayer = 1
 position = Vector2(881, 446)
 
 [node name="Item21" type="Sprite2D" parent="Node2D" index="0"]
-position = Vector2(-12, 9)
+z_index = 1
+position = Vector2(-76, 18)
 texture = ExtResource("18_sqk27")
 
 [node name="Item25" type="Sprite2D" parent="Node2D" index="1"]
-position = Vector2(30, -95)
+position = Vector2(-74, -67)
 texture = ExtResource("19_v74e7")
 
 [node name="Item28" type="Sprite2D" parent="Node2D" index="2"]
-position = Vector2(17, -116)
+position = Vector2(4, 14)
 texture = ExtResource("20_gxw54")
 
 [node name="Item24" type="Sprite2D" parent="Node2D" index="3"]
-position = Vector2(9, -3)
+position = Vector2(-103, -26)
 texture = ExtResource("21_svc76")
 
 [node name="Item27" type="Sprite2D" parent="Node2D" index="4"]
-position = Vector2(-14, 34)
+position = Vector2(-34, -4)
 texture = ExtResource("22_7bbkr")
 
 [node name="Item29" type="Sprite2D" parent="Node2D" index="5"]
-position = Vector2(10, -75)
+position = Vector2(-89, -56)
 texture = ExtResource("23_kydek")
 
 [node name="Item32" type="Sprite2D" parent="Node2D" index="6"]
@@ -421,7 +423,8 @@ position = Vector2(-59, -61)
 texture = ExtResource("25_fsrqa")
 
 [node name="Item19" type="Sprite2D" parent="Node2D" index="7"]
-position = Vector2(56, -14)
+z_index = 4
+position = Vector2(-15, 8)
 texture = ExtResource("26_bae0v")
 
 [node name="Item15" type="Sprite2D" parent="Node2D" index="8"]
@@ -437,91 +440,87 @@ position = Vector2(-353, -170)
 texture = ExtResource("29_4dx8t")
 
 [node name="Item23" type="Sprite2D" parent="Node2D" index="11"]
-position = Vector2(11.5, -56.5)
+position = Vector2(-49, -64)
 texture = ExtResource("30_vfhiv")
 
-[node name="Item03" type="Sprite2D" parent="Node2D" index="12"]
-position = Vector2(243, -274)
-texture = ExtResource("36_knh8x")
-
-[node name="Item-11" type="Sprite2D" parent="Node2D" index="13"]
+[node name="Item-11" type="Sprite2D" parent="Node2D" index="12"]
 z_index = -3
 position = Vector2(-730, -336)
 scale = Vector2(1.73958, 1.73958)
 texture = ExtResource("39_w3n1m")
 
-[node name="Item-19" type="Sprite2D" parent="Node2D" index="14"]
+[node name="Item-19" type="Sprite2D" parent="Node2D" index="13"]
 position = Vector2(-343, -434)
 texture = ExtResource("41_dhny5")
 
-[node name="Item-08" type="Sprite2D" parent="Node2D" index="15"]
+[node name="Item-08" type="Sprite2D" parent="Node2D" index="14"]
 position = Vector2(-183, -254)
 texture = ExtResource("41_w8uos")
 
-[node name="Item01" type="Sprite2D" parent="Node2D" index="16"]
+[node name="Item01" type="Sprite2D" parent="Node2D" index="15"]
 visible = false
 z_index = -1
 position = Vector2(-1, -97)
 texture = ExtResource("37_5rb67")
 
-[node name="Item-09" type="Sprite2D" parent="Node2D" index="17"]
+[node name="Item-09" type="Sprite2D" parent="Node2D" index="16"]
 z_index = -1
 position = Vector2(-158, -161)
 texture = ExtResource("43_x1gko")
 
-[node name="Item-14" type="Sprite2D" parent="Node2D" index="18"]
+[node name="Item-14" type="Sprite2D" parent="Node2D" index="17"]
 position = Vector2(-209, -120)
 texture = ExtResource("44_yhrf0")
 
-[node name="Item-15" type="Sprite2D" parent="Node2D" index="19"]
+[node name="Item-15" type="Sprite2D" parent="Node2D" index="18"]
 position = Vector2(-458, -324)
 texture = ExtResource("45_7i1j7")
 
-[node name="Item-17" type="Sprite2D" parent="Node2D" index="20"]
+[node name="Item-17" type="Sprite2D" parent="Node2D" index="19"]
 position = Vector2(-201, -206)
 texture = ExtResource("47_mf13m")
 
-[node name="Item-20" type="Sprite2D" parent="Node2D" index="21"]
+[node name="Item-20" type="Sprite2D" parent="Node2D" index="20"]
 position = Vector2(135, -140)
 texture = ExtResource("48_2erjm")
 
-[node name="Item-21" type="Sprite2D" parent="Node2D" index="22"]
+[node name="Item-21" type="Sprite2D" parent="Node2D" index="21"]
 position = Vector2(-512, -318)
 texture = ExtResource("49_j5ytr")
 
-[node name="Item-22" type="Sprite2D" parent="Node2D" index="23"]
+[node name="Item-22" type="Sprite2D" parent="Node2D" index="22"]
 position = Vector2(-497, -318)
 texture = ExtResource("49_j5ytr")
 
-[node name="Item-23" type="Sprite2D" parent="Node2D" index="24"]
+[node name="Item-23" type="Sprite2D" parent="Node2D" index="23"]
 position = Vector2(-481, -318)
 texture = ExtResource("49_j5ytr")
 
-[node name="Item06" type="Sprite2D" parent="Node2D" index="25"]
+[node name="Item06" type="Sprite2D" parent="Node2D" index="24"]
 z_index = -1
-position = Vector2(-71, -114)
+position = Vector2(-84, -60)
 texture = ExtResource("7_42rdc")
 
-[node name="Item07" type="Sprite2D" parent="Node2D" index="26"]
-position = Vector2(-99, 10)
+[node name="Item07" type="Sprite2D" parent="Node2D" index="25"]
+position = Vector2(-106, 27)
 texture = ExtResource("49_yocgq")
 
-[node name="Item12" type="Sprite2D" parent="Node2D" index="27"]
-position = Vector2(134, -70)
+[node name="Item12" type="Sprite2D" parent="Node2D" index="26"]
+position = Vector2(-31, -78)
 texture = ExtResource("52_1n1p3")
 flip_h = true
 
-[node name="Ditan" type="Sprite2D" parent="Node2D" index="28"]
+[node name="Ditan" type="Sprite2D" parent="Node2D" index="27"]
 z_index = -4
 position = Vector2(-349, -264)
 texture = ExtResource("13_swsmq")
 
 [node name="Item09" type="Sprite2D" parent="." index="7"]
-position = Vector2(919, 384)
+position = Vector2(904, 453)
 texture = ExtResource("47_l5708")
 
 [node name="Item14" type="Sprite2D" parent="." index="8"]
-position = Vector2(262, 487)
+position = Vector2(257, 561)
 texture = ExtResource("48_sfnvr")
 
 [node name="Item02" type="Sprite2D" parent="." index="9"]
