@@ -11,8 +11,11 @@ public class Eff_TotalAmmo : EffectFragment
 
     public override void InitParam(JsonElement[] args)
     {
-        _initParam = true;
-        _value = args[0].GetInt32();
+        if (args.Length > 0)
+        {
+            _initParam = true;
+            _value = args[0].GetInt32();
+        }
     }
 
     public override void OnUse()

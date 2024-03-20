@@ -1,4 +1,6 @@
 
+using System.Text.Json;
+
 [BuffFragment("BulletSpeed", 
     "子弹速度 buff, " +
     "参数‘1’为射速增加类型: 1:具体射速, 2:百分比射速(小数), " +
@@ -8,10 +10,10 @@ public class Buff_BulletSpeed : BuffFragment
     private int _type;
     private float _value;
 
-    public override void InitParam(float arg1, float arg2)
+    public override void InitParam(JsonElement[] args)
     {
-        _type = (int)arg1;
-        _value = arg2;
+        _type = args[0].GetInt32();
+        _value = args[1].GetSingle();
     }
     
     public override void OnPickUpItem()

@@ -1,4 +1,5 @@
 
+using System.Text.Json;
 using Godot;
 
 [BuffFragment("GetGold", "计算获取的金币buff, " +
@@ -9,10 +10,10 @@ public class Buff_GetGold : BuffFragment
     private int _type;
     private float _value;
 
-    public override void InitParam(float arg1, float arg2)
+    public override void InitParam(JsonElement[] args)
     {
-        _type = (int)arg1;
-        _value = arg2;
+        _type = args[0].GetInt32();
+        _value = args[1].GetSingle();
     }
 
     public override void OnPickUpItem()

@@ -1,4 +1,6 @@
 
+using System.Text.Json;
+
 [BuffFragment("RandomBulletSpeed", 
     "子弹增加随机速度 buff, " +
     "参数‘1’为增加子弹速度下限, " +
@@ -8,10 +10,10 @@ public class Buff_RandomBulletSpeed : BuffFragment
     private float _min;
     private float _max;
     
-    public override void InitParam(float arg1, float arg2)
+    public override void InitParam(JsonElement[] args)
     {
-        _min = arg1;
-        _max = arg2;
+        _min = args[0].GetSingle();
+        _max = args[1].GetSingle();
     }
     
     public override void OnPickUpItem()

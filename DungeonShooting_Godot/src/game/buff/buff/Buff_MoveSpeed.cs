@@ -1,12 +1,14 @@
 
+using System.Text.Json;
+
 [BuffFragment("MoveSpeed", "移速 buff, 参数‘1’为移动速度值")]
 public class Buff_MoveSpeed : BuffFragment
 {
     private float _moveSpeed;
     
-    public override void InitParam(float arg1)
+    public override void InitParam(JsonElement[] args)
     {
-        _moveSpeed = arg1;
+        _moveSpeed = args[0].GetSingle();
     }
 
     public override void OnPickUpItem()

@@ -32,7 +32,14 @@ public partial class BuffProp : PropActivity
                 var buffInfo = PropFragmentRegister.BuffFragmentInfos[keyValuePair.Key];
                 var item = keyValuePair.Value;
                 var buff = (BuffFragment)AddComponent(buffInfo.Type);
-                buff.InitParam(item);
+                try
+                {
+                    buff.InitParam(item);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"初始化道具'{ActivityBase.Id}'参数时发生异常: {e.Message}\n{e.StackTrace}");
+                }
                 _buffFragment.Add(buff);
             }
         }
@@ -67,7 +74,14 @@ public partial class BuffProp : PropActivity
     {
         var fragment = AddComponent<T>();
         _buffFragment.Add(fragment);
-        fragment.InitParam(arg);
+        try
+        {
+            fragment.InitParam(arg);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"初始化道具'{ActivityBase.Id}'参数时发生异常: {e.Message}\n{e.StackTrace}");
+        }
         if (Master != null)
         {
             fragment.OnPickUpItem();

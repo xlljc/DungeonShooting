@@ -1,12 +1,14 @@
 
+using System.Text.Json;
+
 [BuffFragment("BulletPenetration", "子弹穿透次数 buff, 参数‘1’为增加的穿透次数")]
 public class Buff_BulletPenetration : BuffFragment
 {
     private int _value;
 
-    public override void InitParam(float arg1)
+    public override void InitParam(JsonElement[] args)
     {
-        _value = (int)arg1;
+        _value = args[0].GetInt32();
     }
 
     public override void OnPickUpItem()
