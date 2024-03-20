@@ -1,4 +1,5 @@
 
+using System.Text.Json;
 using Godot;
 
 [BuffFragment("BulletDamage", 
@@ -10,10 +11,10 @@ public class Buff_BulletDamage : BuffFragment
     private int _type;
     private float _value;
     
-    public override void InitParam(float arg1, float arg2)
+    public override void InitParam(JsonElement[] arg)
     {
-        _type = (int)arg1;
-        _value = arg2;
+        _type = arg[0].GetInt32();
+        _value = arg[1].GetSingle();
     }
 
     public override void OnPickUpItem()

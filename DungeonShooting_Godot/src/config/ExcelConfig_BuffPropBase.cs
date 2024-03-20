@@ -31,7 +31,7 @@ public static partial class ExcelConfig
         /// value为buff初始化参数
         /// </summary>
         [JsonInclude]
-        public Dictionary<string, float[]> Buff;
+        public Dictionary<string, System.Text.Json.JsonElement[]> Buff;
 
         /// <summary>
         /// 返回浅拷贝出的新对象

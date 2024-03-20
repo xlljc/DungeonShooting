@@ -1,4 +1,5 @@
 
+using System.Text.Json;
 using Godot;
 
 [EffectFragment("PiggyBank", "存钱罐, 使用后返还存入的金币, 参数1为返还金币的倍率(小数)")]
@@ -8,9 +9,9 @@ public class Eff_PiggyBank : EffectFragment
     //当前存入的金币数量
     private float _currValue;
     
-    public override void InitParam(float arg1)
+    public override void InitParam(JsonElement[] arg)
     {
-        _value = arg1;
+        _value = arg[0].GetSingle();
     }
 
     public override bool OnCheckUse()

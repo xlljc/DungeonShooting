@@ -1,5 +1,6 @@
 
 using System.Collections.Generic;
+using System.Text.Json;
 using Godot;
 
 [EffectFragment("AreaTrigger", 
@@ -13,9 +14,9 @@ public class Eff_AreaTrigger : EffectFragment
     
     private int _radius = 250;
 
-    public override void InitParam(float arg1)
+    public override void InitParam(JsonElement[] arg)
     {
-        _radius = (int)arg1;
+        _radius = arg[0].GetInt32();
     }
 
     public override void Ready()
