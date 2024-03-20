@@ -10,6 +10,11 @@ using Godot;
 public partial class Player : Role
 {
     /// <summary>
+    /// 当玩家第一次进入房间时调用
+    /// </summary>
+    public event Action<RoomInfo> OnFirstEnterRoomEvent;
+    
+    /// <summary>
     /// 获取当前操作的角色
     /// </summary>
     public static Player Current { get; private set; }
@@ -419,5 +424,22 @@ public partial class Player : Role
     {
         base.AddGold(goldCount);
         EventManager.EmitEvent(EventEnum.OnPlayerGoldChange, RoleState.Gold);
+    }
+
+    public override void UseGold(int goldCount)
+    {
+        base.UseGold(goldCount);
+        EventManager.EmitEvent(EventEnum.OnPlayerGoldChange, RoleState.Gold);
+    }
+
+    /// <summary>
+    /// 玩家第一次进入房间时调用
+    /// </summary>
+    public virtual void OnFirstEnterRoom(RoomInfo roomInfo)
+    {
+        if (OnFirstEnterRoomEvent != null)
+        {
+            OnFirstEnterRoomEvent(roomInfo);
+        }
     }
 }

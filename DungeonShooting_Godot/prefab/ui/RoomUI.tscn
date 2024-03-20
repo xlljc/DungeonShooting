@@ -87,7 +87,6 @@ grow_vertical = 2
 texture = ExtResource("2_ruc0p")
 
 [node name="InteractiveIcon" type="TextureRect" parent="InteractiveTipBar"]
-visible = false
 layout_mode = 0
 offset_top = -30.0
 offset_bottom = -30.0

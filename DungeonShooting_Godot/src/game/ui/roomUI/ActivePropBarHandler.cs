@@ -51,7 +51,7 @@ public class ActivePropBarHandler
             }
             else
             {
-                _shaderMaterial.SetShaderParameter("schedule", 0.6f);
+                _shaderMaterial.SetShaderParameter("schedule", 0.8f);
             }
             
             //冷却

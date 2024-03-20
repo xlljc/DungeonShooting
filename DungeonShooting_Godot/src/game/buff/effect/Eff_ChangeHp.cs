@@ -1,8 +1,8 @@
 
 using System.Text.Json;
 
-[EffectFragment("Hp", "修改血量, 参数1为血量变化的具体值")]
-public class Eff_Hp : EffectFragment
+[EffectFragment("ChangeHp", "修改血量, 参数1为血量变化的具体值")]
+public class Eff_ChangeHp : EffectFragment
 {
     private int _value;
 

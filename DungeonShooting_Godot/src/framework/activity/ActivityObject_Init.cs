@@ -259,6 +259,21 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_prop5003 = "prop5003";
         /// <summary>
+        /// 名称: 魔术棒 <br/>
+        /// 简介: 随机选择房间内的一个手持武器的敌人, 交换你们手中的武器
+        /// </summary>
+        public const string Id_prop5004 = "prop5004";
+        /// <summary>
+        /// 名称: 便携式供血器 <br/>
+        /// 简介: 使用金币换取血量
+        /// </summary>
+        public const string Id_prop5005 = "prop5005";
+        /// <summary>
+        /// 名称: 便携式献血器 <br/>
+        /// 简介: 使用血量换取金币
+        /// </summary>
+        public const string Id_prop5006 = "prop5006";
+        /// <summary>
         /// 名称: 木质宝箱 <br/>
         /// 简介: 木质宝箱
         /// </summary>
