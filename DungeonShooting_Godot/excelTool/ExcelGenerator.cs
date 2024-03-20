@@ -707,7 +707,16 @@ public static class ExcelGenerator
             var tempStr = str.Substring(1, str.Length - 2);
             var typeData = ConvertToType(tempStr, depth + 1);
             var typeStr = typeData.TypeStr + "[]";
-            var typeName = typeData.TypeName + "[]";
+            string typeName;
+            var index = typeData.TypeName.IndexOf(',');
+            if (index < 0)
+            {
+                typeName = typeData.TypeName + "[]";
+            }
+            else
+            {
+                typeName = typeData.TypeName.Substring(0, index) + "[]" + typeData.TypeName.Substring(index);
+            }
 
             if (typeData.IsRefExcel) //引用过其他表
             {
@@ -724,12 +733,13 @@ public static class ExcelGenerator
     {
         switch (typeName)
         {
+            case "object": return  typeof(JsonElement).FullName;
             case "boolean": return "bool";
-            case "vector2": return "SerializeVector2";
-            case "vector3": return "SerializeVector3";
-            case "color": return "SerializeColor";
-            case "activityType": return "ActivityType";
-            case "activityQuality": return "ActivityQuality";
+            case "vector2": return typeof(SerializeVector2).FullName;
+            case "vector3": return typeof(SerializeVector3).FullName;
+            case "color": return typeof(SerializeColor).FullName;
+            case "activityType": return typeof(ActivityType).FullName;
+            case "activityQuality": return typeof(ActivityQuality).FullName;
         }
 
         return typeName;
@@ -739,24 +749,25 @@ public static class ExcelGenerator
     {
         switch (typeName)
         {
+            case "object":return typeof(JsonElement).AssemblyQualifiedName;
             case "bool":
-            case "boolean": return typeof(bool).FullName;
-            case "byte": return typeof(byte).FullName;
-            case "sbyte": return typeof(sbyte).FullName;
-            case "short": return typeof(short).FullName;
-            case "ushort": return typeof(ushort).FullName;
-            case "int": return typeof(int).FullName;
-            case "uint": return typeof(uint).FullName;
-            case "long": return typeof(long).FullName;
-            case "ulong": return typeof(ulong).FullName;
-            case "string": return typeof(string).FullName;
-            case "float": return typeof(float).FullName;
-            case "double": return typeof(double).FullName;
-            case "vector2": return "SerializeVector2";
-            case "vector3": return "SerializeVector3";
-            case "color": return "SerializeColor";
-            case "activityType": return "ActivityType";
-            case "activityQuality": return "ActivityQuality";
+            case "boolean": return typeof(bool).AssemblyQualifiedName;
+            case "byte": return typeof(byte).AssemblyQualifiedName;
+            case "sbyte": return typeof(sbyte).AssemblyQualifiedName;
+            case "short": return typeof(short).AssemblyQualifiedName;
+            case "ushort": return typeof(ushort).AssemblyQualifiedName;
+            case "int": return typeof(int).AssemblyQualifiedName;
+            case "uint": return typeof(uint).AssemblyQualifiedName;
+            case "long": return typeof(long).AssemblyQualifiedName;
+            case "ulong": return typeof(ulong).AssemblyQualifiedName;
+            case "string": return typeof(string).AssemblyQualifiedName;
+            case "float": return typeof(float).AssemblyQualifiedName;
+            case "double": return typeof(double).AssemblyQualifiedName;
+            case "vector2": return typeof(SerializeVector2).AssemblyQualifiedName;
+            case "vector3": return typeof(SerializeVector3).AssemblyQualifiedName;
+            case "color": return typeof(SerializeColor).AssemblyQualifiedName;
+            case "activityType": return typeof(ActivityType).AssemblyQualifiedName;
+            case "activityQuality": return typeof(ActivityQuality).AssemblyQualifiedName;
         }
 
         return typeName;
