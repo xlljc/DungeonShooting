@@ -1,8 +1,9 @@
 [gd_scene load_steps=24 format=3 uid="uid://dqeph6v1y3ycm"]
 
 [ext_resource type="PackedScene" uid="uid://c7i2q4mx5qp2h" path="res://prefab/currency/GoldTemplate.tscn" id="1_t3bsk"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_r5r64"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_r5r64"]
 [ext_resource type="Texture2D" uid="uid://bfpcqj2x8t2os" path="res://resource/sprite/currency/Gold_5.png" id="3_rf7nc"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_2tpx1"]
 resource_local_to_scene = true

@@ -1,8 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://c1fx7c1jwil26"]
 
 [ext_resource type="Script" path="res://src/game/activity/bullet/normal/TrailBullet.cs" id="1_b8pov"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_iolc6"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_iolc6"]
 [ext_resource type="SpriteFrames" uid="uid://dx4t45bq8ehhq" path="res://resource/spriteFrames/bullet/Bullet0006.tres" id="3_v2y7a"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w5w0i"]
 resource_local_to_scene = true

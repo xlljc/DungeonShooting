@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://dwstu11dix0nq" path="res://resource/sprite/item/hall_b/item-30.png" id="12_agfji"]
 [ext_resource type="Texture2D" uid="uid://idax7j3m365m" path="res://resource/sprite/item/hall_b/item-010.png" id="13_swsmq"]
 [ext_resource type="Texture2D" uid="uid://d08oi1tvpcd3p" path="res://resource/sprite/item/hall_b/item-29.png" id="13_unnpl"]
-[ext_resource type="Shader" path="res://resource/material/GodRays.gdshader" id="14_8vfgi"]
+[ext_resource type="Shader" path="res://resource/shader/GodRays.gdshader" id="14_8vfgi"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="15_1xqxd"]
 [ext_resource type="Texture2D" uid="uid://iqj44lyknjr2" path="res://resource/sprite/item/hall_a/Slice_04.png" id="15_h7524"]
 [ext_resource type="Texture2D" uid="uid://bm8xcx73s83ku" path="res://resource/sprite/item/hall_a/Slice_47.png" id="16_xj0e1"]
@@ -48,6 +48,7 @@
 [ext_resource type="Texture2D" uid="uid://w3uubg6lwsjl" path="res://resource/sprite/item/hall_b/item-21.png" id="49_j5ytr"]
 [ext_resource type="Texture2D" uid="uid://ms8v1g1nhqv3" path="res://resource/sprite/item/hall_c/item _07.png" id="49_yocgq"]
 [ext_resource type="Texture2D" uid="uid://rrxkyras3kdw" path="res://resource/sprite/item/hall_c/item _12.png" id="52_1n1p3"]
+
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ru8u4"]
 size = Vector2(19, 10)

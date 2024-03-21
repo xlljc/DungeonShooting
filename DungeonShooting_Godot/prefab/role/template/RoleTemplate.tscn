@@ -1,9 +1,10 @@
 [gd_scene load_steps=9 format=3 uid="uid://cyrcv2jdgr8cf"]
 
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1_xk5yk"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="1_xk5yk"]
 [ext_resource type="Script" path="res://src/game/activity/role/MountRotation.cs" id="2_5ddpw"]
 [ext_resource type="Script" path="res://src/framework/activity/hurt/HurtArea.cs" id="2_8jnvr"]
 [ext_resource type="SpriteFrames" uid="uid://c8h5svp76h3kw" path="res://resource/spriteFrames/role/Role_tip.tres" id="3_bo78w"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yif6x"]
 resource_local_to_scene = true

@@ -2,10 +2,11 @@
 
 [ext_resource type="Script" path="res://src/test/TestNewTerrain.cs" id="1_68mbo"]
 [ext_resource type="PackedScene" uid="uid://cxhrcytrx0kcf" path="res://prefab/role/Role0001.tscn" id="3_bo13a"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="4_iy0ux"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="4_iy0ux"]
 [ext_resource type="Texture2D" uid="uid://bda63puujv425" path="res://resource/sprite/role/common/Role_query.png" id="5_rv0km"]
-[ext_resource type="Shader" path="res://resource/material/GodRays.gdshader" id="6_bcjt6"]
+[ext_resource type="Shader" path="res://resource/shader/GodRays.gdshader" id="6_bcjt6"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="7_34lsg"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7va3f"]
 resource_local_to_scene = true

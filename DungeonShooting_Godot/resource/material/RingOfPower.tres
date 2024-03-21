@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://civgek3sgwh82"]
+
+[ext_resource type="Shader" path="res://resource/shader/RingOfPower.gdshader" id="1_skd47"]
+
+[resource]
+shader = ExtResource("1_skd47")
+shader_parameter/radius = 0.58
+shader_parameter/thickness = 0.2
+shader_parameter/color = Color(0.9, 0.4, 0.1, 1)
+shader_parameter/brightness = 5.0
+shader_parameter/angular_speed = 2.5
+shader_parameter/radial_speed = 1.4
+shader_parameter/alpha = 0.5

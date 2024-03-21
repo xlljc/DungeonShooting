@@ -2,12 +2,13 @@
 
 [ext_resource type="PackedScene" uid="uid://dbrig6dq441wo" path="res://prefab/role/template/EnemyTemplate.tscn" id="1_2vqwe"]
 [ext_resource type="Script" path="res://src/game/activity/role/enemy/Enemy.cs" id="2_0pcq3"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_x8agd"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="3_x8agd"]
 [ext_resource type="SpriteFrames" uid="uid://cnctpyrn02rhd" path="res://resource/spriteFrames/role/Enemy0001.tres" id="4_qv8w5"]
 [ext_resource type="Animation" uid="uid://b4mgiysicdk2b" path="res://resource/animation/enemy/Enemy_reset.res" id="5_ffnft"]
 [ext_resource type="Animation" uid="uid://gvkkxspcdwrp" path="res://resource/animation/enemy/Enemy_astonished.res" id="5_jyt15"]
 [ext_resource type="Animation" uid="uid://16rxpnsgj5tl" path="res://resource/animation/enemy/Enemy_notify.res" id="6_x8gmo"]
 [ext_resource type="Animation" uid="uid://cmje7jsgrhgmx" path="res://resource/animation/enemy/Enemy_query.res" id="7_e37p2"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3nkur"]
 resource_local_to_scene = true

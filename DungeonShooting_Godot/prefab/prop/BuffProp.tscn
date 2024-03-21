@@ -1,7 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://dfpic4nubu7cf"]
 
 [ext_resource type="Script" path="res://src/game/activity/prop/BuffProp.cs" id="1_nlcp6"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_imicp"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_imicp"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mrkt4"]
 resource_local_to_scene = true
