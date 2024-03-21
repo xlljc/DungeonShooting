@@ -17,7 +17,7 @@ Particles2D = []
 shape = SubResource("RectangleShape2D_l4vuk")
 
 [node name="LineSprite" type="Sprite2D" parent="."]
-modulate = Color(1.5, 1.5, 1.5, 1)
+modulate = Color(1.6, 1.6, 1.6, 1)
 position = Vector2(0, 1.19209e-07)
 texture = ExtResource("2_uqalj")
 centered = false

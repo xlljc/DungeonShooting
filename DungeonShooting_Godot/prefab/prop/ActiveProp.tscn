@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://src/game/activity/prop/ActiveProp.cs" id="1_n541c"]
 [ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_75di4"]
 
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mrkt4"]
 resource_local_to_scene = true
 shader = ExtResource("2_75di4")
