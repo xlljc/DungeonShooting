@@ -151,7 +151,12 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             {
                 item.InitWaveList();
             }
-
+            
+            //检测是否创建特殊标记
+            if (!item.CheckSpecialMark(EditorTileMapManager.SelectRoom.RoomInfo.RoomType))
+            {
+                EventManager.EmitEvent(EventEnum.OnTileMapDirty);
+            }
             optionButton.AddItem($"{item.Name} ({item.Weight})");
         }
         

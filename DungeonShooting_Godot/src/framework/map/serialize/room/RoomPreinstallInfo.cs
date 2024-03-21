@@ -53,16 +53,7 @@ public class RoomPreinstallInfo
     /// </summary>
     public void InitSpecialMark(DungeonRoomType roomType)
     {
-        var type = SpecialMarkType.Normal;
-        if (roomType == DungeonRoomType.Inlet) //初始房间
-        {
-            type = SpecialMarkType.BirthPoint;
-        }
-        else if (roomType == DungeonRoomType.Outlet) //结束房间
-        {
-            type = SpecialMarkType.OutPoint;
-        }
-
+        var type = GetRoomSpecialMark(roomType);
         if (type != SpecialMarkType.Normal)
         {
             var preloading = WaveList[0];
@@ -73,5 +64,57 @@ public class RoomPreinstallInfo
             markInfo.MarkList = new List<MarkInfoItem>();
             preloading.Add(markInfo);
         }
+    }
+
+    /// <summary>
+    /// 检查是否创建了特殊标记, 如果没有, 则会自动创建并返回false
+    /// </summary>
+    public bool CheckSpecialMark(DungeonRoomType roomType)
+    {
+        var type = GetRoomSpecialMark(roomType);
+        if (type == SpecialMarkType.Normal)
+        {
+            return true;
+        }
+
+        if (WaveList.Count> 0)
+        {
+            var markInfos = WaveList[0];
+            foreach (var markInfo in markInfos)
+            {
+                if (markInfo.SpecialMarkType == type)
+                {
+                    return true;
+                }
+            }
+        }
+        
+        InitSpecialMark(roomType);
+        return false;
+    }
+    
+    /// <summary>
+    /// 获取指定类型房间中应该存在的特殊标记数据类型
+    /// </summary>
+    public SpecialMarkType GetRoomSpecialMark(DungeonRoomType roomType)
+    {
+        if (roomType == DungeonRoomType.Inlet) //初始房间
+        {
+            return SpecialMarkType.BirthPoint;
+        }
+        else if (roomType == DungeonRoomType.Outlet) //结束房间
+        {
+            return SpecialMarkType.OutPoint;
+        }
+        else if (roomType == DungeonRoomType.Shop) //商店房间
+        {
+            return SpecialMarkType.ShopBoss;
+        }
+        else if (roomType == DungeonRoomType.Reward) //奖励房间
+        {
+            return SpecialMarkType.Box;
+        }
+        
+        return SpecialMarkType.Normal;
     }
 }

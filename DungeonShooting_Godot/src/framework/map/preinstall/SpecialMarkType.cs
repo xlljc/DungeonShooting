@@ -16,4 +16,12 @@ public enum SpecialMarkType
     /// 地牢出口
     /// </summary>
     OutPoint,
+    /// <summary>
+    /// 宝箱房刷新点
+    /// </summary>
+    Box,
+    /// <summary>
+    /// 商店房商店老板刷新点
+    /// </summary>
+    ShopBoss,
 }

@@ -10,6 +10,9 @@ public static class EditorPlayManager
 
     private static DungeonConfig _config;
 
+    /// <summary>
+    /// 地牢编辑器中的播放按钮
+    /// </summary>
     public static void Play(UiBase prevUi)
     {
         if (IsPlay)
