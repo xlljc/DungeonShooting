@@ -2,7 +2,11 @@
 using System.Text.Json;
 using Godot;
 
-[EffectFragment("PiggyBank", "存钱罐, 使用后返还存入的金币, 参数1为返还金币的倍率(小数)")]
+[EffectFragment(
+    "PiggyBank",
+    "存钱罐, 使用后返还存入的金币",
+    Arg1 = "(float)返还金币的倍率, 范围0-1"
+)]
 public class Eff_PiggyBank : EffectFragment
 {
     private float _value;

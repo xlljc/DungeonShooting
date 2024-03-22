@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Text.Json;
 
-[BuffFragment("MaxHp", "血量上限 buff, 参数‘1’为血量上限值")]
+[BuffFragment(
+    "MaxHp",
+    "增加血量上限 buff",
+    Arg1 = "(int)增加血量上限值"
+)]
 public class Buff_MaxHp : BuffFragment
 {
     private List<ulong> _cacheId = new List<ulong>();

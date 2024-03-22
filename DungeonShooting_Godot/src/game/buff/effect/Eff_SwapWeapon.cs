@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using System.Text.Json;
 
-[EffectFragment("SwapWeapon", "随机选择房间内的一个手持武器的敌人, 交换你们手中的武器, 无参数")]
+[EffectFragment(
+    "SwapWeapon",
+    "随机选择房间内的一个手持武器的敌人, 交换你们手中的武器"
+)]
 public class Eff_SwapWeapon : EffectFragment
 {
     public override void InitParam(JsonElement[] args)

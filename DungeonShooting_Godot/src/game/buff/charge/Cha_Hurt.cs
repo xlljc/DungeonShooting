@@ -1,8 +1,11 @@
 
 using System.Text.Json;
 
-[ChargeFragment("Hurt", 
-    "造成伤害充能, 参数1为充满能量需要造成的伤害值")]
+[ChargeFragment(
+    "Hurt", 
+    "造成伤害充能",
+    Arg1 = "(int)充满能量需要造成的伤害值"
+)]
 public class Cha_Hurt : ChargeFragment
 {
     private int _value = 100;

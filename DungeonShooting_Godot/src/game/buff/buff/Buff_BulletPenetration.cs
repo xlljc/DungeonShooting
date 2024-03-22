@@ -1,7 +1,11 @@
 
 using System.Text.Json;
 
-[BuffFragment("BulletPenetration", "子弹穿透次数 buff, 参数‘1’为增加的穿透次数")]
+[BuffFragment(
+    "BulletPenetration",
+    "子弹穿透次数 buff",
+    Arg1 = "(int)子弹增加的穿透次数"
+)]
 public class Buff_BulletPenetration : BuffFragment
 {
     private int _value;

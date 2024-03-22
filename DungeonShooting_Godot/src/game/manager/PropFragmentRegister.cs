@@ -47,14 +47,14 @@ public class PropFragmentRegister
             var attribute = (BuffFragmentAttribute)type.GetCustomAttribute(typeof(BuffFragmentAttribute), false);
             if (attribute != null)
             {
-                if (BuffFragmentInfos.ContainsKey(attribute.BuffName))
+                if (BuffFragmentInfos.ContainsKey(attribute.Name))
                 {
-                    GD.PrintErr($"Buff '{attribute.BuffName}' 重名!");
+                    GD.PrintErr($"Buff '{attribute.Name}' 重名!");
                     continue;
                 }
 
-                var buffInfo = new PropFragmentInfo(attribute.BuffName, attribute.Description, type);
-                BuffFragmentInfos.Add(attribute.BuffName, buffInfo);
+                var buffInfo = new PropFragmentInfo(attribute, type);
+                BuffFragmentInfos.Add(attribute.Name, buffInfo);
             }
         }
         //包含[ConditionAttribute]特性
@@ -65,14 +65,14 @@ public class PropFragmentRegister
             var attribute = (ConditionFragmentAttribute)type.GetCustomAttribute(typeof(ConditionFragmentAttribute), false);
             if (attribute != null)
             {
-                if (ConditionFragmentInfos.ContainsKey(attribute.ConditionName))
+                if (ConditionFragmentInfos.ContainsKey(attribute.Name))
                 {
-                    GD.PrintErr($"Condition '{attribute.ConditionName}' 重名!");
+                    GD.PrintErr($"Condition '{attribute.Name}' 重名!");
                     continue;
                 }
 
-                var conditionInfo = new PropFragmentInfo(attribute.ConditionName, attribute.Description, type);
-                ConditionFragmentInfos.Add(attribute.ConditionName, conditionInfo);
+                var conditionInfo = new PropFragmentInfo(attribute, type);
+                ConditionFragmentInfos.Add(attribute.Name, conditionInfo);
             }
         }
         //包含[EffectAttribute]特性
@@ -83,14 +83,14 @@ public class PropFragmentRegister
             var attribute = (EffectFragmentAttribute)type.GetCustomAttribute(typeof(EffectFragmentAttribute), false);
             if (attribute != null)
             {
-                if (EffectFragmentInfos.ContainsKey(attribute.EffectName))
+                if (EffectFragmentInfos.ContainsKey(attribute.Name))
                 {
-                    GD.PrintErr($"Effect '{attribute.EffectName}' 重名!");
+                    GD.PrintErr($"Effect '{attribute.Name}' 重名!");
                     continue;
                 }
 
-                var effectInfo = new PropFragmentInfo(attribute.EffectName, attribute.Description, type);
-                EffectFragmentInfos.Add(attribute.EffectName, effectInfo);
+                var effectInfo = new PropFragmentInfo(attribute, type);
+                EffectFragmentInfos.Add(attribute.Name, effectInfo);
             }
         }
         //包含[ChargeAttribute]特性
@@ -101,14 +101,14 @@ public class PropFragmentRegister
             var attribute = (ChargeFragmentAttribute)type.GetCustomAttribute(typeof(ChargeFragmentAttribute), false);
             if (attribute != null)
             {
-                if (ChargeFragmentInfos.ContainsKey(attribute.ChargeName))
+                if (ChargeFragmentInfos.ContainsKey(attribute.Name))
                 {
-                    GD.PrintErr($"Charge '{attribute.ChargeName}' 重名!");
+                    GD.PrintErr($"Charge '{attribute.Name}' 重名!");
                     continue;
                 }
 
-                var chargeInfo = new PropFragmentInfo(attribute.ChargeName, attribute.Description, type);
-                ChargeFragmentInfos.Add(attribute.ChargeName, chargeInfo);
+                var chargeInfo = new PropFragmentInfo(attribute, type);
+                ChargeFragmentInfos.Add(attribute.Name, chargeInfo);
             }
         }
     }

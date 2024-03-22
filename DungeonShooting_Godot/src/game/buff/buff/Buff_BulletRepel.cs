@@ -2,10 +2,12 @@
 using System.Text.Json;
 using Godot;
 
-[BuffFragment("BulletRepel", 
-    "子弹击退 buff, " +
-    "参数‘1’为击退增加类型: 1:具体击退值, 2:百分比击退值(小数), " +
-    "参数‘2’为子弹增加的击退值")]
+[BuffFragment(
+    "BulletRepel", 
+    "子弹击退 buff, ",
+    Arg1 = "(int)击退增加类型: 1:具体击退值, 2:百分比击退值",
+    Arg2 = "(float)子弹增加的击退值"
+)]
 public class Buff_BulletRepel : BuffFragment
 {
     private int _type;

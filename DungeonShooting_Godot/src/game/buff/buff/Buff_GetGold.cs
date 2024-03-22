@@ -2,9 +2,12 @@
 using System.Text.Json;
 using Godot;
 
-[BuffFragment("GetGold", "计算获取的金币buff, " +
-                         "参数‘1’为金币数量添加类型, 1: 具体数量, 2:百分比(小数), " +
-                         "参数‘2’为增加金币的数量值")]
+[BuffFragment(
+    "GetGold",
+    "计算获取的金币buff, ",
+    Arg1 = "(int)金币数量添加类型, 1: 具体数量, 2:百分比",
+    Arg2 = "(float)增加金币的数量值"
+)]
 public class Buff_GetGold : BuffFragment
 {
     private int _type;

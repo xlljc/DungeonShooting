@@ -1,10 +1,12 @@
 
 using System.Text.Json;
 
-[ConditionFragment("Gold", 
-    "判断金币数量, " +
-    "参数1为判断条件符号, 分别为: >, <, =, >=, <=; " +
-    "参数2为比较的值")]
+[ConditionFragment(
+    "Gold", 
+    "判断金币数量, ",
+    Arg1 = "(string)判断条件符号, 分别为: >, <, =, >=, <=",
+    Arg2 = "(int)比较的值"
+)]
 public class Cond_Gold : ConditionFragment
 {
     private string _symbol;
