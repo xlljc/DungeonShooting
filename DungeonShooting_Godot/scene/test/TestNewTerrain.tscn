@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://iwm27vpirfef"]
+[gd_scene load_steps=9 format=3 uid="uid://iwm27vpirfef"]
 
 [ext_resource type="Script" path="res://src/test/TestNewTerrain.cs" id="1_68mbo"]
 [ext_resource type="PackedScene" uid="uid://cxhrcytrx0kcf" path="res://prefab/role/Role0001.tscn" id="3_bo13a"]

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="枪火地牢"
-run/main_scene="res://scene/Main.tscn"
+run/main_scene="res://scene/test/TestLobby.tscn"
 config/features=PackedStringArray("4.2", "C#")
 config/icon="res://icon.png"
 
@@ -31,7 +31,7 @@ project/assembly_name="DungeonShooting"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/dungeonShooting_plugin/plugin.cfg")
+enabled=PackedStringArray()
 
 [file_customization]
 
