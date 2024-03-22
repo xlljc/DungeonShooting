@@ -1,9 +1,11 @@
 using System.Text.Json;
 
-[ConditionFragment("Hp", 
-    "判断血量, " +
-    "参数1为判断条件符号, 分别为: >, <, =, >=, <=; " +
-    "参数2为比较的值")]
+[ConditionFragment(
+    "Hp", 
+    "判断血量, ",
+    Arg1 = "(string)判断条件符号, 分别为: >, <, =, >=, <=",
+    Arg2 = "(int)比较的值"
+)]
 public class Cond_Hp : ConditionFragment
 {
     private string _symbol;

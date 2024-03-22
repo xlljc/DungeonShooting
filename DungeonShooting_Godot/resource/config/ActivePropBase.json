@@ -6,7 +6,7 @@
     "Buff": null,
     "Condition": {
       "HpFull": [
-        0
+        true
       ]
     },
     "Effect": {
@@ -27,7 +27,7 @@
     "Buff": null,
     "Condition": {
       "AmmoFull": [
-        0
+        true
       ]
     },
     "Effect": {
@@ -103,7 +103,7 @@
     "Buff": null,
     "Condition": {
       "HpFull": [
-        0
+        true
       ],
       "Gold": [
         "\u003E=",

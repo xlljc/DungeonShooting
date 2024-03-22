@@ -2,7 +2,11 @@
 
 using System.Text.Json;
 
-[EffectFragment("UseGold", "使用金币, 参数1为金币的值")]
+[EffectFragment(
+    "UseGold",
+    "使用金币",
+    Arg1 = "(int)消耗金币的值"
+)]
 public class Eff_UseGold : EffectFragment
 {
     private int _value;

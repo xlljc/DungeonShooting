@@ -1,10 +1,12 @@
 
 using System.Text.Json;
 
-[BuffFragment("RandomBulletSpeed", 
-    "子弹增加随机速度 buff, " +
-    "参数‘1’为增加子弹速度下限, " +
-    "参数‘2’为增加子弹速度上限, 会从上限和下限随机抽取值")]
+[BuffFragment(
+    "RandomBulletSpeed", 
+    "子弹增加随机速度 buff, 会从上限和下限随机抽取值",
+    Arg1 = "(float)增加子弹速度下限",
+    Arg2 = "(float)增加子弹速度上限"
+)]
 public class Buff_RandomBulletSpeed : BuffFragment
 {
     private float _min;

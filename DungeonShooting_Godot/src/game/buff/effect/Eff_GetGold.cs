@@ -3,7 +3,11 @@
 using System.Text.Json;
 using Godot;
 
-[EffectFragment("GetGold", "获得金币, 参数1为金币的值")]
+[EffectFragment(
+    "GetGold",
+    "获得金币",
+    Arg1 = "(int)金币的值"
+)]
 public class Eff_GetGold : EffectFragment
 {
     private int _value;

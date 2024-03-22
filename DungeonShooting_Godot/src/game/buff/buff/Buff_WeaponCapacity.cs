@@ -1,7 +1,11 @@
 
 using System.Text.Json;
 
-[BuffFragment("WeaponCapacity", "武器背包容量 buff, 参数‘1’为武器背包增加的容量")]
+[BuffFragment(
+    "WeaponCapacity",
+    "武器背包容量 buff",
+    Arg1 = "(int)武器背包增加的容量"
+)]
 public class Buff_WeaponCapacity : BuffFragment
 {
     private int _value;

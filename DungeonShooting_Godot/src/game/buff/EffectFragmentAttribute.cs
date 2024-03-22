@@ -1,21 +1,12 @@
 using System;
 
+/// <summary>
+/// 主动效果片段
+/// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public class EffectFragmentAttribute : Attribute
+public class EffectFragmentAttribute : FragmentAttribute
 {
-    /// <summary>
-    /// 效果名称
-    /// </summary>
-    public string EffectName { get; set; }
-    
-    /// <summary>
-    /// 描述
-    /// </summary>
-    public string Description { get; set; }
-    
-    public EffectFragmentAttribute(string effectName, string description)
+    public EffectFragmentAttribute(string name, string description) : base(name, description)
     {
-        EffectName = effectName;
-        Description = description;
     }
 }

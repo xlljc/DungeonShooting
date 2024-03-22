@@ -1,7 +1,11 @@
 
 using System.Text.Json;
 
-[BuffFragment("ShieldRecoveryTime", "单格护盾减少的恢复时间, 参数‘1’单位: 秒")]
+[BuffFragment(
+    "ShieldRecoveryTime",
+    "单格护盾减少的恢复时间, 单位: 秒",
+    Arg1 = "(float)单格护盾减少的恢复时间"
+)]
 public class Buff_ShieldRecoveryTime : BuffFragment
 {
     private float _time;

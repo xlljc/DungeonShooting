@@ -1,10 +1,12 @@
 
 using System.Text.Json;
 
-[BuffFragment("BulletSpeed", 
-    "子弹速度 buff, " +
-    "参数‘1’为射速增加类型: 1:具体射速, 2:百分比射速(小数), " +
-    "参数‘2’为子弹增加的射速值")]
+[BuffFragment(
+    "BulletSpeed", 
+    "子弹速度 buff, ",
+    Arg1 = "(int)子弹速度增加类型: 1:具体速度, 2:百分比速度",
+    Arg2 = "(float)子弹增加的速度值"
+)]
 public class Buff_BulletSpeed : BuffFragment
 {
     private int _type;

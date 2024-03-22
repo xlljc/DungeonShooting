@@ -2,10 +2,12 @@
 using System.Text.Json;
 using Godot;
 
-[BuffFragment("BulletDamage", 
-    "提升子弹伤害buff, " +
-    "参数‘1’为伤害增加类型: 1:具体伤害, 2:百分比伤害(小数), " +
-    "参数‘2’为增益伤害值")]
+[BuffFragment(
+    "BulletDamage", 
+    "提升子弹伤害buff, ",
+    Arg1 = "(int)伤害增加类型: 1:具体伤害, 2:百分比伤害",
+    Arg2 = "(float)增益伤害值"
+)]
 public class Buff_BulletDamage : BuffFragment
 {
     private int _type;
