@@ -53,7 +53,7 @@ public class PropFragmentRegister
                     continue;
                 }
 
-                var buffInfo = new PropFragmentInfo(attribute.Name, attribute.Description, type);
+                var buffInfo = new PropFragmentInfo(attribute, type);
                 BuffFragmentInfos.Add(attribute.Name, buffInfo);
             }
         }
@@ -71,7 +71,7 @@ public class PropFragmentRegister
                     continue;
                 }
 
-                var conditionInfo = new PropFragmentInfo(attribute.Name, attribute.Description, type);
+                var conditionInfo = new PropFragmentInfo(attribute, type);
                 ConditionFragmentInfos.Add(attribute.Name, conditionInfo);
             }
         }
@@ -89,7 +89,7 @@ public class PropFragmentRegister
                     continue;
                 }
 
-                var effectInfo = new PropFragmentInfo(attribute.Name, attribute.Description, type);
+                var effectInfo = new PropFragmentInfo(attribute, type);
                 EffectFragmentInfos.Add(attribute.Name, effectInfo);
             }
         }
@@ -107,7 +107,7 @@ public class PropFragmentRegister
                     continue;
                 }
 
-                var chargeInfo = new PropFragmentInfo(attribute.Name, attribute.Description, type);
+                var chargeInfo = new PropFragmentInfo(attribute, type);
                 ChargeFragmentInfos.Add(attribute.Name, chargeInfo);
             }
         }
