@@ -112,7 +112,7 @@ public class RoomPreinstallInfo
         }
         else if (roomType == DungeonRoomType.Reward) //奖励房间
         {
-            return SpecialMarkType.Box;
+            return SpecialMarkType.Treasure;
         }
         
         return SpecialMarkType.Normal;

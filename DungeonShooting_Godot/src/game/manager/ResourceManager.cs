@@ -186,7 +186,7 @@ public static class ResourceManager
             {
                 return LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_BirthMark_png);
             }
-            else if (markInfo.SpecialMarkType == SpecialMarkType.Box) //宝箱
+            else if (markInfo.SpecialMarkType == SpecialMarkType.Treasure) //宝箱
             {
                 return LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_BirthMark_png);
             }

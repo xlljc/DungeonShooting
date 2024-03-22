@@ -110,7 +110,7 @@ public static class PreinstallMarkManager
         {
             return "商店老板标记";
         }
-        else if (type == SpecialMarkType.Box)
+        else if (type == SpecialMarkType.Treasure)
         {
             return "奖励箱子标记";
         }

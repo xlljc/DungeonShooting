@@ -113,9 +113,9 @@ public class RoomPreinstall : IDestroy
                 {
                     
                 }
-                else if (markInfo.SpecialMarkType == SpecialMarkType.Box) //奖励宝箱标记
+                else if (markInfo.SpecialMarkType == SpecialMarkType.Treasure) //奖励宝箱标记
                 {
-                    
+                    HandlerBoxMark(world, markInfo, mark);
                 }
                 else
                 {
@@ -223,6 +223,16 @@ public class RoomPreinstall : IDestroy
 
         return false;
     }
+    
+    private void HandlerBoxMark(World world, MarkInfo markInfo, ActivityMark mark)
+    {
+        mark.Id = ActivityObject.Ids.Id_treasure_box0001;
+        mark.ActivityType = ActivityType.Treasure;
+        mark.DelayTime = 0;
+        mark.Altitude = 0;
+        mark.Attr = new Dictionary<string, string>();
+        mark.Position = RoomInfo.ToGlobalPosition(markInfo.Position.AsVector2());
+    }
 
     private void CheckHasEnemy()
     {
@@ -259,7 +269,7 @@ public class RoomPreinstall : IDestroy
             var activityMarks = WaveList[0];
             foreach (var activityMark in activityMarks)
             {
-                if (activityMark.MarkType == SpecialMarkType.Normal)
+                if (activityMark.MarkType == SpecialMarkType.Normal || activityMark.MarkType == SpecialMarkType.Treasure)
                 {
                     var activityObject = CreateItem(activityMark);
                     //初始化属性
@@ -487,6 +497,19 @@ public class RoomPreinstall : IDestroy
 
             _readyList.Clear();
         }
+    }
+    
+    /// <summary>
+    /// 获取或创建指定波数数据
+    /// </summary>
+    public List<ActivityMark> GetOrCreateWave(int waveIndex)
+    {
+        while (WaveList.Count <= waveIndex)
+        {
+            WaveList.Add(new List<ActivityMark>());
+        }
+        
+        return WaveList[waveIndex];
     }
 
     //初始化物体属性

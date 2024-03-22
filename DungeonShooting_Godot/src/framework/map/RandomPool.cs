@@ -54,10 +54,6 @@ public class RandomPool
         {
             FillBattleRoom(preinstall);
         }
-        else if (preinstall.RoomInfo.RoomType == DungeonRoomType.Reward)
-        {
-            FillRewardRoom(preinstall);
-        }
     }
 
     //填充战斗房间
@@ -76,12 +72,12 @@ public class RandomPool
         var weight = new int[] { 15, 2, 1 };
         for (var i = 0; i < count; i++)
         {
-            var tempWave = GetOrCreateWave(preinstall, World.Random.RandomRangeInt(0, 2));
+            var tempWave = preinstall.GetOrCreateWave(World.Random.RandomRangeInt(0, 2));
             var index = World.Random.RandomWeight(weight);
             var activityType = arr[index];
     
             //创建标记
-            var mark = CreateMark(activityType, i * 0.3f, preinstall.RoomInfo.ToGlobalPosition(positionArray[i]));
+            var mark = ActivityMark.CreateMark(activityType, i * 0.3f, preinstall.RoomInfo.ToGlobalPosition(positionArray[i]));
             
             if (activityType == ActivityType.Enemy) //敌人
             {
@@ -108,38 +104,5 @@ public class RandomPool
             }
             tempWave.Add(mark);
         }
-    }
-
-    //填充奖励房间
-    private void FillRewardRoom(RoomPreinstall preinstall)
-    {
-        var wave = GetOrCreateWave(preinstall, 0);
-        var mark = CreateMark(ActivityType.Treasure, 0, preinstall.GetSpecialMark(SpecialMarkType.Box).Position);
-        mark.Id = "treasure_box0001";
-        wave.Add(mark);
-    }
-    
-    private List<ActivityMark> GetOrCreateWave(RoomPreinstall preinstall,int waveIndex)
-    {
-        while (preinstall.WaveList.Count <= waveIndex)
-        {
-            preinstall.WaveList.Add(new List<ActivityMark>());
-        }
-        
-        return preinstall.WaveList[waveIndex];
-    }
-
-    //创建标记
-    private ActivityMark CreateMark(ActivityType activityType, float delayTime, Vector2 pos)
-    {
-        var mark = new ActivityMark();
-        mark.Attr = new Dictionary<string, string>();
-        mark.ActivityType = activityType;
-        mark.MarkType = SpecialMarkType.Normal;
-        mark.VerticalSpeed = 0;
-        mark.Altitude = activityType == ActivityType.Enemy ? 0 : 8;
-        mark.DelayTime = delayTime;
-        mark.Position = pos;
-        return mark;
     }
 }

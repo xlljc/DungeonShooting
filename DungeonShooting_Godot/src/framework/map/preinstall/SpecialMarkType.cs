@@ -19,7 +19,7 @@ public enum SpecialMarkType
     /// <summary>
     /// 宝箱房刷新点
     /// </summary>
-    Box,
+    Treasure,
     /// <summary>
     /// 商店房商店老板刷新点
     /// </summary>
