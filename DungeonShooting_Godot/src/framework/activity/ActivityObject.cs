@@ -2019,4 +2019,13 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
             }
         }
     }
+
+    /// <summary>
+    /// 通过标记创建时调用
+    /// </summary>
+    /// <param name="roomPreinstall">当前所在的预设</param>
+    /// <param name="activityMark">创建当前物体的标记对象</param>
+    public virtual void OnCreateWithMark(RoomPreinstall roomPreinstall, ActivityMark activityMark)
+    {
+    }
 }

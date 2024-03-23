@@ -111,11 +111,11 @@ public class RoomPreinstall : IDestroy
                 }
                 else if (markInfo.SpecialMarkType == SpecialMarkType.ShopBoss) //商店老板标记
                 {
-                    
+                    HandlerShopBossMark(world, markInfo, mark);
                 }
                 else if (markInfo.SpecialMarkType == SpecialMarkType.Treasure) //奖励宝箱标记
                 {
-                    HandlerBoxMark(world, markInfo, mark);
+                    HandlerTreasureMark(world, markInfo, mark);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ public class RoomPreinstall : IDestroy
     private static bool HandlerNormalMark(World world, MarkInfo markInfo, ActivityMark mark)
     {
         MarkInfoItem markInfoItem;
-        if (markInfo.MarkList.Count == 0)
+        if (markInfo.MarkList.Count == 0) //未配置生成的物体
         {
             return true;
         }
@@ -224,14 +224,18 @@ public class RoomPreinstall : IDestroy
         return false;
     }
     
-    private void HandlerBoxMark(World world, MarkInfo markInfo, ActivityMark mark)
+    private void HandlerShopBossMark(World world, MarkInfo markInfo, ActivityMark mark)
     {
         mark.Id = ActivityObject.Ids.Id_treasure_box0001;
         mark.ActivityType = ActivityType.Treasure;
-        mark.DelayTime = 0;
         mark.Altitude = 0;
-        mark.Attr = new Dictionary<string, string>();
-        mark.Position = RoomInfo.ToGlobalPosition(markInfo.Position.AsVector2());
+    }
+    
+    private void HandlerTreasureMark(World world, MarkInfo markInfo, ActivityMark mark)
+    {
+        mark.Id = ActivityObject.Ids.Id_treasure_box0001;
+        mark.ActivityType = ActivityType.Treasure;
+        mark.Altitude = 0;
     }
 
     private void CheckHasEnemy()
@@ -269,9 +273,15 @@ public class RoomPreinstall : IDestroy
             var activityMarks = WaveList[0];
             foreach (var activityMark in activityMarks)
             {
-                if (activityMark.MarkType == SpecialMarkType.Normal || activityMark.MarkType == SpecialMarkType.Treasure)
+                if (activityMark.MarkType == SpecialMarkType.Normal ||
+                    activityMark.MarkType == SpecialMarkType.Treasure ||
+                    activityMark.MarkType == SpecialMarkType.ShopBoss)
                 {
                     var activityObject = CreateItem(activityMark);
+                    if (activityObject == null)
+                    {
+                        continue;
+                    }
                     //初始化属性
                     InitAttr(activityObject, activityMark);
                     if (_readyList == null)
@@ -279,6 +289,7 @@ public class RoomPreinstall : IDestroy
                         _readyList = new List<PreloadData>();
                     }
                     _readyList.Add(new PreloadData(activityObject, GetDefaultLayer(activityMark)));
+                    activityObject.OnCreateWithMark(this, activityMark);
                 }
             }
         }
@@ -442,6 +453,10 @@ public class RoomPreinstall : IDestroy
     private ActivityObject CreateItem(ActivityMark activityMark)
     {
         var activityObject = ActivityObject.Create(activityMark.Id);
+        if (activityObject == null)
+        {
+            return null;
+        }
         activityObject.Position = activityMark.Position;
         activityObject.VerticalSpeed = activityMark.VerticalSpeed;
         activityObject.Altitude = activityMark.Altitude;

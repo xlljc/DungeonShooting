@@ -5,7 +5,6 @@
 [ext_resource type="Script" path="res://src/framework/activity/hurt/HurtArea.cs" id="2_8jnvr"]
 [ext_resource type="SpriteFrames" uid="uid://c8h5svp76h3kw" path="res://resource/spriteFrames/role/Role_tip.tres" id="3_bo78w"]
 
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yif6x"]
 resource_local_to_scene = true
 shader = ExtResource("1_xk5yk")
