@@ -2,12 +2,12 @@
 using System;
 using Godot;
 
-namespace EnemyState;
+namespace AiState;
 
 /// <summary>
 /// 收到其他敌人通知, 前往发现目标的位置
 /// </summary>
-public class AiLeaveForState : StateBase<Enemy, AIStateEnum>
+public class AiLeaveForState : StateBase<AiRole, AIStateEnum>
 {
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;

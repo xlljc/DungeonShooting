@@ -2,12 +2,12 @@
 using System.Linq;
 using Godot;
 
-namespace EnemyState;
+namespace AiState;
 
 /// <summary>
 /// AI 正常状态
 /// </summary>
-public class AiNormalState : StateBase<Enemy, AIStateEnum>
+public class AiNormalState : StateBase<AiRole, AIStateEnum>
 {
     //下一个运动的坐标
     private Vector2 _nextPos;

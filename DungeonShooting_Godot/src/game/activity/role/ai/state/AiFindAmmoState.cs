@@ -2,12 +2,12 @@
 using System;
 using Godot;
 
-namespace EnemyState;
+namespace AiState;
 
 /// <summary>
 /// Ai 寻找弹药, 进入该状态需要在参数中传入目标武器对象
 /// </summary>
-public class AiFindAmmoState : StateBase<Enemy, AIStateEnum>
+public class AiFindAmmoState : StateBase<AiRole, AIStateEnum>
 {
     /// <summary>
     /// 目标武器

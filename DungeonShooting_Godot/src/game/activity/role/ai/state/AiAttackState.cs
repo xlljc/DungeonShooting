@@ -1,12 +1,12 @@
 ﻿using System;
 using Godot;
 
-namespace EnemyState;
+namespace AiState;
 
 /// <summary>
 /// ai 攻击状态
 /// </summary>
-public class AiAttackState : StateBase<Enemy, AIStateEnum>
+public class AiAttackState : StateBase<AiRole, AIStateEnum>
 {
     /// <summary>
     /// 上一个状态
@@ -209,7 +209,7 @@ public class AiAttackState : StateBase<Enemy, AIStateEnum>
 
                 if (AttackState == AiAttackEnum.AttackInterval) //触发攻击完成
                 {
-                    Master.AttackTimer = weapon.Attribute.TriggerInterval + Master.EnemyRoleState.AttackInterval;
+                    Master.AttackTimer = weapon.Attribute.TriggerInterval + Master.AttackInterval;
                 }
             }
         }

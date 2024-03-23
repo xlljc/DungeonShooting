@@ -2,12 +2,12 @@
 using System;
 using Godot;
 
-namespace EnemyState;
+namespace AiState;
 
 /// <summary>
 /// 目标在视野内, 跟进目标, 如果距离在子弹有效射程内, 则开火
 /// </summary>
-public class AiFollowUpState : StateBase<Enemy, AIStateEnum>
+public class AiFollowUpState : StateBase<AiRole, AIStateEnum>
 {
     //导航目标点刷新计时器
     private float _navigationUpdateTimer = 0;
@@ -72,7 +72,7 @@ public class AiFollowUpState : StateBase<Enemy, AIStateEnum>
         }
         else
         {
-            inAttackRange = distanceSquared <= Mathf.Pow(Master.EnemyRoleState.ViewRange * 0.7f, 2);
+            inAttackRange = distanceSquared <= Mathf.Pow(Master.ViewRange * 0.7f, 2);
         }
         
         if (!Master.NavigationAgent2D.IsNavigationFinished())
@@ -121,7 +121,7 @@ public class AiFollowUpState : StateBase<Enemy, AIStateEnum>
                 else
                 {
                     //距离够近, 可以切换到环绕模式
-                    if (distanceSquared <= Mathf.Pow(Master.EnemyRoleState.ViewRange * 0.7f, 2))
+                    if (distanceSquared <= Mathf.Pow(Master.ViewRange * 0.7f, 2))
                     {
                         ChangeState(AIStateEnum.AiSurround);
                     }

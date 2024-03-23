@@ -82,7 +82,7 @@ public partial class NoWeaponEnemy : Enemy
     {
         if (name == AnimatorNames.Attack)
         {
-            AttackTimer = EnemyRoleState.AttackInterval;
+            AttackTimer = AttackInterval;
         }
     }
 }
