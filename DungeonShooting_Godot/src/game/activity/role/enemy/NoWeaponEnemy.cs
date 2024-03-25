@@ -71,7 +71,7 @@ public partial class NoWeaponEnemy : Enemy
         debris.BrushPrevPosition =  BrushPrevPosition;
         
         //创建金币
-        CreateGold();
+        Gold.CreateGold(Position, RoleState.Gold);
         
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);

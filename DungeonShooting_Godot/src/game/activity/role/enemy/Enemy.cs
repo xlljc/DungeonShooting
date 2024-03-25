@@ -131,11 +131,12 @@ public partial class Enemy : AiRole
         }
         
         //创建金币
-        CreateGold();
+        Gold.CreateGold(Position, RoleState.Gold);
         
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
         Destroy();
+
     }
 
     protected override void Process(float delta)
@@ -169,24 +170,6 @@ public partial class Enemy : AiRole
         {
             //拾起武器操作
             DoPickUpWeapon();
-        }
-    }
-
-    /// <summary>
-    /// 创建散落的金币
-    /// </summary>
-    protected void CreateGold()
-    {
-        var goldList = Utils.GetGoldList(RoleState.Gold);
-        foreach (var id in goldList)
-        {
-            var o = ObjectManager.GetActivityObject<Gold>(id);
-            o.Position = Position;
-            o.Throw(0,
-                Utils.Random.RandomRangeInt(50, 110),
-                new Vector2(Utils.Random.RandomRangeInt(-20, 20), Utils.Random.RandomRangeInt(-20, 20)),
-                0
-            );
         }
     }
 

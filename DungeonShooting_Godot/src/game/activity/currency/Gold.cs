@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -69,5 +70,30 @@ public partial class Gold : ActivityObject, IPoolItem
 		MoveController.Enable = true;
 		MoveController.ClearForce();
 		MoveController.SetAllVelocity(Vector2.Zero);
+	}
+	
+	/// <summary>
+	/// 创建散落的金币
+	/// </summary>
+	/// <param name="position">位置</param>
+	/// <param name="count">金币数量</param>
+	/// <param name="force">投抛力度</param>
+	public static List<Gold> CreateGold(Vector2 position, int count, int force = 10)
+	{
+		var list = new List<Gold>();
+		var goldList = Utils.GetGoldList(count);
+		foreach (var id in goldList)
+		{
+			var o = ObjectManager.GetActivityObject<Gold>(id);
+			o.Position = position;
+			o.Throw(0,
+				Utils.Random.RandomRangeInt(5 * force, 11 * force),
+				new Vector2(Utils.Random.RandomRangeInt(-2 * force, 2 * force), Utils.Random.RandomRangeInt(-2 * force, 2 * force)),
+				0
+			);
+			list.Add(o);
+		}
+
+		return list;
 	}
 }
