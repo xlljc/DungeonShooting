@@ -3,7 +3,8 @@
 [ext_resource type="Script" path="res://src/game/ui/mapEditorSelectObject/MapEditorSelectObjectPanel.cs" id="1_hdfkd"]
 [ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="3_4nhjm"]
 [ext_resource type="Texture2D" uid="uid://blfvsup876agh" path="res://resource/sprite/ui/commonIcon/Search.png" id="3_laasd"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="4_uomdx"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="4_uomdx"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8bgig"]
 resource_local_to_scene = true

@@ -1,18 +1,22 @@
 
+using System.Text.Json;
 using Godot;
 
-[BuffFragment("GetGold", "计算获取的金币buff, " +
-                         "参数‘1’为金币数量添加类型, 1: 具体数量, 2:百分比(小数), " +
-                         "参数‘2’为增加金币的数量值")]
+[BuffFragment(
+    "GetGold",
+    "计算获取的金币buff, ",
+    Arg1 = "(int)金币数量添加类型, 1: 具体数量, 2:百分比",
+    Arg2 = "(float)增加金币的数量值"
+)]
 public class Buff_GetGold : BuffFragment
 {
     private int _type;
     private float _value;
 
-    public override void InitParam(float arg1, float arg2)
+    public override void InitParam(JsonElement[] args)
     {
-        _type = (int)arg1;
-        _value = arg2;
+        _type = args[0].GetInt32();
+        _value = args[1].GetSingle();
     }
 
     public override void OnPickUpItem()

@@ -1,16 +1,21 @@
 
+using System.Text.Json;
 using Godot;
 
-[EffectFragment("PiggyBank", "存钱罐, 使用后返还存入的金币, 参数1为返还金币的倍率(小数)")]
+[EffectFragment(
+    "PiggyBank",
+    "存钱罐, 使用后返还存入的金币",
+    Arg1 = "(float)返还金币的倍率, 范围0-1"
+)]
 public class Eff_PiggyBank : EffectFragment
 {
     private float _value;
     //当前存入的金币数量
     private float _currValue;
     
-    public override void InitParam(float arg1)
+    public override void InitParam(JsonElement[] arg)
     {
-        _value = arg1;
+        _value = arg[0].GetSingle();
     }
 
     public override bool OnCheckUse()
@@ -20,17 +25,7 @@ public class Eff_PiggyBank : EffectFragment
 
     public override void OnUse()
     {
-        var goldList = Utils.GetGoldList(Mathf.FloorToInt(_currValue * _value));
-        foreach (var id in goldList)
-        {
-            var o = ObjectManager.GetActivityObject<Gold>(id);
-            o.Position = Role.Position;
-            o.Throw(0,
-                Utils.Random.RandomRangeInt(50, 110),
-                new Vector2(Utils.Random.RandomRangeInt(-20, 20), Utils.Random.RandomRangeInt(-20, 20)),
-                0
-            );
-        }
+        Gold.CreateGold(Role.Position, Mathf.FloorToInt(_currValue * _value));
 
         _currValue = 0;
     }

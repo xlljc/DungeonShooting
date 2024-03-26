@@ -1234,17 +1234,32 @@ public abstract partial class Role : ActivityObject
             return;
         }
 
-        var temp = weapon.AnimatedSprite.Position;
-        if (Face == FaceDirection.Left)
-        {
-            temp.Y = -temp.Y;
-        }
+        // var temp = weapon.AnimatedSprite.Position;
+        // if (Face == FaceDirection.Left)
+        // {
+        //     temp.Y = -temp.Y;
+        // }
         //var pos = GlobalPosition + temp.Rotated(weapon.GlobalRotation);
         WeaponPack.RemoveItem(index);
         //播放抛出效果
         weapon.ThrowWeapon(this, GlobalPosition);
     }
 
+    /// <summary>
+    /// 从背包中移除指定武器, 不会触发投抛效果
+    /// </summary>
+    /// <param name="index">武器在武器背包中的位置</param>
+    public void RemoveWeapon(int index)
+    {
+        var weapon = WeaponPack.GetItem(index);
+        if (weapon == null)
+        {
+            return;
+        }
+        
+        WeaponPack.RemoveItem(index);
+    }
+    
     /// <summary>
     /// 扔掉所有武器
     /// </summary>
@@ -1339,6 +1354,14 @@ public abstract partial class Role : ActivityObject
         RoleState.Gold += RoleState.CalcGetGold(goldCount);
         //播放音效
         SoundManager.PlaySoundByConfig(ExcelConfig.Sound_Map["gold"], Position, this);
+    }
+
+    /// <summary>
+    /// 使用金币
+    /// </summary>
+    public virtual void UseGold(int goldCount)
+    {
+        RoleState.Gold -= goldCount;
     }
 
     /// <summary>

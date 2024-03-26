@@ -1,19 +1,22 @@
 
+using System.Text.Json;
 using Godot;
 
-[BuffFragment("BulletCount", 
-    "子弹数量 buff, " +
-    "参数‘1’为子弹数量添加类型, 1: 具体数量, 2:百分比(小数), " +
-    "参数‘2’为增加子弹的数量")]
+[BuffFragment(
+    "BulletCount", 
+    "子弹数量 buff",
+    Arg1 = "(int)子弹数量添加类型, 1: 具体数量, 2:百分比",
+    Arg2 = "(float)增加子弹的数量"
+)]
 public class Buff_BulletCount : BuffFragment
 {
     private int _type;
     private float _value;
 
-    public override void InitParam(float arg1, float arg2)
+    public override void InitParam(JsonElement[] arg)
     {
-        _type = (int)arg1;
-        _value = (int)arg2;
+        _type = arg[0].GetInt32();
+        _value = arg[1].GetSingle();
     }
     
     public override void OnPickUpItem()

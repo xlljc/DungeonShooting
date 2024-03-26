@@ -1,8 +1,9 @@
 [gd_scene load_steps=12 format=3 uid="uid://d2gj0yuup0gdb"]
 
 [ext_resource type="Script" path="res://src/game/activity/box/TreasureBox.cs" id="1_wxils"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_l4sas"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_l4sas"]
 [ext_resource type="Texture2D" uid="uid://dladvmgql1pwe" path="res://resource/sprite/box/TreasureBox0001.png" id="3_eed5t"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1v1is"]
 resource_local_to_scene = true

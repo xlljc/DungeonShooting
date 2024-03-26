@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using Config;
 using Godot;
 
@@ -30,43 +31,16 @@ public partial class BuffProp : PropActivity
             {
                 var buffInfo = PropFragmentRegister.BuffFragmentInfos[keyValuePair.Key];
                 var item = keyValuePair.Value;
-                switch (item.Length)
+                var buff = (BuffFragment)AddComponent(buffInfo.Type);
+                try
                 {
-                    case 0:
-                    {
-                        var buff = (BuffFragment)AddComponent(buffInfo.Type);
-                        _buffFragment.Add(buff);
-                    }
-                        break;
-                    case 1:
-                    {
-                        var buff = (BuffFragment)AddComponent(buffInfo.Type);
-                        buff.InitParam(item[0]);
-                        _buffFragment.Add(buff);
-                    }
-                        break;
-                    case 2:
-                    {
-                        var buff = (BuffFragment)AddComponent(buffInfo.Type);
-                        buff.InitParam(item[0], item[1]);
-                        _buffFragment.Add(buff);
-                    }
-                        break;
-                    case 3:
-                    {
-                        var buff = (BuffFragment)AddComponent(buffInfo.Type);
-                        buff.InitParam(item[0], item[1], item[2]);
-                        _buffFragment.Add(buff);
-                    }
-                        break;
-                    case 4:
-                    {
-                        var buff = (BuffFragment)AddComponent(buffInfo.Type);
-                        buff.InitParam(item[0], item[1], item[2], item[3]);
-                        _buffFragment.Add(buff);
-                    }
-                        break;
+                    buff.InitParam(item);
                 }
+                catch (Exception e)
+                {
+                    Debug.LogError($"初始化道具'{ActivityBase.Id}'参数时发生异常: {e.Message}\n{e.StackTrace}");
+                }
+                _buffFragment.Add(buff);
             }
         }
 
@@ -92,70 +66,22 @@ public partial class BuffProp : PropActivity
             buffFragment.OnRemoveItem();
         }
     }
-
-    /// <summary>
-    /// 添加被动属性
-    /// </summary>
-    public void AddBuffFragment<T>() where T : BuffFragment, new()
-    {
-        var fragment = AddComponent<T>();
-        _buffFragment.Add(fragment);
-        if (Master != null)
-        {
-            fragment.OnPickUpItem();
-        }
-    }
     
     /// <summary>
     /// 添加被动属性
     /// </summary>
-    public void AddBuffFragment<T>(float arg1) where T : BuffFragment, new()
+    public void AddBuffFragment<T>(JsonElement[] arg) where T : BuffFragment, new()
     {
         var fragment = AddComponent<T>();
         _buffFragment.Add(fragment);
-        fragment.InitParam(arg1);
-        if (Master != null)
+        try
         {
-            fragment.OnPickUpItem();
+            fragment.InitParam(arg);
         }
-    }
-    
-    /// <summary>
-    /// 添加被动属性
-    /// </summary>
-    public void AddBuffFragment<T>(float arg1, float arg2) where T : BuffFragment, new()
-    {
-        var fragment = AddComponent<T>();
-        _buffFragment.Add(fragment);
-        fragment.InitParam(arg1, arg2);
-        if (Master != null)
+        catch (Exception e)
         {
-            fragment.OnPickUpItem();
+            Debug.LogError($"初始化道具'{ActivityBase.Id}'参数时发生异常: {e.Message}\n{e.StackTrace}");
         }
-    }
-    
-    /// <summary>
-    /// 添加被动属性
-    /// </summary>
-    public void AddBuffFragment<T>(float arg1, float arg2, float arg3) where T : BuffFragment, new()
-    {
-        var fragment = AddComponent<T>();
-        _buffFragment.Add(fragment);
-        fragment.InitParam(arg1, arg2, arg3);
-        if (Master != null)
-        {
-            fragment.OnPickUpItem();
-        }
-    }
-    
-    /// <summary>
-    /// 添加被动属性
-    /// </summary>
-    public void AddBuffFragment<T>(float arg1, float arg2, float arg3, float arg4) where T : BuffFragment, new()
-    {
-        var fragment = AddComponent<T>();
-        _buffFragment.Add(fragment);
-        fragment.InitParam(arg1, arg2, arg3, arg4);
         if (Master != null)
         {
             fragment.OnPickUpItem();

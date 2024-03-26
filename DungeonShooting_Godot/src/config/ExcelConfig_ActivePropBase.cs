@@ -31,7 +31,7 @@ public static partial class ExcelConfig
         /// value为buff初始化参数
         /// </summary>
         [JsonInclude]
-        public Dictionary<string, float[]> Buff;
+        public Dictionary<string, System.Text.Json.JsonElement[]> Buff;
 
         /// <summary>
         /// 道具使用条件 <br/>
@@ -39,7 +39,7 @@ public static partial class ExcelConfig
         /// 性名称请参阅condition属性表
         /// </summary>
         [JsonInclude]
-        public Dictionary<string, float[]> Condition;
+        public Dictionary<string, System.Text.Json.JsonElement[]> Condition;
 
         /// <summary>
         /// 道具使用效果 <br/>
@@ -47,7 +47,7 @@ public static partial class ExcelConfig
         /// 性名称请参阅effect属性表
         /// </summary>
         [JsonInclude]
-        public Dictionary<string, float[]> Effect;
+        public Dictionary<string, System.Text.Json.JsonElement[]> Effect;
 
         /// <summary>
         /// 道具充能效果 <br/>
@@ -56,7 +56,7 @@ public static partial class ExcelConfig
         /// 注意: 仅当'IsConsumables'为false是生效
         /// </summary>
         [JsonInclude]
-        public Dictionary<string, float[]> Charge;
+        public Dictionary<string, System.Text.Json.JsonElement[]> Charge;
 
         /// <summary>
         /// 使用道具的效果持续时间 <br/>

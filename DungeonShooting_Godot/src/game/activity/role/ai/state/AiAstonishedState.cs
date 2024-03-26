@@ -1,11 +1,11 @@
 using Godot;
 
-namespace EnemyState;
+namespace AiState;
 
 /// <summary>
 /// 发现目标时的惊讶状态
 /// </summary>
-public class AiAstonishedState : StateBase<Enemy, AIStateEnum>
+public class AiAstonishedState : StateBase<AiRole, AIStateEnum>
 {
     /// <summary>
     /// 下一个状态

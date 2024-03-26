@@ -1,9 +1,10 @@
 [gd_scene load_steps=11 format=3 uid="uid://b7s3fvpkltk1d"]
 
 [ext_resource type="Script" path="res://src/game/activity/weapon/bow/Bow.cs" id="1_k4gvs"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_cui8l"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="3_cui8l"]
 [ext_resource type="SpriteFrames" uid="uid://ccrflh6pjmq7r" path="res://resource/spriteFrames/weapon/Weapon0016.tres" id="4_buwa4"]
 [ext_resource type="Animation" uid="uid://v3dltmdstqad" path="res://resource/animation/weapon/Weapon_floodlight.res" id="4_nl06y"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sy2aq"]
 resource_local_to_scene = true

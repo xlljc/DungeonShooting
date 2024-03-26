@@ -3,8 +3,9 @@
 [ext_resource type="Script" path="res://src/game/ui/weaponRoulette/WeaponRoulettePanel.cs" id="1_1uvbk"]
 [ext_resource type="Texture2D" uid="uid://e6krxgte01j3" path="res://resource/sprite/ui/roulette/RouletteBg.png" id="2_k6gjh"]
 [ext_resource type="Script" path="res://src/game/ui/weaponRoulette/WeaponSlot.cs" id="3_8v011"]
-[ext_resource type="Shader" path="res://resource/material/Outline.gdshader" id="4_p348k"]
+[ext_resource type="Shader" path="res://resource/shader/Outline.gdshader" id="4_p348k"]
 [ext_resource type="Texture2D" uid="uid://dmm8jw06bhffh" path="res://resource/sprite/ui/commonIcon/Lock.png" id="6_7mog3"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i1wmw"]
 resource_local_to_scene = true

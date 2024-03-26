@@ -1,8 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://bvfnnqo71knb"]
 
 [ext_resource type="Script" path="res://src/game/room/RoomDoor.cs" id="1_f3qbq"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_6vvcd"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_6vvcd"]
 [ext_resource type="SpriteFrames" uid="uid://xs72aopsgpg6" path="res://resource/spriteFrames/other/RoomDoor_N.tres" id="3_vbbxp"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yvwpk"]
 resource_local_to_scene = true

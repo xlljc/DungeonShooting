@@ -1,19 +1,22 @@
 
+using System.Text.Json;
 using Godot;
 
-[BuffFragment("BulletDamage", 
-    "提升子弹伤害buff, " +
-    "参数‘1’为伤害增加类型: 1:具体伤害, 2:百分比伤害(小数), " +
-    "参数‘2’为增益伤害值")]
+[BuffFragment(
+    "BulletDamage", 
+    "提升子弹伤害buff, ",
+    Arg1 = "(int)伤害增加类型: 1:具体伤害, 2:百分比伤害",
+    Arg2 = "(float)增益伤害值"
+)]
 public class Buff_BulletDamage : BuffFragment
 {
     private int _type;
     private float _value;
     
-    public override void InitParam(float arg1, float arg2)
+    public override void InitParam(JsonElement[] arg)
     {
-        _type = (int)arg1;
-        _value = arg2;
+        _type = arg[0].GetInt32();
+        _value = arg[1].GetSingle();
     }
 
     public override void OnPickUpItem()

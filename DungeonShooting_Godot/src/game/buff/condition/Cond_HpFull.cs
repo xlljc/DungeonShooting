@@ -1,19 +1,23 @@
 
-[ConditionFragment("HpFull", 
-    "判断满血状态, " +
-    "参数1可选值: 0:判断非满血, 1:判断满血")]
+using System.Text.Json;
+
+[ConditionFragment(
+    "HpFull", 
+    "判断满血状态, ",
+    Arg1 = "(boolean)判断非满血"
+)]
 public class Cond_HpFull : ConditionFragment
 {
-    private int _type;
+    private bool _type;
     
-    public override void InitParam(float arg1)
+    public override void InitParam(JsonElement[] arg)
     {
-        _type = (int)arg1;
+        _type = arg[0].GetBoolean();
     }
 
     public override bool OnCheckUse()
     {
-        if (_type == 0)
+        if (_type)
         {
             return !Role.IsHpFull();
         }

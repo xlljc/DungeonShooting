@@ -1,12 +1,18 @@
 
-[BuffFragment("ShieldRecoveryTime", "单格护盾减少的恢复时间, 参数‘1’单位: 秒")]
+using System.Text.Json;
+
+[BuffFragment(
+    "ShieldRecoveryTime",
+    "单格护盾减少的恢复时间, 单位: 秒",
+    Arg1 = "(float)单格护盾减少的恢复时间"
+)]
 public class Buff_ShieldRecoveryTime : BuffFragment
 {
     private float _time;
     
-    public override void InitParam(float arg1)
+    public override void InitParam(JsonElement[] args)
     {
-        _time = arg1;
+        _time = args[0].GetSingle();
     }
     
     public override void OnPickUpItem()

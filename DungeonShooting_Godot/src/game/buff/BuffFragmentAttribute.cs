@@ -1,21 +1,12 @@
 using System;
 
+/// <summary>
+/// buff片段
+/// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public class BuffFragmentAttribute : Attribute
+public class BuffFragmentAttribute : FragmentAttribute
 {
-    /// <summary>
-    /// Buff属性名称
-    /// </summary>
-    public string BuffName { get; set; }
-    
-    /// <summary>
-    /// 描述
-    /// </summary>
-    public string Description { get; set; }
-    
-    public BuffFragmentAttribute(string buffName, string description)
+    public BuffFragmentAttribute(string name, string description) : base(name, description)
     {
-        BuffName = buffName;
-        Description = description;
     }
 }

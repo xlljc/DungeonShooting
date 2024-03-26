@@ -31,7 +31,7 @@ project/assembly_name="DungeonShooting"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/dungeonShooting_plugin/plugin.cfg")
+enabled=PackedStringArray()
 
 [file_customization]
 

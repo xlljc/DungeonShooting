@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://bnoa5mkbw6o0n"]
+
+[ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="1_5e1lv"]
+[ext_resource type="Shader" path="res://resource/shader/RingOfPower.gdshader" id="2_cewpk"]
+[ext_resource type="Texture2D" uid="uid://bcca04qkcqpr6" path="res://resource/sprite/noise/Noise0001.png" id="3_cnv2p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1pb8g"]
+shader = ExtResource("2_cewpk")
+shader_parameter/radius = 0.58
+shader_parameter/thickness = 0.34
+shader_parameter/color = Color(0.9, 0.4, 0.1, 1)
+shader_parameter/brightness = 5.0
+shader_parameter/angular_speed = 2.5
+shader_parameter/radial_speed = 0.24
+shader_parameter/alpha = 0.5
+shader_parameter/noise = ExtResource("3_cnv2p")
+
+[node name="TestShader" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(168, 115)
+scale = Vector2(2.9375, 2.53125)
+texture = ExtResource("1_5e1lv")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(1062, 627)
+scale = Vector2(25.25, 14.5938)
+texture = ExtResource("1_5e1lv")
+
+[node name="Sprite2D3" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_1pb8g")
+position = Vector2(314, 354)
+texture = ExtResource("1_5e1lv")

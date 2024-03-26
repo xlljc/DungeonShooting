@@ -1,8 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://c4puxmnan51ds"]
 
 [ext_resource type="Script" path="res://src/game/activity/bullet/normal/Arrow.cs" id="1_eots7"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_tscmb"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_tscmb"]
 [ext_resource type="SpriteFrames" uid="uid://cyg3uvbakan08" path="res://resource/spriteFrames/bullet/Bullet0009.tres" id="3_l58ff"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v77gw"]
 resource_local_to_scene = true

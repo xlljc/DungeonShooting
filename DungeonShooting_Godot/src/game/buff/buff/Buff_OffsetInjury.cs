@@ -1,12 +1,18 @@
 
-[BuffFragment("OffsetInjury", "受伤时有概率抵消伤害的buff, 参数‘1’为抵消伤害概率百分比(小数)")]
+using System.Text.Json;
+
+[BuffFragment(
+    "OffsetInjury",
+    "受伤时有概率抵消伤害的 buff",
+    Arg1 = "(float)抵消伤害概率百分比"
+)]
 public class Buff_OffsetInjury : BuffFragment
 {
     private float _value;
 
-    public override void InitParam(float arg1)
+    public override void InitParam(JsonElement[] args)
     {
-        _value = arg1;
+        _value = args[0].GetSingle();
     }
 
     public override void OnPickUpItem()

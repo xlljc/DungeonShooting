@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://ci41ruj125hk2" path="res://resource/sprite/item/hall_c/item _20.png" id="11_tg3jo"]
 [ext_resource type="Texture2D" uid="uid://dwstu11dix0nq" path="res://resource/sprite/item/hall_b/item-30.png" id="12_agfji"]
 [ext_resource type="Texture2D" uid="uid://d08oi1tvpcd3p" path="res://resource/sprite/item/hall_b/item-29.png" id="13_unnpl"]
-[ext_resource type="Shader" path="res://resource/material/GodRays.gdshader" id="14_8vfgi"]
+[ext_resource type="Shader" path="res://resource/shader/GodRays.gdshader" id="14_8vfgi"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="15_1xqxd"]
 [ext_resource type="Texture2D" uid="uid://iqj44lyknjr2" path="res://resource/sprite/item/hall_a/Slice_04.png" id="15_h7524"]
 [ext_resource type="Texture2D" uid="uid://bm8xcx73s83ku" path="res://resource/sprite/item/hall_a/Slice_47.png" id="16_xj0e1"]
@@ -86,7 +86,7 @@ layer_0/tile_data = PackedInt32Array(917505, 1, 0, 983041, 1, 0, 1048577, 1, 0, 
 metadata/_edit_group_ = true
 
 [node name="BirthMark" type="Marker2D" parent="." index="3"]
-position = Vector2(536, 310)
+position = Vector2(533, 180)
 
 [node name="DungeonEntrance" type="Area2D" parent="." index="4"]
 z_index = 15

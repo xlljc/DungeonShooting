@@ -1,11 +1,11 @@
 using System;
 
-namespace EnemyState;
+namespace AiState;
 
 /// <summary>
 /// 发现目标, 通知其它敌人
 /// </summary>
-public class AiNotifyState : StateBase<Enemy, AIStateEnum>
+public class AiNotifyState : StateBase<AiRole, AIStateEnum>
 {
     private float _timer;
     

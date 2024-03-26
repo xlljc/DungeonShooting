@@ -2,12 +2,12 @@
 using System;
 using Godot;
 
-namespace EnemyState;
+namespace AiState;
 
 /// <summary>
 /// 距离目标足够近, 在目标附近随机移动, 并开火
 /// </summary>
-public class AiSurroundState : StateBase<Enemy, AIStateEnum>
+public class AiSurroundState : StateBase<AiRole, AIStateEnum>
 {
     //是否移动结束
     private bool _isMoveOver;
@@ -151,7 +151,7 @@ public class AiSurroundState : StateBase<Enemy, AIStateEnum>
                 }
                 else
                 {
-                    if (masterPosition.DistanceSquaredTo(playerPos) > Mathf.Pow(Master.EnemyRoleState.ViewRange * 0.7f, 2)) //玩家离开正常射击范围
+                    if (masterPosition.DistanceSquaredTo(playerPos) > Mathf.Pow(Master.ViewRange * 0.7f, 2)) //玩家离开正常射击范围
                     {
                         ChangeState(AIStateEnum.AiFollowUp);
                     }

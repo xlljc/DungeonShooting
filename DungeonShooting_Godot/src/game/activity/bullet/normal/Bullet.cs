@@ -76,7 +76,7 @@ public partial class Bullet : ActivityObject, IBullet
     {
         base.OnInit();
         OutlineColor = new Color(2.5f, 0, 0);
-        SetBlendColor(new Color(2.0f, 2.0f, 2.0f));
+        SetBlendColor(new Color(2.5f, 2.5f, 2.5f));
     }
 
     public virtual void InitData(BulletData data, uint attackLayer)

@@ -106,6 +106,14 @@ public static class PreinstallMarkManager
         {
             return "出口标记";
         }
+        else if (type == SpecialMarkType.ShopBoss)
+        {
+            return "商店老板标记";
+        }
+        else if (type == SpecialMarkType.Treasure)
+        {
+            return "奖励箱子标记";
+        }
 
         return string.Empty;
     }

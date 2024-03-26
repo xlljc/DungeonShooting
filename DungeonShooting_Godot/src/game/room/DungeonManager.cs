@@ -480,7 +480,7 @@ public partial class DungeonManager : Node2D
         yield return 0;
         
         //初始房间创建玩家标记
-        var playerBirthMark = StartRoomInfo.RoomPreinstall.GetPlayerBirthMark();
+        var playerBirthMark = StartRoomInfo.RoomPreinstall.GetSpecialMark(SpecialMarkType.BirthPoint);
         
         //创建玩家
         var player = Player.Current;

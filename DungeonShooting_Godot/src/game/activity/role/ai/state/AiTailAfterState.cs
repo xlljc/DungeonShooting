@@ -2,12 +2,12 @@
 using System;
 using Godot;
 
-namespace EnemyState;
+namespace AiState;
 
 /// <summary>
 /// AI 发现玩家, 跟随玩家, 但是不在视野范围内
 /// </summary>
-public class AiTailAfterState : StateBase<Enemy, AIStateEnum>
+public class AiTailAfterState : StateBase<AiRole, AIStateEnum>
 {
     /// <summary>
     /// 目标是否在视野半径内

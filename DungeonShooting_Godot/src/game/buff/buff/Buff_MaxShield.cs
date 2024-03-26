@@ -1,15 +1,20 @@
 
 using System.Collections.Generic;
+using System.Text.Json;
 
-[BuffFragment("MaxShield", "护盾上限buff, 参数‘1’为护盾上限")]
+[BuffFragment(
+    "MaxShield",
+    "增加护盾上限buff",
+    Arg1 = "(int)增加的护盾上限值"
+)]
 public class Buff_MaxShield : BuffFragment
 {
     private List<ulong> _cacheId = new List<ulong>();
     private int _maxShield;
     
-    public override void InitParam(float arg1)
+    public override void InitParam(JsonElement[] args)
     {
-        _maxShield = (int)arg1;
+        _maxShield = args[0].GetInt32();
     }
     
     public override void OnPickUpItem()

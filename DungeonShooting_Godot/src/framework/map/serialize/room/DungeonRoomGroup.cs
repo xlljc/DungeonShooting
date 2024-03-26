@@ -151,6 +151,11 @@ public class DungeonRoomGroup : IClone<DungeonRoomGroup>
     {
         if (_init)
         {
+            foreach (var keyValuePair in _weightRandomMap)
+            {
+                keyValuePair.Value.SetSeedRandom(random);
+            }
+
             return;
         }
 

@@ -1,21 +1,12 @@
 using System;
 
+/// <summary>
+/// 充能片段
+/// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public class ChargeFragmentAttribute : Attribute
+public class ChargeFragmentAttribute : FragmentAttribute
 {
-    /// <summary>
-    /// 充能属性名称
-    /// </summary>
-    public string ChargeName { get; set; }
-    
-    /// <summary>
-    /// 描述
-    /// </summary>
-    public string Description { get; set; }
-    
-    public ChargeFragmentAttribute(string chargeName, string description)
+    public ChargeFragmentAttribute(string name, string description) : base(name, description)
     {
-        ChargeName = chargeName;
-        Description = description;
     }
 }

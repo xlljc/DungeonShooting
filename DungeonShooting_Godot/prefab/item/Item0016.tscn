@@ -1,8 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://b4r3hpil3we2s"]
 
 [ext_resource type="Script" path="res://src/game/activity/item/ObstacleObject.cs" id="1_go51e"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_ot0d2"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_ot0d2"]
 [ext_resource type="Texture2D" uid="uid://6mkb76o7ja47" path="res://resource/sprite/item/hall_a/Slice_03.png" id="3_bvm05"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wh4b7"]
 resource_local_to_scene = true

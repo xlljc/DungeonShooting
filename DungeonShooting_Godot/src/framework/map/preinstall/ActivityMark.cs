@@ -37,17 +37,34 @@ public class ActivityMark
      /// <summary>
      /// 物体初始海拔高度
      /// </summary>
-     public int Altitude = 8;
+     public int Altitude { get; set; } = 8;
 
      /// <summary>
      /// 物体初始纵轴速度
      /// </summary>
-     public float VerticalSpeed = 0;
+     public float VerticalSpeed { get; set; } = 0;
     
     /// <summary>
     /// 物体类型
     /// </summary>
     public ActivityType ActivityType { get; set; }
     
-    
+    /// <summary>
+    /// 快速创建标记
+    /// </summary>
+    /// <param name="activityType">物体类型</param>
+    /// <param name="delayTime">延时时间</param>
+    /// <param name="pos">位置</param>
+    public static ActivityMark CreateMark(ActivityType activityType, float delayTime, Vector2 pos)
+    {
+        var mark = new ActivityMark();
+        mark.Attr = new Dictionary<string, string>();
+        mark.ActivityType = activityType;
+        mark.MarkType = SpecialMarkType.Normal;
+        mark.VerticalSpeed = 0;
+        mark.Altitude = activityType == ActivityType.Enemy ? 0 : 8;
+        mark.DelayTime = delayTime;
+        mark.Position = pos;
+        return mark;
+    }
 }

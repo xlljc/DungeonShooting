@@ -14,6 +14,14 @@ public class WeightRandom
     {
         _random = random;
     }
+
+    /// <summary>
+    /// 设置随机数生成器
+    /// </summary>
+    public void SetSeedRandom(SeedRandom random)
+    {
+        _random = random;
+    }
     
     /// <summary>
     /// 初始化权重列表

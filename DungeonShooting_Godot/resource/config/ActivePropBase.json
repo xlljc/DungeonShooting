@@ -6,11 +6,11 @@
     "Buff": null,
     "Condition": {
       "HpFull": [
-        0
+        true
       ]
     },
     "Effect": {
-      "Hp": [
+      "ChangeHp": [
         2
       ]
     },
@@ -27,7 +27,7 @@
     "Buff": null,
     "Condition": {
       "AmmoFull": [
-        0
+        true
       ]
     },
     "Effect": {
@@ -74,6 +74,82 @@
     },
     "Duration": 6,
     "CooldownTime": 0,
+    "IsConsumables": false,
+    "MaxCount": 1
+  },
+  {
+    "Id": "0005",
+    "Remark": "\u9B54\u672F\u68D2",
+    "__Activity": "prop5004",
+    "Buff": null,
+    "Condition": null,
+    "Effect": {
+      "SwapWeapon": []
+    },
+    "Charge": {
+      "EnterRoom": [
+        0.5
+      ]
+    },
+    "Duration": 0,
+    "CooldownTime": 0,
+    "IsConsumables": false,
+    "MaxCount": 1
+  },
+  {
+    "Id": "0006",
+    "Remark": "\u4FBF\u643A\u5F0F\u4F9B\u8840\u5668",
+    "__Activity": "prop5005",
+    "Buff": null,
+    "Condition": {
+      "HpFull": [
+        true
+      ],
+      "Gold": [
+        "\u003E=",
+        25
+      ]
+    },
+    "Effect": {
+      "ChangeHp": [
+        1
+      ],
+      "UseGold": [
+        25
+      ]
+    },
+    "Charge": {
+      "EnterRoom": [
+        1
+      ]
+    },
+    "Duration": 0,
+    "CooldownTime": 0,
+    "IsConsumables": false,
+    "MaxCount": 1
+  },
+  {
+    "Id": "0007",
+    "Remark": "\u4FBF\u643A\u5F0F\u732E\u8840\u5668",
+    "__Activity": "prop5006",
+    "Buff": null,
+    "Condition": {
+      "Hp": [
+        "\u003E",
+        1
+      ]
+    },
+    "Effect": {
+      "ChangeHp": [
+        -1
+      ],
+      "GetGold": [
+        20
+      ]
+    },
+    "Charge": null,
+    "Duration": 0,
+    "CooldownTime": 3,
     "IsConsumables": false,
     "MaxCount": 1
   }

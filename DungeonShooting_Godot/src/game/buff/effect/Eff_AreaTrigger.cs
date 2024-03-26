@@ -1,10 +1,13 @@
 
 using System.Collections.Generic;
+using System.Text.Json;
 using Godot;
 
-[EffectFragment("AreaTrigger", 
-    "触发附近地上的武器开火, " +
-    "参数1为最大作用半径, ")]
+[EffectFragment(
+    "AreaTrigger",
+    "触发附近地上的武器开火, ",
+    Arg1 = "(int)最大作用半径"
+)]
 public class Eff_AreaTrigger : EffectFragment
 {
     private Prop5003Area _areaNode;
@@ -13,9 +16,9 @@ public class Eff_AreaTrigger : EffectFragment
     
     private int _radius = 250;
 
-    public override void InitParam(float arg1)
+    public override void InitParam(JsonElement[] arg)
     {
-        _radius = (int)arg1;
+        _radius = arg[0].GetInt32();
     }
 
     public override void Ready()

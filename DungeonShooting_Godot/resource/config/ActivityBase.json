@@ -700,6 +700,48 @@
     "ShowInMapEditor": true
   },
   {
+    "Id": "prop5004",
+    "Name": "\u9B54\u672F\u68D2",
+    "Type": 9,
+    "Quality": 1,
+    "Price": 0,
+    "Intro": "\u968F\u673A\u9009\u62E9\u623F\u95F4\u5185\u7684\u4E00\u4E2A\u624B\u6301\u6B66\u5668\u7684\u654C\u4EBA, \u4EA4\u6362\u4F60\u4EEC\u624B\u4E2D\u7684\u6B66\u5668",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/prop/ActiveProp.tscn",
+    "Icon": "res://resource/sprite/prop/active/ActiveProp5004.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "prop5005",
+    "Name": "\u4FBF\u643A\u5F0F\u4F9B\u8840\u5668",
+    "Type": 9,
+    "Quality": 1,
+    "Price": 0,
+    "Intro": "\u4F7F\u7528\u91D1\u5E01\u6362\u53D6\u8840\u91CF",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/prop/ActiveProp.tscn",
+    "Icon": "res://resource/sprite/prop/active/ActiveProp5005.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "prop5006",
+    "Name": "\u4FBF\u643A\u5F0F\u732E\u8840\u5668",
+    "Type": 9,
+    "Quality": 1,
+    "Price": 0,
+    "Intro": "\u4F7F\u7528\u8840\u91CF\u6362\u53D6\u91D1\u5E01",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/prop/ActiveProp.tscn",
+    "Icon": "res://resource/sprite/prop/active/ActiveProp5006.png",
+    "ShowInMapEditor": true
+  },
+  {
     "Id": "treasure_box0001",
     "Name": "\u6728\u8D28\u5B9D\u7BB1",
     "Type": 10,

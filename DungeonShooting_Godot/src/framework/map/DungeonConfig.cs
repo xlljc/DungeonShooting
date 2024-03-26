@@ -102,7 +102,7 @@ public class DungeonConfig
     /// </summary>
     public bool HasDesignatedRoom => DesignatedRoom != null && DesignatedRoom.Count > 0;
     /// <summary>
-    /// 指定房间类型
+    /// 指定预设的房间类型
     /// </summary>
     public DungeonRoomType DesignatedType;
     /// <summary>

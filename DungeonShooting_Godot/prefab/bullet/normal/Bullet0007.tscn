@@ -1,8 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://cybey66bhe4ro"]
 
 [ext_resource type="Script" path="res://src/game/activity/bullet/normal/Bullet.cs" id="1_h4tn7"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_fgeyt"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_fgeyt"]
 [ext_resource type="SpriteFrames" uid="uid://bkwoy70bnm74k" path="res://resource/spriteFrames/bullet/Bullet0007.tres" id="3_c1ec6"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v77gw"]
 resource_local_to_scene = true
