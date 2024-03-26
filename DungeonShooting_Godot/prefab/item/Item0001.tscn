@@ -4,8 +4,6 @@
 [ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_1c01w"]
 [ext_resource type="Texture2D" uid="uid://b74yx6c2jifyd" path="res://resource/sprite/item/hall_b/item-31.png" id="3_mua0g"]
 
-
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wh4b7"]
 resource_local_to_scene = true
 shader = ExtResource("2_1c01w")
@@ -42,7 +40,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kmpvc"]
-size = Vector2(58, 16)
+size = Vector2(42, 16)
 
 [node name="Item0001" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 512
@@ -62,5 +60,9 @@ position = Vector2(0, -10.5)
 sprite_frames = SubResource("SpriteFrames_uqva1")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2(0, 4)
+position = Vector2(-3, -15)
 shape = SubResource("RectangleShape2D_kmpvc")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(32, -10)
+polygon = PackedVector2Array(-14, 31, -14, -13, 4, -13, 4, 31)

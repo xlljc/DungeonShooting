@@ -4,8 +4,6 @@
 [ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_u3oiv"]
 [ext_resource type="Texture2D" uid="uid://dl15qkga1kc82" path="res://resource/sprite/item/hall_b/item-12.png" id="3_6b42f"]
 
-
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wh4b7"]
 resource_local_to_scene = true
 shader = ExtResource("2_u3oiv")
@@ -55,7 +53,7 @@ material = SubResource("ShaderMaterial_wh4b7")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_f7tsa")
-position = Vector2(15.5, -10)
+position = Vector2(0, -10)
 sprite_frames = SubResource("SpriteFrames_uqva1")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
