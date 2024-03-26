@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://c2hynqudkykxl"]
+[gd_scene load_steps=49 format=3 uid="uid://c2hynqudkykxl"]
 
 [ext_resource type="PackedScene" uid="uid://bqf2vks5ggnsp" path="res://scene/Dungeon.tscn" id="1_31od0"]
 [ext_resource type="Script" path="res://src/game/hall/Hall.cs" id="2_43fdu"]
@@ -14,7 +14,6 @@
 [ext_resource type="Texture2D" uid="uid://1a5b1cjalju1" path="res://resource/sprite/item/hall_c/item _30.png" id="10_4eqn0"]
 [ext_resource type="Texture2D" uid="uid://ci41ruj125hk2" path="res://resource/sprite/item/hall_c/item _20.png" id="11_tg3jo"]
 [ext_resource type="Texture2D" uid="uid://dwstu11dix0nq" path="res://resource/sprite/item/hall_b/item-30.png" id="12_agfji"]
-[ext_resource type="Texture2D" uid="uid://idax7j3m365m" path="res://resource/sprite/item/hall_b/item-010.png" id="13_swsmq"]
 [ext_resource type="Texture2D" uid="uid://d08oi1tvpcd3p" path="res://resource/sprite/item/hall_b/item-29.png" id="13_unnpl"]
 [ext_resource type="Shader" path="res://resource/material/GodRays.gdshader" id="14_8vfgi"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="15_1xqxd"]
@@ -31,7 +30,6 @@
 [ext_resource type="Texture2D" uid="uid://ch5igk6o578xq" path="res://resource/sprite/item/hall_c/item _19.png" id="26_bae0v"]
 [ext_resource type="Texture2D" uid="uid://g8361wl4jtua" path="res://resource/sprite/item/hall_c/item _15.png" id="27_gaatx"]
 [ext_resource type="Texture2D" uid="uid://cym4h4qndqmxl" path="res://resource/sprite/item/hall_c/item _16.png" id="28_1l3ls"]
-[ext_resource type="Texture2D" uid="uid://c5aieljuvuhld" path="res://resource/sprite/item/hall_c/item _59.png" id="29_4dx8t"]
 [ext_resource type="Texture2D" uid="uid://bgrroshvf4iyu" path="res://resource/sprite/item/hall_c/item _23.png" id="30_vfhiv"]
 [ext_resource type="Texture2D" uid="uid://b7dxbpdj5hdmd" path="res://resource/sprite/item/hall_c/item _01.png" id="37_5rb67"]
 [ext_resource type="Texture2D" uid="uid://d0x15i73kve07" path="res://resource/sprite/item/hall_b/item-11.png" id="39_w3n1m"]
@@ -40,10 +38,10 @@
 [ext_resource type="Texture2D" uid="uid://dlm2sgko33lw3" path="res://resource/sprite/item/hall_b/item-09.png" id="43_x1gko"]
 [ext_resource type="Texture2D" uid="uid://c4vlhjoxvba76" path="res://resource/sprite/item/hall_b/item-14.png" id="44_yhrf0"]
 [ext_resource type="Texture2D" uid="uid://dno1yrrch8e2g" path="res://resource/sprite/item/hall_b/item-15.png" id="45_7i1j7"]
+[ext_resource type="Texture2D" uid="uid://idax7j3m365m" path="res://resource/sprite/item/hall_b/item-010.png" id="46_k2yo2"]
 [ext_resource type="Texture2D" uid="uid://jrkqwsh08jpb" path="res://resource/sprite/item/hall_c/item _09.png" id="47_l5708"]
 [ext_resource type="Texture2D" uid="uid://pkmc2lhvnejo" path="res://resource/sprite/item/hall_b/item-17.png" id="47_mf13m"]
 [ext_resource type="Texture2D" uid="uid://n28j32tve2e0" path="res://resource/sprite/item/hall_b/item-20.png" id="48_2erjm"]
-[ext_resource type="Texture2D" uid="uid://i1qpk06s6a4q" path="res://resource/sprite/item/hall_c/item _14.png" id="48_sfnvr"]
 [ext_resource type="Texture2D" uid="uid://blusrop7675k4" path="res://resource/sprite/item/hall_c/item _02.png" id="49_06fin"]
 [ext_resource type="Texture2D" uid="uid://w3uubg6lwsjl" path="res://resource/sprite/item/hall_b/item-21.png" id="49_j5ytr"]
 [ext_resource type="Texture2D" uid="uid://ms8v1g1nhqv3" path="res://resource/sprite/item/hall_c/item _07.png" id="49_yocgq"]
@@ -305,20 +303,20 @@ position = Vector2(16, -9)
 texture = ExtResource("15_h7524")
 
 [node name="Item0016" type="Node2D" parent="ItemRoot" index="20"]
-position = Vector2(168, 400)
+position = Vector2(174, 279)
 scale = Vector2(-1, 1)
 script = ExtResource("5_lowqi")
 Id = "item_0016"
 DefaultLayer = 1
 
 [node name="Item0018" type="Node2D" parent="ItemRoot" index="21"]
-position = Vector2(224, 426)
+position = Vector2(230, 305)
 script = ExtResource("5_lowqi")
 Id = "item_0018"
 DefaultLayer = 1
 
 [node name="Item0019" type="Node2D" parent="ItemRoot" index="22"]
-position = Vector2(226, 399)
+position = Vector2(232, 278)
 script = ExtResource("5_lowqi")
 Id = "item_0019"
 DefaultLayer = 1
@@ -350,7 +348,7 @@ Id = "item_0020"
 DefaultLayer = 1
 
 [node name="Item0021" type="Node2D" parent="ItemRoot" index="26"]
-position = Vector2(284, 416)
+position = Vector2(290, 295)
 script = ExtResource("5_lowqi")
 Id = "item_0021"
 DefaultLayer = 1
@@ -435,95 +433,86 @@ texture = ExtResource("27_gaatx")
 position = Vector2(134, -197)
 texture = ExtResource("28_1l3ls")
 
-[node name="Item59" type="Sprite2D" parent="Node2D" index="10"]
-position = Vector2(-353, -170)
-texture = ExtResource("29_4dx8t")
-
-[node name="Item23" type="Sprite2D" parent="Node2D" index="11"]
+[node name="Item23" type="Sprite2D" parent="Node2D" index="10"]
 position = Vector2(-49, -64)
 texture = ExtResource("30_vfhiv")
 
-[node name="Item-11" type="Sprite2D" parent="Node2D" index="12"]
+[node name="Item-11" type="Sprite2D" parent="Node2D" index="11"]
 z_index = -3
 position = Vector2(-730, -336)
 scale = Vector2(1.73958, 1.73958)
 texture = ExtResource("39_w3n1m")
 
-[node name="Item-19" type="Sprite2D" parent="Node2D" index="13"]
-position = Vector2(-343, -434)
+[node name="Item-19" type="Sprite2D" parent="Node2D" index="12"]
+position = Vector2(-342, -470)
 texture = ExtResource("41_dhny5")
 
-[node name="Item-08" type="Sprite2D" parent="Node2D" index="14"]
+[node name="Item-08" type="Sprite2D" parent="Node2D" index="13"]
 position = Vector2(-183, -254)
 texture = ExtResource("41_w8uos")
 
-[node name="Item01" type="Sprite2D" parent="Node2D" index="15"]
+[node name="Item01" type="Sprite2D" parent="Node2D" index="14"]
 visible = false
 z_index = -1
 position = Vector2(-1, -97)
 texture = ExtResource("37_5rb67")
 
-[node name="Item-09" type="Sprite2D" parent="Node2D" index="16"]
+[node name="Item-09" type="Sprite2D" parent="Node2D" index="15"]
 z_index = -1
 position = Vector2(-158, -161)
 texture = ExtResource("43_x1gko")
 
-[node name="Item-14" type="Sprite2D" parent="Node2D" index="17"]
+[node name="Item-14" type="Sprite2D" parent="Node2D" index="16"]
 position = Vector2(-209, -120)
 texture = ExtResource("44_yhrf0")
 
-[node name="Item-15" type="Sprite2D" parent="Node2D" index="18"]
+[node name="Item-15" type="Sprite2D" parent="Node2D" index="17"]
 position = Vector2(-458, -324)
 texture = ExtResource("45_7i1j7")
 
-[node name="Item-17" type="Sprite2D" parent="Node2D" index="19"]
+[node name="Item-17" type="Sprite2D" parent="Node2D" index="18"]
 position = Vector2(-201, -206)
 texture = ExtResource("47_mf13m")
 
-[node name="Item-20" type="Sprite2D" parent="Node2D" index="20"]
+[node name="Item-20" type="Sprite2D" parent="Node2D" index="19"]
 position = Vector2(135, -140)
 texture = ExtResource("48_2erjm")
 
-[node name="Item-21" type="Sprite2D" parent="Node2D" index="21"]
+[node name="Item-21" type="Sprite2D" parent="Node2D" index="20"]
 position = Vector2(-512, -318)
 texture = ExtResource("49_j5ytr")
 
-[node name="Item-22" type="Sprite2D" parent="Node2D" index="22"]
+[node name="Item-22" type="Sprite2D" parent="Node2D" index="21"]
 position = Vector2(-497, -318)
 texture = ExtResource("49_j5ytr")
 
-[node name="Item-23" type="Sprite2D" parent="Node2D" index="23"]
+[node name="Item-23" type="Sprite2D" parent="Node2D" index="22"]
 position = Vector2(-481, -318)
 texture = ExtResource("49_j5ytr")
 
-[node name="Item06" type="Sprite2D" parent="Node2D" index="24"]
+[node name="Item06" type="Sprite2D" parent="Node2D" index="23"]
 z_index = -1
 position = Vector2(-84, -60)
 texture = ExtResource("7_42rdc")
 
-[node name="Item07" type="Sprite2D" parent="Node2D" index="25"]
+[node name="Item07" type="Sprite2D" parent="Node2D" index="24"]
 position = Vector2(-106, 27)
 texture = ExtResource("49_yocgq")
 
-[node name="Item12" type="Sprite2D" parent="Node2D" index="26"]
+[node name="Item12" type="Sprite2D" parent="Node2D" index="25"]
 position = Vector2(-31, -78)
 texture = ExtResource("52_1n1p3")
 flip_h = true
-
-[node name="Ditan" type="Sprite2D" parent="Node2D" index="27"]
-z_index = -4
-position = Vector2(-349, -264)
-texture = ExtResource("13_swsmq")
 
 [node name="Item09" type="Sprite2D" parent="." index="7"]
 position = Vector2(904, 453)
 texture = ExtResource("47_l5708")
 
-[node name="Item14" type="Sprite2D" parent="." index="8"]
-position = Vector2(257, 561)
-texture = ExtResource("48_sfnvr")
-
-[node name="Item02" type="Sprite2D" parent="." index="9"]
+[node name="Item02" type="Sprite2D" parent="." index="8"]
 z_index = -1
 position = Vector2(896, 216)
 texture = ExtResource("49_06fin")
+
+[node name="Item-010" type="Sprite2D" parent="." index="9"]
+position = Vector2(531, 534)
+texture = ExtResource("46_k2yo2")
