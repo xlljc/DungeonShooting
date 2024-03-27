@@ -369,7 +369,17 @@ public abstract partial class AiRole : Role
             AffiliationArea.RoomInfo.MarkTargetPosition[LookTarget.Id] = LookTarget.Position;
         }
     }
-    
+
+    protected override void OnDie()
+    {
+        //扔掉所有武器
+        ThrowAllWeapon();
+        //创建金币
+        Gold.CreateGold(Position, RoleState.Gold);
+        //销毁
+        Destroy();
+    }
+
     // private void OnVelocityComputed(Vector2 velocity)
     // {
     //     if (Mathf.Abs(velocity.X) >= 0.01f && Mathf.Abs(velocity.Y) >= 0.01f)

@@ -86,7 +86,7 @@ metadata/_edit_group_ = true
 
 [node name="BirthMark" type="Marker2D" parent="." index="3"]
 z_as_relative = false
-position = Vector2(535, 180)
+position = Vector2(502, 214)
 
 [node name="DungeonEntrance" type="Area2D" parent="." index="4"]
 z_index = 15

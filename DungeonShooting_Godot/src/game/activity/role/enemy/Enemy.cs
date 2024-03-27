@@ -110,9 +110,6 @@ public partial class Enemy : AiRole
 
     protected override void OnDie()
     {
-        //扔掉所有武器
-        ThrowAllWeapon();
-
         var effPos = Position + new Vector2(0, -Altitude);
         //血液特效
         var blood = ObjectManager.GetPoolItem<AutoDestroyParticles>(ResourcePath.prefab_effect_enemy_EnemyBlood0001_tscn);
@@ -130,13 +127,10 @@ public partial class Enemy : AiRole
             debris.MoveController.AddForce(Velocity + realVelocity);
         }
         
-        //创建金币
-        Gold.CreateGold(Position, RoleState.Gold);
-        
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
-        Destroy();
-
+        
+        base.OnDie();
     }
 
     protected override void Process(float delta)
