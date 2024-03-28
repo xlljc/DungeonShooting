@@ -68,5 +68,5 @@ debug_color = Color(0, 0.6, 0.701961, 0.419608)
 metadata/collsionShape2D1 = false
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-position = Vector2(-28, -12)
+position = Vector2(-29, 14)
 polygon = PackedVector2Array(-12, -14, 48, -14, 48, 51, 69, 51, 69, 55, -12, 55)

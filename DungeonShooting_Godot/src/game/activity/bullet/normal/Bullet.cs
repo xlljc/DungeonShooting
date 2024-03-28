@@ -120,7 +120,7 @@ public partial class Bullet : ActivityObject, IBullet
         MoveController.AddForce(new Vector2(data.FlySpeed, 0).Rotated(Rotation));
         
         //如果子弹会对玩家造成伤害, 则显示红色描边
-        if (Player.Current != null && Player.Current.CollisionWithMask(attackLayer))
+        if (World.Player != null && World.Player.CollisionWithMask(attackLayer))
         {
             if (!IsEnemyBullet)
             {

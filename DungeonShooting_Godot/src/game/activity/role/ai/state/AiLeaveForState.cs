@@ -102,16 +102,17 @@ public class AiLeaveForState : StateBase<AiRole, AIStateEnum>
             Master.DoIdle();
         }
 
-        var playerPos = Player.Current.GetCenterPosition();
+        var attackTarget = Master.GetAttackTarget();
+        var targetPos = attackTarget.GetCenterPosition();
         //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
-        if (Master.IsInTailAfterViewRange(playerPos))
+        if (Master.IsInTailAfterViewRange(targetPos))
         {
-            if (!Master.TestViewRayCast(playerPos)) //看到玩家
+            if (!Master.TestViewRayCast(targetPos)) //看到玩家
             {
                 //关闭射线检测
                 Master.TestViewRayCastOver();
                 //切换成发现目标状态
-                Master.LookTarget = Player.Current;
+                Master.LookTarget = attackTarget;
                 ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFollowUp);
                 return;
             }

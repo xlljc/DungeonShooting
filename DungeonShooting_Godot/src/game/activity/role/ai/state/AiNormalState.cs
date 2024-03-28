@@ -46,17 +46,17 @@ public class AiNormalState : StateBase<AiRole, AIStateEnum>
 
     public override void Process(float delta)
     {
-        //检测玩家
-        var player = Player.Current;
+        //获取攻击目标
+        var attackTarget = Master.GetAttackTarget();
         //玩家中心点坐标
-        var playerPos = player.GetCenterPosition();
+        var targetPos = attackTarget.GetCenterPosition();
 
-        if (Master.IsInViewRange(playerPos) && !Master.TestViewRayCast(playerPos)) //发现玩家
+        if (Master.IsInViewRange(targetPos) && !Master.TestViewRayCast(targetPos)) //发现目标
         {
             //关闭射线检测
             Master.TestViewRayCastOver();
             //发现玩家
-            Master.LookTarget = player;
+            Master.LookTarget = attackTarget;
             //判断是否进入通知状态
             if (Master.World.Enemy_InstanceList.FindIndex(enemy =>
                     enemy != Master && !enemy.IsDie && enemy.AffiliationArea == Master.AffiliationArea &&

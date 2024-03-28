@@ -75,14 +75,14 @@ public class AiFindAmmoState : StateBase<AiRole, AIStateEnum>
         if (Master.LookTarget == null) //没有目标
         {
             //临时处理
-            var player = Player.Current;
-            var playerPos = player.GetCenterPosition();
-            if (Master.IsInViewRange(playerPos) && !Master.TestViewRayCast(playerPos)) //发现玩家
+            var attackTarget = Master.GetAttackTarget();
+            var targetPos = attackTarget.GetCenterPosition();
+            if (Master.IsInViewRange(targetPos) && !Master.TestViewRayCast(targetPos)) //发现玩家
             {
                 //关闭射线检测
                 Master.TestViewRayCastOver();
                 //发现玩家
-                Master.LookTarget = player;
+                Master.LookTarget = attackTarget;
                 //进入惊讶状态, 然后再进入通知状态
                 ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFindAmmo, TargetWeapon);
                 return;

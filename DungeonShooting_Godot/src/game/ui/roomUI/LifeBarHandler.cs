@@ -67,7 +67,7 @@ public class LifeBarHandler
 
     private void HandlerRefreshLife()
     {
-        var player = Player.Current;
+        var player = World.Current.Player;
         if (player.MaxHp % 2 != 0)
         {
             Debug.LogError("玩家血量不是偶数!");
@@ -108,7 +108,7 @@ public class LifeBarHandler
     
     private void HandlerRefreshGold()
     {
-        _bar.L_Gold.L_GoldText.Instance.Text = Player.Current.RoleState.Gold.ToString();
+        _bar.L_Gold.L_GoldText.Instance.Text = World.Current.Player.RoleState.Gold.ToString();
     }
 
 }

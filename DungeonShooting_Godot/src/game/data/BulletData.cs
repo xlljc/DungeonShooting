@@ -8,6 +8,11 @@ using Godot;
 public class BulletData : IClone<BulletData>
 {
     /// <summary>
+    /// 数据所在世界对象
+    /// </summary>
+    public World World;
+    
+    /// <summary>
     /// 发射该子弹的武器, 可能为null
     /// </summary>
     public Weapon Weapon;
@@ -77,9 +82,14 @@ public class BulletData : IClone<BulletData>
     /// </summary>
     public float Rotation;
     
+    public BulletData(World world)
+    {
+        World = world;
+    }
+    
     public BulletData Clone()
     {
-        return new BulletData
+        return new BulletData(World)
         {
             Weapon = Weapon,
             BulletBase = BulletBase,

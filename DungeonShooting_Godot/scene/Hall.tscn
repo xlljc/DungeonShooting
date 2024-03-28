@@ -225,6 +225,7 @@ Id = "item_0004"
 DefaultLayer = 1
 ShadowZIndex = 0
 VerticalMotion = false
+CollisionVisible = false
 
 [node name="Sprite2D" type="Sprite2D" parent="ItemRoot/Item0004" index="1"]
 position = Vector2(71, -37)

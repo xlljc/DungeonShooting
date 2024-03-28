@@ -88,7 +88,7 @@ public partial class AffiliationArea : Area2D, IDestroy
         if (_includeItems.Add(activityObject))
         {
             //如果是玩家
-            if (activityObject == Player.Current)
+            if (activityObject == RoomInfo.World.Player)
             {
                 CallDeferred(nameof(OnPlayerInsertRoom));
             }
@@ -287,7 +287,7 @@ public partial class AffiliationArea : Area2D, IDestroy
     {
         if (IsFirstEnterFlag)
         {
-            Player.Current.OnFirstEnterRoom(RoomInfo);
+            RoomInfo.World.Player.OnFirstEnterRoom(RoomInfo);
             EventManager.EmitEvent(EventEnum.OnPlayerFirstEnterRoom, RoomInfo);
         }
         EventManager.EmitEvent(EventEnum.OnPlayerEnterRoom, RoomInfo);

@@ -63,7 +63,7 @@ public partial class AisleFogArea : Area2D, IDestroy
     
     private void OnBodyEntered(Node2D body)
     {
-        if (body == Player.Current)
+        if (body == RoomDoorInfo.RoomInfo.World.Player)
         {
             //注意需要延时调用
             CallDeferred(nameof(InsertPlayer));

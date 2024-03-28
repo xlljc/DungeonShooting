@@ -20,6 +20,11 @@ public class RoomInfo : IDestroy
         RoomType = type;
         RoomSplit = roomSplit;
     }
+
+    /// <summary>
+    /// 所在世界对象
+    /// </summary>
+    public World World;
     
     /// <summary>
     /// 房间 id

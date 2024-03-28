@@ -159,7 +159,7 @@ public partial class WeaponRoulettePanel : WeaponRoulette
         //如果选中了物体
         if (ActiveWeapon != null)
         {
-            Player.Current.ExchangeWeaponByIndex(ActiveWeapon.PackageIndex);
+            World.Current.Player.ExchangeWeaponByIndex(ActiveWeapon.PackageIndex);
         }
     }
     
@@ -182,7 +182,7 @@ public partial class WeaponRoulettePanel : WeaponRoulette
     //刷新页码
     private void RefreshSlotPage()
     {
-        var current = Player.Current;
+        var current = World.Current.Player;
         if (current == null)
         {
             return;
@@ -211,7 +211,7 @@ public partial class WeaponRoulettePanel : WeaponRoulette
     //更新显示的武器
     private void RefreshWeapon()
     {
-        var current = Player.Current;
+        var current = World.Current.Player;
         if (current == null) //没有玩家对象，这是异常情况
         {
             foreach (var slotNode in _slotNodes)

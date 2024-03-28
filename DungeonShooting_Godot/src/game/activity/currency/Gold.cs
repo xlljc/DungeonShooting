@@ -28,7 +28,7 @@ public partial class Gold : ActivityObject, IPoolItem
 
 	protected override void OnThrowOver()
 	{
-		var current = Player.Current;
+		var current = World.Player;
 		if (current != null)
 		{
 			this.CallDelay(0.3f, () =>

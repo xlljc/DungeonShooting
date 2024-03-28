@@ -172,7 +172,7 @@ public static class FireManager
 
     private static BulletData CreateSolidBulletData(Weapon weapon, float fireRotation, ExcelConfig.BulletBase bullet)
     {
-        var data = new BulletData()
+        var data = new BulletData(weapon.World)
         {
             Weapon = weapon,
             BulletBase = bullet,
@@ -216,7 +216,7 @@ public static class FireManager
     
     private static BulletData CreateSolidBulletData(Role role, float fireRotation, ExcelConfig.BulletBase bullet)
     {
-        var data = new BulletData()
+        var data = new BulletData(role.World)
         {
             Weapon = null,
             BulletBase = bullet,
@@ -261,7 +261,7 @@ public static class FireManager
 
     private static BulletData CreateLaserData(Weapon weapon, float fireRotation, ExcelConfig.BulletBase bullet)
     {
-        var data = new BulletData()
+        var data = new BulletData(weapon.World)
         {
             Weapon = weapon,
             BulletBase = bullet,

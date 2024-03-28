@@ -94,7 +94,7 @@ public partial class Knife : Weapon
         }
 
 
-        if (Master == Player.Current)
+        if (Master == World.Player)
         {
             var r = Master.MountPoint.RotationDegrees;
             //创建屏幕抖动

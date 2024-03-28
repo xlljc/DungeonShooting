@@ -12,7 +12,12 @@ public partial class World : CanvasModulate, ICoroutine
     /// <summary>
     /// 当前的游戏世界对象
     /// </summary>
-    public static World Current => GameApplication.Instance?.DungeonManager?.CurrWorld;
+    public static World Current => GameApplication.Instance.DungeonManager.CurrWorld;
+    
+    /// <summary>
+    /// 当前操作的玩家
+    /// </summary>
+    public Player Player { get; private set; }
     
     /// <summary>
     /// //对象根节点
@@ -119,6 +124,17 @@ public partial class World : CanvasModulate, ICoroutine
         return null;
     }
 
+    /// <summary>
+    /// 设置当前操作的玩家对象
+    /// </summary>
+    public void SetCurrentPlayer(Player player)
+    {
+        Player = player;
+        //设置相机和鼠标跟随玩家
+        GameCamera.Main.SetFollowTarget(player);
+        GameApplication.Instance.Cursor.SetMountRole(player);
+    }
+    
     /// <summary>
     /// 通知其他敌人发现目标了
     /// </summary>

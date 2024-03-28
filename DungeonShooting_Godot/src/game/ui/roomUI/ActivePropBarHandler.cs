@@ -38,7 +38,7 @@ public class ActivePropBarHandler
 
     public void Process(float delta)
     {
-        var prop = Player.Current?.ActivePropsPack.ActiveItem;
+        var prop = World.Current.Player?.ActivePropsPack.ActiveItem;
         if (prop != null)
         {
             SetActivePropCount(prop.Count);

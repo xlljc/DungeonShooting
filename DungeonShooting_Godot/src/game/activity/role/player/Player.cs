@@ -15,11 +15,6 @@ public partial class Player : Role
     public event Action<RoomInfo> OnFirstEnterRoomEvent;
     
     /// <summary>
-    /// 获取当前操作的角色
-    /// </summary>
-    public static Player Current { get; private set; }
-    
-    /// <summary>
     /// 玩家身上的状态机控制器
     /// </summary>
     public StateController<Player, PlayerStateEnum> StateController { get; private set; }
@@ -35,17 +30,6 @@ public partial class Player : Role
     private float _rollCoolingTimer = 0;
     
     private BrushImageData _brushData2;
-    
-    /// <summary>
-    /// 设置当前操作的玩家对象
-    /// </summary>
-    public static void SetCurrentPlayer(Player player)
-    {
-        Current = player;
-        //设置相机和鼠标跟随玩家
-        GameCamera.Main.SetFollowTarget(player);
-        GameApplication.Instance.Cursor.SetMountRole(player);
-    }
     
     public override void OnInit()
     {

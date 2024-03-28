@@ -100,7 +100,15 @@ public abstract partial class AiRole : Role
         //NavigationAgent2D.VelocityComputed += OnVelocityComputed;
     }
     
-        /// <summary>
+    /// <summary>
+    /// 获取攻击的目标对象, 该函数不能返回 null
+    /// </summary>
+    public virtual Role GetAttackTarget()
+    {
+        return World.Player;
+    }
+    
+    /// <summary>
     /// 返回地上的武器是否有可以拾取的, 也包含没有被其他敌人标记的武器
     /// </summary>
     public bool CheckUsableWeaponInUnclaimed()

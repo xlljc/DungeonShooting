@@ -141,10 +141,11 @@ public partial class RoomMapPanel : RoomMap
             _needRefresh.Clear();
         }
 
-        if (Player.Current != null)
+        var player = World.Current.Player;
+        if (player != null)
         {
             //更新地图中心点位置
-            var playPosition = Player.Current.GetCenterPosition();
+            var playPosition = player.GetCenterPosition();
             if (!_isMagnifyMap)
             {
                 S_Root.Instance.Position = CalcRootPosition(playPosition);
@@ -155,7 +156,7 @@ public partial class RoomMapPanel : RoomMap
                 S_Mark.Instance.Position = S_DrawContainer.Instance.Size / 2 + _mapOffset;
             }
 
-            var area = Player.Current.AffiliationArea;
+            var area = player.AffiliationArea;
             //传送
             if (_pressMapFlag && _mouseHoverRoom != null &&
                 area != null && !area.RoomInfo.IsSeclusion &&
@@ -269,7 +270,7 @@ public partial class RoomMapPanel : RoomMap
                 var shaderMaterial = (ShaderMaterial)roomInfo.PreviewSprite.Material;
                 _originOutlineColor = shaderMaterial.GetShaderParameter("outline_color").AsColor();
                 //玩家所在的房间门是否打开
-                var area = Player.Current.AffiliationArea;
+                var area = World.Current.Player.AffiliationArea;
                 if (area != null)
                 {
                     var isOpen = !area.RoomInfo.IsSeclusion;
@@ -411,7 +412,7 @@ public partial class RoomMapPanel : RoomMap
         _transmissionTween.TweenProperty(roomUI.S_Mask.Instance, "color", new Color(0, 0, 0), 0.3f);
         _transmissionTween.TweenCallback(Callable.From(() =>
         {
-            Player.Current.Position = position;
+            World.Current.Player.Position = position;
         }));
         _transmissionTween.TweenInterval(0.2f);
         _transmissionTween.TweenProperty(roomUI.S_Mask.Instance, "color", new Color(0, 0, 0, 0), 0.3f);

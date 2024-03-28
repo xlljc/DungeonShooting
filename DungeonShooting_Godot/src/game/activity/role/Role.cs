@@ -1013,7 +1013,7 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool IsPlayer()
     {
-        return this == Player.Current;
+        return this == World.Player;
     }
     
     /// <summary>
@@ -1021,11 +1021,11 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool IsEnemyWithPlayer()
     {
-        if (Player.Current == null)
+        if (World.Player == null)
         {
             return false;
         }
-        return CollisionWithMask(Player.Current.EnemyLayer);
+        return CollisionWithMask(World.Player.EnemyLayer);
     }
 
     /// <summary>

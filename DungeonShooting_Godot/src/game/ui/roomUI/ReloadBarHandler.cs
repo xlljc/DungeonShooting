@@ -55,8 +55,8 @@ public class ReloadBarHandler
     /// </summary>
     public void OnCameraPositionUpdate(float delta)
     {
-        var player = Player.Current;
-        var activeItem = player.WeaponPack.ActiveItem;
+        var player = World.Current.Player;
+        var activeItem = player?.WeaponPack.ActiveItem;
         if (activeItem != null && activeItem.Reloading && activeItem.Attribute.ShowReloadBar)
         {
             ShowBar(player.GlobalPosition, activeItem.ReloadProgress);
