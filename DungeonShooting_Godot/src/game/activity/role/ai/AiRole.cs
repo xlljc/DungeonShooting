@@ -76,6 +76,11 @@ public abstract partial class AiRole : Role
     /// </summary>
     public float AttackInterval { get; set; } = 0;
 
+    /// <summary>
+    /// 当前Ai是否有攻击欲望
+    /// </summary>
+    public bool HasAttackDesire { get; private set; } = true;
+
     public override void OnInit()
     {
         base.OnInit();
@@ -101,7 +106,7 @@ public abstract partial class AiRole : Role
     }
     
     /// <summary>
-    /// 获取攻击的目标对象, 该函数不能返回 null
+    /// 获取攻击的目标对象, 当 HasAttackDesire 为 true 时才会调用
     /// </summary>
     public virtual Role GetAttackTarget()
     {
@@ -386,6 +391,18 @@ public abstract partial class AiRole : Role
         Gold.CreateGold(Position, RoleState.Gold);
         //销毁
         Destroy();
+    }
+
+    /// <summary>
+    /// 设置Ai是否有攻击欲望
+    /// </summary>
+    public void SetAttackDesire(bool v)
+    {
+        if (v != HasAttackDesire)
+        {
+            HasAttackDesire = v;
+            StateController.ChangeState(AIStateEnum.AiNormal);
+        }
     }
 
     // private void OnVelocityComputed(Vector2 velocity)

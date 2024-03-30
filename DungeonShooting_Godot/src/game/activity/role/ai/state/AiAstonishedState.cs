@@ -34,7 +34,10 @@ public class AiAstonishedState : StateBase<AiRole, AIStateEnum>
         _timer = 0.6f;
         
         //播放惊讶表情
-        Master.AnimationPlayer.Play(AnimatorNames.Astonished);
+        if (Master.AnimationPlayer.HasAnimation(AnimatorNames.Astonished))
+        {
+            Master.AnimationPlayer.Play(AnimatorNames.Astonished);
+        }
     }
 
     public override void Process(float delta)

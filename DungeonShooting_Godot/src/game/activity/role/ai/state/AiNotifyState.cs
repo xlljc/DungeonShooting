@@ -22,7 +22,10 @@ public class AiNotifyState : StateBase<AiRole, AIStateEnum>
         _timer = 1.2f;
         //通知其它角色
         Master.World.NotifyEnemyTarget(Master, Master.LookTarget);
-        Master.AnimationPlayer.Play(AnimatorNames.Notify);
+        if (Master.AnimationPlayer.HasAnimation(AnimatorNames.Notify))
+        {
+            Master.AnimationPlayer.Play(AnimatorNames.Notify);
+        }
     }
 
     public override void Process(float delta)

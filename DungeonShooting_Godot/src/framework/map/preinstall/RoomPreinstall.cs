@@ -226,12 +226,9 @@ public class RoomPreinstall : IDestroy
     
     private void HandlerShopBossMark(World world, MarkInfo markInfo, ActivityMark mark)
     {
-        mark.Id = ActivityObject.Ids.Id_treasure_box0001;
-        mark.ActivityType = ActivityType.Treasure;
+        mark.Id = ActivityObject.Ids.Id_shopBoss0001;
+        mark.ActivityType = ActivityType.Npc;
         mark.Altitude = 0;
-        
-        // mark.Id = ActivityObject.Ids.Id_shopBoss0001;
-        // mark.ActivityType = ActivityType.Enemy;
     }
     
     private void HandlerTreasureMark(World world, MarkInfo markInfo, ActivityMark mark)
@@ -469,12 +466,16 @@ public class RoomPreinstall : IDestroy
     //获取物体默认所在层级
     private RoomLayerEnum GetDefaultLayer(ActivityMark activityMark)
     {
-        if (activityMark.ActivityType == ActivityType.Player || activityMark.ActivityType == ActivityType.Enemy || activityMark.ActivityType == ActivityType.Treasure)
+        switch (activityMark.ActivityType)
         {
-            return RoomLayerEnum.YSortLayer;
+            case ActivityType.Player:
+            case ActivityType.Enemy:
+            case ActivityType.Npc:
+            case ActivityType.Treasure:
+                return RoomLayerEnum.YSortLayer;
+            default:
+                return RoomLayerEnum.NormalLayer;
         }
-
-        return RoomLayerEnum.NormalLayer;
     }
     
     /// <summary>

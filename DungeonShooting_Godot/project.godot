@@ -252,6 +252,7 @@ roulette={
 2d_physics/layer_8="debris"
 2d_physics/layer_9="throwing"
 2d_physics/layer_10="obstacle"
+2d_physics/layer_11="npc"
 2d_physics/layer_14="ui_mouse"
 
 [mono]

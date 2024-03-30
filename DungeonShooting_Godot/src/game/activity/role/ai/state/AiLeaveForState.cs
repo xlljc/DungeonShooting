@@ -53,7 +53,10 @@ public class AiLeaveForState : StateBase<AiRole, AIStateEnum>
         _playAnimFlag = prev != AIStateEnum.AiFindAmmo;
         if (_playAnimFlag)
         {
-            Master.AnimationPlayer.Play(AnimatorNames.Query);
+            if (Master.AnimationPlayer.HasAnimation(AnimatorNames.Query))
+            {
+                Master.AnimationPlayer.Play(AnimatorNames.Query);
+            }
         }
         
         //看向目标位置
@@ -101,27 +104,31 @@ public class AiLeaveForState : StateBase<AiRole, AIStateEnum>
             //站立
             Master.DoIdle();
         }
-
+        //攻击目标
         var attackTarget = Master.GetAttackTarget();
-        var targetPos = attackTarget.GetCenterPosition();
-        //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
-        if (Master.IsInTailAfterViewRange(targetPos))
+        if (attackTarget != null)
         {
-            if (!Master.TestViewRayCast(targetPos)) //看到玩家
+            var targetPos = attackTarget.GetCenterPosition();
+            //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
+            if (Master.IsInTailAfterViewRange(targetPos))
             {
-                //关闭射线检测
-                Master.TestViewRayCastOver();
-                //切换成发现目标状态
-                Master.LookTarget = attackTarget;
-                ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFollowUp);
-                return;
-            }
-            else
-            {
-                //关闭射线检测
-                Master.TestViewRayCastOver();
+                if (!Master.TestViewRayCast(targetPos)) //看到玩家
+                {
+                    //关闭射线检测
+                    Master.TestViewRayCastOver();
+                    //切换成发现目标状态
+                    Master.LookTarget = attackTarget;
+                    ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFollowUp);
+                    return;
+                }
+                else
+                {
+                    //关闭射线检测
+                    Master.TestViewRayCastOver();
+                }
             }
         }
+        
 
         //移动到目标掉了, 还没发现目标
         if (Master.NavigationAgent2D.IsNavigationFinished())

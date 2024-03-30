@@ -47,4 +47,8 @@ public class PhysicsLayer
     /// 障碍物
     /// </summary>
     public const uint Obstacle = 0b1000000000;
+    /// <summary>
+    /// npc
+    /// </summary>
+    public const uint Npc = 0b10000000000;
 }

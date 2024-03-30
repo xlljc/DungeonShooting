@@ -49,6 +49,10 @@ public enum ActivityType
     /// </summary>
     Treasure,
     /// <summary>
+    /// Npc
+    /// </summary>
+    Npc,
+    /// <summary>
     /// 其它类型
     /// </summary>
     Other = 99,

@@ -30,6 +30,7 @@ public static partial class ExcelConfig
         /// Effect(特效): 8 <br/>
         /// Prop(道具): 9 <br/>
         /// Treasure(宝箱): 10 <br/>
+        /// Npc: 11 <br/>
         /// Other(其它类型): 99
         /// </summary>
         [JsonInclude]

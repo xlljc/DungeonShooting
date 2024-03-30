@@ -54,7 +54,10 @@ public class AiFindAmmoState : StateBase<AiRole, AIStateEnum>
         _playAnimFlag = prev == AIStateEnum.AiLeaveFor;
         if (_playAnimFlag)
         {
-            Master.AnimationPlayer.Play(AnimatorNames.Query);
+            if (Master.AnimationPlayer.HasAnimation(AnimatorNames.Query))
+            {
+                Master.AnimationPlayer.Play(AnimatorNames.Query);
+            }
         }
     }
 
@@ -74,18 +77,21 @@ public class AiFindAmmoState : StateBase<AiRole, AIStateEnum>
 
         if (Master.LookTarget == null) //没有目标
         {
-            //临时处理
+            //攻击目标
             var attackTarget = Master.GetAttackTarget();
-            var targetPos = attackTarget.GetCenterPosition();
-            if (Master.IsInViewRange(targetPos) && !Master.TestViewRayCast(targetPos)) //发现玩家
+            if (attackTarget != null)
             {
-                //关闭射线检测
-                Master.TestViewRayCastOver();
-                //发现玩家
-                Master.LookTarget = attackTarget;
-                //进入惊讶状态, 然后再进入通知状态
-                ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFindAmmo, TargetWeapon);
-                return;
+                var targetPos = attackTarget.GetCenterPosition();
+                if (Master.IsInViewRange(targetPos) && !Master.TestViewRayCast(targetPos)) //发现玩家
+                {
+                    //关闭射线检测
+                    Master.TestViewRayCastOver();
+                    //发现玩家
+                    Master.LookTarget = attackTarget;
+                    //进入惊讶状态, 然后再进入通知状态
+                    ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFindAmmo, TargetWeapon);
+                    return;
+                }
             }
         }
 
