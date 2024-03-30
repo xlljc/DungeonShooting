@@ -1,13 +1,13 @@
 [gd_scene load_steps=9 format=3 uid="uid://cyrcv2jdgr8cf"]
 
-[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="1_xk5yk"]
-[ext_resource type="Script" path="res://src/game/activity/role/MountRotation.cs" id="2_5ddpw"]
-[ext_resource type="Script" path="res://src/framework/activity/hurt/HurtArea.cs" id="2_8jnvr"]
-[ext_resource type="SpriteFrames" uid="uid://c8h5svp76h3kw" path="res://resource/spriteFrames/role/Role_tip.tres" id="3_bo78w"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="1_xedx7"]
+[ext_resource type="Script" path="res://src/framework/activity/hurt/HurtArea.cs" id="2_2eey0"]
+[ext_resource type="Script" path="res://src/game/activity/role/MountRotation.cs" id="3_1jj1i"]
+[ext_resource type="SpriteFrames" uid="uid://c8h5svp76h3kw" path="res://resource/spriteFrames/role/Role_tip.tres" id="4_kn7in"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yif6x"]
 resource_local_to_scene = true
-shader = ExtResource("1_xk5yk")
+shader = ExtResource("1_xedx7")
 shader_parameter/blend = Color(1, 1, 1, 1)
 shader_parameter/schedule = 0.0
 shader_parameter/modulate = Color(1, 1, 1, 1)
@@ -49,7 +49,7 @@ shape = SubResource("CircleShape2D_5pj80")
 collision_layer = 0
 collision_mask = 0
 monitoring = false
-script = ExtResource("2_8jnvr")
+script = ExtResource("2_2eey0")
 
 [node name="HurtCollision" type="CollisionShape2D" parent="HurtArea"]
 position = Vector2(0, -9)
@@ -66,7 +66,7 @@ shape = SubResource("CapsuleShape2D_843d5")
 
 [node name="MountPoint" type="Marker2D" parent="."]
 position = Vector2(2, -8)
-script = ExtResource("2_5ddpw")
+script = ExtResource("3_1jj1i")
 
 [node name="MeleeAttackArea" type="Area2D" parent="MountPoint"]
 visible = false
@@ -81,6 +81,6 @@ monitorable = false
 [node name="TipSprite" type="AnimatedSprite2D" parent="TipRoot"]
 visible = false
 position = Vector2(0, -22)
-sprite_frames = ExtResource("3_bo78w")
+sprite_frames = ExtResource("4_kn7in")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

@@ -24,6 +24,11 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_enemy0002 = "enemy0002";
         /// <summary>
+        /// 名称: 商店老板 <br/>
+        /// 简介: 商店老板
+        /// </summary>
+        public const string Id_shopBoss0001 = "shopBoss0001";
+        /// <summary>
         /// 名称: 步枪 <br/>
         /// 简介: 
         /// </summary>

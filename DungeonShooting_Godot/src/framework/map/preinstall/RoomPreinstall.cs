@@ -229,6 +229,9 @@ public class RoomPreinstall : IDestroy
         mark.Id = ActivityObject.Ids.Id_treasure_box0001;
         mark.ActivityType = ActivityType.Treasure;
         mark.Altitude = 0;
+        
+        // mark.Id = ActivityObject.Ids.Id_shopBoss0001;
+        // mark.ActivityType = ActivityType.Enemy;
     }
     
     private void HandlerTreasureMark(World world, MarkInfo markInfo, ActivityMark mark)

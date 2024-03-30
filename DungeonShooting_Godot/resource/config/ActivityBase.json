@@ -23,7 +23,7 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/role/Enemy0001.tscn",
+    "Prefab": "res://prefab/role/enemy/Enemy0001.tscn",
     "Icon": "res://resource/sprite/role/enemy0001/enemy0001_Icon.png",
     "ShowInMapEditor": true
   },
@@ -37,8 +37,22 @@
     "Details": "",
     "IsStatic": false,
     "__Material": "",
-    "Prefab": "res://prefab/role/Enemy0002.tscn",
+    "Prefab": "res://prefab/role/enemy/Enemy0002.tscn",
     "Icon": "res://resource/sprite/role/enemy0002/Enemy0002.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "shopBoss0001",
+    "Name": "\u5546\u5E97\u8001\u677F",
+    "Type": 4,
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "\u5546\u5E97\u8001\u677F",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/role/shopBoss/ShopBoss0001.tscn",
+    "Icon": "res://resource/sprite/role/shopBoss0001/ShopBoss0001.png",
     "ShowInMapEditor": true
   },
   {

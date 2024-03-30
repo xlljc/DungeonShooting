@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://b8s1dgu63fddf"]
 
-[ext_resource type="PackedScene" uid="uid://dbrig6dq441wo" path="res://prefab/role/template/EnemyTemplate.tscn" id="1_2vqwe"]
+[ext_resource type="PackedScene" uid="uid://dbrig6dq441wo" path="res://prefab/role/template/AiTemplate.tscn" id="1_2vqwe"]
 [ext_resource type="Script" path="res://src/game/activity/role/enemy/Enemy.cs" id="2_0pcq3"]
 [ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="3_x8agd"]
 [ext_resource type="SpriteFrames" uid="uid://cnctpyrn02rhd" path="res://resource/spriteFrames/role/Enemy0001.tres" id="4_qv8w5"]
