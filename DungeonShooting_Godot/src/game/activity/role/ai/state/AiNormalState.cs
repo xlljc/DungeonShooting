@@ -89,7 +89,7 @@ public class AiNormalState : StateBase<AiRole, AIStateEnum>
             RunOver();
             _isMoveOver = false;
         }
-        else //移动中
+        else if (Master.HasMoveDesire) //移动中
         {
             if (_lockTimer >= 1) //卡在一个点超过一秒
             {

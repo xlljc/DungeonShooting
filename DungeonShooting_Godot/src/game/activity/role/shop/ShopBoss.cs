@@ -10,7 +10,8 @@ public partial class ShopBoss : AiRole
     public override void OnInit()
     {
         base.OnInit();
-        SetAttackDesire(false);
+        SetAttackDesire(false); //默认不攻击
+        SetMoveDesire(false); //默认不攻击
     }
 
     protected override RoleState OnCreateRoleState()

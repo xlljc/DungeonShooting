@@ -80,6 +80,11 @@ public abstract partial class AiRole : Role
     /// 当前Ai是否有攻击欲望
     /// </summary>
     public bool HasAttackDesire { get; private set; } = true;
+    
+    /// <summary>
+    /// 是否有移动欲望, 仅在 AiNormal 状态下有效, 其他状态都可以移动
+    /// </summary>
+    public bool HasMoveDesire { get; private set; } = true;
 
     public override void OnInit()
     {
@@ -405,6 +410,14 @@ public abstract partial class AiRole : Role
         }
     }
 
+    /// <summary>
+    /// 设置Ai是否有移动欲望
+    /// </summary>
+    public void SetMoveDesire(bool v)
+    {
+        HasMoveDesire = v;
+    }
+    
     // private void OnVelocityComputed(Vector2 velocity)
     // {
     //     if (Mathf.Abs(velocity.X) >= 0.01f && Mathf.Abs(velocity.Y) >= 0.01f)
