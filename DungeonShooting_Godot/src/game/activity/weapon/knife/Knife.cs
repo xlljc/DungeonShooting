@@ -75,7 +75,7 @@ public partial class Knife : Weapon
     {
         Debug.Log("近战武器攻击! 蓄力时长: " + GetTriggerChargeTime() + ", 扳机按下时长: " + GetTriggerDownTime());
         //更新碰撞层级
-        _hitArea.CollisionMask = GetAttackLayer() | PhysicsLayer.Bullet;
+        _hitArea.CollisionMask = AttackLayer | PhysicsLayer.Bullet;
         //启用碰撞
         _hitArea.Monitoring = true;
         _attackIndex = 0;
@@ -143,7 +143,6 @@ public partial class Knife : Weapon
                 }
                 bullet.MoveController.ScaleAllVelocity(scale);
                 bullet.Rotation += Mathf.Pi;
-                bullet.AttackLayer = TriggerRole.AttackLayer;
                 bullet.RefreshBulletColor(false);
             }
         }
@@ -195,6 +194,9 @@ public partial class Knife : Weapon
         }
         
         //造成伤害
-        hurt.Hurt(TriggerRole, damage, (hurt.GetPosition() - globalPosition).Angle());
+        if (hurt.CanHurt(TriggerRole))
+        {
+            hurt.Hurt(TriggerRole, damage, (hurt.GetPosition() - globalPosition).Angle());
+        }
     }
 }

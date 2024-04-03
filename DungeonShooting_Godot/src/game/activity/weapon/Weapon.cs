@@ -28,9 +28,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     private ExcelConfig.WeaponBase _aiWeaponAttribute;
 
     /// <summary>
-    /// 武器攻击的目标阵营
+    /// 攻击目标层级
     /// </summary>
-    public CampEnum TargetCamp { get; set; }
+    public uint AttackLayer => Role.AttackLayer;
 
     public Role Master { get; set; }
 
@@ -148,11 +148,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     /// 上一次触发改武器开火的角色, 可能为 null
     /// </summary>
     public Role TriggerRole { get; private set; }
-    
-    /// <summary>
-    /// 上一次触发改武器开火的触发开火攻击的层级, 数据源自于: <see cref="PhysicsLayer"/>
-    /// </summary>
-    public long TriggerRoleAttackLayer { get; private set; }
     
     /// <summary>
     /// 武器当前射速
@@ -850,13 +845,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         if (triggerRole != null)
         {
             TriggerRole = triggerRole;
-            TriggerRoleAttackLayer = triggerRole.AttackLayer;
             SetCurrentWeaponAttribute(triggerRole.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute);
         }
         else if (Master != null)
         {
             TriggerRole = Master;
-            TriggerRoleAttackLayer = Master.AttackLayer;
             SetCurrentWeaponAttribute(Master.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute);
         }
 
@@ -1273,19 +1266,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         }
 
         return AiUseAttribute;
-    }
-    
-    /// <summary>
-    /// 获取武器攻击的目标层级
-    /// </summary>
-    /// <returns></returns>
-    public uint GetAttackLayer()
-    {
-        if (TriggerRoleAttackLayer > 0)
-        {
-            return (uint)TriggerRoleAttackLayer;
-        }
-        return Master != null ? Master.AttackLayer : Role.DefaultAttackLayer;
     }
     
     /// <summary>

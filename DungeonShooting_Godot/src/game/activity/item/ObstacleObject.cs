@@ -7,6 +7,11 @@ using Godot;
 [Tool]
 public partial class ObstacleObject : ActivityObject, IHurt
 {
+	public virtual bool CanHurt(ActivityObject target)
+	{
+		return true;
+	}
+
 	public virtual void Hurt(ActivityObject target, int damage, float angle)
 	{
 	}

@@ -63,9 +63,6 @@ public partial class Enemy : AiRole
     public override void OnInit()
     {
         base.OnInit();
-
-        AttackLayer = PhysicsLayer.Obstacle | PhysicsLayer.Player;
-        EnemyLayer = PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
         RoleState.MoveSpeed = 20;

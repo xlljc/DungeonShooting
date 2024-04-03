@@ -904,7 +904,7 @@ public partial class DungeonManager : Node2D
                 {
                     //房间内是否有存活的敌人
                     var flag = ActiveAffiliationArea.ExistEnterItem(
-                        activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
+                        activityObject => activityObject is Role role && role.IsEnemyWithPlayer()
                     );
                     //Debug.Log("当前房间存活数量: " + count);
                     if (!flag)

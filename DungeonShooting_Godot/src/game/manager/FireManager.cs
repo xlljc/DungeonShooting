@@ -97,11 +97,11 @@ public static class FireManager
     {
         if (bullet.Type == 1) //实体子弹
         {
-            return ShootSolidBullet(CreateSolidBulletData(weapon, fireRotation, bullet), weapon.GetAttackLayer());
+            return ShootSolidBullet(CreateSolidBulletData(weapon, fireRotation, bullet), weapon.AttackLayer);
         }
         else if (bullet.Type == 2) //激光子弹
         {
-            return ShootLaser(CreateLaserData(weapon, fireRotation, bullet), weapon.GetAttackLayer());
+            return ShootLaser(CreateLaserData(weapon, fireRotation, bullet), weapon.AttackLayer);
         }
         else
         {
@@ -118,7 +118,7 @@ public static class FireManager
     {
         if (bullet.Type == 1) //实体子弹
         {
-            return ShootSolidBullet(CreateSolidBulletData(trigger, fireRotation, bullet), trigger.AttackLayer);
+            return ShootSolidBullet(CreateSolidBulletData(trigger, fireRotation, bullet), Role.AttackLayer);
         }
 
         return null;

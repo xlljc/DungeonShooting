@@ -317,7 +317,7 @@ public class RoomPreinstall : IDestroy
             foreach (var preloadData in _readyList)
             {
                 //有敌人
-                if (!hasEnemy && preloadData.ActivityObject.CollisionWithMask(PhysicsLayer.Enemy))
+                if (!hasEnemy && preloadData.ActivityObject is Role role && role.IsEnemyWithPlayer())
                 {
                     hasEnemy = true;
                 }
@@ -332,7 +332,7 @@ public class RoomPreinstall : IDestroy
         if (!hasEnemy)
         {
             hasEnemy = RoomInfo.AffiliationArea.ExistIncludeItem(
-                activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
+                activityObject => activityObject is Role role && role.IsEnemyWithPlayer()
             );
         }
 

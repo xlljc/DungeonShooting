@@ -11,6 +11,11 @@ using Godot;
 public abstract partial class Role : ActivityObject
 {
     /// <summary>
+    /// 攻击目标的碰撞器所属层级, 数据源自于: <see cref="PhysicsLayer"/>
+    /// </summary>
+    public const uint AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Obstacle | PhysicsLayer.HurtArea;
+    
+    /// <summary>
     /// 当前角色对其他角色造成伤害时对回调
     /// 参数1为目标角色
     /// 参数2为造成对伤害值
@@ -28,11 +33,6 @@ public abstract partial class Role : ActivityObject
     public RoleState RoleState { get; private set; }
     
     /// <summary>
-    /// 默认攻击对象层级
-    /// </summary>
-    public const uint DefaultAttackLayer = PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Obstacle;
-    
-    /// <summary>
     /// 伤害区域
     /// </summary>
     [Export, ExportFillNode]
@@ -47,17 +47,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 所属阵营
     /// </summary>
-    public CampEnum Camp;
-
-    /// <summary>
-    /// 攻击目标的碰撞器所属层级, 数据源自于: <see cref="PhysicsLayer"/>
-    /// </summary>
-    public uint AttackLayer { get; set; } = PhysicsLayer.Wall | PhysicsLayer.Obstacle;
-    
-    /// <summary>
-    /// 该角色敌对目标的碰撞器所属层级, 数据源自于: <see cref="PhysicsLayer"/>
-    /// </summary>
-    public uint EnemyLayer { get; set; } = PhysicsLayer.Enemy;
+    public CampEnum Camp { get; set; }
 
     /// <summary>
     /// 携带的被动道具列表
@@ -282,20 +272,11 @@ public abstract partial class Role : ActivityObject
             {
                 if (value) //无敌状态
                 {
-                    if (HurtArea != null)
-                    {
-                        HurtArea.CollisionLayer = _currentLayer;
-                    }
-
                     _flashingInvincibleTimer = -1;
                     _flashingInvincibleFlag = false;
                 }
                 else //正常状态
                 {
-                    if (HurtArea != null)
-                    {
-                        HurtArea.CollisionLayer = _currentLayer;
-                    }
                     SetBlendModulate(new Color(1, 1, 1, 1));
                 }
             }
@@ -335,7 +316,6 @@ public abstract partial class Role : ActivityObject
     private Vector2 _startScale;
     //当前可互动的物体
     private CheckInteractiveResult _currentResultData;
-    private uint _currentLayer;
     //闪烁计时器
     private float _flashingInvincibleTimer = -1;
     //闪烁状态
@@ -479,15 +459,7 @@ public abstract partial class Role : ActivityObject
         
         _startScale = Scale;
         
-        HurtArea.InitActivityObject(this);
-        HurtArea.CollisionLayer = CollisionLayer;
-        HurtArea.CollisionMask = PhysicsLayer.None;
-        _currentLayer = HurtArea.CollisionLayer;
-        //CollisionLayer = PhysicsLayer.None;
-        HurtArea.OnHurtEvent += (target, damage, angle) =>
-        {
-            CallDeferred(nameof(HurtHandler), target, damage, angle);
-        };
+        HurtArea.InitRole(this);
         
         Face = FaceDirection.Right;
         
@@ -857,7 +829,7 @@ public abstract partial class Role : ActivityObject
     /// <param name="target">触发伤害的对象, 为 null 表示不存在对象或者对象已经被销毁</param>
     /// <param name="damage">伤害的量</param>
     /// <param name="angle">伤害角度（弧度制）</param>
-    protected virtual void HurtHandler(ActivityObject target, int damage, float angle)
+    public virtual void HurtHandler(ActivityObject target, int damage, float angle)
     {
         //受伤闪烁, 无敌状态
         if (Invincible)
@@ -1016,6 +988,20 @@ public abstract partial class Role : ActivityObject
         return this == World.Player;
     }
     
+    
+    /// <summary>
+    /// 返回指定角色是否是敌人
+    /// </summary>
+    public bool IsEnemy(Role other)
+    {
+        if (other.Camp == Camp || other.Camp == CampEnum.Peace || Camp == CampEnum.Peace)
+        {
+            return false;
+        }
+
+        return true;
+    }
+    
     /// <summary>
     /// 是否是玩家的敌人
     /// </summary>
@@ -1025,7 +1011,7 @@ public abstract partial class Role : ActivityObject
         {
             return false;
         }
-        return CollisionWithMask(World.Player.EnemyLayer);
+        return IsEnemy(World.Player);
     }
 
     /// <summary>
@@ -1437,8 +1423,11 @@ public abstract partial class Role : ActivityObject
             var v2 = position.Normalized() * repel;
             o.AddRepelForce(v2);
         }
-        
-        hurt.Hurt(this, damage, (pos - GlobalPosition).Angle());
+
+        if (hurt.CanHurt(this))
+        {
+            hurt.Hurt(this, damage, (pos - GlobalPosition).Angle());
+        }
     }
 
     protected override void OnDestroy()

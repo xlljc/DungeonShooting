@@ -204,7 +204,11 @@ public partial class Bullet : ActivityObject, IBullet
         }
 
         //造成伤害
-        hurt.Hurt(BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
+        var target = BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole;
+        if (hurt.CanHurt(target))
+        {
+            hurt.Hurt(target, BulletData.Harm, Rotation);
+        }
 
         //穿透次数
         CurrentPenetration++;
