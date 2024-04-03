@@ -14,9 +14,10 @@ public interface IBullet : ICoroutine, IPoolItem
     event Action OnLeavePoolEvent;
 
     /// <summary>
-    /// 攻击的层级
+    /// 子弹所在阵营
     /// </summary>
-    uint AttackLayer { get; set; }
+    CampEnum Camp { get; set; }
+    
     /// <summary>
     /// 子弹数据
     /// </summary>
@@ -30,7 +31,8 @@ public interface IBullet : ICoroutine, IPoolItem
     /// <summary>
     /// 初始化子弹数据
     /// </summary>
-    void InitData(BulletData data, uint attackLayer);
+    void InitData(BulletData data, CampEnum camp);
+    
     /// <summary>
     /// 子弹运行逻辑执行完成
     /// </summary>

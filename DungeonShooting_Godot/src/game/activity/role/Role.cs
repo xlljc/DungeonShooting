@@ -1001,6 +1001,19 @@ public abstract partial class Role : ActivityObject
 
         return true;
     }
+
+    /// <summary>
+    /// 返回指定阵营是否是敌人
+    /// </summary>
+    public bool IsEnemy(CampEnum otherCamp)
+    {
+        if (otherCamp == Camp || otherCamp == CampEnum.Peace || Camp == CampEnum.Peace)
+        {
+            return false;
+        }
+
+        return true;   
+    }
     
     /// <summary>
     /// 是否是玩家的敌人
@@ -1399,8 +1412,7 @@ public abstract partial class Role : ActivityObject
         }
         else if (body is Bullet bullet) //攻击子弹
         {
-            var attackLayer = bullet.AttackLayer;
-            if (CollisionWithMask(attackLayer)) //是攻击玩家的子弹
+            if (IsEnemy(bullet.BulletData.TriggerRole))
             {
                 bullet.OnPlayDisappearEffect();
                 bullet.Destroy();
@@ -1410,22 +1422,22 @@ public abstract partial class Role : ActivityObject
 
     private void HandlerCollision(IHurt hurt, Weapon activeWeapon)
     {
-        var damage = Utils.Random.RandomConfigRange(activeWeapon.Attribute.MeleeAttackHarmRange);
-        damage = RoleState.CalcDamage(damage);
-
-        var o = hurt.GetActivityObject();
-        var pos = hurt.GetPosition();
-        if (o != null && o is not Player) //不是玩家才能被击退
-        {
-            var attr = IsAi ? activeWeapon.AiUseAttribute : activeWeapon.PlayerUseAttribute;
-            var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRange);
-            var position = pos - MountPoint.GlobalPosition;
-            var v2 = position.Normalized() * repel;
-            o.AddRepelForce(v2);
-        }
-
         if (hurt.CanHurt(this))
         {
+            var damage = Utils.Random.RandomConfigRange(activeWeapon.Attribute.MeleeAttackHarmRange);
+            damage = RoleState.CalcDamage(damage);
+
+            var o = hurt.GetActivityObject();
+            var pos = hurt.GetPosition();
+            if (o != null && o is not Player) //不是玩家才能被击退
+            {
+                var attr = IsAi ? activeWeapon.AiUseAttribute : activeWeapon.PlayerUseAttribute;
+                var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRange);
+                var position = pos - MountPoint.GlobalPosition;
+                var v2 = position.Normalized() * repel;
+                o.AddRepelForce(v2);
+            }
+            
             hurt.Hurt(this, damage, (pos - GlobalPosition).Angle());
         }
     }

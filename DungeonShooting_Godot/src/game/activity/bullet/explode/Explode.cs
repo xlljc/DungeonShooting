@@ -26,11 +26,6 @@ public partial class Explode : Area2D, IPoolItem
     public CircleShape2D CircleShape { get; private set; }
 
     /// <summary>
-    /// 爆炸攻击的层级
-    /// </summary>
-    public uint AttackLayer { get; private set; }
-
-    /// <summary>
     /// 产生爆炸的子弹数据
     /// </summary>
     public BulletData BulletData { get; private set; }
@@ -40,7 +35,12 @@ public partial class Explode : Area2D, IPoolItem
     private int _harm;
     private float _repelledRadius;
     private float _maxRepelled;
-    
+
+    public override void _Ready()
+    {
+        CollisionMask = Role.AttackLayer;
+    }
+
     public void Destroy()
     {
         if (IsDestroyed)
@@ -56,12 +56,11 @@ public partial class Explode : Area2D, IPoolItem
     /// 初始化爆炸数据
     /// </summary>
     /// <param name="bulletData">产生爆炸的子弹数据</param>
-    /// <param name="attackLayer">攻击的层级</param>
     /// <param name="hitRadius">伤害半径</param>
     /// <param name="harm">造成的伤害</param>
     /// <param name="repelledRadius">击退半径</param>
     /// <param name="maxRepelled">最大击退速度</param>
-    public void Init(BulletData bulletData, uint attackLayer, float hitRadius, int harm, float repelledRadius, float maxRepelled)
+    public void Init(BulletData bulletData, float hitRadius, int harm, float repelledRadius, float maxRepelled)
     {
         if (!_init)
         {
@@ -75,12 +74,10 @@ public partial class Explode : Area2D, IPoolItem
         }
 
         BulletData = bulletData;
-        AttackLayer = attackLayer;
         _hitRadius = hitRadius;
         _harm = harm;
         _repelledRadius = repelledRadius;
         _maxRepelled = maxRepelled;
-        CollisionMask = attackLayer | PhysicsLayer.Prop | PhysicsLayer.Debris;
         CircleShape.Radius = Mathf.Max(hitRadius, maxRepelled);
 
         //冲击波
@@ -162,22 +159,22 @@ public partial class Explode : Area2D, IPoolItem
         var len = temp.Length();
         var angle = temp.Angle();
 
-        if (len <= _hitRadius) //在伤害半径内
+        var target = BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole;
+        if (hurt.CanHurt(target))
         {
-            var target = BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole;
-            if (hurt.CanHurt(target))
+            if (len <= _hitRadius) //在伤害半径内
             {
                 hurt.Hurt(target, _harm, angle);
             }
-        }
         
-        if (len <= _repelledRadius) //击退半径内
-        {
-            var o = hurt.GetActivityObject();
-            if (o != null)
+            if (len <= _repelledRadius) //击退半径内
             {
-                var repelled = (_repelledRadius - len) / _repelledRadius * _maxRepelled;
-                o.AddRepelForce(Vector2.FromAngle(angle) * repelled);
+                var o = hurt.GetActivityObject();
+                if (o != null)
+                {
+                    var repelled = (_repelledRadius - len) / _repelledRadius * _maxRepelled;
+                    o.AddRepelForce(Vector2.FromAngle(angle) * repelled);
+                }
             }
         }
     }

@@ -12,8 +12,11 @@ public partial class Bullet : ActivityObject, IBullet
 {
     public event Action OnReclaimEvent;
     public event Action OnLeavePoolEvent;
+    
     public bool IsRecycled { get; set; }
     public string Logotype { get; set; }
+    
+    public CampEnum Camp { get; set; }
     
     /// <summary>
     /// 子弹伤害碰撞区域
@@ -32,15 +35,6 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     [Export]
     public Array<GpuParticles2D> Particles2D { get; set; }
-
-    /// <summary>
-    /// 攻击的层级
-    /// </summary>
-    public uint AttackLayer
-    {
-        get => CollisionArea.CollisionMask;
-        set => CollisionArea.CollisionMask = value;
-    }
 
     /// <summary>
     /// 子弹使用的数据
@@ -77,9 +71,11 @@ public partial class Bullet : ActivityObject, IBullet
         base.OnInit();
         OutlineColor = new Color(2.5f, 0, 0);
         SetBlendColor(new Color(2.5f, 2.5f, 2.5f));
+
+        CollisionArea.CollisionMask = Role.AttackLayer;
     }
 
-    public virtual void InitData(BulletData data, uint attackLayer)
+    public virtual void InitData(BulletData data, CampEnum camp)
     {
         if (!_init)
         {
@@ -87,13 +83,13 @@ public partial class Bullet : ActivityObject, IBullet
             CollisionArea.BodyEntered += OnBodyEntered;
             _init = true;
         }
-        
+
+        Camp = camp;
         CurrentBounce = 0;
         CurrentPenetration = 0;
         CurrFlyDistance = 0;
         
         BulletData = data;
-        AttackLayer = attackLayer;
         Rotation = data.Rotation;
         
         var triggerRole = data.TriggerRole;
@@ -120,7 +116,7 @@ public partial class Bullet : ActivityObject, IBullet
         MoveController.AddForce(new Vector2(data.FlySpeed, 0).Rotated(Rotation));
         
         //如果子弹会对玩家造成伤害, 则显示红色描边
-        if (World.Player != null && World.Player.CollisionWithMask(attackLayer))
+        if (triggerRole != null && triggerRole.IsEnemyWithPlayer())
         {
             if (!IsEnemyBullet)
             {
@@ -193,29 +189,29 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public virtual void OnCollisionTarget(IHurt hurt)
     {
-        OnPlayDisappearEffect();
-        if (BulletData.Repel != 0)
-        {
-            var o = hurt.GetActivityObject();
-            if (o != null && o is not Player) //目标不是玩家才会触发击退
-            {
-                o.AddRepelForce(Velocity.Normalized() * BulletData.Repel);
-            }
-        }
-
-        //造成伤害
         var target = BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole;
         if (hurt.CanHurt(target))
         {
+            OnPlayDisappearEffect();
+            if (BulletData.Repel != 0)
+            {
+                var o = hurt.GetActivityObject();
+                if (o != null && o is not Player) //目标不是玩家才会触发击退
+                {
+                    o.AddRepelForce(Velocity.Normalized() * BulletData.Repel);
+                }
+            }
+            
+            //造成伤害
             hurt.Hurt(target, BulletData.Harm, Rotation);
-        }
-
-        //穿透次数
-        CurrentPenetration++;
-        if (CurrentPenetration > BulletData.Penetration)
-        {
-            State = BulletStateEnum.CollisionTarget;
-            CallDeferred(nameof(LogicalFinish));
+            
+            //穿透次数
+            CurrentPenetration++;
+            if (CurrentPenetration > BulletData.Penetration)
+            {
+                State = BulletStateEnum.CollisionTarget;
+                CallDeferred(nameof(LogicalFinish));
+            }   
         }
     }
 

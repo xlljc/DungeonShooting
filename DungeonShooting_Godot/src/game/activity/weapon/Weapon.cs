@@ -27,11 +27,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     private ExcelConfig.WeaponBase _playerWeaponAttribute;
     private ExcelConfig.WeaponBase _aiWeaponAttribute;
 
-    /// <summary>
-    /// 攻击目标层级
-    /// </summary>
-    public uint AttackLayer => Role.AttackLayer;
-
     public Role Master { get; set; }
 
     public int PackageIndex { get; set; } = -1;
