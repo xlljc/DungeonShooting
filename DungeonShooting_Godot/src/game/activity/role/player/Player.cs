@@ -225,7 +225,7 @@ public partial class Player : Role
             foreach (var enemy in enemyList)
             {
                 var hurt = ((Enemy)enemy).HurtArea;
-                if (hurt.CanHurt(this))
+                if (hurt.CanHurt(Camp))
                 {
                     hurt.Hurt(this, 1000, 0);
                 }

@@ -29,6 +29,11 @@ public partial class Explode : Area2D, IPoolItem
     /// 产生爆炸的子弹数据
     /// </summary>
     public BulletData BulletData { get; private set; }
+    
+    /// <summary>
+    /// 所属阵营
+    /// </summary>
+    public CampEnum Camp { get; private set; }
 
     private bool _init = false;
     private float _hitRadius;
@@ -56,11 +61,12 @@ public partial class Explode : Area2D, IPoolItem
     /// 初始化爆炸数据
     /// </summary>
     /// <param name="bulletData">产生爆炸的子弹数据</param>
+    /// <param name="camp">所属阵营</param>
     /// <param name="hitRadius">伤害半径</param>
     /// <param name="harm">造成的伤害</param>
     /// <param name="repelledRadius">击退半径</param>
     /// <param name="maxRepelled">最大击退速度</param>
-    public void Init(BulletData bulletData, float hitRadius, int harm, float repelledRadius, float maxRepelled)
+    public void Init(BulletData bulletData, CampEnum camp, float hitRadius, int harm, float repelledRadius, float maxRepelled)
     {
         if (!_init)
         {
@@ -73,6 +79,7 @@ public partial class Explode : Area2D, IPoolItem
             BodyEntered += OnBodyEntered;
         }
 
+        Camp = camp;
         BulletData = bulletData;
         _hitRadius = hitRadius;
         _harm = harm;
@@ -159,9 +166,9 @@ public partial class Explode : Area2D, IPoolItem
         var len = temp.Length();
         var angle = temp.Angle();
 
-        var target = BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole;
-        if (hurt.CanHurt(target))
+        if (hurt.CanHurt(Camp))
         {
+            var target = BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole;
             if (len <= _hitRadius) //在伤害半径内
             {
                 hurt.Hurt(target, _harm, angle);

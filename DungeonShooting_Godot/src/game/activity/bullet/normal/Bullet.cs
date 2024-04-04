@@ -189,8 +189,7 @@ public partial class Bullet : ActivityObject, IBullet
     /// </summary>
     public virtual void OnCollisionTarget(IHurt hurt)
     {
-        var target = BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole;
-        if (hurt.CanHurt(target))
+        if (hurt.CanHurt(Camp))
         {
             OnPlayDisappearEffect();
             if (BulletData.Repel != 0)
@@ -203,6 +202,7 @@ public partial class Bullet : ActivityObject, IBullet
             }
             
             //造成伤害
+            var target = BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole;
             hurt.Hurt(target, BulletData.Harm, Rotation);
             
             //穿透次数

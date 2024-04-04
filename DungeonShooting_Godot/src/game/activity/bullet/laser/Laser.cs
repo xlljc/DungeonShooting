@@ -215,8 +215,7 @@ public partial class Laser : Area2D, IBullet
 
     private void HandlerCollision(IHurt hurt)
     {
-        var target = BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole;
-        if (hurt.CanHurt(target))
+        if (hurt.CanHurt(Camp))
         {
             if (BulletData.Repel != 0)
             {
@@ -228,6 +227,7 @@ public partial class Laser : Area2D, IBullet
             }
             
             //造成伤害
+            var target = BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole;
             hurt.Hurt(target, BulletData.Harm, Rotation);
         }
     }

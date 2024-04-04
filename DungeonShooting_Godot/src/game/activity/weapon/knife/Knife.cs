@@ -159,7 +159,7 @@ public partial class Knife : Weapon
 
     private void HandlerCollision(IHurt hurt)
     {
-        if (hurt.CanHurt(TriggerRole))
+        if (TriggerRole == null || hurt.CanHurt(TriggerRole.Camp))
         {
             var damage = Utils.Random.RandomConfigRange(Attribute.Bullet.HarmRange);
             //计算子弹造成的伤害

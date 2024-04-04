@@ -1422,7 +1422,7 @@ public abstract partial class Role : ActivityObject
 
     private void HandlerCollision(IHurt hurt, Weapon activeWeapon)
     {
-        if (hurt.CanHurt(this))
+        if (hurt.CanHurt(Camp))
         {
             var damage = Utils.Random.RandomConfigRange(activeWeapon.Attribute.MeleeAttackHarmRange);
             damage = RoleState.CalcDamage(damage);

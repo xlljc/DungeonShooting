@@ -21,19 +21,15 @@ public partial class HurtArea : Area2D, IHurt
         Monitoring = false;
     }
 
-    public bool CanHurt(ActivityObject target)
+    public bool CanHurt(CampEnum targetCamp)
     {
         //无敌状态
         if (Master.Invincible)
         {
             return true;
         }
-
-        if (target is Role role)
-        {
-            return Master.IsEnemy(role);
-        }
-        return true;
+        
+        return Master.IsEnemy(targetCamp);
     }
 
     public void Hurt(ActivityObject target, int damage, float angle)

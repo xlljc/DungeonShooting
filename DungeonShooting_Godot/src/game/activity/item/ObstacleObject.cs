@@ -7,7 +7,7 @@ using Godot;
 [Tool]
 public partial class ObstacleObject : ActivityObject, IHurt
 {
-	public virtual bool CanHurt(ActivityObject target)
+	public virtual bool CanHurt(CampEnum targetCamp)
 	{
 		return true;
 	}
