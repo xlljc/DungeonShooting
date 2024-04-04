@@ -21,9 +21,12 @@ public partial class BoomBullet : Bullet
 
     public override void OnCollisionTarget(IHurt o)
     {
-        State = BulletStateEnum.CollisionTarget;
-        PlayBoom();
-        LogicalFinish();
+        if (o.CanHurt(Camp))
+        {
+            State = BulletStateEnum.CollisionTarget;
+            PlayBoom();
+            LogicalFinish();
+        }
     }
 
     public override void OnMoveCollision(KinematicCollision2D lastSlideCollision)
