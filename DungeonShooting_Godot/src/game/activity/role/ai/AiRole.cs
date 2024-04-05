@@ -86,6 +86,11 @@ public abstract partial class AiRole : Role
     /// </summary>
     public bool HasMoveDesire { get; private set; } = true;
 
+    /// <summary>
+    /// 临时存储攻击目标, 获取该值请调用 GetAttackTarget() 函数
+    /// </summary>
+    protected Role AttackTarget { get; set; } = null;
+
     public override void OnInit()
     {
         base.OnInit();
@@ -115,7 +120,18 @@ public abstract partial class AiRole : Role
     /// </summary>
     public virtual Role GetAttackTarget()
     {
-        return World.Player;
+        if (AttackTarget == null || AttackTarget.IsDestroyed || !IsEnemy(AttackTarget))
+        {
+            foreach (var role in World.Role_InstanceList)
+            {
+                if (role.AffiliationArea == AffiliationArea && IsEnemy(role))
+                {
+                    AttackTarget = role;
+                    break;
+                }
+            }
+        }
+        return AttackTarget;
     }
     
     /// <summary>

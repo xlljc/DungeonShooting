@@ -91,20 +91,7 @@ public partial class Enemy : AiRole
         roleState.Gold = Mathf.Max(0, Utils.Random.RandomConfigRange(enemyBase.Gold));
         return roleState;
     }
-
-    public override void EnterTree()
-    {
-        if (!World.Role_InstanceList.Contains(this))
-        {
-            World.Role_InstanceList.Add(this);
-        }
-    }
-
-    public override void ExitTree()
-    {
-        World.Role_InstanceList.Remove(this);
-    }
-
+    
     protected override void OnDie()
     {
         var effPos = Position + new Vector2(0, -Altitude);

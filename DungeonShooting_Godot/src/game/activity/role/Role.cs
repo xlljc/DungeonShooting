@@ -451,6 +451,20 @@ public abstract partial class Role : ActivityObject
     {
     }
     
+    public override void EnterTree()
+    {
+        if (!World.Role_InstanceList.Contains(this))
+        {
+            World.Role_InstanceList.Add(this);
+        }
+    }
+
+    public override void ExitTree()
+    {
+        World.Role_InstanceList.Remove(this);
+    }
+
+    
     public override void OnInit()
     {
         RoleState = OnCreateRoleState();
