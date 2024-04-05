@@ -14,13 +14,12 @@ public class Eff_SwapWeapon : EffectFragment
 
     public override void OnUse()
     {
-        var list = new List<Enemy>();
-        foreach (var enemy in Master.World.Enemy_InstanceList)
+        var list = new List<AiRole>();
+        foreach (var role in Master.World.Role_InstanceList)
         {
-            if (enemy.WeaponPack.ActiveItem != null)
+            if (role is AiRole enemy && enemy.IsEnemy(Role) && enemy.WeaponPack.ActiveItem != null)
             {
                 list.Add(enemy);
-
             }
         }
 
@@ -45,9 +44,9 @@ public class Eff_SwapWeapon : EffectFragment
             return false;
         }
 
-        foreach (var enemy in Master.World.Enemy_InstanceList)
+        foreach (var role in Master.World.Role_InstanceList)
         {
-            if (enemy.WeaponPack.ActiveItem != null)
+            if (role is AiRole enemy && enemy.IsEnemy(Role) && enemy.WeaponPack.ActiveItem != null)
             {
                 return true;
             }

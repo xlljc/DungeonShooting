@@ -858,10 +858,10 @@ public partial class DungeonManager : Node2D
         if (room.IsSeclusion)
         {
             var playerAffiliationArea = CurrWorld.Player.AffiliationArea;
-            foreach (var enemy in CurrWorld.Enemy_InstanceList)
+            foreach (var role in CurrWorld.Role_InstanceList)
             {
                 //不与玩家处于同一个房间
-                if (!enemy.IsDestroyed && enemy.AffiliationArea != playerAffiliationArea)
+                if (role is AiRole enemy && !enemy.IsDestroyed && enemy.AffiliationArea != playerAffiliationArea)
                 {
                     if (enemy.StateController.CurrState != AIStateEnum.AiNormal)
                     {

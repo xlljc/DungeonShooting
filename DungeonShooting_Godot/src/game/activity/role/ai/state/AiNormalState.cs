@@ -62,7 +62,8 @@ public class AiNormalState : StateBase<AiRole, AIStateEnum>
                     //发现玩家
                     Master.LookTarget = attackTarget;
                     //判断是否进入通知状态
-                    if (Master.World.Enemy_InstanceList.FindIndex(enemy =>
+                    if (Master.World.Role_InstanceList.FindIndex(role =>
+                            role is AiRole enemy &&
                             enemy != Master && !enemy.IsDie && enemy.AffiliationArea == Master.AffiliationArea &&
                             enemy.StateController.CurrState == AIStateEnum.AiNormal) != -1)
                     {

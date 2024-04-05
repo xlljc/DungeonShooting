@@ -484,13 +484,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         //收集落在地上的武器
         if (IsInGround())
         {
-            World.Weapon_UnclaimedWeapons.Add(this);
+            World.Weapon_UnclaimedList.Add(this);
         }
     }
 
     public override void ExitTree()
     {
-        World.Weapon_UnclaimedWeapons.Remove(this);
+        World.Weapon_UnclaimedList.Remove(this);
     }
 
     protected override void Process(float delta)

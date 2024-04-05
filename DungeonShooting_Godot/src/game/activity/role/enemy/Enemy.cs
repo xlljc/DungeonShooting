@@ -94,15 +94,15 @@ public partial class Enemy : AiRole
 
     public override void EnterTree()
     {
-        if (!World.Enemy_InstanceList.Contains(this))
+        if (!World.Role_InstanceList.Contains(this))
         {
-            World.Enemy_InstanceList.Add(this);
+            World.Role_InstanceList.Add(this);
         }
     }
 
     public override void ExitTree()
     {
-        World.Enemy_InstanceList.Remove(this);
+        World.Role_InstanceList.Remove(this);
     }
 
     protected override void OnDie()
@@ -181,7 +181,8 @@ public partial class Enemy : AiRole
         {
             LookTarget = target;
             //判断是否进入通知状态
-            if (World.Enemy_InstanceList.FindIndex(enemy =>
+            if (World.Role_InstanceList.FindIndex(role =>
+                    role is AiRole enemy && 
                     enemy != this && !enemy.IsDie && enemy.AffiliationArea == AffiliationArea &&
                     enemy.StateController.CurrState == AIStateEnum.AiNormal) != -1)
             {
