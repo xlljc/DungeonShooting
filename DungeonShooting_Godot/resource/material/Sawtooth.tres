@@ -2,6 +2,5 @@
 
 [ext_resource type="Shader" path="res://resource/shader/Sawtooth.gdshader" id="1_nrhtr"]
 
-
 [resource]
 shader = ExtResource("1_nrhtr")

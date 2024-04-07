@@ -1,7 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://d4axmwaqk1f55"]
+[gd_scene load_steps=7 format=3 uid="uid://d4axmwaqk1f55"]
 
 [ext_resource type="Script" path="res://src/test/TestCreateSector.cs" id="1_ieqp4"]
 [ext_resource type="Texture2D" uid="uid://uhhfgdhpk7i4" path="res://icon.png" id="2_73jok"]
+[ext_resource type="Texture2D" uid="uid://b6iklkty6p8sx" path="res://resource/sprite/brush/Temp.png" id="3_mchtg"]
+[ext_resource type="Material" uid="uid://cca0ka64xmrrd" path="res://resource/material/Sawtooth.tres" id="3_p1gue"]
+[ext_resource type="Texture2D" uid="uid://jnx4wfn5hu3u" path="res://resource/sprite/brush/Brush3.png" id="5_1h5h3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_42m3w"]
 
@@ -20,3 +23,14 @@ texture = ExtResource("2_73jok")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D2"]
 shape = SubResource("CircleShape2D_42m3w")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = ExtResource("3_p1gue")
+position = Vector2(32, 25)
+texture = ExtResource("3_mchtg")
+centered = false
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(31, 36)
+texture = ExtResource("5_1h5h3")
+centered = false
