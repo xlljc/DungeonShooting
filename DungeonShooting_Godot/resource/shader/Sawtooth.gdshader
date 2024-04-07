@@ -90,12 +90,11 @@ bool checkRT(float len, sampler2D tex, vec2 uv) {
 
 
 void vertex() {
-	//VERTEX = VERTEX * vec2(4.0);
+	VERTEX = VERTEX * vec2(4.0);
 }
 
 void fragment() {
-
-	if (COLOR.a == 0.0) {
+	if (COLOR.a <= 0.0) {
 		int c = 0;
 		vec4 cf = vec4(0.0, 0.0, 0.0, 0.0);
 		vec4 cL = texture(TEXTURE, UV + vec2(-TEXTURE_PIXEL_SIZE.x, 0.0));
@@ -119,49 +118,61 @@ void fragment() {
 			cf += cb;
 		}
 		if (c >= 2) {
-
 			if (cb.a > 0.0 && cL.a > 0.0) {
 				if (checkLB(TEXTURE_PIXEL_SIZE.y / 4.0, TEXTURE, UV)) {
-					//cf /= float(c);
+					cf /= float(c);
 					COLOR = cf;
 				}
 			}
 			if (ct.a > 0.0 && cL.a > 0.0) {
 				if (checkLT(TEXTURE_PIXEL_SIZE.y / 4.0, TEXTURE, UV)) {
-					//cf /= float(c);
+					cf /= float(c);
 					COLOR = cf;
 				}
 			}
 
 			if (cb.a > 0.0 && cr.a > 0.0) {
 				if (checkRB(TEXTURE_PIXEL_SIZE.y / 4.0, TEXTURE, UV)) {
-					//cf /= float(c);
+					cf /= float(c);
 					COLOR = cf;
 				}
 			}
 			if (ct.a > 0.0 && cr.a > 0.0) {
 				if (checkRT(TEXTURE_PIXEL_SIZE.y / 4.0, TEXTURE, UV)) {
-					//cf /= float(c);
+					cf /= float(c);
 					COLOR = cf;
 				}
 			}
 		}
 	} else {
 		int c = 0;
-		if (texture(TEXTURE, UV + vec2(-TEXTURE_PIXEL_SIZE.x, TEXTURE_PIXEL_SIZE.y)).a > 0.0) {
+		float tempV = TEXTURE_PIXEL_SIZE.x / 4.0;
+		vec4 cf = vec4(0.0, 0.0, 0.0, 0.0);
+		vec4 clt = texture(TEXTURE, UV + vec2(-tempV, tempV));
+		vec4 crt = texture(TEXTURE, UV + vec2(tempV, tempV));
+		vec4 clb = texture(TEXTURE, UV + vec2(-tempV, -tempV));
+		vec4 crb = texture(TEXTURE, UV + vec2(tempV, -tempV));
+		
+		if (clt.a > 0.0) {
 			c++;
+			cf += clt;
 		}
-		if (texture(TEXTURE, UV + vec2(TEXTURE_PIXEL_SIZE.x, TEXTURE_PIXEL_SIZE.y)).a > 0.0) {
+		if (crt.a > 0.0) {
 			c++;
+			cf += crt;
 		}
-		if (texture(TEXTURE, UV + vec2(-TEXTURE_PIXEL_SIZE.x, -TEXTURE_PIXEL_SIZE.y)).a > 0.0) {
+		if (clb.a > 0.0) {
 			c++;
+			cf += clb;
 		}
-		if (texture(TEXTURE, UV + vec2(TEXTURE_PIXEL_SIZE.x, -TEXTURE_PIXEL_SIZE.y)).a > 0.0) {
+		if (crb.a > 0.0) {
 			c++;
+			cf += crb;
 		}
-		if (c <= 1) {
+		if (c > 0 && c < 2) {
 			COLOR = vec4(0.0, 0.0, 0.0, 0.0);
+		} else {
+			COLOR = cf / float(c);
 		}
 	}
 }

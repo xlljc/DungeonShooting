@@ -255,7 +255,7 @@ public partial class Player : Role
         }
 
         //测试刷地
-        //DrawLiquid(_brushData2);
+        DrawLiquid(_brushData2);
     }
 
     protected override void OnAffiliationChange(AffiliationArea prevArea)
