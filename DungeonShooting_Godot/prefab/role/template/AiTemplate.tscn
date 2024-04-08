@@ -33,6 +33,13 @@ shape = SubResource("CircleShape2D_wu0xv")
 position = Vector2(0, -8)
 enabled = false
 
+[node name="ViewArea" type="Area2D" parent="MountPoint" index="1"]
+collision_layer = 0
+collision_mask = 16
+monitorable = false
+
+[node name="ViewAreaCollision" type="CollisionPolygon2D" parent="MountPoint/ViewArea" index="0"]
+
 [node name="FirePoint" type="Marker2D" parent="." index="8"]
 
 [node name="NavigationPoint" type="Marker2D" parent="." index="9"]

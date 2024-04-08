@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using AiState;
 using Godot;
 
@@ -42,6 +43,18 @@ public abstract partial class AiRole : Role
     public Marker2D FirePoint { get; set; }
     
     /// <summary>
+    /// 视野区域
+    /// </summary>
+    [Export, ExportFillNode]
+    public Area2D ViewArea { get; set; }
+    
+    /// <summary>
+    /// 视野区域碰撞器形状
+    /// </summary>
+    [Export, ExportFillNode]
+    public CollisionPolygon2D ViewAreaCollision { get; set; }
+    
+    /// <summary>
     /// 当前敌人所看向的对象, 也就是枪口指向的对象
     /// </summary>
     public ActivityObject LookTarget { get; set; }
@@ -55,11 +68,27 @@ public abstract partial class AiRole : Role
     /// 锁定目标已经走过的时间
     /// </summary>
     public float LockTargetTime { get; set; } = 0;
-    
+
     /// <summary>
     /// 视野半径, 单位像素, 发现玩家后改视野范围可以穿墙
     /// </summary>
-    public float ViewRange { get; set; } = 250;
+    public float ViewRange
+    {
+        get => _viewRange;
+        set
+        {
+            if (_viewRange != value)
+            {
+                _viewRange = value;
+                if (ViewAreaCollision != null)
+                {
+                    ViewAreaCollision.Polygon = Utils.CreateSectorPolygon(0, _viewRange, 120, 4);
+                }
+            }
+        }
+    }
+
+    private float _viewRange = -1;
 
     /// <summary>
     /// 发现玩家后跟随玩家的视野半径
@@ -89,12 +118,16 @@ public abstract partial class AiRole : Role
     /// <summary>
     /// 临时存储攻击目标, 获取该值请调用 GetAttackTarget() 函数
     /// </summary>
-    protected Role AttackTarget { get; set; } = null;
+    private Role AttackTarget { get; set; } = null;
+    
+    private HashSet<Role> _viewTargets = new HashSet<Role>();
 
     public override void OnInit()
     {
         base.OnInit();
         IsAi = true;
+        ViewArea.BodyEntered += OnViewAreaBodyEntered;
+        ViewArea.BodyExited += OnViewAreaBodyExited;
         
         StateController = AddComponent<StateController<AiRole, AIStateEnum>>();
         
@@ -118,20 +151,31 @@ public abstract partial class AiRole : Role
     /// <summary>
     /// 获取攻击的目标对象, 当 HasAttackDesire 为 true 时才会调用
     /// </summary>
-    public virtual Role GetAttackTarget()
+    /// <param name="perspective">上一次发现的角色在本次检测中是否开启视野透视</param>
+    public Role GetAttackTarget(bool perspective = true)
     {
+        //目标丢失
         if (AttackTarget == null || AttackTarget.IsDestroyed || !IsEnemy(AttackTarget))
         {
-            AttackTarget = null;
-            foreach (var role in World.Role_InstanceList)
+            AttackTarget = RefreshAttackTargets(AttackTarget);
+            return AttackTarget;
+        }
+        
+        if (!perspective)
+        {
+            //被墙阻挡
+            if (TestViewRayCast(AttackTarget.GetCenterPosition()))
             {
-                if (role.AffiliationArea == AffiliationArea && IsEnemy(role))
-                {
-                    AttackTarget = role;
-                    break;
-                }
+                AttackTarget = RefreshAttackTargets(AttackTarget);
+                TestViewRayCastOver();
+                return AttackTarget;
+            }
+            else
+            {
+                TestViewRayCastOver();
             }
         }
+        
         return AttackTarget;
     }
     
@@ -433,6 +477,44 @@ public abstract partial class AiRole : Role
     public void SetMoveDesire(bool v)
     {
         HasMoveDesire = v;
+    }
+
+    private void OnViewAreaBodyEntered(Node2D node)
+    {
+        if (node is Role role)
+        {
+            _viewTargets.Add(role);
+        }
+    }
+
+    private void OnViewAreaBodyExited(Node2D node)
+    {
+        if (node is Role role)
+        {
+            _viewTargets.Remove(role);
+        }
+    }
+
+    private Role RefreshAttackTargets(Role prevRole)
+    {
+        if (_viewTargets.Count == 0)
+        {
+            return null;
+        }
+        foreach (var attackTarget in _viewTargets)
+        {
+            if (prevRole != attackTarget && !attackTarget.IsDestroyed && IsEnemy(attackTarget))
+            {
+                if (!TestViewRayCast(attackTarget.GetCenterPosition()))
+                {
+                    TestViewRayCastOver();
+                    return attackTarget;
+                }
+            }
+        }
+        
+        TestViewRayCastOver();
+        return null;
     }
     
     // private void OnVelocityComputed(Vector2 velocity)

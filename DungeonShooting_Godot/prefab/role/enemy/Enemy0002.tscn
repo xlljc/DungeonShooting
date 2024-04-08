@@ -84,12 +84,14 @@ _data = {
 "query": ExtResource("7_h4cls")
 }
 
-[node name="Enemy0002" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_fanet")]
+[node name="Enemy0002" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "ViewArea", "ViewAreaCollision", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_fanet")]
 script = ExtResource("2_3an4s")
 ViewRay = NodePath("ViewRay")
 NavigationAgent2D = NodePath("NavigationPoint/NavigationAgent2D")
 NavigationPoint = NodePath("NavigationPoint")
 FirePoint = NodePath("FirePoint")
+ViewArea = NodePath("MountPoint/ViewArea")
+ViewAreaCollision = NodePath("MountPoint/ViewArea/ViewAreaCollision")
 HurtArea = NodePath("HurtArea")
 HurtCollision = NodePath("HurtArea/HurtCollision")
 InteractiveArea = NodePath("InteractiveArea")
