@@ -7,13 +7,10 @@ namespace AiState;
 /// </summary>
 public class AiAstonishedState : StateBase<AiRole, AIStateEnum>
 {
-    /// <summary>
-    /// 下一个状态
-    /// </summary>
-    public AIStateEnum NextState;
-    
     private float _timer;
     private object[] _args;
+    //用于判断是否进入过惊讶状态
+    private bool _flag = false;
     
     public AiAstonishedState() : base(AIStateEnum.AiAstonished)
     {
@@ -28,9 +25,15 @@ public class AiAstonishedState : StateBase<AiRole, AIStateEnum>
             return;
         }
 
+        if (_flag)
+        {
+            ChangeNextState(args);
+            return;
+        }
+
+        _flag = true;
         _args = args;
         
-        NextState = (AIStateEnum)args[0];
         _timer = 0.6f;
         
         //播放惊讶表情
@@ -46,14 +49,19 @@ public class AiAstonishedState : StateBase<AiRole, AIStateEnum>
         _timer -= delta;
         if (_timer <= 0)
         {
-            if (_args.Length == 1)
-            {
-                ChangeState(NextState);
-            }
-            else if (_args.Length == 2)
-            {
-                ChangeState(NextState, _args[1]);
-            }
+            ChangeNextState(_args);
+        }
+    }
+
+    private void ChangeNextState(object[] args)
+    {
+        if (args.Length == 1)
+        {
+            ChangeState((AIStateEnum)args[0]);
+        }
+        else if (args.Length == 2)
+        {
+            ChangeState((AIStateEnum)args[0], args[1]);
         }
     }
 }

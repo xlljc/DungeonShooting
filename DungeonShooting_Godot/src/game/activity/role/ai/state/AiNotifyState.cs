@@ -17,7 +17,9 @@ public class AiNotifyState : StateBase<AiRole, AIStateEnum>
     {
         if (Master.LookTarget == null)
         {
-            throw new Exception("进入 AIAdvancedStateEnum.AiNotify 没有攻击目标!");
+            ChangeState(AIStateEnum.AiNormal);
+            return;
+            //throw new Exception("进入 AIAdvancedStateEnum.AiNotify 没有攻击目标!");
         }
         _timer = 1.2f;
         //通知其它角色
