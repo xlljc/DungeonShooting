@@ -122,6 +122,7 @@ public abstract partial class AiRole : Role
     {
         if (AttackTarget == null || AttackTarget.IsDestroyed || !IsEnemy(AttackTarget))
         {
+            AttackTarget = null;
             foreach (var role in World.Role_InstanceList)
             {
                 if (role.AffiliationArea == AffiliationArea && IsEnemy(role))

@@ -128,20 +128,27 @@ public partial class Enemy : AiRole
         //看向目标
         if (LookTarget != null && MountLookTarget)
         {
-            var pos = LookTarget.Position;
-            LookPosition = pos;
-            //脸的朝向
-            var gPos = Position;
-            if (pos.X > gPos.X && Face == FaceDirection.Left)
+            if (LookTarget.IsDestroyed)
             {
-                Face = FaceDirection.Right;
+                LookTarget = null;
             }
-            else if (pos.X < gPos.X && Face == FaceDirection.Right)
+            else
             {
-                Face = FaceDirection.Left;
+                var pos = LookTarget.Position;
+                LookPosition = pos;
+                //脸的朝向
+                var gPos = Position;
+                if (pos.X > gPos.X && Face == FaceDirection.Left)
+                {
+                    Face = FaceDirection.Right;
+                }
+                else if (pos.X < gPos.X && Face == FaceDirection.Right)
+                {
+                    Face = FaceDirection.Left;
+                }
+                //枪口跟随目标
+                MountPoint.SetLookAt(pos);
             }
-            //枪口跟随目标
-            MountPoint.SetLookAt(pos);
         }
 
         if (RoleState.CanPickUpWeapon)

@@ -203,6 +203,15 @@ public partial class Player : Role
         else if (InputManager.UseActiveProp) //使用道具
         {
             UseActiveProp();
+            
+            foreach (var role in World.Role_InstanceList)
+            {
+                if (IsEnemy(role))
+                {
+                    role.Camp = Camp;
+                    break;
+                }
+            }
         }
         else if (InputManager.ExchangeProp) //切换道具
         {

@@ -43,6 +43,12 @@ public class AiSurroundState : StateBase<AiRole, AIStateEnum>
 
     public override void Process(float delta)
     {
+        if (Master.LookTarget == null)
+        {
+            ChangeState(AIStateEnum.AiNormal);
+            return;
+        }
+            
         //先检查弹药是否打光
         if (Master.IsAllWeaponTotalAmmoEmpty())
         {

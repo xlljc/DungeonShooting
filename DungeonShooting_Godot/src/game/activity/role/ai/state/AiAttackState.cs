@@ -83,6 +83,12 @@ public class AiAttackState : StateBase<AiRole, AIStateEnum>
 
     public override void Process(float delta)
     {
+        if (Master.LookTarget == null || Master.LookTarget.IsDestroyed || (Master.LookTarget is Role role && !Master.IsEnemy(role))) //更改攻击状态
+        {
+            ChangeState(AIStateEnum.AiNormal);
+            return;
+        }
+
         //更新标记位置
         Master.UpdateMarkTargetPosition();
 
