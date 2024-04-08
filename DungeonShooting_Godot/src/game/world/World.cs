@@ -144,7 +144,7 @@ public partial class World : CanvasModulate, ICoroutine
     {
         foreach (var role in Role_InstanceList)
         {
-            if (role != self && !role.IsDestroyed && role.AffiliationArea == self.AffiliationArea && role is AiRole enemy)
+            if (role != self && !role.IsDestroyed && role.AffiliationArea == self.AffiliationArea && role is AiRole enemy && !self.IsEnemy(enemy))
             {
                 //将未发现目标的敌人状态置为惊讶状态
                 var controller = enemy.StateController;
