@@ -32,7 +32,9 @@ public class AiSurroundState : StateBase<AiRole, AIStateEnum>
     {
         if (Master.LookTarget == null)
         {
-            throw new Exception("进入 AIAdvancedStateEnum.AiSurround 状态时角色没有攻击目标!");
+            ChangeState(AIStateEnum.AiNormal);
+            return;
+            //throw new Exception("进入 AIAdvancedStateEnum.AiSurround 状态时角色没有攻击目标!");
         }
         
         Master.TargetInView = true;
@@ -43,6 +45,12 @@ public class AiSurroundState : StateBase<AiRole, AIStateEnum>
 
     public override void Process(float delta)
     {
+        if (Master.LookTarget == null)
+        {
+            ChangeState(AIStateEnum.AiNormal);
+            return;
+        }
+            
         //先检查弹药是否打光
         if (Master.IsAllWeaponTotalAmmoEmpty())
         {

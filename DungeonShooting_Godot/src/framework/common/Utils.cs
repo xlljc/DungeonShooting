@@ -67,6 +67,17 @@ public static class Utils
 
         return angle;
     }
+
+    /// <summary>
+    /// 判断a和b是否在同一梯度下
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <param name="gradient">梯度间距</param>
+    public static bool IsSameGradient(float a, float b, float gradient)
+    {
+        return (int)(a / gradient) == (int)(b / gradient);
+    }
     
     /// <summary>
     /// 根据步长吸附值

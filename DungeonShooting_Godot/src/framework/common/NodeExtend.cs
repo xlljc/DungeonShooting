@@ -21,7 +21,7 @@ public static class NodeExtend
 
         if (hurt is HurtArea hurtArea)
         {
-            return hurtArea.ActivityObject;
+            return hurtArea.Master;
         }
 
         return null;

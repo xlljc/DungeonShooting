@@ -37,8 +37,6 @@ public partial class Player : Role
 
         IsAi = false;
         StateController = AddComponent<StateController<Player, PlayerStateEnum>>();
-        AttackLayer = PhysicsLayer.Obstacle | PhysicsLayer.Enemy;
-        EnemyLayer = EnemyLayer = PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
 
         MaxHp = 6;
@@ -205,6 +203,15 @@ public partial class Player : Role
         else if (InputManager.UseActiveProp) //使用道具
         {
             UseActiveProp();
+            
+            foreach (var role in World.Role_InstanceList)
+            {
+                if (IsEnemy(role))
+                {
+                    role.Camp = Camp;
+                    break;
+                }
+            }
         }
         else if (InputManager.ExchangeProp) //切换道具
         {
@@ -223,10 +230,14 @@ public partial class Player : Role
         }
         else if (Input.IsKeyPressed(Key.O)) //测试用, 消灭房间内所有敌人
         {
-            var enemyList = AffiliationArea.FindIncludeItems(o => o.CollisionWithMask(PhysicsLayer.Enemy));
+            var enemyList = AffiliationArea.FindIncludeItems(o => o is Role role && role.IsEnemyWithPlayer());
             foreach (var enemy in enemyList)
             {
-                ((Enemy)enemy).HurtArea.Hurt(this, 1000, 0);
+                var hurt = ((Enemy)enemy).HurtArea;
+                if (hurt.CanHurt(Camp))
+                {
+                    hurt.Hurt(this, 1000, 0);
+                }
             }
         }
         // //测试用
@@ -253,7 +264,7 @@ public partial class Player : Role
         }
 
         //测试刷地
-        //DrawLiquid(_brushData2);
+        DrawLiquid(_brushData2);
     }
 
     protected override void OnAffiliationChange(AffiliationArea prevArea)

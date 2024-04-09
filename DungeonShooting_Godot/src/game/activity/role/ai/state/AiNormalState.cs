@@ -49,33 +49,27 @@ public class AiNormalState : StateBase<AiRole, AIStateEnum>
         if (Master.HasAttackDesire) //有攻击欲望
         {
             //获取攻击目标
-            var attackTarget = Master.GetAttackTarget();
+            var attackTarget = Master.GetAttackTarget(false);
             if (attackTarget != null)
             {
-                //玩家中心点坐标
-                var targetPos = attackTarget.GetCenterPosition();
-
-                if (Master.IsInViewRange(targetPos) && !Master.TestViewRayCast(targetPos)) //发现目标
+                //发现玩家
+                Master.LookTarget = attackTarget;
+                //判断是否进入通知状态
+                if (Master.World.Role_InstanceList.FindIndex(role =>
+                        role is AiRole enemy &&
+                        enemy != Master && !enemy.IsDie && enemy.AffiliationArea == Master.AffiliationArea &&
+                        enemy.StateController.CurrState == AIStateEnum.AiNormal) != -1)
                 {
-                    //关闭射线检测
-                    Master.TestViewRayCastOver();
-                    //发现玩家
-                    Master.LookTarget = attackTarget;
-                    //判断是否进入通知状态
-                    if (Master.World.Enemy_InstanceList.FindIndex(enemy =>
-                            enemy != Master && !enemy.IsDie && enemy.AffiliationArea == Master.AffiliationArea &&
-                            enemy.StateController.CurrState == AIStateEnum.AiNormal) != -1)
-                    {
-                        //进入惊讶状态, 然后再进入通知状态
-                        ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiNotify);
-                    }
-                    else
-                    {
-                        //进入惊讶状态, 然后再进入跟随状态
-                        ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiTailAfter);
-                    }
-                    return;
+                    //进入惊讶状态, 然后再进入通知状态
+                    ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiNotify);
                 }
+                else
+                {
+                    //进入惊讶状态, 然后再进入跟随状态
+                    ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiTailAfter);
+                }
+
+                return;
             }
         }
 
@@ -89,7 +83,7 @@ public class AiNormalState : StateBase<AiRole, AIStateEnum>
             RunOver();
             _isMoveOver = false;
         }
-        else //移动中
+        else if (Master.HasMoveDesire) //移动中
         {
             if (_lockTimer >= 1) //卡在一个点超过一秒
             {

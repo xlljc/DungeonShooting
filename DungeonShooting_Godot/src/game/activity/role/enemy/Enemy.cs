@@ -63,9 +63,6 @@ public partial class Enemy : AiRole
     public override void OnInit()
     {
         base.OnInit();
-
-        AttackLayer = PhysicsLayer.Obstacle | PhysicsLayer.Player;
-        EnemyLayer = PhysicsLayer.Player;
         Camp = CampEnum.Camp2;
 
         RoleState.MoveSpeed = 20;
@@ -94,20 +91,7 @@ public partial class Enemy : AiRole
         roleState.Gold = Mathf.Max(0, Utils.Random.RandomConfigRange(enemyBase.Gold));
         return roleState;
     }
-
-    public override void EnterTree()
-    {
-        if (!World.Enemy_InstanceList.Contains(this))
-        {
-            World.Enemy_InstanceList.Add(this);
-        }
-    }
-
-    public override void ExitTree()
-    {
-        World.Enemy_InstanceList.Remove(this);
-    }
-
+    
     protected override void OnDie()
     {
         var effPos = Position + new Vector2(0, -Altitude);
@@ -144,20 +128,27 @@ public partial class Enemy : AiRole
         //看向目标
         if (LookTarget != null && MountLookTarget)
         {
-            var pos = LookTarget.Position;
-            LookPosition = pos;
-            //脸的朝向
-            var gPos = Position;
-            if (pos.X > gPos.X && Face == FaceDirection.Left)
+            if (LookTarget.IsDestroyed)
             {
-                Face = FaceDirection.Right;
+                LookTarget = null;
             }
-            else if (pos.X < gPos.X && Face == FaceDirection.Right)
+            else
             {
-                Face = FaceDirection.Left;
+                var pos = LookTarget.Position;
+                LookPosition = pos;
+                //脸的朝向
+                var gPos = Position;
+                if (pos.X > gPos.X && Face == FaceDirection.Left)
+                {
+                    Face = FaceDirection.Right;
+                }
+                else if (pos.X < gPos.X && Face == FaceDirection.Right)
+                {
+                    Face = FaceDirection.Left;
+                }
+                //枪口跟随目标
+                MountPoint.SetLookAt(pos);
             }
-            //枪口跟随目标
-            MountPoint.SetLookAt(pos);
         }
 
         if (RoleState.CanPickUpWeapon)
@@ -184,7 +175,8 @@ public partial class Enemy : AiRole
         {
             LookTarget = target;
             //判断是否进入通知状态
-            if (World.Enemy_InstanceList.FindIndex(enemy =>
+            if (World.Role_InstanceList.FindIndex(role =>
+                    role is AiRole enemy && 
                     enemy != this && !enemy.IsDie && enemy.AffiliationArea == AffiliationArea &&
                     enemy.StateController.CurrState == AIStateEnum.AiNormal) != -1)
             {

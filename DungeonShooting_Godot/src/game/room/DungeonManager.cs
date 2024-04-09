@@ -858,10 +858,10 @@ public partial class DungeonManager : Node2D
         if (room.IsSeclusion)
         {
             var playerAffiliationArea = CurrWorld.Player.AffiliationArea;
-            foreach (var enemy in CurrWorld.Enemy_InstanceList)
+            foreach (var role in CurrWorld.Role_InstanceList)
             {
                 //不与玩家处于同一个房间
-                if (!enemy.IsDestroyed && enemy.AffiliationArea != playerAffiliationArea)
+                if (role is AiRole enemy && !enemy.IsDestroyed && enemy.AffiliationArea != playerAffiliationArea)
                 {
                     if (enemy.StateController.CurrState != AIStateEnum.AiNormal)
                     {
@@ -904,7 +904,7 @@ public partial class DungeonManager : Node2D
                 {
                     //房间内是否有存活的敌人
                     var flag = ActiveAffiliationArea.ExistEnterItem(
-                        activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
+                        activityObject => activityObject is Role role && role.IsEnemyWithPlayer()
                     );
                     //Debug.Log("当前房间存活数量: " + count);
                     if (!flag)

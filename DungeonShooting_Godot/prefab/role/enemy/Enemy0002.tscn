@@ -9,7 +9,6 @@
 [ext_resource type="Animation" uid="uid://cmje7jsgrhgmx" path="res://resource/animation/enemy/Enemy_query.res" id="7_h4cls"]
 [ext_resource type="Animation" uid="uid://16rxpnsgj5tl" path="res://resource/animation/enemy/Enemy_notify.res" id="8_0688j"]
 
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_y5nia"]
 resource_local_to_scene = true
 shader = ExtResource("2_yunbp")
@@ -85,12 +84,14 @@ _data = {
 "query": ExtResource("7_h4cls")
 }
 
-[node name="Enemy0002" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_fanet")]
+[node name="Enemy0002" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "ViewArea", "ViewAreaCollision", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_fanet")]
 script = ExtResource("2_3an4s")
 ViewRay = NodePath("ViewRay")
 NavigationAgent2D = NodePath("NavigationPoint/NavigationAgent2D")
 NavigationPoint = NodePath("NavigationPoint")
 FirePoint = NodePath("FirePoint")
+ViewArea = NodePath("MountPoint/ViewArea")
+ViewAreaCollision = NodePath("MountPoint/ViewArea/ViewAreaCollision")
 HurtArea = NodePath("HurtArea")
 HurtCollision = NodePath("HurtArea/HurtCollision")
 InteractiveArea = NodePath("InteractiveArea")

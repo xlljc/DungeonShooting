@@ -75,7 +75,7 @@ public partial class RoomMapPanel : RoomMap
         
         //更新敌人位置
         {
-            var enemyList = World.Current.Enemy_InstanceList;
+            var enemyList = World.Current.Role_InstanceList;
             if (enemyList.Count == 0) //没有敌人
             {
                 foreach (var sprite in _enemySpriteList)
@@ -90,8 +90,8 @@ public partial class RoomMapPanel : RoomMap
                 var count = 0; //绘制数量
                 for (var i = 0; i < enemyList.Count; i++)
                 {
-                    var enemy = enemyList[i];
-                    if (!enemy.IsDestroyed && !enemy.IsDie && enemy.AffiliationArea != null && enemy.AffiliationArea.RoomInfo.RoomFogMask.IsExplored)
+                    var role = enemyList[i];
+                    if (role is AiRole enemy && !enemy.IsDestroyed && !enemy.IsDie && enemy.AffiliationArea != null && enemy.AffiliationArea.RoomInfo.RoomFogMask.IsExplored)
                     {
                         count++;
                         Sprite2D sprite;

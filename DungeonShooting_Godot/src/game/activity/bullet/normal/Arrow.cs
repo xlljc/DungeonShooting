@@ -10,9 +10,9 @@ public partial class Arrow : Bullet, IMountItem
     [Export, ExportFillNode]
     public AnimatedSprite2D HalfSprite { get; set; }
 
-    public override void InitData(BulletData data, uint attackLayer)
+    public override void InitData(BulletData data, CampEnum camp)
     {
-        base.InitData(data, attackLayer);
+        base.InitData(data, camp);
         SetEnableMovement(true);
         EnableVerticalMotion = false;
         DefaultLayer = RoomLayerEnum.NormalLayer;

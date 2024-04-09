@@ -21,9 +21,12 @@ public partial class BoomBullet : Bullet
 
     public override void OnCollisionTarget(IHurt o)
     {
-        State = BulletStateEnum.CollisionTarget;
-        PlayBoom();
-        LogicalFinish();
+        if (o.CanHurt(Camp))
+        {
+            State = BulletStateEnum.CollisionTarget;
+            PlayBoom();
+            LogicalFinish();
+        }
     }
 
     public override void OnMoveCollision(KinematicCollision2D lastSlideCollision)
@@ -59,7 +62,7 @@ public partial class BoomBullet : Bullet
         explode.Position = pos;
         explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
         explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);
-        explode.Init(BulletData, AttackLayer, 25, BulletData.Harm, 50, BulletData.Repel);
+        explode.Init(BulletData, Camp, 25, BulletData.Harm, 50, BulletData.Repel);
         explode.RunPlay(BulletData.TriggerRole);
         if (AffiliationArea != null)
         {

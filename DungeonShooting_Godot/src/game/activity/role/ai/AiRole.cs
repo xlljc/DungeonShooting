@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using AiState;
 using Godot;
 
@@ -42,6 +43,18 @@ public abstract partial class AiRole : Role
     public Marker2D FirePoint { get; set; }
     
     /// <summary>
+    /// 视野区域
+    /// </summary>
+    [Export, ExportFillNode]
+    public Area2D ViewArea { get; set; }
+    
+    /// <summary>
+    /// 视野区域碰撞器形状
+    /// </summary>
+    [Export, ExportFillNode]
+    public CollisionPolygon2D ViewAreaCollision { get; set; }
+    
+    /// <summary>
     /// 当前敌人所看向的对象, 也就是枪口指向的对象
     /// </summary>
     public ActivityObject LookTarget { get; set; }
@@ -55,11 +68,27 @@ public abstract partial class AiRole : Role
     /// 锁定目标已经走过的时间
     /// </summary>
     public float LockTargetTime { get; set; } = 0;
-    
+
     /// <summary>
     /// 视野半径, 单位像素, 发现玩家后改视野范围可以穿墙
     /// </summary>
-    public float ViewRange { get; set; } = 250;
+    public float ViewRange
+    {
+        get => _viewRange;
+        set
+        {
+            if (_viewRange != value)
+            {
+                _viewRange = value;
+                if (ViewAreaCollision != null)
+                {
+                    ViewAreaCollision.Polygon = Utils.CreateSectorPolygon(0, _viewRange, 120, 4);
+                }
+            }
+        }
+    }
+
+    private float _viewRange = -1;
 
     /// <summary>
     /// 发现玩家后跟随玩家的视野半径
@@ -80,11 +109,25 @@ public abstract partial class AiRole : Role
     /// 当前Ai是否有攻击欲望
     /// </summary>
     public bool HasAttackDesire { get; private set; } = true;
+    
+    /// <summary>
+    /// 是否有移动欲望, 仅在 AiNormal 状态下有效, 其他状态都可以移动
+    /// </summary>
+    public bool HasMoveDesire { get; private set; } = true;
+
+    /// <summary>
+    /// 临时存储攻击目标, 获取该值请调用 GetAttackTarget() 函数
+    /// </summary>
+    private Role AttackTarget { get; set; } = null;
+    
+    private HashSet<Role> _viewTargets = new HashSet<Role>();
 
     public override void OnInit()
     {
         base.OnInit();
         IsAi = true;
+        ViewArea.BodyEntered += OnViewAreaBodyEntered;
+        ViewArea.BodyExited += OnViewAreaBodyExited;
         
         StateController = AddComponent<StateController<AiRole, AIStateEnum>>();
         
@@ -108,9 +151,32 @@ public abstract partial class AiRole : Role
     /// <summary>
     /// 获取攻击的目标对象, 当 HasAttackDesire 为 true 时才会调用
     /// </summary>
-    public virtual Role GetAttackTarget()
+    /// <param name="perspective">上一次发现的角色在本次检测中是否开启视野透视</param>
+    public Role GetAttackTarget(bool perspective = true)
     {
-        return World.Player;
+        //目标丢失
+        if (AttackTarget == null || AttackTarget.IsDestroyed || !IsEnemy(AttackTarget))
+        {
+            AttackTarget = RefreshAttackTargets(AttackTarget);
+            return AttackTarget;
+        }
+        
+        if (!perspective)
+        {
+            //被墙阻挡
+            if (TestViewRayCast(AttackTarget.GetCenterPosition()))
+            {
+                AttackTarget = RefreshAttackTargets(AttackTarget);
+                TestViewRayCastOver();
+                return AttackTarget;
+            }
+            else
+            {
+                TestViewRayCastOver();
+            }
+        }
+        
+        return AttackTarget;
     }
     
     /// <summary>
@@ -118,7 +184,7 @@ public abstract partial class AiRole : Role
     /// </summary>
     public bool CheckUsableWeaponInUnclaimed()
     {
-        foreach (var unclaimedWeapon in World.Weapon_UnclaimedWeapons)
+        foreach (var unclaimedWeapon in World.Weapon_UnclaimedList)
         {
             //判断是否能拾起武器, 条件: 相同的房间
             if (unclaimedWeapon.AffiliationArea == AffiliationArea)
@@ -158,7 +224,7 @@ public abstract partial class AiRole : Role
     {
         Weapon target = null;
         var position = Position;
-        foreach (var weapon in World.Weapon_UnclaimedWeapons)
+        foreach (var weapon in World.Weapon_UnclaimedList)
         {
             //判断是否能拾起武器, 条件: 相同的房间, 或者当前房间目前没有战斗, 或者不在战斗房间
             if (weapon.AffiliationArea == AffiliationArea)
@@ -405,6 +471,52 @@ public abstract partial class AiRole : Role
         }
     }
 
+    /// <summary>
+    /// 设置Ai是否有移动欲望
+    /// </summary>
+    public void SetMoveDesire(bool v)
+    {
+        HasMoveDesire = v;
+    }
+
+    private void OnViewAreaBodyEntered(Node2D node)
+    {
+        if (node is Role role)
+        {
+            _viewTargets.Add(role);
+        }
+    }
+
+    private void OnViewAreaBodyExited(Node2D node)
+    {
+        if (node is Role role)
+        {
+            _viewTargets.Remove(role);
+        }
+    }
+
+    private Role RefreshAttackTargets(Role prevRole)
+    {
+        if (_viewTargets.Count == 0)
+        {
+            return null;
+        }
+        foreach (var attackTarget in _viewTargets)
+        {
+            if (prevRole != attackTarget && !attackTarget.IsDestroyed && IsEnemy(attackTarget))
+            {
+                if (!TestViewRayCast(attackTarget.GetCenterPosition()))
+                {
+                    TestViewRayCastOver();
+                    return attackTarget;
+                }
+            }
+        }
+        
+        TestViewRayCastOver();
+        return null;
+    }
+    
     // private void OnVelocityComputed(Vector2 velocity)
     // {
     //     if (Mathf.Abs(velocity.X) >= 0.01f && Mathf.Abs(velocity.Y) >= 0.01f)

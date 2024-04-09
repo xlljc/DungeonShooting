@@ -24,7 +24,7 @@ size = Vector2(12, 18)
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ka171"]
 
 [node name="Role0001" node_paths=PackedStringArray("HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_10c2n")]
-collision_layer = 8
+collision_layer = 24
 script = ExtResource("2_6xwnt")
 HurtArea = NodePath("HurtArea")
 HurtCollision = NodePath("HurtArea/HurtCollision")

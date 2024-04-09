@@ -24,17 +24,13 @@ public partial class Laser : Area2D, IBullet
     public Sprite2D LineSprite { get; private set; }
     public RectangleShape2D Shape { get; private set; }
 
+    public CampEnum Camp { get; set; }
+    
     public event Action OnReclaimEvent;
     public event Action OnLeavePoolEvent;
     
     public bool IsRecycled { get; set; }
     public string Logotype { get; set; }
-
-    public uint AttackLayer
-    {
-        get => CollisionMask;
-        set => CollisionMask = value;
-    }
 
     public BulletData BulletData { get; private set; }
     public BulletStateEnum State { get; protected set; } = BulletStateEnum.Normal;
@@ -49,12 +45,17 @@ public partial class Laser : Area2D, IBullet
     private Tween _tween;
     private bool _init = false;
 
-    public void InitData(BulletData data, uint attackLayer)
+    public override void _Ready()
     {
-        InitData(data, attackLayer, LaserDefaultWidth);
+        CollisionMask = Role.AttackLayer;
     }
 
-    public void InitData(BulletData data, uint attackLayer, float width)
+    public void InitData(BulletData data, CampEnum camp)
+    {
+        InitData(data, camp, LaserDefaultWidth);
+    }
+
+    public void InitData(BulletData data, CampEnum camp, float width)
     {
         if (!_init)
         {
@@ -70,9 +71,9 @@ public partial class Laser : Area2D, IBullet
             _init = true;
         }
 
+        Camp = camp;
         ZIndex = 1;
         BulletData = data;
-        AttackLayer = attackLayer;
         
         Position = data.Position;
         Rotation = data.Rotation;
@@ -103,7 +104,7 @@ public partial class Laser : Area2D, IBullet
         LineSprite.Scale = new Vector2(0, width * _pixelScale);
 
         //如果子弹会对玩家造成伤害, 则显示成红色
-        if (BulletData.World.Player.CollisionWithMask(attackLayer))
+        if (BulletData.TriggerRole != null && BulletData.TriggerRole.IsEnemyWithPlayer())
         {
             LineSprite.Modulate = new Color(2.5f, 0.5f, 0.5f);
         }
@@ -191,7 +192,7 @@ public partial class Laser : Area2D, IBullet
                 bulletData.BounceCount -= 1;
                 bulletData.MaxDistance = newDistance;
                 bulletData.Rotation = rotation;
-                FireManager.ShootBullet(bulletData, AttackLayer);
+                FireManager.ShootBullet(bulletData, Camp);
             }
         }
     }
@@ -214,17 +215,21 @@ public partial class Laser : Area2D, IBullet
 
     private void HandlerCollision(IHurt hurt)
     {
-        if (BulletData.Repel != 0)
+        if (hurt.CanHurt(Camp))
         {
-            var o = hurt.GetActivityObject();
-            if (o != null && o is not Player) //目标不是玩家才会触发击退
+            if (BulletData.Repel != 0)
             {
-                o.AddRepelForce(Vector2.FromAngle(Rotation) * BulletData.Repel);
+                var o = hurt.GetActivityObject();
+                if (o != null && o is not Player) //目标不是玩家才会触发击退
+                {
+                    o.AddRepelForce(Vector2.FromAngle(Rotation) * BulletData.Repel);
+                }
             }
+            
+            //造成伤害
+            var target = BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole;
+            hurt.Hurt(target, BulletData.Harm, Rotation);
         }
-
-        //造成伤害
-        hurt.Hurt(BulletData.TriggerRole.IsDestroyed ? null : BulletData.TriggerRole, BulletData.Harm, Rotation);
     }
 
     public long StartCoroutine(IEnumerator able)

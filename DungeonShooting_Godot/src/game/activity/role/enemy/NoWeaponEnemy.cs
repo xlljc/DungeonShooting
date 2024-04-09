@@ -56,7 +56,7 @@ public partial class NoWeaponEnemy : Enemy
             var data = bulletData.Clone();
             var tempPos = new Vector2(targetPosition.X + Utils.Random.RandomRangeInt(-30, 30), targetPosition.Y + Utils.Random.RandomRangeInt(-30, 30));
             FireManager.SetParabolaTarget(data, tempPos);
-            FireManager.ShootBullet(data, AttackLayer);
+            FireManager.ShootBullet(data, Camp);
         }
     }
 

@@ -207,14 +207,14 @@ public class DungeonGenerator
                     if (errorCode == GenerateRoomErrorCode.OutArea)
                     {
                         _failCount++;
-                        Debug.Log("超出区域失败次数: " + _failCount);
+                        //Debug.Log("超出区域失败次数: " + _failCount);
                         if (_failCount >= _maxFailCount)
                         {
                             //_enableLimitRange = false;
                             _failCount = 0;
                             _rangeX += 50;
                             _rangeY += 50;
-                            Debug.Log("生成房间失败次数过多, 增大区域");
+                            //Debug.Log("生成房间失败次数过多, 增大区域");
                         }
                     }
 

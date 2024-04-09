@@ -65,12 +65,12 @@ public partial class World : CanvasModulate, ICoroutine
     /// <summary>
     /// 所有被扔在地上的武器
     /// </summary>
-    public HashSet<Weapon> Weapon_UnclaimedWeapons { get; } = new HashSet<Weapon>();
+    public HashSet<Weapon> Weapon_UnclaimedList { get; } = new HashSet<Weapon>();
     
     /// <summary>
-    /// 记录所有存活的敌人
+    /// 记录所有存活的角色
     /// </summary>
-    public List<Enemy> Enemy_InstanceList  { get; } = new List<Enemy>();
+    public List<Role> Role_InstanceList  { get; } = new List<Role>();
     
     /// <summary>
     /// 随机数对象
@@ -142,12 +142,12 @@ public partial class World : CanvasModulate, ICoroutine
     /// <param name="target">目标</param>
     public void NotifyEnemyTarget(Role self, ActivityObject target)
     {
-        foreach (var role in Enemy_InstanceList)
+        foreach (var role in Role_InstanceList)
         {
-            if (role != self && !role.IsDestroyed && role.AffiliationArea == self.AffiliationArea)
+            if (role != self && !role.IsDestroyed && role.AffiliationArea == self.AffiliationArea && role is AiRole enemy && !self.IsEnemy(enemy))
             {
                 //将未发现目标的敌人状态置为惊讶状态
-                var controller = role.StateController;
+                var controller = enemy.StateController;
                 //延时通知效果
                 role.CallDelay(Utils.Random.RandomRangeFloat(0.2f, 1f), () =>
                 {
