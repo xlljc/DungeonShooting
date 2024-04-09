@@ -87,6 +87,7 @@ public partial class Enemy : AiRole
         DefaultViewRange = enemyBase.ViewRange;
         TailAfterViewRange = enemyBase.TailAfterViewRange;
         AttackInterval = enemyBase.AttackInterval;
+        ViewAngleRange = enemyBase.ViewAngleRange;
         
         roleState.Gold = Mathf.Max(0, Utils.Random.RandomConfigRange(enemyBase.Gold));
         return roleState;

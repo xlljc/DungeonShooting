@@ -74,10 +74,10 @@ public static partial class ExcelConfig
         public float TailAfterViewRange;
 
         /// <summary>
-        /// 背后的视野半径, 单位像素
+        /// 视野角度范围, 角度制
         /// </summary>
         [JsonInclude]
-        public float BackViewRange;
+        public float ViewAngleRange;
 
         /// <summary>
         /// 掉落金币数量区间, 如果为负数或者0则不会掉落金币 <br/>
@@ -103,7 +103,7 @@ public static partial class ExcelConfig
             inst.CanPickUpWeapon = CanPickUpWeapon;
             inst.ViewRange = ViewRange;
             inst.TailAfterViewRange = TailAfterViewRange;
-            inst.BackViewRange = BackViewRange;
+            inst.ViewAngleRange = ViewAngleRange;
             inst.Gold = Gold;
             return inst;
         }

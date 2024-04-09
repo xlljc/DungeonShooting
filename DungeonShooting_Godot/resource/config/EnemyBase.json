@@ -10,8 +10,8 @@
     "AttackInterval": 0,
     "CanPickUpWeapon": true,
     "ViewRange": 250,
-    "TailAfterViewRange": 400,
-    "BackViewRange": 50,
+    "TailAfterViewRange": 300,
+    "ViewAngleRange": 150,
     "Gold": [
       -2,
       3
@@ -29,7 +29,7 @@
     "CanPickUpWeapon": false,
     "ViewRange": 200,
     "TailAfterViewRange": 300,
-    "BackViewRange": 50,
+    "ViewAngleRange": 150,
     "Gold": [
       -2,
       4

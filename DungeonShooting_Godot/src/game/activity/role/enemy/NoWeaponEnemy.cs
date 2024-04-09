@@ -41,6 +41,10 @@ public partial class NoWeaponEnemy : Enemy
     /// </summary>
     public virtual void OnAttack()
     {
+        if (LookTarget == null)
+        {
+            return;
+        }
         //攻击特效
         var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_weapon_ShotFire0003_tscn);
         var node = (Node2D)effect;

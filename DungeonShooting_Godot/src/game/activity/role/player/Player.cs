@@ -264,7 +264,7 @@ public partial class Player : Role
         }
 
         //测试刷地
-        DrawLiquid(_brushData2);
+        //DrawLiquid(_brushData2);
     }
 
     protected override void OnAffiliationChange(AffiliationArea prevArea)
@@ -299,6 +299,12 @@ public partial class Player : Role
         else //护盾抵消掉的
         {
             PlayInvincibleFlashing(RoleState.ShieldInvincibleTime);
+        }
+
+        //血量为0, 扔掉所有武器
+        if (Hp <= 0)
+        {
+            ThrowAllWeapon();
         }
     }
 
@@ -346,12 +352,16 @@ public partial class Player : Role
         GameCamera.Main.SetFollowTarget(null);
         BasisVelocity = Vector2.Zero;
         MoveController.ClearForce();
+        Visible = false;
 
-        //暂停游戏
-        World.Current.Pause = true;
-        //弹出结算面板
-        GameApplication.Instance.Cursor.SetGuiMode(true);
-        UiManager.Open_Settlement();
+        World.CallDelay(0.5f, () =>
+        {
+            //暂停游戏
+            World.Current.Pause = true;
+            //弹出结算面板
+            GameApplication.Instance.Cursor.SetGuiMode(true);
+            UiManager.Open_Settlement();
+        });
     }
 
     protected override void OnPickUpActiveProp(ActiveProp activeProp)
