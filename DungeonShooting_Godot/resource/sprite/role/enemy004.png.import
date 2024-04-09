@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d32g0f5vk68sj"
-path="res://.godot/imported/Sprite-0004.png-cf62052cb55359d7a126f6f1af85e7d6.ctex"
+uid="uid://dhdrfq2sujlwi"
+path="res://.godot/imported/enemy004.png-edee3234fcf023701ba8f39d633728bd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/role/role0001/before/Sprite-0004.png"
-dest_files=["res://.godot/imported/Sprite-0004.png-cf62052cb55359d7a126f6f1af85e7d6.ctex"]
+source_file="res://resource/sprite/role/enemy004.png"
+dest_files=["res://.godot/imported/enemy004.png-edee3234fcf023701ba8f39d633728bd.ctex"]
 
 [params]
 

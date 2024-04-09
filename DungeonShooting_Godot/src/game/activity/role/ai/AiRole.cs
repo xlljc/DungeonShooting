@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using AiState;
 using Godot;
@@ -87,11 +88,11 @@ public abstract partial class AiRole : Role
         get => _viewRange;
         set
         {
-            if (_viewRange != value)
+            if (Math.Abs(_viewRange - value) > 0.001f)
             {
                 if (ViewAreaCollision != null)
                 {
-                    ViewAreaCollision.Polygon = Utils.CreateSectorPolygon(0, value, 120, 4);
+                    ViewAreaCollision.Polygon = Utils.CreateSectorPolygon(0, value, ViewAngleRange, 4);
                 }
             }
             _viewRange = value;
@@ -109,6 +110,11 @@ public abstract partial class AiRole : Role
     /// 发现玩家后跟随玩家的视野半径
     /// </summary>
     public float TailAfterViewRange { get; set; } = 400;
+    
+    /// <summary>
+    /// 视野角度, 角度制
+    /// </summary>
+    public float ViewAngleRange { get; set; } = 150;
     
     /// <summary>
     /// 攻击间隔时间, 秒
@@ -188,6 +194,19 @@ public abstract partial class AiRole : Role
 
                 TargetInView = !TargetHasOcclusion && TargetInViewRange;
             }
+        }
+
+        //更新视野范围
+        switch (StateController.CurrState)
+        {
+            case AIStateEnum.AiNormal:
+            case AIStateEnum.AiNotify:
+            case AIStateEnum.AiAstonished:
+                ViewRange = DefaultViewRange;
+                break;
+            default:
+                ViewRange = TailAfterViewRange;
+                break;
         }
     }
 
