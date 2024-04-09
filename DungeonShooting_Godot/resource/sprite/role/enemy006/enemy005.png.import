@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dbqkfqnxibpil"
-path="res://.godot/imported/ShopBoss0002.png-58b10c2ddf1b62fbcf9af26fd4b52645.ctex"
+uid="uid://bft65nd80tlju"
+path="res://.godot/imported/enemy005.png-5f308aab472c7f7817c38753a7889f10.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/role/shopBoss0001/ShopBoss0002.png"
-dest_files=["res://.godot/imported/ShopBoss0002.png-58b10c2ddf1b62fbcf9af26fd4b52645.ctex"]
+source_file="res://resource/sprite/role/enemy006/enemy005.png"
+dest_files=["res://.godot/imported/enemy005.png-5f308aab472c7f7817c38753a7889f10.ctex"]
 
 [params]
 
