@@ -83,26 +83,16 @@ public class AiTailAfterState : StateBase<AiRole, AIStateEnum>
             //站立
             Master.DoIdle();
         }
-        //检测玩家是否在视野内, 如果在, 则切换到 AiTargetInView 状态
-        if (Master.IsInTailAfterViewRange(playerPos))
+        //检测玩家是否在视野内
+        if (!Master.TargetHasOcclusion) //直接看到玩家
         {
-            if (!Master.TestViewRayCast(playerPos)) //看到玩家
-            {
-                //关闭射线检测
-                Master.TestViewRayCastOver();
-                //切换成发现目标状态
-                ChangeState(AIStateEnum.AiFollowUp);
-                return;
-            }
-            else
-            {
-                //关闭射线检测
-                Master.TestViewRayCastOver();
-            }
+            //切换成发现目标状态
+            ChangeState(AIStateEnum.AiFollowUp);
+            return;
         }
         
         //检测玩家是否在穿墙视野范围内, 直接检测距离即可
-        _isInViewRange = Master.IsInViewRange(playerPos);
+        _isInViewRange = Master.TargetInViewRange;
         if (_isInViewRange)
         {
             _viewTimer = 0;

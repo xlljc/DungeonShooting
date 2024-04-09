@@ -131,7 +131,7 @@ public class AiFindAmmoState : StateBase<AiRole, AIStateEnum>
             if (Master.LookTarget != null)
             {
                 //检测目标没有超出跟随视野距离
-                var isInTailAfterRange = Master.IsInTailAfterViewRange(Master.LookTarget.GetCenterPosition());
+                var isInTailAfterRange = Master.TargetInViewRange;
                 if (isInTailAfterRange)
                 {
                     _tailAfterTimer = 0;
