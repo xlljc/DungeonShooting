@@ -1,0 +1,86 @@
+[gd_scene load_steps=13 format=3 uid="uid://dys8ke837tsqd"]
+
+[ext_resource type="PackedScene" uid="uid://dbrig6dq441wo" path="res://prefab/role/template/AiTemplate.tscn" id="1_kvs3t"]
+[ext_resource type="Script" path="res://src/game/activity/role/enemy/Enemy.cs" id="2_fehwl"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="3_stfjv"]
+[ext_resource type="SpriteFrames" uid="uid://cejv5k5ivm0k0" path="res://resource/spriteFrames/role/Enemy0004.tres" id="4_mfl1j"]
+[ext_resource type="Animation" uid="uid://b4mgiysicdk2b" path="res://resource/animation/enemy/Enemy_reset.res" id="5_7p0o8"]
+[ext_resource type="Animation" uid="uid://gvkkxspcdwrp" path="res://resource/animation/enemy/Enemy_astonished.res" id="6_tsq7a"]
+[ext_resource type="Animation" uid="uid://16rxpnsgj5tl" path="res://resource/animation/enemy/Enemy_notify.res" id="7_lyuvq"]
+[ext_resource type="Animation" uid="uid://cmje7jsgrhgmx" path="res://resource/animation/enemy/Enemy_query.res" id="8_nn4m4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3nkur"]
+resource_local_to_scene = true
+shader = ExtResource("3_stfjv")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2kup1"]
+resource_local_to_scene = true
+shader = ExtResource("3_stfjv")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rkrey"]
+size = Vector2(12, 18)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ur1ug"]
+_data = {
+"RESET": ExtResource("5_7p0o8"),
+"astonished": ExtResource("6_tsq7a"),
+"notify": ExtResource("7_lyuvq"),
+"query": ExtResource("8_nn4m4")
+}
+
+[node name="Enemy0004" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "ViewArea", "ViewAreaCollision", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_kvs3t")]
+script = ExtResource("2_fehwl")
+ViewRay = NodePath("ViewRay")
+NavigationAgent2D = NodePath("NavigationPoint/NavigationAgent2D")
+NavigationPoint = NodePath("NavigationPoint")
+FirePoint = NodePath("FirePoint")
+ViewArea = NodePath("MountPoint/ViewArea")
+ViewAreaCollision = NodePath("MountPoint/ViewArea/ViewAreaCollision")
+HurtArea = NodePath("HurtArea")
+HurtCollision = NodePath("HurtArea/HurtCollision")
+InteractiveArea = NodePath("InteractiveArea")
+InteractiveCollision = NodePath("InteractiveArea/InteractiveCollision")
+TipRoot = NodePath("TipRoot")
+TipSprite = NodePath("TipRoot/TipSprite")
+AnimationPlayer = NodePath("AnimationPlayer")
+MountPoint = NodePath("MountPoint")
+BackMountPoint = NodePath("BackMountPoint")
+MeleeAttackArea = NodePath("MountPoint/MeleeAttackArea")
+MeleeAttackCollision = NodePath("MountPoint/MeleeAttackArea/MeleeAttackCollision")
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
+
+[node name="ShadowSprite" parent="." index="0"]
+material = SubResource("ShaderMaterial_3nkur")
+
+[node name="AnimatedSprite" parent="." index="2"]
+material = SubResource("ShaderMaterial_2kup1")
+sprite_frames = ExtResource("4_mfl1j")
+
+[node name="HurtCollision" parent="HurtArea" index="0"]
+shape = SubResource("RectangleShape2D_rkrey")
+
+[node name="FirePoint" parent="." index="8"]
+position = Vector2(2, -9)
+
+[node name="AnimationPlayer" parent="." index="11"]
+libraries = {
+"": SubResource("AnimationLibrary_ur1ug")
+}
