@@ -824,7 +824,6 @@ public abstract partial class Role : ActivityObject
         return null;
     }
     
-    
     /// <summary>
     /// 触发使用道具
     /// </summary>
@@ -845,8 +844,8 @@ public abstract partial class Role : ActivityObject
     /// <param name="angle">伤害角度（弧度制）</param>
     public virtual void HurtHandler(ActivityObject target, int damage, float angle)
     {
-        //受伤闪烁, 无敌状态
-        if (Invincible)
+        //受伤闪烁, 无敌状态, 或者已经死亡
+        if (Invincible || IsDie)
         {
             return;
         }
@@ -893,11 +892,51 @@ public abstract partial class Role : ActivityObject
             if (!IsDie)
             {
                 IsDie = true;
-                OnDie();
-                //死亡事件
-                World.OnRoleDie(this);
+                
+                //禁用状态机控制器
+                var stateController = GetComponent(typeof(IStateController));
+                if (stateController != null)
+                {
+                    stateController.Enable = false;
+                }
+
+                //播放死亡动画
+                if (AnimationPlayer.HasAnimation(AnimatorNames.Die))
+                {
+                    StartCoroutine(DoDieWithAnimationPlayer());
+                }
+                else if (AnimatedSprite.SpriteFrames.HasAnimation(AnimatorNames.Die))
+                {
+                    StartCoroutine(DoDieWithAnimatedSprite());
+                }
+                else
+                {
+                    DoDieHandler();
+                }
             }
         }
+    }
+
+    private IEnumerator DoDieWithAnimationPlayer()
+    {
+        AnimationPlayer.Play(AnimatorNames.Die);
+        yield return ToSignal(AnimationPlayer, AnimationMixer.SignalName.AnimationFinished);
+        DoDieHandler();
+    }
+    
+    private IEnumerator DoDieWithAnimatedSprite()
+    {
+        AnimatedSprite.Play(AnimatorNames.Die);
+        yield return ToSignal(AnimatedSprite, AnimatedSprite2D.SignalName.AnimationFinished);
+        DoDieHandler();
+    }
+
+    //死亡逻辑
+    private void DoDieHandler()
+    {
+        OnDie();
+        //死亡事件
+        World.OnRoleDie(this);
     }
 
     /// <summary>

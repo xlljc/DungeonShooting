@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c133a7elsjedc"
-path="res://.godot/imported/enemy002.png-31ab39c6db5ef9c63253e2a46071bc80.ctex"
+uid="uid://v63ex2nsmve8"
+path="res://.godot/imported/enemy0004_Debris.png-8490ea147f0c0301c8ff1081373d661a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/role/enemy002/enemy002.png"
-dest_files=["res://.godot/imported/enemy002.png-31ab39c6db5ef9c63253e2a46071bc80.ctex"]
+source_file="res://resource/sprite/role/enemy0004/enemy0004_Debris.png"
+dest_files=["res://.godot/imported/enemy0004_Debris.png-8490ea147f0c0301c8ff1081373d661a.ctex"]
 
 [params]
 

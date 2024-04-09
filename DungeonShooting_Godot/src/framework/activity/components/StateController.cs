@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// 对象状态机控制器
 /// </summary>
-public class StateController<T, S> : Component<T> where T : ActivityObject where S : Enum
+public class StateController<T, S> : Component<T>, IStateController where T : ActivityObject where S : Enum
 {
     /// <summary>
     /// 获取当前状态
