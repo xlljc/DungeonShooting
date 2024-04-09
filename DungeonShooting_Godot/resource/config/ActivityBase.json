@@ -42,6 +42,48 @@
     "ShowInMapEditor": true
   },
   {
+    "Id": "enemy0003",
+    "Name": "\u654C\u4EBA3",
+    "Type": 4,
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "\u654C\u4EBA3",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/role/enemy/Enemy0003.tscn",
+    "Icon": "res://resource/sprite/role/enemy0003/enemy0003_Icon.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "enemy0004",
+    "Name": "\u654C\u4EBA4",
+    "Type": 4,
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "\u654C\u4EBA3",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/role/enemy/Enemy0004.tscn",
+    "Icon": "res://resource/sprite/role/enemy0004/enemy0004_Icon.png",
+    "ShowInMapEditor": true
+  },
+  {
+    "Id": "enemy0005",
+    "Name": "\u654C\u4EBA5",
+    "Type": 4,
+    "Quality": 0,
+    "Price": 0,
+    "Intro": "\u654C\u4EBA3",
+    "Details": "",
+    "IsStatic": false,
+    "__Material": "",
+    "Prefab": "res://prefab/role/enemy/Enemy0005.tscn",
+    "Icon": "res://resource/sprite/role/enemy0005/enemy0005_Icon.png",
+    "ShowInMapEditor": true
+  },
+  {
     "Id": "shopBoss0001",
     "Name": "\u5546\u5E97\u8001\u677F",
     "Type": 11,
