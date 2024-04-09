@@ -27,7 +27,6 @@ public class AiFollowUpState : StateBase<AiRole, AIStateEnum>
         }
         
         _navigationUpdateTimer = 0;
-        Master.TargetInView = true;
     }
 
     public override void Process(float delta)
@@ -86,18 +85,6 @@ public class AiFollowUpState : StateBase<AiRole, AIStateEnum>
         {
             //站立
             Master.DoIdle();
-        }
-
-        //检测玩家是否在视野内
-        if (Master.IsInTailAfterViewRange(playerPos))
-        {
-            Master.TargetInView = !Master.TestViewRayCast(playerPos);
-            //关闭射线检测
-            Master.TestViewRayCastOver();
-        }
-        else
-        {
-            Master.TargetInView = false;
         }
 
         //在视野中

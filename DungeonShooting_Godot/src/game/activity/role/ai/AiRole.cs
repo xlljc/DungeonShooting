@@ -9,9 +9,19 @@ using Godot;
 public abstract partial class AiRole : Role
 {
     /// <summary>
-    /// 目标是否在视野内
+    /// 目标是否在视野内, 视野内不能有墙壁遮挡
     /// </summary>
-    public bool TargetInView { get; set; } = true;
+    public bool TargetInView { get; private set; } = false;
+
+    /// <summary>
+    /// 目标间是否有墙壁遮挡
+    /// </summary>
+    public bool TargetHasOcclusion { get; private set; } = false;
+    
+    /// <summary>
+    /// 目标是否在视野范围内, 不会考虑是否被枪遮挡
+    /// </summary>
+    public bool TargetInViewRange { get; private set; } = false;
     
     /// <summary>
     /// 敌人身上的状态机控制器
@@ -79,26 +89,26 @@ public abstract partial class AiRole : Role
         {
             if (_viewRange != value)
             {
-                _viewRange = value;
                 if (ViewAreaCollision != null)
                 {
-                    ViewAreaCollision.Polygon = Utils.CreateSectorPolygon(0, _viewRange, 120, 4);
+                    ViewAreaCollision.Polygon = Utils.CreateSectorPolygon(0, value, 120, 4);
                 }
             }
+            _viewRange = value;
         }
     }
 
     private float _viewRange = -1;
 
     /// <summary>
+    /// 默认视野半径
+    /// </summary>
+    public float DefaultViewRange { get; set; } = 250;
+
+    /// <summary>
     /// 发现玩家后跟随玩家的视野半径
     /// </summary>
     public float TailAfterViewRange { get; set; } = 400;
-
-    /// <summary>
-    /// 背后的视野半径, 单位像素
-    /// </summary>
-    public float BackViewRange { get; set; } = 50;
     
     /// <summary>
     /// 攻击间隔时间, 秒
@@ -118,7 +128,7 @@ public abstract partial class AiRole : Role
     /// <summary>
     /// 临时存储攻击目标, 获取该值请调用 GetAttackTarget() 函数
     /// </summary>
-    private Role AttackTarget { get; set; } = null;
+    private Role _attackTarget = null;
     
     private HashSet<Role> _viewTargets = new HashSet<Role>();
 
@@ -147,7 +157,40 @@ public abstract partial class AiRole : Role
 
         //NavigationAgent2D.VelocityComputed += OnVelocityComputed;
     }
-    
+
+    protected override void Process(float delta)
+    {
+        base.Process(delta);
+        
+        if (LookTarget != null)
+        {
+            if (LookTarget.IsDestroyed)
+            {
+                LookTarget = null;
+                TargetInViewRange = false;
+                TargetHasOcclusion = false;
+                TargetInView = false;
+            }
+            else
+            {
+                //判断目标是否被墙壁遮挡
+                TargetHasOcclusion = TestViewRayCast(LookTarget.GetCenterPosition());
+                TestViewRayCastOver();
+
+                if (LookTarget is Role role)
+                {
+                    TargetInViewRange = _viewTargets.Contains(role);
+                }
+                else
+                {
+                    TargetInViewRange = true;
+                }
+
+                TargetInView = !TargetHasOcclusion && TargetInViewRange;
+            }
+        }
+    }
+
     /// <summary>
     /// 获取攻击的目标对象, 当 HasAttackDesire 为 true 时才会调用
     /// </summary>
@@ -155,20 +198,20 @@ public abstract partial class AiRole : Role
     public Role GetAttackTarget(bool perspective = true)
     {
         //目标丢失
-        if (AttackTarget == null || AttackTarget.IsDestroyed || !IsEnemy(AttackTarget))
+        if (_attackTarget == null || _attackTarget.IsDestroyed || !IsEnemy(_attackTarget))
         {
-            AttackTarget = RefreshAttackTargets(AttackTarget);
-            return AttackTarget;
+            _attackTarget = RefreshAttackTargets(_attackTarget);
+            return _attackTarget;
         }
         
         if (!perspective)
         {
             //被墙阻挡
-            if (TestViewRayCast(AttackTarget.GetCenterPosition()))
+            if (TestViewRayCast(_attackTarget.GetCenterPosition()))
             {
-                AttackTarget = RefreshAttackTargets(AttackTarget);
+                _attackTarget = RefreshAttackTargets(_attackTarget);
                 TestViewRayCastOver();
-                return AttackTarget;
+                return _attackTarget;
             }
             else
             {
@@ -176,7 +219,7 @@ public abstract partial class AiRole : Role
             }
         }
         
-        return AttackTarget;
+        return _attackTarget;
     }
     
     /// <summary>
@@ -283,40 +326,6 @@ public abstract partial class AiRole : Role
         }
 
         return 0;
-    }
-
-    /// <summary>
-    /// 返回目标点是否在视野范围内
-    /// </summary>
-    public virtual bool IsInViewRange(Vector2 target)
-    {
-        var isForward = IsPositionInForward(target);
-        if (isForward)
-        {
-            if (GlobalPosition.DistanceSquaredTo(target) <= ViewRange * ViewRange) //没有超出视野半径
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// 返回目标点是否在跟随状态下的视野半径内
-    /// </summary>
-    public virtual bool IsInTailAfterViewRange(Vector2 target)
-    {
-        var isForward = IsPositionInForward(target);
-        if (isForward)
-        {
-            if (GlobalPosition.DistanceSquaredTo(target) <= TailAfterViewRange * TailAfterViewRange) //没有超出视野半径
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /// <summary>

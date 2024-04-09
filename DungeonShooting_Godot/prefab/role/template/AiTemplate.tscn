@@ -33,6 +33,9 @@ shape = SubResource("CircleShape2D_wu0xv")
 position = Vector2(0, -8)
 enabled = false
 
+[node name="MeleeAttackArea" parent="MountPoint" index="0"]
+visible = true
+
 [node name="ViewArea" type="Area2D" parent="MountPoint" index="1"]
 collision_layer = 0
 collision_mask = 16

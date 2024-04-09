@@ -84,8 +84,8 @@ public partial class Enemy : AiRole
         roleState.Acceleration = enemyBase.Acceleration;
         roleState.Friction = enemyBase.Friction;
         ViewRange = enemyBase.ViewRange;
+        DefaultViewRange = enemyBase.ViewRange;
         TailAfterViewRange = enemyBase.TailAfterViewRange;
-        BackViewRange = enemyBase.BackViewRange;
         AttackInterval = enemyBase.AttackInterval;
         
         roleState.Gold = Mathf.Max(0, Utils.Random.RandomConfigRange(enemyBase.Gold));
@@ -128,27 +128,21 @@ public partial class Enemy : AiRole
         //看向目标
         if (LookTarget != null && MountLookTarget)
         {
-            if (LookTarget.IsDestroyed)
+            var pos = LookTarget.Position;
+            LookPosition = pos;
+            //脸的朝向
+            var gPos = Position;
+            if (pos.X > gPos.X && Face == FaceDirection.Left)
             {
-                LookTarget = null;
+                Face = FaceDirection.Right;
             }
-            else
+            else if (pos.X < gPos.X && Face == FaceDirection.Right)
             {
-                var pos = LookTarget.Position;
-                LookPosition = pos;
-                //脸的朝向
-                var gPos = Position;
-                if (pos.X > gPos.X && Face == FaceDirection.Left)
-                {
-                    Face = FaceDirection.Right;
-                }
-                else if (pos.X < gPos.X && Face == FaceDirection.Right)
-                {
-                    Face = FaceDirection.Left;
-                }
-                //枪口跟随目标
-                MountPoint.SetLookAt(pos);
+                Face = FaceDirection.Left;
             }
+
+            //枪口跟随目标
+            MountPoint.SetLookAt(pos);
         }
 
         if (RoleState.CanPickUpWeapon)

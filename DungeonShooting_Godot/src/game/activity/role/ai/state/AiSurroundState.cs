@@ -36,8 +36,7 @@ public class AiSurroundState : StateBase<AiRole, AIStateEnum>
             return;
             //throw new Exception("进入 AIAdvancedStateEnum.AiSurround 状态时角色没有攻击目标!");
         }
-        
-        Master.TargetInView = true;
+
         _isMoveOver = true;
         _pauseTimer = 0;
         _moveFlag = false;
@@ -63,19 +62,6 @@ public class AiSurroundState : StateBase<AiRole, AIStateEnum>
             }
         }
 
-        var playerPos = Master.LookTarget.GetCenterPosition();
-
-        //检测玩家是否在视野内
-        if (Master.IsInTailAfterViewRange(playerPos))
-        {
-            Master.TargetInView = !Master.TestViewRayCast(playerPos);
-            //关闭射线检测
-            Master.TestViewRayCastOver();
-        }
-        else
-        {
-            Master.TargetInView = false;
-        }
 
         //在视野中
         if (Master.TargetInView)
@@ -90,7 +76,7 @@ public class AiSurroundState : StateBase<AiRole, AIStateEnum>
             }
             else if (_isMoveOver) //移动已经完成
             {
-                RunOver(playerPos);
+                RunOver(Master.LookTarget.GetCenterPosition());
                 _isMoveOver = false;
             }
             else
@@ -98,7 +84,7 @@ public class AiSurroundState : StateBase<AiRole, AIStateEnum>
                 var masterPosition = Master.Position;
                 if (_lockTimer >= 1) //卡在一个点超过一秒
                 {
-                    RunOver(playerPos);
+                    RunOver(Master.LookTarget.GetCenterPosition());
                     _isMoveOver = false;
                     _lockTimer = 0;
                 }
@@ -147,7 +133,7 @@ public class AiSurroundState : StateBase<AiRole, AIStateEnum>
                 var weapon = Master.WeaponPack.ActiveItem;
                 if (weapon != null)
                 {
-                    if (masterPosition.DistanceSquaredTo(playerPos) > Mathf.Pow(Master.GetWeaponRange(0.7f), 2)) //玩家离开正常射击范围
+                    if (masterPosition.DistanceSquaredTo(Master.LookTarget.GetCenterPosition()) > Mathf.Pow(Master.GetWeaponRange(0.7f), 2)) //玩家离开正常射击范围
                     {
                         ChangeState(AIStateEnum.AiFollowUp);
                     }
@@ -159,7 +145,7 @@ public class AiSurroundState : StateBase<AiRole, AIStateEnum>
                 }
                 else
                 {
-                    if (masterPosition.DistanceSquaredTo(playerPos) > Mathf.Pow(Master.ViewRange * 0.7f, 2)) //玩家离开正常射击范围
+                    if (masterPosition.DistanceSquaredTo(Master.LookTarget.GetCenterPosition()) > Mathf.Pow(Master.ViewRange * 0.7f, 2)) //玩家离开正常射击范围
                     {
                         ChangeState(AIStateEnum.AiFollowUp);
                     }
