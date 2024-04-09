@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhwhhg2dfsr26"
-path="res://.godot/imported/Role0001.png-6999fc593f104cd54766f96578820516.ctex"
+uid="uid://kpveaqso6a6t"
+path="res://.godot/imported/Sprite-0008.png-b416ef9be8cbedc81d4a53256f8a9498.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/role/role0001/Role0001.png"
-dest_files=["res://.godot/imported/Role0001.png-6999fc593f104cd54766f96578820516.ctex"]
+source_file="res://resource/sprite/role/role0001/backward/Sprite-0008.png"
+dest_files=["res://.godot/imported/Sprite-0008.png-b416ef9be8cbedc81d4a53256f8a9498.ctex"]
 
 [params]
 

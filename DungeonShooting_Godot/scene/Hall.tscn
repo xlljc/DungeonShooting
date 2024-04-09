@@ -317,7 +317,7 @@ Id = "item_0016"
 DefaultLayer = 1
 
 [node name="Item0018" type="Node2D" parent="ItemRoot" index="21"]
-position = Vector2(230, 305)
+position = Vector2(412, 102)
 script = ExtResource("5_lowqi")
 Id = "item_0018"
 DefaultLayer = 1
@@ -487,27 +487,19 @@ position = Vector2(135, -140)
 texture = ExtResource("48_2erjm")
 
 [node name="Item-21" type="Sprite2D" parent="Node2D" index="20"]
-position = Vector2(-512, -318)
+position = Vector2(-533, -321)
 texture = ExtResource("49_j5ytr")
 
-[node name="Item-22" type="Sprite2D" parent="Node2D" index="21"]
-position = Vector2(-497, -318)
-texture = ExtResource("49_j5ytr")
-
-[node name="Item-23" type="Sprite2D" parent="Node2D" index="22"]
-position = Vector2(-481, -318)
-texture = ExtResource("49_j5ytr")
-
-[node name="Item06" type="Sprite2D" parent="Node2D" index="23"]
+[node name="Item06" type="Sprite2D" parent="Node2D" index="21"]
 z_index = -1
 position = Vector2(-84, -60)
 texture = ExtResource("7_42rdc")
 
-[node name="Item07" type="Sprite2D" parent="Node2D" index="24"]
+[node name="Item07" type="Sprite2D" parent="Node2D" index="22"]
 position = Vector2(-106, 27)
 texture = ExtResource("49_yocgq")
 
-[node name="Item12" type="Sprite2D" parent="Node2D" index="25"]
+[node name="Item12" type="Sprite2D" parent="Node2D" index="23"]
 position = Vector2(-31, -78)
 texture = ExtResource("52_1n1p3")
 flip_h = true

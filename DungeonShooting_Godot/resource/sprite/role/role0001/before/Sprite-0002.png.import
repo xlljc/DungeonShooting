@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b1gh481w2xvsl"
-path="res://.godot/imported/Sprite-0002.png-071631cbf3e4907d8ef6d018f7604aed.ctex"
+path="res://.godot/imported/Sprite-0002.png-e7c2aff206a6365b5b7fdd6a6cc0cdf2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resource/sprite/role/role0001/run/Sprite-0002.png"
-dest_files=["res://.godot/imported/Sprite-0002.png-071631cbf3e4907d8ef6d018f7604aed.ctex"]
+source_file="res://resource/sprite/role/role0001/before/Sprite-0002.png"
+dest_files=["res://.godot/imported/Sprite-0002.png-e7c2aff206a6365b5b7fdd6a6cc0cdf2.ctex"]
 
 [params]
 
