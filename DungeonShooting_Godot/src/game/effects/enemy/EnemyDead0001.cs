@@ -42,10 +42,14 @@ public partial class EnemyDead0001 : ActivityObject
             Freeze();
             _runBrush = false;
         }
-        else if (_runBrush && AffiliationArea != null && Altitude <= 1f) //测试笔刷
+        else if (_runBrush && AffiliationArea != null) //测试笔刷
         {
             var pos = AffiliationArea.RoomInfo.LiquidCanvas.ToLiquidCanvasPosition(Position);
-            AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(_brushData, PrevPosition, pos, 0);
+            if (Altitude <= 0.25f)
+            {
+                AffiliationArea.RoomInfo.LiquidCanvas.DrawBrush(_brushData, PrevPosition, pos, 0);
+            }
+
             PrevPosition = pos;
         }
     }

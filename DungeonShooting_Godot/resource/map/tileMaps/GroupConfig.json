@@ -30,7 +30,7 @@
     ],
     "InletList": [
       {
-        "ErrorType": 2,
+        "ErrorType": 0,
         "Path": "resource/map/tileMaps/Test1/inlet/Start"
       },
       {

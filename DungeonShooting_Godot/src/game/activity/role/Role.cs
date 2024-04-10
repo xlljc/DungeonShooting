@@ -312,6 +312,11 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool NoWeaponAttack { get; set; }
     
+    /// <summary>
+    /// 上一次受到伤害的角度, 弧度制
+    /// </summary>
+    public float PrevHitAngle { get; private set; }
+    
     //初始缩放
     private Vector2 _startScale;
     //当前可互动的物体
@@ -871,6 +876,8 @@ public abstract partial class Role : ActivityObject
             // blood.Rotation = angle;
             // GameApplication.Instance.Node3D.GetRoot().AddChild(blood);
         }
+
+        PrevHitAngle = angle;
         OnHit(target, damage, angle, !flag);
         
         if (target is Role targetRole && !targetRole.IsDestroyed)

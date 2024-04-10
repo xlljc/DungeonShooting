@@ -103,18 +103,26 @@ public partial class Enemy : AiRole
         blood.PlayEffect();
         
         var realVelocity = GetRealVelocity();
+        var velocity = (realVelocity * 1.5f).LimitLength(80);
         //创建敌人碎片
         var count = Utils.Random.RandomRangeInt(3, 6);
         for (var i = 0; i < count; i++)
         {
             var debris = Create(Ids.Id_enemy_dead0001);
             debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
-            debris.MoveController.AddForce(Velocity + realVelocity);
+            debris.MoveController.AddForce(velocity);
         }
         
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
-        
+
+        var obj = ResourceManager.LoadAndInstantiate<EnemyBlood0002>(ResourcePath.prefab_effect_enemy_EnemyBlood0002_tscn);
+        obj.AddToActivityRoot(RoomLayerEnum.NormalLayer);
+        obj.InitRoom(AffiliationArea.RoomInfo);
+        obj.Position = Position;
+        obj.Rotation = PrevHitAngle;
+        obj.ZIndex = AffiliationArea.RoomInfo.StaticImageCanvas.ZIndex;
+
         base.OnDie();
     }
 

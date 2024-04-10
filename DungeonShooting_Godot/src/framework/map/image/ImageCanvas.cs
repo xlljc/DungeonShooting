@@ -37,6 +37,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
     {
         Centered = false;
         Texture = _texture;
+        ZIndex = -1;
     }
 
     /// <summary>
