@@ -54,12 +54,16 @@ public class AiTailAfterState : StateBase<AiRole, AIStateEnum>
     {
         //这个状态下不会有攻击事件, 所以没必要每一帧检查是否弹药耗尽
 
-        if (Master.LookTarget == null)
+        var target = Master.GetAttackTarget();
+        if (target == null)
         {
+            Master.LookTarget = null;
             ChangeState(AIStateEnum.AiNormal);
             return;
         }
-        var playerPos = Master.LookTarget.GetCenterPosition();
+
+        Master.LookTarget = target;
+        var playerPos = target.GetCenterPosition();
         
         //更新玩家位置
         if (_navigationUpdateTimer <= 0)

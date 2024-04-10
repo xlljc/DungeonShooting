@@ -304,6 +304,8 @@ public partial class Player : Role
         //血量为0, 扔掉所有武器
         if (Hp <= 0)
         {
+            BasisVelocity = Vector2.Zero;
+            Velocity = Vector2.Zero;
             ThrowAllWeapon();
         }
     }

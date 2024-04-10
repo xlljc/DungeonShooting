@@ -162,44 +162,6 @@ public partial class Enemy : AiRole
         return base.IsAllWeaponTotalAmmoEmpty();
     }
 
-    protected override void OnHit(ActivityObject target, int damage, float angle, bool realHarm)
-    {
-        //受到伤害
-        var state = StateController.CurrState;
-        if (state == AIStateEnum.AiNormal)
-        {
-            LookTarget = target;
-            //判断是否进入通知状态
-            if (World.Role_InstanceList.FindIndex(role =>
-                    role is AiRole enemy && 
-                    enemy != this && !enemy.IsDie && enemy.AffiliationArea == AffiliationArea &&
-                    enemy.StateController.CurrState == AIStateEnum.AiNormal) != -1)
-            {
-                //进入惊讶状态, 然后再进入通知状态
-                StateController.ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiNotify);
-            }
-            else
-            {
-                //进入惊讶状态, 然后再进入跟随状态
-                StateController.ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiTailAfter);
-            }
-        }
-        else if (state == AIStateEnum.AiLeaveFor)
-        {
-            LookTarget = target;
-            StateController.ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiTailAfter);
-        }
-        else if (state == AIStateEnum.AiFindAmmo)
-        {
-            if (LookTarget == null)
-            {
-                LookTarget = target;
-                var findAmmo = (AiFindAmmoState)StateController.CurrStateBase;
-                StateController.ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFindAmmo, findAmmo.TargetWeapon);
-            }
-        }
-    }
-
     /// <summary>
     /// 从标记出生时调用, 预加载波不会调用
     /// </summary>

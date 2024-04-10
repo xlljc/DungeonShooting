@@ -507,6 +507,67 @@ public abstract partial class AiRole : Role
         HasMoveDesire = v;
     }
 
+    protected override void OnHit(ActivityObject target, int damage, float angle, bool realHarm)
+    {
+        //受到伤害
+        var state = StateController.CurrState;
+        if (state == AIStateEnum.AiNormal)
+        {
+            LookTarget = target;
+            if (target is Role role)
+            {
+                _attackTarget = role;
+            }
+            //判断是否进入通知状态
+            if (World.Role_InstanceList.FindIndex(role =>
+                    role is AiRole aiRole && 
+                    aiRole != this && !aiRole.IsDie && aiRole.AffiliationArea == AffiliationArea &&
+                    aiRole.StateController.CurrState == AIStateEnum.AiNormal) != -1)
+            {
+                //进入惊讶状态, 然后再进入通知状态
+                StateController.ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiNotify);
+            }
+            else
+            {
+                //进入惊讶状态, 然后再进入跟随状态
+                StateController.ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiTailAfter);
+            }
+        }
+        else if (state == AIStateEnum.AiLeaveFor)
+        {
+            LookTarget = target;
+            if (target is Role role)
+            {
+                _attackTarget = role;
+            }
+            StateController.ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiTailAfter);
+        }
+        else if (state == AIStateEnum.AiFindAmmo)
+        {
+            if (LookTarget == null)
+            {
+                LookTarget = target;
+                if (target is Role role)
+                {
+                    _attackTarget = role;
+                }
+                var findAmmo = (AiFindAmmoState)StateController.CurrStateBase;
+                StateController.ChangeState(AIStateEnum.AiAstonished, AIStateEnum.AiFindAmmo, findAmmo.TargetWeapon);
+            }
+        }
+        else if (state != AIStateEnum.AiAstonished && state != AIStateEnum.AiNotify)
+        {
+            if (TargetHasOcclusion || !TargetInView)
+            {
+                LookTarget = target;
+                if (target is Role role)
+                {
+                    _attackTarget = role;
+                }
+            }
+        }
+    }
+    
     private void OnViewAreaBodyEntered(Node2D node)
     {
         if (node is Role role)
@@ -525,6 +586,15 @@ public abstract partial class AiRole : Role
 
     private Role RefreshAttackTargets(Role prevRole)
     {
+        if (LookTarget is Role role && !role.IsDestroyed && IsEnemy(role))
+        {
+            if (!TestViewRayCast(role.GetCenterPosition()))
+            {
+                TestViewRayCastOver();
+                return role;
+            }
+        }
+        
         if (_viewTargets.Count == 0)
         {
             return null;
