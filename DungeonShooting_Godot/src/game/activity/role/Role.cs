@@ -385,7 +385,7 @@ public abstract partial class Role : ActivityObject
     /// <param name="target">触发伤害的对象, 为 null 表示不存在对象或者对象已经被销毁</param>
     /// <param name="damage">受到的伤害</param>
     /// <param name="angle">伤害角度（弧度制）</param>
-    /// <param name="realHarm">是否受到真实伤害, 如果为false, 则表示该伤害被互动格挡掉了</param>
+    /// <param name="realHarm">是否受到真实伤害, 如果为false, 则表示该伤害被护盾格挡掉了</param>
     protected virtual void OnHit(ActivityObject target, int damage, float angle, bool realHarm)
     {
     }
@@ -1047,6 +1047,16 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool IsEnemy(Role other)
     {
+        if (this == other)
+        {
+            return false;
+        }
+
+        if (Camp == CampEnum.None || other.Camp == CampEnum.None)
+        {
+            return true;
+        }
+        
         if (other.Camp == Camp || other.Camp == CampEnum.Peace || Camp == CampEnum.Peace)
         {
             return false;

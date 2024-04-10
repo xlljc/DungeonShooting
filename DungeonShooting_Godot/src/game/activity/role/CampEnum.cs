@@ -25,4 +25,8 @@ public enum CampEnum
     /// 阵营4, 敌人3
     /// </summary>
     Camp4,
+    /// <summary>
+    /// 阵营5, 敌人4
+    /// </summary>
+    Camp5,
 }
