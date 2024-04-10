@@ -177,7 +177,7 @@ gravity = Vector3(0, 0, 0)
 scale_min = 0.4
 scale_max = 1.5
 scale_curve = SubResource("CurveTexture_rutlp")
-color = Color(0.811765, 0.0980392, 0.0980392, 0.627451)
+color = Color(0.992157, 0.788235, 0.788235, 0.627451)
 color_ramp = SubResource("GradientTexture1D_orgu0")
 anim_offset_max = 1.0
 

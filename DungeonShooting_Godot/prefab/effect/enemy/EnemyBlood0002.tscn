@@ -3,6 +3,21 @@
 [ext_resource type="Texture2D" uid="uid://nbwtavmsjps6" path="res://resource/sprite/role/dle_liquid/enemy0001_Icon_liquid.png" id="1_ite3h"]
 [ext_resource type="Script" path="res://src/game/effects/enemy/EnemyBlood0002.cs" id="2_uof3e"]
 
+[sub_resource type="Animation" id="Animation_p16al"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(2.08165e-12, 2.08165e-12, 20, 48)]
+}
+
 [sub_resource type="Animation" id="Animation_rir6a"]
 resource_name = "default"
 length = 0.2
@@ -34,21 +49,6 @@ tracks/1/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_p16al"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:region_rect")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Rect2(2.08165e-12, 2.08165e-12, 20, 48)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_f1xdh"]
 _data = {
 "RESET": SubResource("Animation_p16al"),
@@ -56,6 +56,7 @@ _data = {
 }
 
 [node name="EnemyBlood0002" type="Sprite2D"]
+modulate = Color(0.992157, 0.788235, 0.788235, 1)
 texture = ExtResource("1_ite3h")
 centered = false
 offset = Vector2(-16, -24)

@@ -381,6 +381,10 @@ public class ResourcePath
     public const string resource_sprite_role_scarecrow0001_png = "res://resource/sprite/role/scarecrow0001.png";
     public const string resource_sprite_role_role8_png = "res://resource/sprite/role/role8.png";
     public const string resource_sprite_role_role9_png = "res://resource/sprite/role/role9.png";
+    public const string resource_sprite_role_role0002_Role0002_head_png = "res://resource/sprite/role/role0002/Role0002_head.png";
+    public const string resource_sprite_role_role0002_idle_idle_png = "res://resource/sprite/role/role0002/idle/idle.png";
+    public const string resource_sprite_role_role0002_eat_eat_png = "res://resource/sprite/role/role0002/eat/eat.png";
+    public const string resource_sprite_role_role0002_run_Sprite_png = "res://resource/sprite/role/role0002/run/Sprite.png";
     public const string resource_sprite_role_shopBoss0001_ShopBoss0001_png = "res://resource/sprite/role/shopBoss0001/ShopBoss0001.png";
     public const string resource_sprite_role_enemy0003_enemy0003_png = "res://resource/sprite/role/enemy0003/enemy0003.png";
     public const string resource_sprite_role_enemy0003_enemy0003_Icon_png = "res://resource/sprite/role/enemy0003/enemy0003_Icon.png";
@@ -393,6 +397,7 @@ public class ResourcePath
     public const string resource_sprite_role_enemy0005_enemy0005_png = "res://resource/sprite/role/enemy0005/enemy0005.png";
     public const string resource_sprite_role_enemy0005_enemy0005_Debris_png = "res://resource/sprite/role/enemy0005/enemy0005_Debris.png";
     public const string resource_sprite_role_enemy0005_enemy0005_Icon_png = "res://resource/sprite/role/enemy0005/enemy0005_Icon.png";
+    public const string resource_sprite_role_enemy0002_enemy0001_png = "res://resource/sprite/role/enemy0002/enemy0001.png";
     public const string resource_sprite_role_enemy0002_Enemy0002_png = "res://resource/sprite/role/enemy0002/Enemy0002.png";
     public const string resource_sprite_role_enemy0002_Enemy0002_dead_png = "res://resource/sprite/role/enemy0002/Enemy0002_dead.png";
     public const string resource_sprite_role_enemy0002_Enemy0002_attack_png = "res://resource/sprite/role/enemy0002/Enemy0002_attack.png";
@@ -446,10 +451,15 @@ public class ResourcePath
     public const string resource_sprite_role_common_Role_shadow1_png = "res://resource/sprite/role/common/Role_shadow1.png";
     public const string resource_sprite_role_common_Role_notify_png = "res://resource/sprite/role/common/Role_notify.png";
     public const string resource_sprite_role_enemy0007_enemy005_png = "res://resource/sprite/role/enemy0007/enemy005.png";
+    public const string resource_sprite_role_enemy0007_enemy0006_Debris_png = "res://resource/sprite/role/enemy0007/enemy0006_Debris.png";
+    public const string resource_sprite_role_enemy0007_enemy0005_Icon_png = "res://resource/sprite/role/enemy0007/enemy0005_Icon.png";
+    public const string resource_sprite_role_enemy0007_dle_png = "res://resource/sprite/role/enemy0007/dle.png";
     public const string resource_sprite_role_enemy0001_enemy0001_png = "res://resource/sprite/role/enemy0001/enemy0001.png";
     public const string resource_sprite_role_enemy0001_enemy0001_Icon副本_png = "res://resource/sprite/role/enemy0001/enemy0001_Icon - 副本.png";
     public const string resource_sprite_role_enemy0001_enemy0001_Debris_png = "res://resource/sprite/role/enemy0001/enemy0001_Debris.png";
     public const string resource_sprite_role_enemy0006_enemy0005_png = "res://resource/sprite/role/enemy0006/enemy0005.png";
+    public const string resource_sprite_role_enemy0006_enemy0006_Debris_png = "res://resource/sprite/role/enemy0006/enemy0006_Debris.png";
+    public const string resource_sprite_role_enemy0006_enemy0005_Icon_png = "res://resource/sprite/role/enemy0006/enemy0005_Icon.png";
     public const string resource_sprite_box_TreasureBox0001_icon_png = "res://resource/sprite/box/TreasureBox0001_icon.png";
     public const string resource_sprite_box_TreasureBox0001_png = "res://resource/sprite/box/TreasureBox0001.png";
     public const string resource_sprite_shootFire_ShotFire0001_png = "res://resource/sprite/shootFire/ShotFire0001.png";

@@ -17,5 +17,6 @@ gravity = Vector3(0, 0, 0)
 scale_min = 0.8
 scale_max = 0.8
 scale_curve = ExtResource("1_yr5l8")
+color = Color(0.992157, 0.788235, 0.788235, 0.627451)
 color_ramp = SubResource("GradientTexture1D_4mhw0")
 anim_offset_max = 1.0

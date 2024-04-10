@@ -13,7 +13,7 @@ public partial class EnemyBlood0002 : Sprite2D
     private void DoDestory()
     {
         var position = _roomInfo.ToCanvasPosition(GlobalPosition);
-        _roomInfo.StaticImageCanvas.DrawImageInCanvas(Texture, null, position.X, position.Y, RotationDegrees,
+        _roomInfo.StaticImageCanvas.DrawImageInCanvas(Texture, Modulate, null, position.X, position.Y, RotationDegrees,
             (int)-Offset.X, (int)-Offset.Y, false, () =>
             {
                 QueueFree();

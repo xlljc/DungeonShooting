@@ -44,6 +44,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
     /// 将指定纹理添加到预渲染队列中, 完成后会调用 onDrawingComplete 回调函数
     /// </summary>
     /// <param name="texture">需要渲染的纹理</param>
+    /// <param name="modulate">混色</param>
     /// <param name="material">渲染材质, 不需要则传null</param>
     /// <param name="x">离画布左上角x坐标</param>
     /// <param name="y">离画布左上角y坐标</param>
@@ -52,17 +53,18 @@ public partial class ImageCanvas : Sprite2D, IDestroy
     /// <param name="centerY">旋转中心点y</param>
     /// <param name="flipY">是否翻转y轴</param>
     /// <param name="onDrawingComplete">绘制完成的回调函数</param>
-    public void DrawImageInCanvas(Texture2D texture, Material material, float x, float y, float angle, int centerX, int centerY, bool flipY, Action onDrawingComplete = null)
+    public void DrawImageInCanvas(Texture2D texture, Color modulate, Material material, float x, float y, float angle, int centerX, int centerY, bool flipY, Action onDrawingComplete = null)
     {
-        DrawImageInCanvas(texture, material, x, y, angle, centerX, centerY, flipY, true, onDrawingComplete);
+        DrawImageInCanvas(texture,modulate, material, x, y, angle, centerX, centerY, flipY, true, onDrawingComplete);
     }
-    private void DrawImageInCanvas(Texture2D texture, Material material, float x, float y, float angle, int centerX, int centerY, bool flipY, bool enableQueueCutting, Action onDrawingComplete)
+    private void DrawImageInCanvas(Texture2D texture, Color modulate, Material material, float x, float y, float angle, int centerX, int centerY, bool flipY, bool enableQueueCutting, Action onDrawingComplete)
     {
         var item = new ImageRenderData();
         item.OnDrawingComplete = onDrawingComplete;
         item.EnableQueueCutting = enableQueueCutting;
         item.ImageCanvas = this;
         item.SrcImage = texture.GetImage();
+        item.Modulate = modulate;
         item.Material = material;
         var width = item.SrcImage.GetWidth();
         var height = item.SrcImage.GetHeight();
@@ -165,7 +167,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
             }
             
             DrawImageInCanvas(
-                shadowSprite.Texture, shadowSprite.Material,
+                shadowSprite.Texture, shadowSprite.Modulate, shadowSprite.Material,
                 ax + activityObject.ShadowOffset.X, ay + activityObject.ShadowOffset.Y,
                 angle,
                 centerX, centerY, flipY,
@@ -187,7 +189,7 @@ public partial class ImageCanvas : Sprite2D, IDestroy
             }
             //为了保证阴影在此之前渲染, 所以必须关闭插队渲染
             DrawImageInCanvas(
-                texture, animatedSprite.Material,
+                texture, animatedSprite.Modulate, animatedSprite.Material,
                 ax, ay,
                 animatedSprite.GlobalRotationDegrees,
                 centerX, centerY, flipY,
