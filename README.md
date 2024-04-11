@@ -4,7 +4,7 @@
 **Godot版本:** `4.2.1 mono`  
 **.Net版本:** `8.0`
 
---- 
+---
 ### 游戏定义
 
 **游戏名称:**《枪火地牢》  
@@ -41,9 +41,31 @@ git仓库的目录结构如下
 > ├ DungeonShooting_Document (更新日志相关的目录)  
 > └ DungeonShooting_Godot (Godot工程目录)
 
-使用GodotMono版打开`DungeonShooting_Godot/project.godot`, 如果是第一次打开项目会弹出一个找不到资源的提示, 这是因为项目没有编译过, 点击Godot右上角`build`, 然后打`开项目设置`, 在`插件`这一个页签下启用`DungeonShooting_plugin`这个插件, 然后项目就可以正常运行了
 
---- 
+
+请确保安装了`.net8`和`godot mono4.2.1`
+
+godot下载地址: https://godotengine.org/download
+
+.net8下载地址: https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0
+
+
+
+使用GodotMono版打开`DungeonShooting_Godot/project.godot`
+
+
+
+**注意**: 如果是第一次打开项目会弹出以下提示
+
+![png](DungeonShooting_Document/文档资源/tip.png)
+
+这是因为项目没有编译过, 点击Godot右上角`build`, 然后打`开项目设置`, 在`插件`这一个页签下启用`DungeonShooting_plugin`这个插件
+
+![png](DungeonShooting_Document/文档资源/setting.png)
+
+最后重启编辑器, 项目就可以正常运行了
+
+---
 ### 其他
 
 **开发日志:** [开发日志.md](DungeonShooting_Document/开发日志.md)  
