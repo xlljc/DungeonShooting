@@ -1077,6 +1077,11 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool IsEnemy(CampEnum otherCamp)
     {
+        if (Camp == CampEnum.None || otherCamp == CampEnum.None)
+        {
+            return true;
+        }
+        
         if (otherCamp == Camp || otherCamp == CampEnum.Peace || Camp == CampEnum.Peace)
         {
             return false;
