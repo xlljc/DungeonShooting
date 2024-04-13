@@ -221,6 +221,7 @@ public class DungeonGenerator
                     currTryCount++;
                     if (currTryCount >= maxTryCount)
                     {
+                        //Debug.Log("生成失败, 房间总数: " + RoomInfos.Count);
                         return false;
                     }
 
@@ -281,7 +282,7 @@ public class DungeonGenerator
                 {
                     _rule.GenerateRoomFail(tempPrevRoomInfo, nextRoomType);
 
-                    //Debug.Log("生成第" + (_count + 1) + "个房间失败! 失败原因: " + errorCode);
+                    //Debug.Log("生成第" + (RoomInfos.Count + 1) + "个房间失败! 失败原因: " + errorCode);
                     if (errorCode == GenerateRoomErrorCode.OutArea)
                     {
                         _failCount++;
@@ -299,6 +300,7 @@ public class DungeonGenerator
                     currTryCount++;
                     if (currTryCount >= maxTryCount)
                     {
+                        //Debug.Log("生成失败, 房间总数: " + RoomInfos.Count);
                         return false;
                     }
                 }
@@ -375,11 +377,11 @@ public class DungeonGenerator
                 if (direction == RoomDirection.Up) //上
                 {
                     room.Position = new Vector2I(prevRoom.Position.X + offset,
-                        prevRoom.Position.Y - room.Size.Y - space);
+                        prevRoom.Position.Y - room.Size.Y - space - 1);
                 }
                 else if (direction == RoomDirection.Right) //右
                 {
-                    room.Position = new Vector2I(prevRoom.Position.X + prevRoom.Size.Y + space,
+                    room.Position = new Vector2I(prevRoom.Position.X + prevRoom.Size.X + space,
                         prevRoom.Position.Y + offset);
                 }
                 else if (direction == RoomDirection.Down) //下
