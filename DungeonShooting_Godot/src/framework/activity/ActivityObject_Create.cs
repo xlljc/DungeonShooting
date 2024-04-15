@@ -14,9 +14,18 @@ public partial class ActivityObject
         {
             throw new Exception("实例化 ActivityObject 前请先调用 'GameApplication.Instance.DungeonManager.CreateNewWorld()' 初始化 World 对象");
         }
-        var instance = ResourceManager.LoadAndInstantiate<ActivityObject>(config.Prefab);
-        instance._InitNode(config, world);
-        return instance;
+
+        try
+        {  
+            var instance = ResourceManager.LoadAndInstantiate<ActivityObject>(config.Prefab);
+            instance._InitNode(config, world);
+            return instance;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"创建实例'{config.Id}'失败, 错误信息: {e.Message}\n{e.StackTrace}");
+            throw;
+        }
     }
 
     /// <summary>

@@ -1,6 +1,7 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://chcpnatun8hlf"]
 
-[ext_resource type="Shader" path="res://resource/material/Grid.gdshader" id="1_xhgfe"]
+[ext_resource type="Shader" path="res://resource/shader/Grid.gdshader" id="1_xhgfe"]
+
 
 [resource]
 resource_local_to_scene = true

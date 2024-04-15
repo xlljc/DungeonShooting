@@ -8,9 +8,9 @@ public partial class TrailBullet : Bullet
     private static Color EnemyTerrainColor = new Color(1.5f, 0, 0, 0.7f);
     private Trail trail;
 
-    public override void InitData(BulletData data, uint attackLayer)
+    public override void InitData(BulletData data, CampEnum camp)
     {
-        base.InitData(data, attackLayer);
+        base.InitData(data, camp);
         
         trail = ObjectManager.GetPoolItem<Trail>(ResourcePath.prefab_effect_common_Trail0001_tscn);
         trail.SetTarget(AnimatedSprite);

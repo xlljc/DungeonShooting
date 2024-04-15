@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cyrcv2jdgr8cf" path="res://prefab/role/template/RoleTemplate.tscn" id="1_10c2n"]
 [ext_resource type="Script" path="res://src/game/activity/role/player/Player.cs" id="2_6xwnt"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="3_rk4gg"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="3_rk4gg"]
 [ext_resource type="Texture2D" uid="uid://dn58ax3t6rf4x" path="res://resource/sprite/role/common/Role_shadow1.png" id="3_vx7tr"]
 [ext_resource type="SpriteFrames" uid="uid://n11thtali6es" path="res://resource/spriteFrames/role/Role0001.tres" id="4_galcc"]
 
@@ -24,7 +24,7 @@ size = Vector2(12, 18)
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ka171"]
 
 [node name="Role0001" node_paths=PackedStringArray("HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_10c2n")]
-collision_layer = 8
+collision_layer = 24
 script = ExtResource("2_6xwnt")
 HurtArea = NodePath("HurtArea")
 HurtCollision = NodePath("HurtArea/HurtCollision")
@@ -47,7 +47,7 @@ texture = ExtResource("3_vx7tr")
 [node name="AnimatedSprite" parent="." index="2"]
 material = SubResource("ShaderMaterial_8hgu2")
 sprite_frames = ExtResource("4_galcc")
-animation = &"roll"
+animation = &"die"
 
 [node name="Collision" parent="." index="3"]
 position = Vector2(0, 0)

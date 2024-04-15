@@ -97,11 +97,13 @@ public static class FireManager
     {
         if (bullet.Type == 1) //实体子弹
         {
-            return ShootSolidBullet(CreateSolidBulletData(weapon, fireRotation, bullet), weapon.GetAttackLayer());
+            return ShootSolidBullet(CreateSolidBulletData(weapon, fireRotation, bullet),
+                weapon.TriggerRole != null ? weapon.TriggerRole.Camp : CampEnum.None);
         }
         else if (bullet.Type == 2) //激光子弹
         {
-            return ShootLaser(CreateLaserData(weapon, fireRotation, bullet), weapon.GetAttackLayer());
+            return ShootLaser(CreateLaserData(weapon, fireRotation, bullet),
+                weapon.TriggerRole != null ? weapon.TriggerRole.Camp : CampEnum.None);
         }
         else
         {
@@ -118,7 +120,7 @@ public static class FireManager
     {
         if (bullet.Type == 1) //实体子弹
         {
-            return ShootSolidBullet(CreateSolidBulletData(trigger, fireRotation, bullet), trigger.AttackLayer);
+            return ShootSolidBullet(CreateSolidBulletData(trigger, fireRotation, bullet), trigger.Camp);
         }
 
         return null;
@@ -127,15 +129,15 @@ public static class FireManager
     /// <summary>
     /// 通过 BulletData 直接发射子弹
     /// </summary>
-    public static IBullet ShootBullet(BulletData bulletData, uint attackLayer)
+    public static IBullet ShootBullet(BulletData bulletData, CampEnum camp)
     {
         if (bulletData.BulletBase.Type == 1) //实体子弹
         {
-            return ShootSolidBullet(bulletData, attackLayer);
+            return ShootSolidBullet(bulletData, camp);
         }
         else if (bulletData.BulletBase.Type == 2) //激光子弹
         {
-            return ShootLaser(bulletData, attackLayer);
+            return ShootLaser(bulletData, camp);
         }
         else
         {
@@ -148,23 +150,23 @@ public static class FireManager
     /// <summary>
     /// 发射子弹的默认实现方式
     /// </summary>
-    private static Bullet ShootSolidBullet(BulletData bulletData, uint attackLayer)
+    private static Bullet ShootSolidBullet(BulletData bulletData, CampEnum camp)
     {
         //创建子弹
         var bulletInstance = ObjectManager.GetBullet(bulletData.BulletBase.Prefab);
-        bulletInstance.InitData(bulletData, attackLayer);
+        bulletInstance.InitData(bulletData, camp);
         return bulletInstance;
     }
 
     /// <summary>
     /// 发射射线的默认实现方式
     /// </summary>
-    private static Laser ShootLaser(BulletData bulletData, uint attackLayer)
+    private static Laser ShootLaser(BulletData bulletData, CampEnum camp)
     {
         //创建激光
         var laser = ObjectManager.GetLaser(bulletData.BulletBase.Prefab);
         laser.AddToActivityRoot(RoomLayerEnum.YSortLayer);
-        laser.InitData(bulletData, attackLayer, Laser.LaserDefaultWidth);
+        laser.InitData(bulletData, camp, Laser.LaserDefaultWidth);
         return laser;
     }
     
@@ -172,7 +174,7 @@ public static class FireManager
 
     private static BulletData CreateSolidBulletData(Weapon weapon, float fireRotation, ExcelConfig.BulletBase bullet)
     {
-        var data = new BulletData()
+        var data = new BulletData(weapon.World)
         {
             Weapon = weapon,
             BulletBase = bullet,
@@ -216,7 +218,7 @@ public static class FireManager
     
     private static BulletData CreateSolidBulletData(Role role, float fireRotation, ExcelConfig.BulletBase bullet)
     {
-        var data = new BulletData()
+        var data = new BulletData(role.World)
         {
             Weapon = null,
             BulletBase = bullet,
@@ -261,7 +263,7 @@ public static class FireManager
 
     private static BulletData CreateLaserData(Weapon weapon, float fireRotation, ExcelConfig.BulletBase bullet)
     {
-        var data = new BulletData()
+        var data = new BulletData(weapon.World)
         {
             Weapon = weapon,
             BulletBase = bullet,

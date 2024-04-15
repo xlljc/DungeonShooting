@@ -10,9 +10,9 @@ using Godot;
 public partial class Player : Role
 {
     /// <summary>
-    /// 获取当前操作的角色
+    /// 当玩家第一次进入房间时调用
     /// </summary>
-    public static Player Current { get; private set; }
+    public event Action<RoomInfo> OnFirstEnterRoomEvent;
     
     /// <summary>
     /// 玩家身上的状态机控制器
@@ -31,25 +31,12 @@ public partial class Player : Role
     
     private BrushImageData _brushData2;
     
-    /// <summary>
-    /// 设置当前操作的玩家对象
-    /// </summary>
-    public static void SetCurrentPlayer(Player player)
-    {
-        Current = player;
-        //设置相机和鼠标跟随玩家
-        GameCamera.Main.SetFollowTarget(player);
-        GameApplication.Instance.Cursor.SetMountRole(player);
-    }
-    
     public override void OnInit()
     {
         base.OnInit();
 
         IsAi = false;
         StateController = AddComponent<StateController<Player, PlayerStateEnum>>();
-        AttackLayer = PhysicsLayer.Obstacle | PhysicsLayer.Enemy;
-        EnemyLayer = EnemyLayer = PhysicsLayer.Enemy;
         Camp = CampEnum.Camp1;
 
         MaxHp = 6;
@@ -73,6 +60,8 @@ public partial class Player : Role
         //InitSubLine();
         
         _brushData2 = new BrushImageData(ExcelConfig.LiquidMaterial_Map["0001"]);
+        
+        WeaponPack.SetCapacity(10);
     }
 
     private void DebugSet()
@@ -214,6 +203,15 @@ public partial class Player : Role
         else if (InputManager.UseActiveProp) //使用道具
         {
             UseActiveProp();
+            
+            foreach (var role in World.Role_InstanceList)
+            {
+                if (IsEnemy(role))
+                {
+                    role.Camp = Camp;
+                    break;
+                }
+            }
         }
         else if (InputManager.ExchangeProp) //切换道具
         {
@@ -232,10 +230,14 @@ public partial class Player : Role
         }
         else if (Input.IsKeyPressed(Key.O)) //测试用, 消灭房间内所有敌人
         {
-            var enemyList = AffiliationArea.FindIncludeItems(o => o.CollisionWithMask(PhysicsLayer.Enemy));
+            var enemyList = AffiliationArea.FindIncludeItems(o => o is Role role && role.IsEnemyWithPlayer());
             foreach (var enemy in enemyList)
             {
-                ((Enemy)enemy).HurtArea.Hurt(this, 1000, 0);
+                var hurt = ((Enemy)enemy).HurtArea;
+                if (hurt.CanHurt(Camp))
+                {
+                    hurt.Hurt(this, 1000, 0);
+                }
             }
         }
         // //测试用
@@ -298,6 +300,14 @@ public partial class Player : Role
         {
             PlayInvincibleFlashing(RoleState.ShieldInvincibleTime);
         }
+
+        //血量为0, 扔掉所有武器
+        if (Hp <= 0)
+        {
+            BasisVelocity = Vector2.Zero;
+            Velocity = Vector2.Zero;
+            ThrowAllWeapon();
+        }
     }
 
     protected override void OnChangeHp(int hp)
@@ -344,12 +354,16 @@ public partial class Player : Role
         GameCamera.Main.SetFollowTarget(null);
         BasisVelocity = Vector2.Zero;
         MoveController.ClearForce();
+        Visible = false;
 
-        //暂停游戏
-        World.Current.Pause = true;
-        //弹出结算面板
-        GameApplication.Instance.Cursor.SetGuiMode(true);
-        UiManager.Open_Settlement();
+        World.CallDelay(0.5f, () =>
+        {
+            //暂停游戏
+            World.Current.Pause = true;
+            //弹出结算面板
+            GameApplication.Instance.Cursor.SetGuiMode(true);
+            UiManager.Open_Settlement();
+        });
     }
 
     protected override void OnPickUpActiveProp(ActiveProp activeProp)
@@ -417,5 +431,22 @@ public partial class Player : Role
     {
         base.AddGold(goldCount);
         EventManager.EmitEvent(EventEnum.OnPlayerGoldChange, RoleState.Gold);
+    }
+
+    public override void UseGold(int goldCount)
+    {
+        base.UseGold(goldCount);
+        EventManager.EmitEvent(EventEnum.OnPlayerGoldChange, RoleState.Gold);
+    }
+
+    /// <summary>
+    /// 玩家第一次进入房间时调用
+    /// </summary>
+    public virtual void OnFirstEnterRoom(RoomInfo roomInfo)
+    {
+        if (OnFirstEnterRoomEvent != null)
+        {
+            OnFirstEnterRoomEvent(roomInfo);
+        }
     }
 }

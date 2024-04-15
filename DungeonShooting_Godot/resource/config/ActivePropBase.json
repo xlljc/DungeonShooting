@@ -1,0 +1,156 @@
+[
+  {
+    "Id": "0001",
+    "Remark": "\u533B\u836F\u7BB1",
+    "__Activity": "prop5000",
+    "Buff": null,
+    "Condition": {
+      "HpFull": [
+        true
+      ]
+    },
+    "Effect": {
+      "ChangeHp": [
+        2
+      ]
+    },
+    "Charge": null,
+    "Duration": 0,
+    "CooldownTime": 2,
+    "IsConsumables": true,
+    "MaxCount": 10
+  },
+  {
+    "Id": "0002",
+    "Remark": "\u5F39\u836F\u7BB1",
+    "__Activity": "prop5001",
+    "Buff": null,
+    "Condition": {
+      "AmmoFull": [
+        true
+      ]
+    },
+    "Effect": {
+      "TotalAmmo": []
+    },
+    "Charge": null,
+    "Duration": 0,
+    "CooldownTime": 2,
+    "IsConsumables": true,
+    "MaxCount": 10
+  },
+  {
+    "Id": "0003",
+    "Remark": "\u732A\u732A\u5B58\u94B1\u7F50",
+    "__Activity": "prop5002",
+    "Buff": null,
+    "Condition": null,
+    "Effect": {
+      "PiggyBank": [
+        2
+      ]
+    },
+    "Charge": null,
+    "Duration": 0,
+    "CooldownTime": 0,
+    "IsConsumables": true,
+    "MaxCount": 1
+  },
+  {
+    "Id": "0004",
+    "Remark": "\u7EA2\u5916\u9065\u63A7\u5668",
+    "__Activity": "prop5003",
+    "Buff": null,
+    "Condition": null,
+    "Effect": {
+      "AreaTrigger": [
+        200
+      ]
+    },
+    "Charge": {
+      "Hurt": [
+        250
+      ]
+    },
+    "Duration": 6,
+    "CooldownTime": 0,
+    "IsConsumables": false,
+    "MaxCount": 1
+  },
+  {
+    "Id": "0005",
+    "Remark": "\u9B54\u672F\u68D2",
+    "__Activity": "prop5004",
+    "Buff": null,
+    "Condition": null,
+    "Effect": {
+      "SwapWeapon": []
+    },
+    "Charge": {
+      "EnterRoom": [
+        0.5
+      ]
+    },
+    "Duration": 0,
+    "CooldownTime": 0,
+    "IsConsumables": false,
+    "MaxCount": 1
+  },
+  {
+    "Id": "0006",
+    "Remark": "\u4FBF\u643A\u5F0F\u4F9B\u8840\u5668",
+    "__Activity": "prop5005",
+    "Buff": null,
+    "Condition": {
+      "HpFull": [
+        true
+      ],
+      "Gold": [
+        "\u003E=",
+        25
+      ]
+    },
+    "Effect": {
+      "ChangeHp": [
+        1
+      ],
+      "UseGold": [
+        25
+      ]
+    },
+    "Charge": {
+      "EnterRoom": [
+        1
+      ]
+    },
+    "Duration": 0,
+    "CooldownTime": 0,
+    "IsConsumables": false,
+    "MaxCount": 1
+  },
+  {
+    "Id": "0007",
+    "Remark": "\u4FBF\u643A\u5F0F\u732E\u8840\u5668",
+    "__Activity": "prop5006",
+    "Buff": null,
+    "Condition": {
+      "Hp": [
+        "\u003E",
+        1
+      ]
+    },
+    "Effect": {
+      "ChangeHp": [
+        -1
+      ],
+      "GetGold": [
+        20
+      ]
+    },
+    "Charge": null,
+    "Duration": 0,
+    "CooldownTime": 3,
+    "IsConsumables": false,
+    "MaxCount": 1
+  }
+]

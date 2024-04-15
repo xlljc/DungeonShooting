@@ -91,6 +91,7 @@ public partial class GameApplication : Node2D, ICoroutine
 		//初始化配置表
 		ExcelConfig.Init();
 		PreinstallMarkManager.Init();
+		PropFragmentRegister.Init();
 		//初始化房间配置数据
 		InitRoomConfig();
 		//初始化TileSet配置数据
@@ -99,6 +100,10 @@ public partial class GameApplication : Node2D, ICoroutine
 		Weapon.InitWeaponAttribute();
 		//初始化敌人数据
 		Enemy.InitEnemyAttribute();
+		//初始化buff数据
+		BuffProp.InitBuffAttribute();
+		//初始化主动道具数据
+		ActiveProp.InitActiveAttribute();
 		
 		DungeonConfig = new DungeonConfig();
 		DungeonConfig.GroupName = "Test1";

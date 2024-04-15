@@ -26,7 +26,7 @@ public partial class Knife : Weapon
     public override void OnInit()
     {
         base.OnInit();
-
+        
         //没有Master时不能触发开火
         NoMasterCanTrigger = false;
         _hitArea = GetNode<Area2D>("HitArea");
@@ -40,6 +40,9 @@ public partial class Knife : Weapon
         _hitArea.Monitorable = false;
         _hitArea.BodyEntered += OnBodyEntered;
         _hitArea.AreaEntered += OnArea2dEntered;
+        
+        //更新碰撞层级
+        _hitArea.CollisionMask = Role.AttackLayer | PhysicsLayer.Bullet;
 
         //禁用自动播放动画
         IsAutoPlaySpriteFrames = false;
@@ -74,8 +77,6 @@ public partial class Knife : Weapon
     protected override void OnFire()
     {
         Debug.Log("近战武器攻击! 蓄力时长: " + GetTriggerChargeTime() + ", 扳机按下时长: " + GetTriggerDownTime());
-        //更新碰撞层级
-        _hitArea.CollisionMask = GetAttackLayer() | PhysicsLayer.Bullet;
         //启用碰撞
         _hitArea.Monitoring = true;
         _attackIndex = 0;
@@ -94,7 +95,7 @@ public partial class Knife : Weapon
         }
 
 
-        if (Master == Player.Current)
+        if (Master == World.Player)
         {
             var r = Master.MountPoint.RotationDegrees;
             //创建屏幕抖动
@@ -130,8 +131,7 @@ public partial class Knife : Weapon
         }
         else if (body is Bullet bullet) //攻击子弹
         {
-            var attackLayer = bullet.AttackLayer;
-            if (TriggerRole != null && TriggerRole.CollisionWithMask(attackLayer)) //是攻击玩家的子弹
+            if (TriggerRole != null && TriggerRole.IsEnemy(bullet.BulletData.TriggerRole))
             {
                 //反弹子弹
                 bullet.OnPlayDisappearEffect();
@@ -143,7 +143,7 @@ public partial class Knife : Weapon
                 }
                 bullet.MoveController.ScaleAllVelocity(scale);
                 bullet.Rotation += Mathf.Pi;
-                bullet.AttackLayer = TriggerRole.AttackLayer;
+                bullet.Camp = Master.Camp;
                 bullet.RefreshBulletColor(false);
             }
         }
@@ -159,42 +159,45 @@ public partial class Knife : Weapon
 
     private void HandlerCollision(IHurt hurt)
     {
-        var damage = Utils.Random.RandomConfigRange(Attribute.Bullet.HarmRange);
-        //计算子弹造成的伤害
-        if (TriggerRole != null)
+        if (TriggerRole == null || hurt.CanHurt(TriggerRole.Camp))
         {
-            damage = TriggerRole.RoleState.CalcDamage(damage);
-        }
-        //击退
-        var attr = GetUseAttribute(TriggerRole);
-        var repel = Utils.Random.RandomConfigRange(attr.Bullet.RepelRange);
-        //计算击退
-        if (TriggerRole != null)
-        {
-            repel = TriggerRole.RoleState.CalcBulletRepel(repel);
-        }
-        
-        var globalPosition = GlobalPosition;
-        if (repel != 0)
-        {
-            var o = hurt.GetActivityObject();
-            if (o != null && o is not Player) //不是玩家才能被击退
+            var damage = Utils.Random.RandomConfigRange(Attribute.Bullet.HarmRange);
+            //计算子弹造成的伤害
+            if (TriggerRole != null)
             {
-                Vector2 position;
-                if (TriggerRole != null)
-                {
-                    position = o.GlobalPosition - TriggerRole.MountPoint.GlobalPosition;
-                }
-                else
-                {
-                    position = o.GlobalPosition - globalPosition;
-                }
-                var v2 = position.Normalized() * repel;
-                o.AddRepelForce(v2);
+                damage = TriggerRole.RoleState.CalcDamage(damage);
             }
-        }
+            //击退
+            var attr = GetUseAttribute(TriggerRole);
+            var repel = Utils.Random.RandomConfigRange(attr.Bullet.RepelRange);
+            //计算击退
+            if (TriggerRole != null)
+            {
+                repel = TriggerRole.RoleState.CalcBulletRepel(repel);
+            }
         
-        //造成伤害
-        hurt.Hurt(TriggerRole, damage, (hurt.GetPosition() - globalPosition).Angle());
+            var globalPosition = GlobalPosition;
+            if (repel != 0)
+            {
+                var o = hurt.GetActivityObject();
+                if (o != null && o is not Player) //不是玩家才能被击退
+                {
+                    Vector2 position;
+                    if (TriggerRole != null)
+                    {
+                        position = o.GlobalPosition - TriggerRole.MountPoint.GlobalPosition;
+                    }
+                    else
+                    {
+                        position = o.GlobalPosition - globalPosition;
+                    }
+                    var v2 = position.Normalized() * repel;
+                    o.AddRepelForce(v2);
+                }
+            }
+            
+            //造成伤害
+            hurt.Hurt(TriggerRole, damage, (hurt.GetPosition() - globalPosition).Angle());
+        }
     }
 }

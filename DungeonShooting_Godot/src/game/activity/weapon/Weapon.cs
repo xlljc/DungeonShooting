@@ -27,11 +27,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     private ExcelConfig.WeaponBase _playerWeaponAttribute;
     private ExcelConfig.WeaponBase _aiWeaponAttribute;
 
-    /// <summary>
-    /// 武器攻击的目标阵营
-    /// </summary>
-    public CampEnum TargetCamp { get; set; }
-
     public Role Master { get; set; }
 
     public int PackageIndex { get; set; } = -1;
@@ -45,6 +40,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     /// 剩余弹药量(备用弹药)
     /// </summary>
     public int ResidueAmmo { get; private set; }
+    
+    /// <summary>
+    /// 总弹药量(备用弹药 + 当前弹夹弹药)
+    /// </summary>
+    public int TotalAmmon => CurrAmmo + ResidueAmmo;
 
     /// <summary>
     /// 武器管的开火点
@@ -145,17 +145,15 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     public Role TriggerRole { get; private set; }
     
     /// <summary>
-    /// 上一次触发改武器开火的触发开火攻击的层级, 数据源自于: <see cref="PhysicsLayer"/>
-    /// </summary>
-    public long TriggerRoleAttackLayer { get; private set; }
-    
-    /// <summary>
     /// 武器当前射速
     /// </summary>
     public float CurrentFiringSpeed { get; private set; }
     
     //--------------------------------------------------------------------------------------------
 
+    //触发板机是是否计算弹药消耗
+    private bool _triggerCalcAmmon = true;
+    
     //用于记录是否有角色操作过这把武器
     private bool _triggerRoleFlag = false;
     
@@ -249,6 +247,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     
     //抖动计时器
     private float _shakeTimer = 0;
+
+    //换弹完成后播放的动画
+    private string _reloadNextAnimation;
     
     // ----------------------------------------------
     private uint _tempLayer;
@@ -483,13 +484,13 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         //收集落在地上的武器
         if (IsInGround())
         {
-            World.Weapon_UnclaimedWeapons.Add(this);
+            World.Weapon_UnclaimedList.Add(this);
         }
     }
 
     public override void ExitTree()
     {
-        World.Weapon_UnclaimedWeapons.Remove(this);
+        World.Weapon_UnclaimedList.Remove(this);
     }
 
     protected override void Process(float delta)
@@ -797,10 +798,30 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     }
 
     /// <summary>
+    /// 清除触发角色开火标记数据
+    /// </summary>
+    public void ClearTriggerRole()
+    {
+        _triggerRoleFlag = false;
+        if (Master == null)
+        {
+            if (Reloading)
+            {
+                _reloadNextAnimation = AnimatorNames.Floodlight;
+            }
+            else
+            {
+                AnimationPlayer.Play(AnimatorNames.Floodlight);
+            }
+        }
+    }
+
+    /// <summary>
     /// 扳机函数, 调用即视为按下扳机
     /// </summary>
     /// <param name="triggerRole">按下扳机的角色, 如果传 null, 则视为走火</param>
-    public void Trigger(Role triggerRole)
+    /// <param name="calcAmmo">是否计算弹药消耗</param>
+    public void Trigger(Role triggerRole, bool calcAmmo = true)
     {
         //不能触发扳机
         if (!NoMasterCanTrigger && Master == null) return;
@@ -810,17 +831,20 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
 
         //更新武器属性信息
         _triggerFlag = true;
+        if (!_triggerRoleFlag && AnimationPlayer.CurrentAnimation == AnimatorNames.Floodlight)
+        {
+            AnimationPlayer.Play(AnimatorNames.Reset);
+        }
         _triggerRoleFlag = true;
+        _triggerCalcAmmon = calcAmmo;
         if (triggerRole != null)
         {
             TriggerRole = triggerRole;
-            TriggerRoleAttackLayer = triggerRole.AttackLayer;
             SetCurrentWeaponAttribute(triggerRole.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute);
         }
         else if (Master != null)
         {
             TriggerRole = Master;
-            TriggerRoleAttackLayer = Master.AttackLayer;
             SetCurrentWeaponAttribute(Master.IsAi ? _aiWeaponAttribute : _playerWeaponAttribute);
         }
 
@@ -1093,18 +1117,27 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         _reloadShellFlag = false;
 
         //减子弹数量
-        if (_playerWeaponAttribute != _weaponAttribute) //Ai使用该武器, 有一定概率不消耗弹药
+        if (_triggerCalcAmmon)
+        {
+            if (_playerWeaponAttribute != _weaponAttribute) //Ai使用该武器, 有一定概率不消耗弹药
+            {
+                var count = UseAmmoCount();
+                CurrAmmo -= count;
+                if (Utils.Random.RandomRangeFloat(0, 1) >= _weaponAttribute.AiAttackAttr.AmmoConsumptionProbability) //不消耗弹药
+                {
+                    ResidueAmmo += count;
+                }
+            }
+            else
+            {
+                CurrAmmo -= UseAmmoCount();
+            }
+        }
+        else //不消耗弹药
         {
             var count = UseAmmoCount();
             CurrAmmo -= count;
-            if (Utils.Random.RandomRangeFloat(0, 1) >= _weaponAttribute.AiAttackAttr.AmmoConsumptionProbability) //不消耗弹药
-            {
-                ResidueAmmo += count;
-            }
-        }
-        else
-        {
-            CurrAmmo -= UseAmmoCount();
+            ResidueAmmo += count;
         }
 
         if (CurrAmmo == 0)
@@ -1190,9 +1223,9 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         }
         else //在地上
         {
-            var v = Utils.Random.RandomConfigRange(Attribute.BacklashRange) * 5;
+            var v = Utils.Random.RandomConfigRange(Attribute.BacklashRange) * 15;
             var externalForce = MoveController.AddForce(new Vector2(-v, 0).Rotated(Rotation));
-            externalForce.RotationSpeed = -Mathf.DegToRad(40);
+            externalForce.RotationSpeed = -Mathf.DegToRad(50);
             externalForce.RotationResistance = Mathf.DegToRad(80);
         }
 
@@ -1228,19 +1261,6 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
         }
 
         return AiUseAttribute;
-    }
-    
-    /// <summary>
-    /// 获取武器攻击的目标层级
-    /// </summary>
-    /// <returns></returns>
-    public uint GetAttackLayer()
-    {
-        if (TriggerRoleAttackLayer > 0)
-        {
-            return (uint)TriggerRoleAttackLayer;
-        }
-        return Master != null ? Master.AttackLayer : Role.DefaultAttackLayer;
     }
     
     /// <summary>
@@ -1579,6 +1599,11 @@ public abstract partial class Weapon : ActivityObject, IPackageItem<Role>
     private void ReloadFinishHandler()
     {
         // Debug.Log("装弹完成.");
+        if (_reloadNextAnimation != null)
+        {
+            AnimationPlayer.Play(_reloadNextAnimation);
+            _reloadNextAnimation = null;
+        }
         OnReloadFinish();
     }
 

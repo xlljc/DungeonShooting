@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Config;
@@ -10,6 +11,18 @@ using Godot;
 public abstract partial class Role : ActivityObject
 {
     /// <summary>
+    /// 攻击目标的碰撞器所属层级, 数据源自于: <see cref="PhysicsLayer"/>
+    /// </summary>
+    public const uint AttackLayer = PhysicsLayer.Wall | PhysicsLayer.Obstacle | PhysicsLayer.HurtArea;
+    
+    /// <summary>
+    /// 当前角色对其他角色造成伤害时对回调
+    /// 参数1为目标角色
+    /// 参数2为造成对伤害值
+    /// </summary>
+    public event Action<Role, int> OnDamageEvent;
+    
+    /// <summary>
     /// 是否是 Ai
     /// </summary>
     public bool IsAi { get; protected set; } = false;
@@ -18,11 +31,6 @@ public abstract partial class Role : ActivityObject
     /// 角色属性
     /// </summary>
     public RoleState RoleState { get; private set; }
-    
-    /// <summary>
-    /// 默认攻击对象层级
-    /// </summary>
-    public const uint DefaultAttackLayer = PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Obstacle;
     
     /// <summary>
     /// 伤害区域
@@ -39,17 +47,7 @@ public abstract partial class Role : ActivityObject
     /// <summary>
     /// 所属阵营
     /// </summary>
-    public CampEnum Camp;
-
-    /// <summary>
-    /// 攻击目标的碰撞器所属层级, 数据源自于: <see cref="PhysicsLayer"/>
-    /// </summary>
-    public uint AttackLayer { get; set; } = PhysicsLayer.Wall | PhysicsLayer.Obstacle;
-    
-    /// <summary>
-    /// 该角色敌对目标的碰撞器所属层级, 数据源自于: <see cref="PhysicsLayer"/>
-    /// </summary>
-    public uint EnemyLayer { get; set; } = PhysicsLayer.Enemy;
+    public CampEnum Camp { get; set; }
 
     /// <summary>
     /// 携带的被动道具列表
@@ -274,20 +272,11 @@ public abstract partial class Role : ActivityObject
             {
                 if (value) //无敌状态
                 {
-                    if (HurtArea != null)
-                    {
-                        HurtArea.CollisionLayer = _currentLayer;
-                    }
-
                     _flashingInvincibleTimer = -1;
                     _flashingInvincibleFlag = false;
                 }
                 else //正常状态
                 {
-                    if (HurtArea != null)
-                    {
-                        HurtArea.CollisionLayer = _currentLayer;
-                    }
                     SetBlendModulate(new Color(1, 1, 1, 1));
                 }
             }
@@ -323,11 +312,15 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool NoWeaponAttack { get; set; }
     
+    /// <summary>
+    /// 上一次受到伤害的角度, 弧度制
+    /// </summary>
+    public float PrevHitAngle { get; private set; }
+    
     //初始缩放
     private Vector2 _startScale;
     //当前可互动的物体
     private CheckInteractiveResult _currentResultData;
-    private uint _currentLayer;
     //闪烁计时器
     private float _flashingInvincibleTimer = -1;
     //闪烁状态
@@ -397,7 +390,7 @@ public abstract partial class Role : ActivityObject
     /// <param name="target">触发伤害的对象, 为 null 表示不存在对象或者对象已经被销毁</param>
     /// <param name="damage">受到的伤害</param>
     /// <param name="angle">伤害角度（弧度制）</param>
-    /// <param name="realHarm">是否受到真实伤害, 如果为false, 则表示该伤害被互动格挡掉了</param>
+    /// <param name="realHarm">是否受到真实伤害, 如果为false, 则表示该伤害被护盾格挡掉了</param>
     protected virtual void OnHit(ActivityObject target, int damage, float angle, bool realHarm)
     {
     }
@@ -463,6 +456,20 @@ public abstract partial class Role : ActivityObject
     {
     }
     
+    public override void EnterTree()
+    {
+        if (!World.Role_InstanceList.Contains(this))
+        {
+            World.Role_InstanceList.Add(this);
+        }
+    }
+
+    public override void ExitTree()
+    {
+        World.Role_InstanceList.Remove(this);
+    }
+
+    
     public override void OnInit()
     {
         RoleState = OnCreateRoleState();
@@ -471,15 +478,7 @@ public abstract partial class Role : ActivityObject
         
         _startScale = Scale;
         
-        HurtArea.InitActivityObject(this);
-        HurtArea.CollisionLayer = CollisionLayer;
-        HurtArea.CollisionMask = PhysicsLayer.None;
-        _currentLayer = HurtArea.CollisionLayer;
-        //CollisionLayer = PhysicsLayer.None;
-        HurtArea.OnHurtEvent += (target, damage, angle) =>
-        {
-            CallDeferred(nameof(HurtHandler), target, damage, angle);
-        };
+        HurtArea.InitRole(this);
         
         Face = FaceDirection.Right;
         
@@ -603,12 +602,15 @@ public abstract partial class Role : ActivityObject
         //被动道具更新
         if (BuffPropPack.Count > 0)
         {
-            var buffProps = BuffPropPack.ToArray();
-            foreach (var prop in buffProps)
+            var buffProps = BuffPropPack;
+            for (var i = 0; i < buffProps.Count; i++)
             {
-                if (!prop.IsDestroyed)
+                var prop = buffProps[i];
+                if (!prop.IsDestroyed && prop.Master != null)
                 {
-                    prop.PackProcess(delta);
+                    prop.UpdateProcess(delta);
+                    prop.UpdateComponentProcess(delta);
+                    prop.UpdateCoroutine(delta);
                 }
             }
         }
@@ -617,12 +619,14 @@ public abstract partial class Role : ActivityObject
         var props = ActivePropsPack.ItemSlot;
         if (props.Length > 0)
         {
-            props = (ActiveProp[])props.Clone();
-            foreach (var prop in props)
+            for (var i = 0; i < props.Length; i++)
             {
-                if (prop != null && !prop.IsDestroyed)
+                var prop = props[i];
+                if (prop != null && !prop.IsDestroyed && prop.Master != null)
                 {
-                    prop.PackProcess(delta);
+                    prop.UpdateProcess(delta);
+                    prop.UpdateComponentProcess(delta);
+                    prop.UpdateCoroutine(delta);
                 }
             }
         }
@@ -636,7 +640,40 @@ public abstract partial class Role : ActivityObject
             TipRoot.Scale = new Vector2(-1, 1);
         }
     }
-    
+
+    protected override void PhysicsProcess(float delta)
+    {
+        //被动道具更新
+        if (BuffPropPack.Count > 0)
+        {
+            var buffProps = BuffPropPack;
+            for (var i = 0; i < buffProps.Count; i++)
+            {
+                var prop = buffProps[i];
+                if (!prop.IsDestroyed && prop.Master != null)
+                {
+                    prop.UpdatePhysicsProcess(delta);
+                    prop.UpdateComponentPhysicsProcess(delta);
+                }
+            }
+        }
+        
+        //主动道具调用更新
+        var props = ActivePropsPack.ItemSlot;
+        if (props.Length > 0)
+        {
+            for (var i = 0; i < props.Length; i++)
+            {
+                var prop = props[i];
+                if (prop != null && !prop.IsDestroyed && prop.Master != null)
+                {
+                    prop.UpdatePhysicsProcess(delta);
+                    prop.UpdateComponentPhysicsProcess(delta);
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// 初始化瞄准辅助线
     /// </summary>
@@ -679,6 +716,7 @@ public abstract partial class Role : ActivityObject
     {
         if (ActivePropsPack.PickupItem(activeProp, exchange) != -1)
         {
+            activeProp.MoveController.Enable = false;
             //从可互动队列中移除
             InteractiveItemList.Remove(activeProp);
             OnPickUpActiveProp(activeProp);
@@ -707,6 +745,7 @@ public abstract partial class Role : ActivityObject
             return;
         }
 
+        activeProp.MoveController.Enable = true;
         ActivePropsPack.RemoveItem(index);
         OnRemoveActiveProp(activeProp);
         //播放抛出效果
@@ -790,7 +829,6 @@ public abstract partial class Role : ActivityObject
         return null;
     }
     
-    
     /// <summary>
     /// 触发使用道具
     /// </summary>
@@ -809,10 +847,10 @@ public abstract partial class Role : ActivityObject
     /// <param name="target">触发伤害的对象, 为 null 表示不存在对象或者对象已经被销毁</param>
     /// <param name="damage">伤害的量</param>
     /// <param name="angle">伤害角度（弧度制）</param>
-    protected virtual void HurtHandler(ActivityObject target, int damage, float angle)
+    public virtual void HurtHandler(ActivityObject target, int damage, float angle)
     {
-        //受伤闪烁, 无敌状态
-        if (Invincible)
+        //受伤闪烁, 无敌状态, 或者已经死亡
+        if (Invincible || IsDie)
         {
             return;
         }
@@ -838,8 +876,19 @@ public abstract partial class Role : ActivityObject
             // blood.Rotation = angle;
             // GameApplication.Instance.Node3D.GetRoot().AddChild(blood);
         }
-        OnHit(target, damage, angle, !flag);
 
+        PrevHitAngle = angle;
+        OnHit(target, damage, angle, !flag);
+        
+        if (target is Role targetRole && !targetRole.IsDestroyed)
+        {
+            //造成伤害回调
+            if (targetRole.OnDamageEvent != null)
+            {
+                targetRole.OnDamageEvent(this, damage);
+            }
+        }
+        
         //受伤特效
         PlayHitAnimation();
         
@@ -850,9 +899,51 @@ public abstract partial class Role : ActivityObject
             if (!IsDie)
             {
                 IsDie = true;
-                OnDie();
+                
+                //禁用状态机控制器
+                var stateController = GetComponent(typeof(IStateController));
+                if (stateController != null)
+                {
+                    stateController.Enable = false;
+                }
+
+                //播放死亡动画
+                if (AnimationPlayer.HasAnimation(AnimatorNames.Die))
+                {
+                    StartCoroutine(DoDieWithAnimationPlayer());
+                }
+                else if (AnimatedSprite.SpriteFrames.HasAnimation(AnimatorNames.Die))
+                {
+                    StartCoroutine(DoDieWithAnimatedSprite());
+                }
+                else
+                {
+                    DoDieHandler();
+                }
             }
         }
+    }
+
+    private IEnumerator DoDieWithAnimationPlayer()
+    {
+        AnimationPlayer.Play(AnimatorNames.Die);
+        yield return ToSignal(AnimationPlayer, AnimationMixer.SignalName.AnimationFinished);
+        DoDieHandler();
+    }
+    
+    private IEnumerator DoDieWithAnimatedSprite()
+    {
+        AnimatedSprite.Play(AnimatorNames.Die);
+        yield return ToSignal(AnimatedSprite, AnimatedSprite2D.SignalName.AnimationFinished);
+        DoDieHandler();
+    }
+
+    //死亡逻辑
+    private void DoDieHandler()
+    {
+        OnDie();
+        //死亡事件
+        World.OnRoleDie(this);
     }
 
     /// <summary>
@@ -954,7 +1045,49 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool IsPlayer()
     {
-        return this == Player.Current;
+        return this == World.Player;
+    }
+    
+    
+    /// <summary>
+    /// 返回指定角色是否是敌人
+    /// </summary>
+    public bool IsEnemy(Role other)
+    {
+        if (this == other)
+        {
+            return false;
+        }
+
+        if (Camp == CampEnum.None || other.Camp == CampEnum.None)
+        {
+            return true;
+        }
+        
+        if (other.Camp == Camp || other.Camp == CampEnum.Peace || Camp == CampEnum.Peace)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// 返回指定阵营是否是敌人
+    /// </summary>
+    public bool IsEnemy(CampEnum otherCamp)
+    {
+        if (Camp == CampEnum.None || otherCamp == CampEnum.None)
+        {
+            return true;
+        }
+        
+        if (otherCamp == Camp || otherCamp == CampEnum.Peace || Camp == CampEnum.Peace)
+        {
+            return false;
+        }
+
+        return true;   
     }
     
     /// <summary>
@@ -962,11 +1095,11 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public bool IsEnemyWithPlayer()
     {
-        if (Player.Current == null)
+        if (World.Player == null)
         {
             return false;
         }
-        return CollisionWithMask(Player.Current.EnemyLayer);
+        return IsEnemy(World.Player);
     }
 
     /// <summary>
@@ -1145,6 +1278,17 @@ public abstract partial class Role : ActivityObject
     }
 
     /// <summary>
+    /// 切换到指定索引到武器
+    /// </summary>
+    public void ExchangeWeaponByIndex(int index)
+    {
+        if (WeaponPack.ActiveIndex != index)
+        {
+            WeaponPack.ExchangeByIndex(index);
+        }
+    }
+
+    /// <summary>
     /// 扔掉当前使用的武器, 切换到上一个武器
     /// </summary>
     public void ThrowWeapon()
@@ -1164,17 +1308,32 @@ public abstract partial class Role : ActivityObject
             return;
         }
 
-        var temp = weapon.AnimatedSprite.Position;
-        if (Face == FaceDirection.Left)
-        {
-            temp.Y = -temp.Y;
-        }
+        // var temp = weapon.AnimatedSprite.Position;
+        // if (Face == FaceDirection.Left)
+        // {
+        //     temp.Y = -temp.Y;
+        // }
         //var pos = GlobalPosition + temp.Rotated(weapon.GlobalRotation);
         WeaponPack.RemoveItem(index);
         //播放抛出效果
         weapon.ThrowWeapon(this, GlobalPosition);
     }
 
+    /// <summary>
+    /// 从背包中移除指定武器, 不会触发投抛效果
+    /// </summary>
+    /// <param name="index">武器在武器背包中的位置</param>
+    public void RemoveWeapon(int index)
+    {
+        var weapon = WeaponPack.GetItem(index);
+        if (weapon == null)
+        {
+            return;
+        }
+        
+        WeaponPack.RemoveItem(index);
+    }
+    
     /// <summary>
     /// 扔掉所有武器
     /// </summary>
@@ -1266,9 +1425,17 @@ public abstract partial class Role : ActivityObject
     /// </summary>
     public virtual void AddGold(int goldCount)
     {
-        RoleState.Gold += goldCount;
+        RoleState.Gold += RoleState.CalcGetGold(goldCount);
         //播放音效
         SoundManager.PlaySoundByConfig(ExcelConfig.Sound_Map["gold"], Position, this);
+    }
+
+    /// <summary>
+    /// 使用金币
+    /// </summary>
+    public virtual void UseGold(int goldCount)
+    {
+        RoleState.Gold -= goldCount;
     }
 
     /// <summary>
@@ -1320,8 +1487,7 @@ public abstract partial class Role : ActivityObject
         }
         else if (body is Bullet bullet) //攻击子弹
         {
-            var attackLayer = bullet.AttackLayer;
-            if (CollisionWithMask(attackLayer)) //是攻击玩家的子弹
+            if (IsEnemy(bullet.BulletData.TriggerRole))
             {
                 bullet.OnPlayDisappearEffect();
                 bullet.Destroy();
@@ -1331,21 +1497,24 @@ public abstract partial class Role : ActivityObject
 
     private void HandlerCollision(IHurt hurt, Weapon activeWeapon)
     {
-        var damage = Utils.Random.RandomConfigRange(activeWeapon.Attribute.MeleeAttackHarmRange);
-        damage = RoleState.CalcDamage(damage);
-
-        var o = hurt.GetActivityObject();
-        var pos = hurt.GetPosition();
-        if (o != null && o is not Player) //不是玩家才能被击退
+        if (hurt.CanHurt(Camp))
         {
-            var attr = IsAi ? activeWeapon.AiUseAttribute : activeWeapon.PlayerUseAttribute;
-            var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRange);
-            var position = pos - MountPoint.GlobalPosition;
-            var v2 = position.Normalized() * repel;
-            o.AddRepelForce(v2);
+            var damage = Utils.Random.RandomConfigRange(activeWeapon.Attribute.MeleeAttackHarmRange);
+            damage = RoleState.CalcDamage(damage);
+
+            var o = hurt.GetActivityObject();
+            var pos = hurt.GetPosition();
+            if (o != null && o is not Player) //不是玩家才能被击退
+            {
+                var attr = IsAi ? activeWeapon.AiUseAttribute : activeWeapon.PlayerUseAttribute;
+                var repel = Utils.Random.RandomConfigRange(attr.MeleeAttackRepelRange);
+                var position = pos - MountPoint.GlobalPosition;
+                var v2 = position.Normalized() * repel;
+                o.AddRepelForce(v2);
+            }
+            
+            hurt.Hurt(this, damage, (pos - GlobalPosition).Angle());
         }
-        
-        hurt.Hurt(this, damage, (pos - GlobalPosition).Angle());
     }
 
     protected override void OnDestroy()

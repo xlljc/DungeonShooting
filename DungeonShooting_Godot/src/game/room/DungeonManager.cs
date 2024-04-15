@@ -16,12 +16,12 @@ public partial class DungeonManager : Node2D
     /// <summary>
     /// 当前玩家所在的房间
     /// </summary>
-    public RoomInfo ActiveRoomInfo => Player.Current?.AffiliationArea?.RoomInfo;
+    public RoomInfo ActiveRoomInfo => CurrWorld.Player?.AffiliationArea?.RoomInfo;
     
     /// <summary>
     /// 当前玩家所在的区域
     /// </summary>
-    public AffiliationArea ActiveAffiliationArea => Player.Current?.AffiliationArea;
+    public AffiliationArea ActiveAffiliationArea => CurrWorld.Player?.AffiliationArea;
 
     /// <summary>
     /// 是否在地牢里
@@ -277,6 +277,7 @@ public partial class DungeonManager : Node2D
 
         //创建房间数据
         var roomInfo = new RoomInfo(0, DungeonRoomType.None, null);
+        roomInfo.World = CurrWorld;
         roomInfo.Size = hall.BgSprite.Texture.GetSize().AsVector2I() / GameConfig.TileCellSize + new Vector2I(10, 10);
         roomInfo.Position = hall.BgSprite.Position.AsVector2I() - new Vector2I(5, 5) * GameConfig.TileCellSize;
         hall.RoomInfo = roomInfo;
@@ -316,7 +317,7 @@ public partial class DungeonManager : Node2D
         yield return 0;
         
         //创建玩家
-        var player = Player.Current;
+        var player = CurrWorld.Player;
         if (player == null)
         {
             player = ActivityObject.Create<Player>(ActivityObject.Ids.Id_role0001);
@@ -325,7 +326,7 @@ public partial class DungeonManager : Node2D
         player.World = CurrWorld;
         player.Position = hall.BirthMark.Position;
         player.PutDown(RoomLayerEnum.YSortLayer);
-        Player.SetCurrentPlayer(player);
+        CurrWorld.SetCurrentPlayer(player);
         affiliation.InsertItem(player);
         player.WeaponPack.PickupItem(ActivityObject.Create<Weapon>(ActivityObject.Ids.Id_weapon0001));
         yield return 0;
@@ -359,11 +360,11 @@ public partial class DungeonManager : Node2D
         yield return 0;
         if (!keepPlayer)
         {
-            Player.SetCurrentPlayer(null);
+            CurrWorld.SetCurrentPlayer(null);
         }
         else
         {
-            var player = Player.Current;
+            var player = CurrWorld.Player;
             player.AffiliationArea?.RemoveItem(player);
             player.GetParent().RemoveChild(player);
             player.World = null;
@@ -452,6 +453,11 @@ public partial class DungeonManager : Node2D
         //创建世界场景
         var dungeon = (Dungeon)CreateNewWorld(_dungeonGenerator.Random, ResourcePath.scene_Dungeon_tscn);
         dungeon.InitLayer();
+        //初始化房间 World 字段
+        foreach (var roomInfo in _dungeonGenerator.RoomInfos)
+        {
+            roomInfo.World = dungeon;
+        }
         yield return 0;
         var group = GameApplication.Instance.RoomConfig[CurrConfig.GroupName];
         var tileSetSplit = GameApplication.Instance.TileSetConfig[group.TileSet];
@@ -480,10 +486,10 @@ public partial class DungeonManager : Node2D
         yield return 0;
         
         //初始房间创建玩家标记
-        var playerBirthMark = StartRoomInfo.RoomPreinstall.GetPlayerBirthMark();
+        var playerBirthMark = StartRoomInfo.RoomPreinstall.GetSpecialMark(SpecialMarkType.BirthPoint);
         
         //创建玩家
-        var player = Player.Current;
+        var player = CurrWorld.Player;
         if (player == null)
         {
             player = ActivityObject.Create<Player>(ActivityObject.Ids.Id_role0001);
@@ -496,7 +502,7 @@ public partial class DungeonManager : Node2D
 
         player.World = CurrWorld;
         player.PutDown(RoomLayerEnum.YSortLayer);
-        Player.SetCurrentPlayer(player);
+        CurrWorld.SetCurrentPlayer(player);
         StartRoomInfo.AffiliationArea.InsertItem(player);
         yield return 0;
         player.Collision.Disabled = false;
@@ -530,11 +536,11 @@ public partial class DungeonManager : Node2D
         yield return 0;
         if (!keepPlayer)
         {
-            Player.SetCurrentPlayer(null);
+            CurrWorld.SetCurrentPlayer(null);
         }
         else
         {
-            var player = Player.Current;
+            var player = CurrWorld.Player;
             player.AffiliationArea?.RemoveItem(player);
             player.GetParent().RemoveChild(player);
             player.World = null;
@@ -851,11 +857,11 @@ public partial class DungeonManager : Node2D
         //如果关门了, 那么房间外的敌人就会丢失目标
         if (room.IsSeclusion)
         {
-            var playerAffiliationArea = Player.Current.AffiliationArea;
-            foreach (var enemy in CurrWorld.Enemy_InstanceList)
+            var playerAffiliationArea = CurrWorld.Player.AffiliationArea;
+            foreach (var role in CurrWorld.Role_InstanceList)
             {
                 //不与玩家处于同一个房间
-                if (!enemy.IsDestroyed && enemy.AffiliationArea != playerAffiliationArea)
+                if (role is AiRole enemy && !enemy.IsDestroyed && enemy.AffiliationArea != playerAffiliationArea)
                 {
                     if (enemy.StateController.CurrState != AIStateEnum.AiNormal)
                     {
@@ -898,7 +904,7 @@ public partial class DungeonManager : Node2D
                 {
                     //房间内是否有存活的敌人
                     var flag = ActiveAffiliationArea.ExistEnterItem(
-                        activityObject => activityObject.CollisionWithMask(PhysicsLayer.Enemy)
+                        activityObject => activityObject is Role role && role.IsEnemyWithPlayer()
                     );
                     //Debug.Log("当前房间存活数量: " + count);
                     if (!flag)

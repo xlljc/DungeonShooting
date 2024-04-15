@@ -38,7 +38,7 @@ public class ActivePropBarHandler
 
     public void Process(float delta)
     {
-        var prop = Player.Current?.ActivePropsPack.ActiveItem;
+        var prop = World.Current.Player?.ActivePropsPack.ActiveItem;
         if (prop != null)
         {
             SetActivePropCount(prop.Count);
@@ -51,7 +51,7 @@ public class ActivePropBarHandler
             }
             else
             {
-                _shaderMaterial.SetShaderParameter("schedule", 0.6f);
+                _shaderMaterial.SetShaderParameter("schedule", 0.8f);
             }
             
             //冷却

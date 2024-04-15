@@ -24,9 +24,9 @@ public class PhysicsLayer
     /// </summary>
     public const uint Player = 0b1000;
     /// <summary>
-    /// 敌人
+    /// 角色基类
     /// </summary>
-    public const uint Enemy = 0b10000;
+    public const uint Role = 0b10000;
     /// <summary>
     /// 归属区域判断层级
     /// </summary>
@@ -47,4 +47,8 @@ public class PhysicsLayer
     /// 障碍物
     /// </summary>
     public const uint Obstacle = 0b1000000000;
+    /// <summary>
+    /// 可被子弹击中的区域
+    /// </summary>
+    public const uint HurtArea = 0b10000000000;
 }

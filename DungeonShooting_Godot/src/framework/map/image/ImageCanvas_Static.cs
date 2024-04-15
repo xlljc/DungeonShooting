@@ -323,6 +323,7 @@ public partial class ImageCanvas
             }
         }
 
+        renderSprite.Sprite.Modulate = item.Modulate;
         renderSprite.Sprite.Material = item.Material;
         renderSprite.Sprite.Offset = new Vector2(-item.CenterX, -item.CenterY);
         

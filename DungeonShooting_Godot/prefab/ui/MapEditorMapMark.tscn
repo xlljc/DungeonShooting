@@ -6,9 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://c5778ntk2rdon" path="res://resource/sprite/ui/commonIcon/Delete.png" id="4_urq7y"]
 [ext_resource type="Texture2D" uid="uid://d4gduco55dqpk" path="res://resource/sprite/ui/commonIcon/Down.png" id="5_x5dpw"]
 [ext_resource type="Texture2D" uid="uid://bn47bmilcw4x0" path="res://resource/sprite/ui/commonIcon/Select2.png" id="6_jpt3y"]
-[ext_resource type="Texture2D" uid="uid://dqvg18aacx6db" path="res://resource/sprite/ui/commonIcon/Visible.png" id="6_qiemx"]
+[ext_resource type="Texture2D" uid="uid://cpjm2q4000an2" path="res://resource/sprite/ui/commonIcon/Visible.png" id="6_qiemx"]
 [ext_resource type="Texture2D" uid="uid://btetxb0hqoifk" path="res://resource/sprite/ui/commonIcon/MarkCell_placeholder.png" id="8_p8o70"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="9_vr0bo"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="9_vr0bo"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xxv8l"]
 resource_local_to_scene = true
@@ -136,10 +137,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("6_jpt3y")
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
 
 [node name="WaveVisibleButton" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer/WaveItem/WaveContainer"]
 custom_minimum_size = Vector2(36, 36)
@@ -192,7 +193,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("6_jpt3y")
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4

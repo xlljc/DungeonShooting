@@ -16,6 +16,11 @@ public static class GameConfig
 
     
     // ----------------------- 常量 -----------------------
+
+    /// <summary>
+    /// 液体画布渐变梯度
+    /// </summary>
+    public const float LiquidGradient = 0.1f;
     
     /// <summary>
     /// 连接房间的过道宽度

@@ -24,6 +24,26 @@ public partial class ActivityObject
         /// </summary>
         public const string Id_enemy0002 = "enemy0002";
         /// <summary>
+        /// 名称: 敌人3 <br/>
+        /// 简介: 敌人3
+        /// </summary>
+        public const string Id_enemy0003 = "enemy0003";
+        /// <summary>
+        /// 名称: 敌人4 <br/>
+        /// 简介: 敌人3
+        /// </summary>
+        public const string Id_enemy0004 = "enemy0004";
+        /// <summary>
+        /// 名称: 敌人5 <br/>
+        /// 简介: 敌人3
+        /// </summary>
+        public const string Id_enemy0005 = "enemy0005";
+        /// <summary>
+        /// 名称: 商店老板 <br/>
+        /// 简介: 商店老板
+        /// </summary>
+        public const string Id_shopBoss0001 = "shopBoss0001";
+        /// <summary>
         /// 名称: 步枪 <br/>
         /// 简介: 
         /// </summary>
@@ -248,6 +268,31 @@ public partial class ActivityObject
         /// 简介: 使用后补充当前武器备用弹药
         /// </summary>
         public const string Id_prop5001 = "prop5001";
+        /// <summary>
+        /// 名称: 猪猪存钱罐 <br/>
+        /// 简介: 拾起该道具后玩家捡到的所有金币将会被存入到存钱罐中, 使用该道具, 会摧毁存钱罐, 并返回双倍的金币
+        /// </summary>
+        public const string Id_prop5002 = "prop5002";
+        /// <summary>
+        /// 名称: 红外遥控器 <br/>
+        /// 简介: 使用后会触发附近地上的武器开火
+        /// </summary>
+        public const string Id_prop5003 = "prop5003";
+        /// <summary>
+        /// 名称: 魔术棒 <br/>
+        /// 简介: 随机选择房间内的一个手持武器的敌人, 交换你们手中的武器
+        /// </summary>
+        public const string Id_prop5004 = "prop5004";
+        /// <summary>
+        /// 名称: 便携式供血器 <br/>
+        /// 简介: 使用金币换取血量
+        /// </summary>
+        public const string Id_prop5005 = "prop5005";
+        /// <summary>
+        /// 名称: 便携式献血器 <br/>
+        /// 简介: 使用血量换取金币
+        /// </summary>
+        public const string Id_prop5006 = "prop5006";
         /// <summary>
         /// 名称: 木质宝箱 <br/>
         /// 简介: 木质宝箱

@@ -477,7 +477,14 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         else
         {
             SpriteFrames spriteFrames = AnimatedSprite.SpriteFrames;
-            spriteFrames.SetFrame("default", 0, texture);
+            if (spriteFrames.GetFrameCount("default") > 0)
+            {
+                spriteFrames.SetFrame("default", 0, texture);
+            }
+            else
+            {
+                spriteFrames.AddFrame("default", texture);
+            }
         }
     
         AnimatedSprite.Play("default");
@@ -628,6 +635,20 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     /// <summary>
+    /// 添加组件时调用
+    /// </summary>
+    public virtual void OnAddComponent(Component component)
+    {
+    }
+
+    /// <summary>
+    /// 移除组件时调用
+    /// </summary>
+    public virtual void OnRemoveComponent(Component component)
+    {
+    }
+
+    /// <summary>
     /// 返回当物体 CollisionLayer 是否能与 mask 层碰撞
     /// </summary>
     public bool CollisionWithMask(uint mask)
@@ -773,6 +794,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         component.Master = this;
         component.Ready();
         component.OnEnable();
+        OnAddComponent(component);
         return component;
     }
 
@@ -794,6 +816,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         component.Master = this;
         component.Ready();
         component.OnEnable();
+        OnAddComponent(component);
         return component;
     }
 
@@ -811,6 +834,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         if (_updatingComp)
         {
             _changeComponents.Add(new KeyValuePair<Component, bool>(component, false));
+            OnRemoveComponent(component);
             component.Destroy();
         }
         else
@@ -820,6 +844,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
                 if (_components[i].Value == component)
                 {
                     _components.RemoveAt(i);
+                    OnRemoveComponent(component);
                     component.Destroy();
                     return;
                 }
@@ -1018,42 +1043,11 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
 #endif
         var newDelta = (float)delta;
-        if (EnableCustomBehavior)
-        {
-            Process(newDelta);
-        }
+        UpdateProcess(newDelta);
         
         //更新组件
-        if (_components.Count > 0)
-        {
-            _updatingComp = true;
-            if (EnableCustomBehavior) //启用所有组件
-            {
-                for (int i = 0; i < _components.Count; i++)
-                {
-                    if (IsDestroyed) return;
-                    var temp = _components[i].Value;
-                    if (temp != null && temp.Enable)
-                    {
-                        temp.Process(newDelta);
-                    }
-                }
-            }
-            else //只更新 MoveController 组件
-            {
-                if (MoveController.Enable)
-                {
-                    MoveController.Process(newDelta);
-                }
-            }
-            _updatingComp = false;
-            
-            if (_changeComponents.Count > 0)
-            {
-                RefreshComponent();
-            }
-        }
-
+        UpdateComponentProcess(newDelta);
+        
         // 更新下坠处理逻辑
         UpdateFall(newDelta);
 
@@ -1084,7 +1078,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
         
         //协程更新
-        ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, newDelta);
+        UpdateCoroutine(newDelta);
         
         //调试绘制
         if (IsDebug)
@@ -1093,6 +1087,110 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
     }
 
+    /// <summary>
+    /// 触发调用 Process() 函数
+    /// </summary>
+    public void UpdateProcess(float delta)
+    {
+        if (EnableCustomBehavior)
+        {
+            Process(delta);
+        }
+    }
+
+    /// <summary>
+    /// 触发调用 PhysicsProcess() 函数
+    /// </summary>
+    public void UpdatePhysicsProcess(float delta)
+    {
+        if (EnableCustomBehavior)
+        {
+            PhysicsProcess(delta);
+        }
+    }
+
+    /// <summary>
+    /// 更新组件
+    /// </summary>
+    public void UpdateComponentProcess(float delta)
+    {
+        //更新组件
+        if (_components.Count > 0)
+        {
+            _updatingComp = true;
+            if (EnableCustomBehavior) //启用所有组件
+            {
+                for (int i = 0; i < _components.Count; i++)
+                {
+                    if (IsDestroyed) return;
+                    var temp = _components[i].Value;
+                    if (temp != null && temp.Enable)
+                    {
+                        temp.Process(delta);
+                    }
+                }
+            }
+            else //只更新 MoveController 组件
+            {
+                if (MoveController.Enable)
+                {
+                    MoveController.Process(delta);
+                }
+            }
+            _updatingComp = false;
+            
+            if (_changeComponents.Count > 0)
+            {
+                RefreshComponent();
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// 物理帧更新组件
+    /// </summary>
+    public void UpdateComponentPhysicsProcess(float delta)
+    {
+        if (_components.Count > 0)
+        {
+            _updatingComp = true;
+            if (EnableCustomBehavior) //启用所有组件
+            {
+                for (int i = 0; i < _components.Count; i++)
+                {
+                    if (IsDestroyed) return;
+                    var temp = _components[i].Value;
+                    if (temp != null && temp.Enable)
+                    {
+                        temp.PhysicsProcess(delta);
+                    }
+                }
+            }
+            else //只更新 MoveController 组件
+            {
+                if (MoveController.Enable)
+                {
+                    MoveController.PhysicsProcess(delta);
+                }
+            }
+            _updatingComp = false;
+
+            if (_changeComponents.Count > 0)
+            {
+                RefreshComponent();
+            }
+        }
+    }
+    
+    /// <summary>
+    /// 更新协程
+    /// </summary>
+    public void UpdateCoroutine(float delta)
+    {
+        ProxyCoroutineHandler.ProxyUpdateCoroutine(ref _coroutineList, delta);
+    }
+    
     /// <summary>
     /// 更新下坠处理逻辑
     /// </summary>
@@ -1250,41 +1348,10 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
         }
 #endif
         var newDelta = (float)delta;
-        if (EnableCustomBehavior)
-        {
-            PhysicsProcess(newDelta);
-        }
+        UpdatePhysicsProcess(newDelta);
         
         //更新组件
-        if (_components.Count > 0)
-        {
-            _updatingComp = true;
-            if (EnableCustomBehavior) //启用所有组件
-            {
-                for (int i = 0; i < _components.Count; i++)
-                {
-                    if (IsDestroyed) return;
-                    var temp = _components[i].Value;
-                    if (temp != null && temp.Enable)
-                    {
-                        temp.PhysicsProcess(newDelta);
-                    }
-                }
-            }
-            else //只更新 MoveController 组件
-            {
-                if (MoveController.Enable)
-                {
-                    MoveController.PhysicsProcess(newDelta);
-                }
-            }
-            _updatingComp = false;
-
-            if (_changeComponents.Count > 0)
-            {
-                RefreshComponent();
-            }
-        }
+        UpdateComponentPhysicsProcess(newDelta);
     }
 
     //更新新增/移除的组件
@@ -1933,7 +2000,7 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
     }
 
     /// <summary>
-    /// 设置是否启用碰撞层, 该函数是设置下载状态下原碰撞层
+    /// 设置是否启用碰撞层, 该函数是设置下坠状态下原碰撞层
     /// </summary>
     public void SetOriginCollisionLayerValue(uint layer, bool vale)
     {
@@ -1951,5 +2018,14 @@ public partial class ActivityObject : CharacterBody2D, IDestroy, ICoroutine
                 _fallData.OriginCollisionLayer ^= layer;
             }
         }
+    }
+
+    /// <summary>
+    /// 通过标记创建时调用
+    /// </summary>
+    /// <param name="roomPreinstall">当前所在的预设</param>
+    /// <param name="activityMark">创建当前物体的标记对象</param>
+    public virtual void OnCreateWithMark(RoomPreinstall roomPreinstall, ActivityMark activityMark)
+    {
     }
 }

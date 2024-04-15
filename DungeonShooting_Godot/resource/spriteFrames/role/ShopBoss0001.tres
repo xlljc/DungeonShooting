@@ -1,0 +1,38 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://bxn63xs3f87jy"]
+
+[ext_resource type="Texture2D" uid="uid://cfgdtj2quumhy" path="res://resource/sprite/role/shopBoss0001/ShopBoss0001.png" id="1_k2gly"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_k2gly")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_k2gly")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_k2gly")
+}],
+"loop": true,
+"name": &"reverseRun",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_k2gly")
+}],
+"loop": true,
+"name": &"run",
+"speed": 5.0
+}]

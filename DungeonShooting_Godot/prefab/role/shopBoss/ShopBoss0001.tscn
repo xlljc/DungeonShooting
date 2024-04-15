@@ -1,0 +1,62 @@
+[gd_scene load_steps=7 format=3 uid="uid://dyl1dhtlxbcb3"]
+
+[ext_resource type="PackedScene" uid="uid://dbrig6dq441wo" path="res://prefab/role/template/AiTemplate.tscn" id="1_25fpq"]
+[ext_resource type="Script" path="res://src/game/activity/role/shop/ShopBoss.cs" id="2_2ng7e"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_7m501"]
+[ext_resource type="SpriteFrames" uid="uid://bxn63xs3f87jy" path="res://resource/spriteFrames/role/ShopBoss0001.tres" id="3_b0a5c"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0nvxl"]
+resource_local_to_scene = true
+shader = ExtResource("2_7m501")
+shader_parameter/blend = Color(0, 0, 0, 0.470588)
+shader_parameter/schedule = 1.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x86iq"]
+resource_local_to_scene = true
+shader = ExtResource("2_7m501")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[node name="ShopBoss0001" node_paths=PackedStringArray("ViewRay", "NavigationAgent2D", "NavigationPoint", "FirePoint", "ViewArea", "ViewAreaCollision", "HurtArea", "HurtCollision", "InteractiveArea", "InteractiveCollision", "TipRoot", "TipSprite", "AnimationPlayer", "MountPoint", "BackMountPoint", "MeleeAttackArea", "MeleeAttackCollision", "ShadowSprite", "AnimatedSprite", "Collision") instance=ExtResource("1_25fpq")]
+collision_layer = 1024
+script = ExtResource("2_2ng7e")
+ViewRay = NodePath("ViewRay")
+NavigationAgent2D = NodePath("NavigationPoint/NavigationAgent2D")
+NavigationPoint = NodePath("NavigationPoint")
+FirePoint = NodePath("FirePoint")
+ViewArea = NodePath("MountPoint/ViewArea")
+ViewAreaCollision = NodePath("MountPoint/ViewArea/ViewAreaCollision")
+HurtArea = NodePath("HurtArea")
+HurtCollision = NodePath("HurtArea/HurtCollision")
+InteractiveArea = NodePath("InteractiveArea")
+InteractiveCollision = NodePath("InteractiveArea/InteractiveCollision")
+TipRoot = NodePath("TipRoot")
+TipSprite = NodePath("TipRoot/TipSprite")
+AnimationPlayer = NodePath("AnimationPlayer")
+MountPoint = NodePath("MountPoint")
+BackMountPoint = NodePath("BackMountPoint")
+MeleeAttackArea = NodePath("MountPoint/MeleeAttackArea")
+MeleeAttackCollision = NodePath("MountPoint/MeleeAttackArea/MeleeAttackCollision")
+ShadowSprite = NodePath("ShadowSprite")
+AnimatedSprite = NodePath("AnimatedSprite")
+Collision = NodePath("Collision")
+
+[node name="ShadowSprite" parent="." index="0"]
+material = SubResource("ShaderMaterial_0nvxl")
+
+[node name="AnimatedSprite" parent="." index="2"]
+material = SubResource("ShaderMaterial_x86iq")
+sprite_frames = ExtResource("3_b0a5c")
+animation = &"idle"

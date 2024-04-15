@@ -1,17 +1,19 @@
 ﻿using Godot;
 
+/// <summary>
+/// 可被子弹击中的区域
+/// </summary>
 [Tool]
 public partial class HurtArea : Area2D, IHurt
 {
-    public delegate void HurtDelegate(ActivityObject target, int damage, float angle);
+    /// <summary>
+    /// 所属角色
+    /// </summary>
+    public Role Master { get; private set; }
 
-    public event HurtDelegate OnHurtEvent;
-    
-    public ActivityObject ActivityObject { get; private set; }
-
-    public void InitActivityObject(ActivityObject activityObject)
+    public void InitRole(Role role)
     {
-        ActivityObject = activityObject;
+        Master = role;
     }
 
     public override void _Ready()
@@ -19,11 +21,19 @@ public partial class HurtArea : Area2D, IHurt
         Monitoring = false;
     }
 
+    public bool CanHurt(CampEnum targetCamp)
+    {
+        //无敌状态
+        if (Master.Invincible)
+        {
+            return true;
+        }
+        
+        return Master.IsEnemy(targetCamp);
+    }
+
     public void Hurt(ActivityObject target, int damage, float angle)
     {
-        if (OnHurtEvent != null)
-        {
-            OnHurtEvent(target, damage, angle);
-        }
+        Master.CallDeferred(nameof(Master.HurtHandler), target, damage, angle);
     }
 }

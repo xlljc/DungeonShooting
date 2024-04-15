@@ -1714,7 +1714,7 @@
     "CameraShake": 2,
     "BacklashRange": [
       1,
-      1
+      2
     ],
     "BacklashRegressionSpeed": 35,
     "UpliftAngle": 3,
@@ -1790,7 +1790,7 @@
     "CameraShake": 2,
     "BacklashRange": [
       1,
-      1
+      2
     ],
     "BacklashRegressionSpeed": 35,
     "UpliftAngle": 3,

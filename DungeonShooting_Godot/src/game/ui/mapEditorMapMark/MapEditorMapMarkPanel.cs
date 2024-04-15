@@ -151,7 +151,12 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
             {
                 item.InitWaveList();
             }
-
+            
+            //检测是否创建特殊标记
+            if (!item.CheckSpecialMark(EditorTileMapManager.SelectRoom.RoomInfo.RoomType))
+            {
+                EventManager.EmitEvent(EventEnum.OnTileMapDirty);
+            }
             optionButton.AddItem($"{item.Name} ({item.Weight})");
         }
         
@@ -430,7 +435,7 @@ public partial class MapEditorMapMarkPanel : MapEditorMapMark
                 //为了引用不变, 所以这里使用克隆数据
                 dataMarkInfo.CloneFrom(mark);
                 //刷新 Cell
-                markCell.SetData(markCell.Data);
+                markCell.UpdateData(markCell.Data);
                 //执行排序
                 markCell.Grid.Sort();
                 EventManager.EmitEvent(EventEnum.OnEditMark, dataMarkInfo);

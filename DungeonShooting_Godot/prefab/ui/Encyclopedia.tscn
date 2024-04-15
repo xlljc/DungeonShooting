@@ -1,0 +1,290 @@
+[gd_scene load_steps=14 format=3 uid="uid://b2xq02i3vxct"]
+
+[ext_resource type="Script" path="res://src/game/ui/encyclopedia/EncyclopediaPanel.cs" id="1_hd86y"]
+[ext_resource type="Texture2D" uid="uid://c0st2iiql8igg" path="res://resource/sprite/ui/encyclopedia/TitleBg.png" id="3_gdtik"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="3_o1xl7"]
+[ext_resource type="Texture2D" uid="uid://dahib4qcevboo" path="res://resource/sprite/ui/encyclopedia/Panel2.png" id="4_21546"]
+[ext_resource type="Texture2D" uid="uid://jb73i5q1dv2a" path="res://resource/sprite/ui/encyclopedia/Tab.png" id="4_nm64b"]
+[ext_resource type="Texture2D" uid="uid://brevrlfdtllmk" path="res://resource/sprite/ui/encyclopedia/Select.png" id="5_f0anf"]
+[ext_resource type="Texture2D" uid="uid://cu5y32wfai4pn" path="res://resource/sprite/ui/encyclopedia/Item.png" id="5_niceh"]
+[ext_resource type="Texture2D" uid="uid://conjg6fw6670x" path="res://resource/sprite/ui/encyclopedia/Panel.png" id="7_hfdat"]
+[ext_resource type="Shader" path="res://resource/shader/Outline.gdshader" id="9_mmpq6"]
+[ext_resource type="Texture2D" uid="uid://cuas0bdjlpmwb" path="res://resource/sprite/ui/encyclopedia/Close.png" id="10_jgsfw"]
+[ext_resource type="Texture2D" uid="uid://7x5b5ed7hk7w" path="res://resource/sprite/ui/encyclopedia/CloseSelect.png" id="11_247gy"]
+
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gm0bl"]
+resource_local_to_scene = true
+shader = ExtResource("3_o1xl7")
+shader_parameter/blend = Color(1, 1, 1, 1)
+shader_parameter/schedule = 0.0
+shader_parameter/modulate = Color(1, 1, 1, 1)
+shader_parameter/show_outline = true
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/outline_rainbow = false
+shader_parameter/outline_use_blend = true
+shader_parameter/grey = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qdxtu"]
+resource_local_to_scene = true
+shader = ExtResource("9_mmpq6")
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+
+[node name="Encyclopedia" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hd86y")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.705882)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 54.0
+offset_right = -3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_hfdat")
+region_rect = Rect2(0, 0, 128, 128)
+patch_margin_left = 56
+patch_margin_top = 56
+patch_margin_right = 56
+patch_margin_bottom = 56
+
+[node name="TextureRect" type="TextureRect" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -3.0
+offset_top = -35.0
+offset_right = -3.0
+offset_bottom = 69.0
+grow_horizontal = 2
+texture = ExtResource("3_gdtik")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="NinePatchRect/TextureRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -3.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 48
+text = "图鉴"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NinePatchRect/MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="NinePatchRect/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_constants/separation = 0
+
+[node name="Control" type="Control" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(2.08165e-12, 48)
+layout_mode = 2
+
+[node name="TabButton" type="TextureButton" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -68.0
+offset_right = 96.0
+offset_bottom = 4.0
+grow_vertical = 0
+texture_normal = ExtResource("4_nm64b")
+
+[node name="Icon" type="TextureRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/Control/TabButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 24.0
+offset_right = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch_mode = 3
+
+[node name="NinePatchRect" type="NinePatchRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("4_21546")
+region_rect = Rect2(0, 0, 128, 128)
+patch_margin_left = 56
+patch_margin_top = 56
+patch_margin_right = 56
+patch_margin_bottom = 56
+
+[node name="ScrollContainer" type="ScrollContainer" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 75.0
+
+[node name="ObjectButton" type="TextureButton" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/NinePatchRect/ScrollContainer"]
+custom_minimum_size = Vector2(200, 120)
+layout_mode = 2
+
+[node name="Bg" type="NinePatchRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/NinePatchRect/ScrollContainer/ObjectButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_niceh")
+region_rect = Rect2(0, 0, 56, 56)
+patch_margin_left = 24
+patch_margin_top = 24
+patch_margin_right = 24
+patch_margin_bottom = 24
+
+[node name="PreviewImage" type="TextureRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/NinePatchRect/ScrollContainer/ObjectButton"]
+material = SubResource("ShaderMaterial_gm0bl")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -150.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(4, 4)
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="Select" type="NinePatchRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer2/NinePatchRect/ScrollContainer/ObjectButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_f0anf")
+region_rect = Rect2(0, 0, 16, 16)
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="NinePatchRect/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(452, 2.08165e-12)
+layout_mode = 2
+
+[node name="NinePatchRect" type="NinePatchRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("4_21546")
+patch_margin_left = 56
+patch_margin_top = 56
+patch_margin_right = 56
+patch_margin_bottom = 56
+
+[node name="ItemInfoBg" type="VBoxContainer" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer3/NinePatchRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = 28.0
+offset_right = -28.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="ItemName" type="Label" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer3/NinePatchRect/ItemInfoBg"]
+layout_mode = 2
+text = "名称"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer3/NinePatchRect/ItemInfoBg"]
+custom_minimum_size = Vector2(396, 300)
+layout_mode = 2
+texture = ExtResource("4_21546")
+patch_margin_left = 56
+patch_margin_top = 56
+patch_margin_right = 56
+patch_margin_bottom = 56
+
+[node name="ItemTexture" type="TextureRect" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer3/NinePatchRect/ItemInfoBg/NinePatchRect"]
+material = SubResource("ShaderMaterial_qdxtu")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -287.0
+offset_bottom = -215.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(4, 4)
+size_flags_vertical = 3
+stretch_mode = 3
+
+[node name="ItemDes" type="RichTextLabel" parent="NinePatchRect/MarginContainer/HBoxContainer/VBoxContainer3/NinePatchRect/ItemInfoBg"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "文本描述"
+
+[node name="CloseButton" type="TextureButton" parent="NinePatchRect"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -88.0
+offset_top = -20.0
+offset_right = -24.0
+offset_bottom = 44.0
+grow_horizontal = 0
+texture_normal = ExtResource("10_jgsfw")
+texture_pressed = ExtResource("11_247gy")
+texture_hover = ExtResource("11_247gy")

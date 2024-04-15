@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://cdcpa4l71tkja"]
 
 [ext_resource type="Script" path="res://src/game/activity/item/ObstacleObject.cs" id="1_nuuf6"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_fbidd"]
-[ext_resource type="Texture2D" uid="uid://dr2d6toqxxifv" path="res://resource/sprite/item/hall_b/zhuozi02.png" id="3_4miy3"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_fbidd"]
+[ext_resource type="Texture2D" uid="uid://dr2d6toqxxifv" path="res://resource/sprite/item/hall_b/item-32.png" id="3_4miy3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wh4b7"]
 resource_local_to_scene = true
@@ -40,7 +40,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p3c6b"]
-size = Vector2(54, 17)
+size = Vector2(28, 29)
 
 [node name="Item0003" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 512
@@ -56,9 +56,7 @@ material = SubResource("ShaderMaterial_wh4b7")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_f7tsa")
-position = Vector2(0, -4)
 sprite_frames = SubResource("SpriteFrames_uqva1")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2(0, 2.5)
 shape = SubResource("RectangleShape2D_p3c6b")

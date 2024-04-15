@@ -14,6 +14,10 @@ public class ImageRenderData
     /// </summary>
     public Image SrcImage;
     /// <summary>
+    /// 颜色
+    /// </summary>
+    public Color Modulate { get; set; }
+    /// <summary>
     /// 渲染材质
     /// </summary>
     public Material Material;

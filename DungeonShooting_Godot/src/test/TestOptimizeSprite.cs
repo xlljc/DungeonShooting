@@ -25,7 +25,7 @@ public partial class TestOptimizeSprite : Node2D
             var centerX = Utils.Random.RandomRangeInt(0, texture.GetWidth());
             var centerY = Utils.Random.RandomRangeInt(0, texture.GetHeight());
             var angle = Utils.Random.RandomRangeInt(0, 360);
-            imageCanvas.DrawImageInCanvas(texture, null, x, y,
+            imageCanvas.DrawImageInCanvas(texture, Colors.White, null, x, y,
                 angle, centerX, centerY, Utils.Random.RandomBoolean(),
                 () =>
                 {

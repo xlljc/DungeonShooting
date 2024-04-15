@@ -63,7 +63,7 @@ public class InteractiveTipBarHandler
         else
         {
             var result = (CheckInteractiveResult)o;
-            var interactiveItem = Player.Current.InteractiveItem;
+            var interactiveItem = World.Current.Player.InteractiveItem;
             //if (interactiveItem is Weapon)
             var icon = result.GetIcon();
             if (icon != null)

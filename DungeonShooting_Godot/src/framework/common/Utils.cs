@@ -67,6 +67,17 @@ public static class Utils
 
         return angle;
     }
+
+    /// <summary>
+    /// 判断a和b是否在同一梯度下
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <param name="gradient">梯度间距</param>
+    public static bool IsSameGradient(float a, float b, float gradient)
+    {
+        return (int)(a / gradient) == (int)(b / gradient);
+    }
     
     /// <summary>
     /// 根据步长吸附值
@@ -343,9 +354,9 @@ public static class Utils
     /// <summary>
     /// 计算Vector2点所占用的区域
     /// </summary>
-    public static Rect2I CalcRect(IEnumerable<Vector2I> cells)
+    public static Rect2I CalcRect(ICollection<Vector2I> cells)
     {
-        var count = cells.Count();
+        var count = cells.Count;
         if (count == 0)
         {
             return new Rect2I();

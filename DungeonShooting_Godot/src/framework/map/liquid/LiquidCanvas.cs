@@ -318,6 +318,7 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
             }
             else
             {
+                var oldA = imagePixel.Color.A;
                 imagePixel.Color.A -= imagePixel.Material.WriteOffSpeed * (_runTime - imagePixel.TempTime);
                 
                 if (imagePixel.Color.A <= 0) //完全透明了
@@ -328,7 +329,7 @@ public partial class LiquidCanvas : Sprite2D, IDestroy
                     imagePixel.IsUpdate = false;
                     return true;
                 }
-                else
+                else if (!Utils.IsSameGradient(oldA, imagePixel.Color.A, GameConfig.LiquidGradient)) //同一渐变梯度下才会有颜色变化
                 {
                     _changeFlag = true;
                     _image.SetPixel(imagePixel.X, imagePixel.Y, imagePixel.Color);

@@ -2,8 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://cxltmhhp4rbyk" path="res://prefab/weapon/WeaponTemplate.tscn" id="1_5xnlm"]
 [ext_resource type="Script" path="res://src/game/activity/weapon/gun/Gun.cs" id="1_exwbu"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_7rywx"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_7rywx"]
 [ext_resource type="SpriteFrames" uid="uid://xxyokrbt10xm" path="res://resource/spriteFrames/weapon/Weapon0007.tres" id="3_ms2gs"]
+
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_sy2aq"]
 resource_local_to_scene = true

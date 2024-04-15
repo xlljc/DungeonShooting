@@ -13,15 +13,25 @@ public partial class WeaponRoulettePanel : WeaponRoulette
     /// </summary>
     public const int SlotCount = 6;
     
+    /// <summary>
+    /// 选中的武器
+    /// </summary>
+    public Weapon ActiveWeapon;    
+    
     //是否展开轮盘
     private bool _pressRouletteFlag = false;
     private bool _isMagnifyRoulette = false;
     //所有武器插槽
     private List<WeaponSlotNode> _slotNodes = new List<WeaponSlotNode>();
 
+    //当前页索引
+    private int _pageIndex = 0;
+    //最大页数
+    private int _maxPageIndex = 0;
+    
     public override void OnCreateUi()
     {
-        S_RouletteBg.Instance.Visible = false;
+        S_Root.Instance.Visible = false;
         S_Bg.Instance.Visible = false;
 
         //创建武器插槽
@@ -33,8 +43,9 @@ public partial class WeaponRoulettePanel : WeaponRoulette
             var sectorPolygon = Utils.CreateSectorPolygon(0, 100, 360f / SlotCount, 4);
             collisionPolygon2D.Polygon = sectorPolygon;
             clone.Instance.RotationDegrees = angle;
-            clone.L_Control.Instance.RotationDegrees = -angle;
-            clone.L_Control.L_WeaponIcon.Instance.Material = (Material)S_WeaponSlotNode.L_Control.L_WeaponIcon.Instance.Material.Duplicate();
+            clone.L_SlotUi.Instance.RotationDegrees = -angle;
+            clone.L_SlotUi.L_WeaponUi.L_WeaponIcon.Instance.Material =
+                (Material)S_WeaponSlotNode.L_SlotUi.L_WeaponUi.L_WeaponIcon.Instance.Material.Duplicate();
             _slotNodes.Add(clone);
         }
         
@@ -58,43 +69,98 @@ public partial class WeaponRoulettePanel : WeaponRoulette
         //按下地图按键
         if (InputManager.Roulette && !_isMagnifyRoulette) //打开轮盘
         {
-            if (UiManager.GetUiInstanceCount(UiManager.UiNames.PauseMenu) == 0)
+            if (UiManager.GetUiInstanceCount(UiManager.UiNames.PauseMenu) == 0 && !InputManager.Map)
             {
                 ExpandRoulette();
             }
         }
-        else if (!InputManager.Roulette && _isMagnifyRoulette) //缩小轮盘
+        else if (!InputManager.Roulette && _isMagnifyRoulette) //关闭轮盘
         {
             ShrinkRoulette();
         }
 
-        
+        //已经打开地图
         if (InputManager.Roulette)
         {
             S_MouseArea.Instance.GlobalPosition = GetGlobalMousePosition();
+
+            //扔掉武器
+            if (ActiveWeapon != null && InputManager.MeleeAttack)
+            {
+                ActiveWeapon.Master.ThrowWeapon(ActiveWeapon.PackageIndex);
+                ActiveWeapon = null;
+                RefreshWeapon();
+            }
+            else
+            {
+                //上一页/下一页
+                if (_maxPageIndex > 0)
+                {
+                    if (InputManager.ExchangeWeapon) //上一页
+                    {
+                        _pageIndex--;
+                        if (_pageIndex < 0)
+                        {
+                            _pageIndex = _maxPageIndex;
+                        }
+                    
+                        RefreshPageLabel();
+                        RefreshWeapon();
+                    }
+                    else if (InputManager.Interactive) //下一页
+                    {
+                        _pageIndex++;
+                        if (_pageIndex > _maxPageIndex)
+                        {
+                            _pageIndex = 0;
+                        }
+                    
+                        RefreshPageLabel();
+                        RefreshWeapon();
+                    }
+                }
+            }
+
+            
+            //扔掉武器提示
+            S_DownBar.Instance.Visible = ActiveWeapon != null;
+        }
+        else
+        {
+            ActiveWeapon = null;
         }
     }
     
+    //打开轮盘
     private void ExpandRoulette()
     {
         World.Current.Pause = true;
         _pressRouletteFlag = true;
         _isMagnifyRoulette = true;
         
-        S_RouletteBg.Instance.Visible = true;
+        S_Root.Instance.Visible = true;
         S_Bg.Instance.Visible = true;
         SetEnableSectorCollision(true);
+        RefreshSlotPage();
+        RefreshPageLabel();
         RefreshWeapon();
     }
     
+    //关闭轮盘
     private void ShrinkRoulette()
     {
-        S_RouletteBg.Instance.Visible = false;
+        S_Root.Instance.Visible = false;
         S_Bg.Instance.Visible = false;
         
         _isMagnifyRoulette = false;
         World.Current.Pause = false;
         SetEnableSectorCollision(false);
+
+        //如果选中了物体
+        if (ActiveWeapon != null)
+        {
+            World.Current.Player.ExchangeWeaponByIndex(ActiveWeapon.PackageIndex);
+        }
     }
     
     //设置是否启用扇形碰撞检测
@@ -106,16 +172,51 @@ public partial class WeaponRoulettePanel : WeaponRoulette
             weaponSlotNode.L_SlotAreaNode.Instance.Monitorable = enable;
         }
     }
+
+    //刷新页码文本
+    private void RefreshPageLabel()
+    {
+        S_PageLabel.Instance.Text = $"{_pageIndex + 1}/{_maxPageIndex + 1}";
+    }
+    
+    //刷新页码
+    private void RefreshSlotPage()
+    {
+        var current = World.Current.Player;
+        if (current == null)
+        {
+            return;
+        }
+
+        var weapons = current.WeaponPack.ItemSlot;
+        //判断是否显示上一页下一页提示
+        var lastIndex = 0;
+        for (var i = weapons.Length - 1; i >= 0; i--)
+        {
+            if (weapons[i] != null)
+            {
+                lastIndex = i;
+                break;
+            }
+        }
+        _maxPageIndex = Mathf.CeilToInt((lastIndex + 1f) / SlotCount) - 1;
+        S_UpBar.Instance.Visible = _maxPageIndex > 0;
+        
+        if (_pageIndex > _maxPageIndex)
+        {
+            _pageIndex = _maxPageIndex;
+        }
+    }
     
     //更新显示的武器
     private void RefreshWeapon()
     {
-        var current = Player.Current;
-        if (current == null)
+        var current = World.Current.Player;
+        if (current == null) //没有玩家对象，这是异常情况
         {
             foreach (var slotNode in _slotNodes)
             {
-                slotNode.L_Control.Instance.Visible = false;
+                slotNode.L_SlotUi.Instance.Visible = false;
             }
 
             return;
@@ -125,25 +226,35 @@ public partial class WeaponRoulettePanel : WeaponRoulette
         for (var i = 0; i < _slotNodes.Count; i++)
         {
             var slotNode = _slotNodes[i];
-            slotNode.L_Control.Instance.Visible = true;
-            if (weapons.Length > i)
+            slotNode.L_SlotUi.Instance.Visible = true;
+            slotNode.L_SlotUi.L_LockSprite.Instance.Visible = false;
+            
+            var weaponIndex = i + _pageIndex * SlotCount;
+            if (weapons.Length > weaponIndex)
             {
-                var weapon = weapons[i];
-                if (weapon != null)
+                var weapon = weapons[weaponIndex];
+                if (weapon != null) //有武器
                 {
-                    slotNode.L_Control.Instance.Visible = true;
-                    slotNode.L_Control.L_WeaponIcon.Instance.Texture = weapon.GetDefaultTexture();
-                    slotNode.L_Control.L_AmmoLabel.Instance.Text = 
+                    slotNode.L_SlotUi.L_WeaponUi.Instance.Visible = true;
+                    slotNode.L_SlotUi.L_WeaponUi.L_WeaponIcon.Instance.Texture = weapon.GetDefaultTexture();
+                    slotNode.L_SlotUi.L_WeaponUi.L_AmmoLabel.Instance.Text = 
                         (weapon.CurrAmmo + weapon.ResidueAmmo).ToString() + "/" + weapon.Attribute.MaxAmmoCapacity;
+                    slotNode.Instance.SetWeapon(weapon);
+                    slotNode.L_SlotAreaNode.Instance.Monitoring = true;
                 }
-                else
+                else //已经解锁，但是没有武器
                 {
-                    slotNode.L_Control.Instance.Visible = false;
+                    slotNode.L_SlotUi.L_WeaponUi.Instance.Visible = false;
+                    slotNode.L_SlotAreaNode.Instance.Monitoring = false;
+                    slotNode.Instance.ClearWeapon();
                 }
             }
-            else
+            else //未解锁
             {
-                slotNode.L_Control.Instance.Visible = false;
+                slotNode.L_SlotUi.L_LockSprite.Instance.Visible = true;
+                slotNode.L_SlotUi.L_WeaponUi.Instance.Visible = false;
+                slotNode.L_SlotAreaNode.Instance.Monitoring = false;
+                slotNode.Instance.ClearWeapon();
             }
         }
     }

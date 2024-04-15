@@ -25,7 +25,7 @@ public class WeaponBarHandler
 
     public void Process(float delta)
     {
-        var weapon = Player.Current?.WeaponPack.ActiveItem;
+        var weapon = World.Current.Player?.WeaponPack.ActiveItem;
         if (weapon != null)
         {
             SetWeaponTexture(weapon.GetCurrentTexture());

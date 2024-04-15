@@ -101,6 +101,10 @@ public static class AnimatorNames
     /// </summary>
     public static readonly StringName Pull = "pull";
 
+    /// <summary>
+    /// 死亡
+    /// </summary>
+    public static readonly StringName Die = "die";
     
     public static readonly StringName HalfStart = "half_start";
     public static readonly StringName HalfEnd = "half_end";

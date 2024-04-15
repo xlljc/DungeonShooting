@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Godot;
 using Environment = System.Environment;
@@ -57,6 +59,8 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
         container.L_HBoxContainer3.L_Button.Instance.Pressed += OnCreateUI;
         //重新生成UiManagerMethods.cs代码
         container.L_HBoxContainer5.L_Button.Instance.Pressed += GenerateUiManagerMethods;
+        //生成buff属性表
+        container.L_HBoxContainer6.L_Button.Instance.Pressed += GenerateBuffAttrTable;
         //导出excel表
         container.L_HBoxContainer7.L_Button.Instance.Pressed += ExportExcel;
         //打开excel表文件夹
@@ -78,6 +82,7 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
         container.L_HBoxContainer4.L_Button.Instance.Pressed -= OnGenerateCurrentUiCode;
         container.L_HBoxContainer3.L_Button.Instance.Pressed -= OnCreateUI;
         container.L_HBoxContainer5.L_Button.Instance.Pressed -= GenerateUiManagerMethods;
+        container.L_HBoxContainer6.L_Button.Instance.Pressed -= GenerateBuffAttrTable;
         container.L_HBoxContainer7.L_Button.Instance.Pressed -= ExportExcel;
         container.L_HBoxContainer8.L_Button.Instance.Pressed -= OpenExportExcelFolder;
     }
@@ -297,6 +302,21 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
             ShowTips("错误", "生成UiManagerMethods.cs代码执行失败! 前往控制台查看错误日志!");
         }
     }
+
+    /// <summary>
+    /// 生成Buff属性表
+    /// </summary>
+    private void GenerateBuffAttrTable()
+    {
+        if (BuffGenerator.Generate())
+        {
+            ShowTips("提示", "Buff属性表生成完成!");
+        }
+        else
+        {
+            ShowTips("错误", "uff属性表生成失败! 前往控制台查看错误日志!");
+        }
+    }
     
     /// <summary>
     /// 导出excel表
@@ -319,15 +339,17 @@ public partial class EditorToolsPanel : EditorTools, ISerializationListener
     /// </summary>
     private void OpenExportExcelFolder()
     {
-        var path = Environment.CurrentDirectory + "/excel";
         var osName = OS.GetName();
-        GD.Print("打开excel文件夹: " + path);
         if (osName == "Windows")
         {
+            var path = Environment.CurrentDirectory + "\\excel";
+            GD.Print("打开excel文件夹: " + path);
             System.Diagnostics.Process.Start("explorer.exe", path);
         }
         else
         {
+            var path = Environment.CurrentDirectory + "/excel";
+            GD.Print("打开excel文件夹: " + path);
             System.Diagnostics.Process.Start("open", path);
         }
     }

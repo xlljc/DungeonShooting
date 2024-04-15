@@ -186,6 +186,14 @@ public static class ResourceManager
             {
                 return LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_BirthMark_png);
             }
+            else if (markInfo.SpecialMarkType == SpecialMarkType.Treasure) //宝箱
+            {
+                return LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_BirthMark_png);
+            }
+            else if (markInfo.SpecialMarkType == SpecialMarkType.ShopBoss) //商店老板
+            {
+                return LoadTexture2D(ResourcePath.resource_sprite_ui_commonIcon_BirthMark_png);
+            }
             else if (markInfo.MarkList != null) //普通标记
             {
                 if (markInfo.MarkList.Count > 1) //多个物体

@@ -21,9 +21,12 @@ public partial class BoomBullet : Bullet
 
     public override void OnCollisionTarget(IHurt o)
     {
-        State = BulletStateEnum.CollisionTarget;
-        PlayBoom();
-        LogicalFinish();
+        if (o.CanHurt(Camp))
+        {
+            State = BulletStateEnum.CollisionTarget;
+            PlayBoom();
+            LogicalFinish();
+        }
     }
 
     public override void OnMoveCollision(KinematicCollision2D lastSlideCollision)
@@ -59,14 +62,14 @@ public partial class BoomBullet : Bullet
         explode.Position = pos;
         explode.RotationDegrees = Utils.Random.RandomRangeInt(0, 360);
         explode.AddToActivityRootDeferred(RoomLayerEnum.YSortLayer);
-        explode.Init(BulletData, AttackLayer, 25, BulletData.Harm, 50, BulletData.Repel);
+        explode.Init(BulletData, Camp, 25, BulletData.Harm, 50, BulletData.Repel);
         explode.RunPlay(BulletData.TriggerRole);
         if (AffiliationArea != null)
         {
             var texture = ResourceManager.LoadTexture2D(ResourcePath.resource_sprite_explode_Explode_pit0001_png);
             var tempPos = AffiliationArea.RoomInfo.ToCanvasPosition(pos);
             AffiliationArea.RoomInfo.StaticImageCanvas.DrawImageInCanvas(
-                texture, null, tempPos.X, tempPos.Y, Utils.Random.RandomRangeInt(0, 360),
+                texture, Colors.White, null, tempPos.X, tempPos.Y, Utils.Random.RandomRangeInt(0, 360),
                 texture.GetWidth() / 2, texture.GetHeight() / 2, false
             );
         }

@@ -32,6 +32,10 @@
       {
         "ErrorType": 0,
         "Path": "resource/map/tileMaps/Test1/inlet/Start"
+      },
+      {
+        "ErrorType": 0,
+        "Path": "resource/map/tileMaps/Test1/inlet/Start2"
       }
     ],
     "OutletList": [
@@ -49,7 +53,7 @@
     "RewardList": [
       {
         "ErrorType": 0,
-        "Path": "resource/map/tileMaps/Test1/reward/Award1"
+        "Path": "resource/map/tileMaps/Test1/reward/Reward1"
       }
     ],
     "ShopList": [

@@ -1,6 +1,7 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://jywcy17le5fd"]
 
-[ext_resource type="Shader" path="res://resource/material/Outline2.gdshader" id="1_skooq"]
+[ext_resource type="Shader" path="res://resource/shader/Outline2.gdshader" id="1_skooq"]
+
 
 [resource]
 resource_local_to_scene = true

@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://cjvmk415l1m7w"]
 
 [ext_resource type="Script" path="res://src/game/activity/item/ObstacleObject.cs" id="1_1qbhq"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_lp5ce"]
-[ext_resource type="Texture2D" uid="uid://belr22s50exy8" path="res://resource/sprite/item/hall_b/mugui.png" id="3_px2by"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_lp5ce"]
+[ext_resource type="Texture2D" uid="uid://belr22s50exy8" path="res://resource/sprite/item/hall_b/item-18.png" id="3_px2by"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wh4b7"]
 resource_local_to_scene = true
@@ -40,7 +40,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p3c6b"]
-size = Vector2(24, 12)
+size = Vector2(62, 73)
 
 [node name="Item0004" type="CharacterBody2D" node_paths=PackedStringArray("ShadowSprite", "AnimatedSprite", "Collision")]
 collision_layer = 512
@@ -56,9 +56,17 @@ material = SubResource("ShaderMaterial_wh4b7")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_f7tsa")
-position = Vector2(0, -4)
+position = Vector2(0, 27)
 sprite_frames = SubResource("SpriteFrames_uqva1")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2(0, 2)
+position = Vector2(0, 35)
+scale = Vector2(1e-05, 1e-05)
 shape = SubResource("RectangleShape2D_p3c6b")
+one_way_collision_margin = 0.0
+debug_color = Color(0, 0.6, 0.701961, 0.419608)
+metadata/collsionShape2D1 = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(-29, 14)
+polygon = PackedVector2Array(-12, -14, 48, -14, 48, 51, 69, 51, 69, 55, -12, 55)

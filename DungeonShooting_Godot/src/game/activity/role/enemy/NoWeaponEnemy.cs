@@ -8,7 +8,7 @@ using Godot;
 [Tool]
 public partial class NoWeaponEnemy : Enemy
 {
-    private BrushImageData _brushData;
+    //private BrushImageData _brushData;
     
     public override void OnInit()
     {
@@ -17,16 +17,16 @@ public partial class NoWeaponEnemy : Enemy
         WeaponPack.SetCapacity(0);
         AnimationPlayer.AnimationFinished += OnAnimationFinished;
         
-        _brushData = LiquidBrushManager.GetBrush("0002");
+        //_brushData = LiquidBrushManager.GetBrush("0002");
     }
 
-    protected override void Process(float delta)
-    {
-        base.Process(delta);
-
-        //测试笔刷
-        DrawLiquid(_brushData);
-    }
+    // protected override void Process(float delta)
+    // {
+    //     base.Process(delta);
+    //
+    //     //测试笔刷
+    //     //DrawLiquid(_brushData);
+    // }
 
     public override void Attack()
     {
@@ -41,6 +41,10 @@ public partial class NoWeaponEnemy : Enemy
     /// </summary>
     public virtual void OnAttack()
     {
+        if (LookTarget == null)
+        {
+            return;
+        }
         //攻击特效
         var effect = ObjectManager.GetPoolItem<IEffect>(ResourcePath.prefab_effect_weapon_ShotFire0003_tscn);
         var node = (Node2D)effect;
@@ -56,7 +60,7 @@ public partial class NoWeaponEnemy : Enemy
             var data = bulletData.Clone();
             var tempPos = new Vector2(targetPosition.X + Utils.Random.RandomRangeInt(-30, 30), targetPosition.Y + Utils.Random.RandomRangeInt(-30, 30));
             FireManager.SetParabolaTarget(data, tempPos);
-            FireManager.ShootBullet(data, AttackLayer);
+            FireManager.ShootBullet(data, Camp);
         }
     }
 
@@ -64,14 +68,14 @@ public partial class NoWeaponEnemy : Enemy
     {
         var realVelocity = GetRealVelocity();
         var effPos = Position;
-        var debris = Create<EnemyDead0002>(Ids.Id_enemy_dead0002);
+        var debris = Create<AutoFreezeObject>(Ids.Id_enemy_dead0002);
         debris.PutDown(effPos, RoomLayerEnum.NormalLayer);
         debris.MoveController.AddForce(Velocity + realVelocity);
         debris.SetForwardDirection(Face);
         debris.BrushPrevPosition =  BrushPrevPosition;
         
         //创建金币
-        CreateGold();
+        Gold.CreateGold(Position, RoleState.Gold);
         
         //派发敌人死亡信号
         EventManager.EmitEvent(EventEnum.OnEnemyDie, this);
@@ -82,7 +86,7 @@ public partial class NoWeaponEnemy : Enemy
     {
         if (name == AnimatorNames.Attack)
         {
-            AttackTimer = EnemyRoleState.AttackInterval;
+            AttackTimer = AttackInterval;
         }
     }
 }

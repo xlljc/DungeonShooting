@@ -64,7 +64,7 @@ public partial class AffiliationArea : Area2D, IDestroy
         Monitoring = true;
         Monitorable = false;
         CollisionLayer = PhysicsLayer.None;
-        CollisionMask = PhysicsLayer.Prop | PhysicsLayer.Player | PhysicsLayer.Enemy | PhysicsLayer.Debris | PhysicsLayer.Throwing;
+        CollisionMask = PhysicsLayer.Prop | PhysicsLayer.Role | PhysicsLayer.Debris | PhysicsLayer.Throwing | PhysicsLayer.Obstacle;
 
         BodyEntered += OnBodyEntered;
         BodyExited += OnBodyExited;
@@ -88,7 +88,7 @@ public partial class AffiliationArea : Area2D, IDestroy
         if (_includeItems.Add(activityObject))
         {
             //如果是玩家
-            if (activityObject == Player.Current)
+            if (activityObject == RoomInfo.World.Player)
             {
                 CallDeferred(nameof(OnPlayerInsertRoom));
             }
@@ -287,6 +287,7 @@ public partial class AffiliationArea : Area2D, IDestroy
     {
         if (IsFirstEnterFlag)
         {
+            RoomInfo.World.Player.OnFirstEnterRoom(RoomInfo);
             EventManager.EmitEvent(EventEnum.OnPlayerFirstEnterRoom, RoomInfo);
         }
         EventManager.EmitEvent(EventEnum.OnPlayerEnterRoom, RoomInfo);

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="枪火地牢"
-run/main_scene="res://scene/test/TestLobby.tscn"
+run/main_scene="res://scene/Main.tscn"
 config/features=PackedStringArray("4.2", "C#")
 config/icon="res://icon.png"
 
@@ -246,12 +246,13 @@ roulette={
 2d_physics/layer_2="bullet"
 2d_physics/layer_3="prop"
 2d_physics/layer_4="player"
-2d_physics/layer_5="enemy"
+2d_physics/layer_5="role"
 2d_physics/layer_6="affiliation"
 2d_physics/layer_7="onHand"
 2d_physics/layer_8="debris"
 2d_physics/layer_9="throwing"
 2d_physics/layer_10="obstacle"
+2d_physics/layer_11="hurtArea"
 2d_physics/layer_14="ui_mouse"
 
 [mono]

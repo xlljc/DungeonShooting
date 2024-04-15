@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://bxcsdgbhapf15"]
 
 [ext_resource type="Script" path="res://src/game/activity/item/ObstacleObject.cs" id="1_rrftl"]
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="2_fshwj"]
-[ext_resource type="Texture2D" uid="uid://bijiqseh8y667" path="res://resource/sprite/item/hall_b/baoxiangui.png" id="3_3isqs"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="2_fshwj"]
+[ext_resource type="Texture2D" uid="uid://bijiqseh8y667" path="res://resource/sprite/item/hall_b/item-01.png" id="3_3isqs"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wh4b7"]
 resource_local_to_scene = true
@@ -56,9 +56,9 @@ material = SubResource("ShaderMaterial_wh4b7")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_f7tsa")
-position = Vector2(0, -4)
+position = Vector2(0.5, -0.5)
 sprite_frames = SubResource("SpriteFrames_uqva1")
 
 [node name="Collision" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1)
+position = Vector2(0, 5)
 shape = SubResource("RectangleShape2D_p3c6b")

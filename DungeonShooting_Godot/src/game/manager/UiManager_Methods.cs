@@ -12,6 +12,7 @@ public static partial class UiManager
         public const string MapEditor = "MapEditor";
         public const string PauseMenu = "PauseMenu";
         public const string MapEditorMapMark = "MapEditorMapMark";
+        public const string Encyclopedia = "Encyclopedia";
         public const string MapEditorCreateMark = "MapEditorCreateMark";
         public const string MapEditorCreateRoom = "MapEditorCreateRoom";
         public const string EditorImportCombination = "EditorImportCombination";
@@ -377,6 +378,54 @@ public static partial class UiManager
     public static UI.MapEditorMapMark.MapEditorMapMarkPanel[] Get_MapEditorMapMark_Instance()
     {
         return GetUiInstance<UI.MapEditorMapMark.MapEditorMapMarkPanel>(nameof(UI.MapEditorMapMark.MapEditorMapMark));
+    }
+
+    /// <summary>
+    /// 创建 Encyclopedia, 并返回UI实例, 该函数不会打开 Ui
+    /// </summary>
+    public static UI.Encyclopedia.EncyclopediaPanel Create_Encyclopedia()
+    {
+        return CreateUi<UI.Encyclopedia.EncyclopediaPanel>(UiNames.Encyclopedia);
+    }
+
+    /// <summary>
+    /// 打开 Encyclopedia, 并返回UI实例
+    /// </summary>
+    public static UI.Encyclopedia.EncyclopediaPanel Open_Encyclopedia()
+    {
+        return OpenUi<UI.Encyclopedia.EncyclopediaPanel>(UiNames.Encyclopedia);
+    }
+
+    /// <summary>
+    /// 隐藏 Encyclopedia 的所有实例
+    /// </summary>
+    public static void Hide_Encyclopedia()
+    {
+        var uiInstance = Get_Encyclopedia_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.HideUi();
+        }
+    }
+
+    /// <summary>
+    /// 销毁 Encyclopedia 的所有实例
+    /// </summary>
+    public static void Destroy_Encyclopedia()
+    {
+        var uiInstance = Get_Encyclopedia_Instance();
+        foreach (var uiPanel in uiInstance)
+        {
+            uiPanel.Destroy();
+        }
+    }
+
+    /// <summary>
+    /// 获取所有 Encyclopedia 的实例, 如果没有实例, 则返回一个空数组
+    /// </summary>
+    public static UI.Encyclopedia.EncyclopediaPanel[] Get_Encyclopedia_Instance()
+    {
+        return GetUiInstance<UI.Encyclopedia.EncyclopediaPanel>(nameof(UI.Encyclopedia.Encyclopedia));
     }
 
     /// <summary>

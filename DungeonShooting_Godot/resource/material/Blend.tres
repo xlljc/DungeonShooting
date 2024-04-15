@@ -1,6 +1,7 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cces3bhds7jyi"]
 
-[ext_resource type="Shader" path="res://resource/material/Blend.gdshader" id="1"]
+[ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="1"]
+
 
 [resource]
 resource_local_to_scene = true
