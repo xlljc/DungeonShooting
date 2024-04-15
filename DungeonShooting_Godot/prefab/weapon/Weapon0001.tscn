@@ -5,7 +5,6 @@
 [ext_resource type="Shader" path="res://resource/shader/Blend.gdshader" id="3_x1q03"]
 [ext_resource type="SpriteFrames" uid="uid://5m0qs7m4er5u" path="res://resource/spriteFrames/weapon/Weapon0001.tres" id="4_d5c81"]
 
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5bfqf"]
 resource_local_to_scene = true
 shader = ExtResource("3_x1q03")

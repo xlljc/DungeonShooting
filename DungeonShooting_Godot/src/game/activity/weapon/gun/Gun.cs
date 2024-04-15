@@ -19,9 +19,6 @@ public partial class Gun : Weapon
         {
             var effect = ObjectManager.GetPoolItem<IEffect>(Attribute.FireEffect);
             var sprite = (Node2D)effect;
-            // sprite.GlobalPosition = FirePoint.GlobalPosition;
-            // sprite.GlobalRotation = FirePoint.GlobalRotation;
-            // sprite.AddToActivityRoot(RoomLayerEnum.YSortLayer);
             sprite.Position = GetLocalFirePosition();
             AddChild(sprite);
             effect.PlayEffect();
@@ -32,19 +29,4 @@ public partial class Gun : Weapon
     {
         FireManager.ShootBullet(this, fireRotation, Attribute.Bullet);
     }
-
-    // //测试用, 敌人被消灭时触发手上武器开火
-    // protected override void OnRemove(Role master)
-    // {
-    //     base.OnRemove(master);
-    //
-    //     if (master.IsDie && master.IsEnemyWithPlayer())
-    //     {
-    //         this.CallDelay(0, () =>
-    //         {
-    //             Debug.Log("敌人扔掉武器触发攻击");
-    //             Trigger(master);
-    //         });
-    //     }
-    // }
 }
